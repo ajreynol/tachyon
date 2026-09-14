@@ -1,0 +1,8 @@
+#!/bin/bash
+# status -- run-dev's status, against this repository's site file.  Read-only.
+#   job_launcher/status [-H HOST] [-s SESSION]
+set -euo pipefail
+HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=common.sh
+source "$HERE/common.sh"
+SUBMIT_SITE=$SITE exec "$RUN_DEV/status" "$@"

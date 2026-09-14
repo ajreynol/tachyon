@@ -1,0 +1,5 @@
+# The run-dev checkout these wrappers were written and tested against.
+# job_launcher/submit and job_launcher/status warn when the checkout at RUN_DEV is elsewhere;
+# update the commit here after re-testing against a newer run-dev.
+remote=https://github.com/ajreynol/run-dev
+commit=50a9a1b695b25b9660acccb29de5a7ce1e565861

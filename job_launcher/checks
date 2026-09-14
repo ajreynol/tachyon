@@ -1,0 +1,95 @@
+#!/bin/bash
+# checks -- lint for this repository; read-only, no ssh, fast.
+#   1. every script parses;
+#   2. no personal data (username, home directory, git identity, and whatever
+#      job_launcher/site.conf names: host, repo, binaries) in any file that could be
+#      committed -- the patterns come from the environment at runtime, so this
+#      repository never contains them;
+#   3. every tracked config resolves against the site template with the
+#      variables submit requires set;
+#   4. the run-dev pin, reported (a mismatch is a note, not a failure: the
+#      checkout may simply be absent where this runs).
+#   Run before committing.
+set -uo pipefail
+HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+ROOT=$(cd "$HERE/.." && pwd)
+cd "$ROOT"
+
+FAIL=0
+err()  { echo "FAIL: $*"; FAIL=1; }
+note() { echo "  ok: $*"; }
+
+# Public files = tracked + untracked-but-not-ignored.
+PUBLIC=$( { git ls-files; git ls-files --others --exclude-standard; } | sort -u )
+
+# ---- 1. every script parses -------------------------------------------------
+BAD=0
+for f in job_launcher/submit job_launcher/status job_launcher/checks job_launcher/common.sh job_launcher/site.conf.example job_launcher/configs/*.conf; do
+  bash -n "$f" 2>/dev/null || { err "bash -n fails: $f"; BAD=1; }
+done
+[ $BAD = 0 ] && note "all scripts and configs parse"
+
+# ---- 2. no personal data in public files ------------------------------------
+# URLs are stripped before matching: a link to a public repository is a
+# reference, not a leak.  Everything else is matched case-insensitively.
+PATS=""
+addpat() { [ -n "${1:-}" ] && [ ${#1} -ge 3 ] && PATS="$PATS $1"; }
+addpat "$(whoami)"
+addpat "$(basename "$HOME")"
+addpat "$(git config user.name 2>/dev/null | tr ' ' '\n' | head -1)"
+addpat "$(git config user.name 2>/dev/null | tr ' ' '\n' | tail -1)"
+addpat "$(git config user.email 2>/dev/null | cut -d@ -f1)"
+if [ -f job_launcher/site.conf ]; then
+  DEFAULT_HOST=""; REPO=""; REPO_BINARY=""; BUILDDIR=""; QUANT_DIR=""; CVC5_BIN=""; Z3_BIN=""
+  # shellcheck disable=SC1091
+  source job_launcher/site.conf 2>/dev/null || true
+  addpat "$DEFAULT_HOST"; addpat "$REPO_BINARY"; addpat "$(basename "${REPO:-}")"
+  addpat "$(basename "${BUILDDIR:-}")"; addpat "$(basename "${QUANT_DIR:-}")"
+  [ "${CVC5_BIN:-cvc5}" = cvc5 ] || addpat "$CVC5_BIN"
+  [ "${Z3_BIN:-z3}" = z3 ] || addpat "$Z3_BIN"
+fi
+BAD=0
+for P in $PATS; do
+  HITS=""
+  while IFS= read -r f; do
+    [ -f "$f" ] || continue
+    sed -E 's#https?://[^ )>]+##g' "$f" | grep -qi -- "$P" && HITS="$HITS $f"
+  done <<< "$PUBLIC"
+  [ -z "$HITS" ] || { err "personal pattern '$P' appears in:$HITS"; BAD=1; }
+done
+[ $BAD = 0 ] && note "no personal data in public files ($(echo $PATS | wc -w | tr -d ' ') patterns checked)"
+
+# ---- 3. every tracked config resolves against the site template ------------
+BAD=0
+for c in job_launcher/configs/*.conf; do
+  OUT=$( set -u; DEFAULT_HOST=""; DEFAULT_SESSION=""; REPO=""; BUILDDIR=""; REPO_BINARY=""
+         source job_launcher/site.conf.example >/dev/null 2>&1 || { echo "site template does not source"; exit 1; }
+         COMMENT=""; NAME=""; TAG=""; DIR=""; DRIVER=""; TIMEOUT=""; BENCH=""; BINARY=""; SCRIPT=""; OPTS=""; CMD=""; BRANCH=""
+         source "$c" 2>&1 || { echo "config does not source"; exit 1; }
+         [ -n "$COMMENT" ] || echo "COMMENT is empty"
+         [ -n "$DIR" ]     || echo "DIR is empty"
+         [ -n "$CMD" ] || { [ -n "$DRIVER" ] || echo "DRIVER is empty"; [ -n "$BINARY" ] || echo "BINARY is empty"; }
+         set_prefix "$DIR" >/dev/null || echo "set_prefix knows no prefix for DIR=$DIR" )
+  # DIR resolves to the template's value, which is a ~ path by design; only a
+  # literal path in the config itself is a defect, so re-check the source text.
+  grep -qE '^DIR=[~/]' "$c" && OUT="$OUT
+DIR is a literal path in the config"
+  OUT=$(echo "$OUT" | sed "/^$/d")
+  [ -z "$OUT" ] || { err "$c: $(echo "$OUT" | tr '\n' ';')"; BAD=1; }
+done
+[ $BAD = 0 ] && note "all configs resolve against job_launcher/site.conf.example"
+
+# ---- 4. the run-dev pin -----------------------------------------------------
+WANT=$(sed -n 's/^commit=//p' job_launcher/run-dev.lock | tail -1)
+RD=${RUN_DEV:-}
+if [ -z "$RD" ] && [ -f job_launcher/site.conf ]; then RD=$(sed -n 's/^RUN_DEV=//p' job_launcher/site.conf | tail -1); fi
+RD=${RD:-$ROOT/../run-dev}; RD=${RD/#\~/$HOME}
+if [ -d "$RD/.git" ]; then
+  HAVE=$(git -C "$RD" rev-parse HEAD 2>/dev/null || echo unknown)
+  if [ "$HAVE" = "$WANT" ]; then note "run-dev at $RD is at the pinned commit ${WANT:0:10}"
+  else echo "note: run-dev at $RD is at ${HAVE:0:10}, lock pins ${WANT:0:10} (re-test, then update job_launcher/run-dev.lock)"; fi
+else
+  echo "note: no run-dev checkout found (RUN_DEV unset, no job_launcher/site.conf, no ../run-dev); pin not checked"
+fi
+
+[ $FAIL = 0 ] && echo "checks: all passed" || { echo "checks: FAILED"; exit 1; }

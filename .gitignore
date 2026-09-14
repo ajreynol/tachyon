@@ -1,0 +1,7 @@
+# machine/user-specific settings: copy job_launcher/site.conf.example -> job_launcher/site.conf
+job_launcher/site.conf
+# source documents summarised into tools/*/notes.md are not tracked
+*.docx
+.DS_Store
+__pycache__/
+*.local.md

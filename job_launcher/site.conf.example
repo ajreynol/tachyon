@@ -1,0 +1,49 @@
+# site.conf.example -- copy to job_launcher/site.conf and edit.  Everything machine- and
+# user-specific for this repository's experiments lives in that one file,
+# which is git-ignored.  It is sourced by run-dev's submit (as SUBMIT_SITE)
+# and by job_launcher/common.sh, so it has the same shape as run-dev's site.conf plus
+# the names the tracked configs in job_launcher/configs/ resolve against.
+
+# ---- where run-dev is (the environment variable RUN_DEV overrides this;
+#      default when unset: ../run-dev next to this repository)
+RUN_DEV=~/run-dev
+
+# ---- how to reach the benchmark host (a config may override HOST / SESSION)
+DEFAULT_HOST=myhost           # ssh alias of the benchmark machine
+DEFAULT_SESSION=1             # tmux session there to open job windows in
+
+# ---- only needed when a config sets BRANCH= (checkout + build + verify first)
+REPO='~/cvc5'                 # git checkout on the host
+BUILDDIR='~/builds/prod'      # build dir with the run_install.sh that installs into host ~/bin
+REPO_BINARY=cvc5              # binary that run_install.sh copies into host ~/bin
+BASELINE_BRANCH=master        # branch that `submit --baseline` builds against
+
+# ---- names the tracked configs use.  A config never contains a path or a
+#      binary name; it says DIR=$QUANT_DIR, BINARY=$CVC5_BIN, and so on.
+QUANT_DIR='~/benchmarks/quant'   # the set under study: tools/heuresis/README.md, "The set"
+CVC5_BIN=cvc5                    # the cvc5 being measured (= REPO_BINARY if submit builds it)
+Z3_BIN=z3                        # the comparison point; record its version in the ledger
+
+# ---- naming: NAME = <set_prefix DIR>[-<bench_tag BENCH>]-<MMDDYY>[-TAG][-<script_tag DRIVER SCRIPT>]
+#      DIR is matched with ~ restored, so keys are written with ~ as above.
+set_prefix() {           # DIR -> benchmark-set prefix; return 1 if unknown
+  case "$1" in
+    "$QUANT_DIR") echo quant ;;
+    *) return 1 ;;
+  esac
+}
+bench_tag() {            # BENCH (mkbench_* script) -> tag; empty if none; return 1 if unknown
+  case "$1" in
+    '') ;;
+    mkbench_*) echo "${1#mkbench_}" | tr _ - ;;
+    *) return 1 ;;
+  esac
+}
+script_tag() {           # DRIVER, SCRIPT -> name suffix; empty if none
+  case "$1" in stats_dir_rec_*) echo stats; return ;; esac
+  case "$2" in
+    ''|cvc5_solve.sh|z3_solve.sh) ;;
+    cvc5_ethos.sh) echo p-ethos ;;
+    *.sh) echo "${2%.sh}" | sed 's/^cvc5_//' ;;
+  esac
+}

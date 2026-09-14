@@ -1,0 +1,6 @@
+# job_launcher/log.txt -- every launch made through job_launcher/submit, in run-dev's own format:
+# one entry per job (date, host, working directory, name, the command, the
+# binary's branch@commit, and for blocking builds/regressions the verdict).
+# Appended by job_launcher/submit, which copies what run-dev's submit wrote to its own
+# log during the call.  Tracked on purpose: it is the experimental record that
+# tools/heuresis/ledger/ cites.  Do not edit entries by hand.
