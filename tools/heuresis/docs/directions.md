@@ -132,14 +132,18 @@ mod-time machinery (R2). SMTInterpol integrates E-matching as a theory that
 finds conflict and unit instances incrementally (Hoenicke and Schindler
 2021).
 
-**Papers.** de Moura and Bjørner, *Efficient E-Matching for SMT Solvers*,
+**Papers.** de Moura and Bjørner, [*Efficient E-Matching for SMT Solvers*](https://leodemoura.github.io/files/ematching.pdf),
 CADE 2007 — the eager/lazy split, the promotion of useful quantifiers to eager
-instantiation, and "Deleting clauses". Detlefs, Nelson and Saxe, *Simplify: a
-theorem prover for program checking*, J. ACM 52(3), 2005. Hoenicke and
-Schindler, *Incremental Search for Conflict and Unit Instances of Quantified
-Formulas with E-Matching*, VMCAI 2021. Ge, Barrett and Tinelli, *Solving
-Quantified Verification Conditions Using Satisfiability Modulo Theories*,
-CADE 2007. Bjørner, *Z3 Internals*, §7.1.5–7.1.6.
+instantiation, and "Deleting clauses". Detlefs, Nelson and Saxe, [*Simplify: a
+theorem prover for program checking*](https://doi.org/10.1145/1066100.1066102),
+J. ACM 52(3), 2005. Hoenicke and Schindler, [*Incremental Search for Conflict
+and Unit Instances of Quantified Formulas with
+E-Matching*](https://doi.org/10.1007/978-3-030-67067-2_24), VMCAI 2021. Ge,
+Barrett and Tinelli, [*Solving Quantified Verification Conditions Using
+Satisfiability Modulo
+Theories*](https://theory.stanford.edu/~barrett/pubs/GBT09-abstract.html), CADE
+2007. Bjørner et al., [*Z3
+Internals*](https://z3prover.github.io/papers/z3internals.html), §7.1.5–7.1.6.
 
 **What would settle it.** The attribution first: on the gap set, the number of
 full-effort rounds per benchmark (`QuantifiersEngine::Rounds_Instantiation_Full`)
@@ -200,14 +204,18 @@ field in current z3; the incrementality is candidates plus path trees.
 Simplify's mod-time and pattern-element optimisations are the ancestors.
 veriT's CCFV is the other family (Barbosa's thesis).
 
-**Papers.** de Moura and Bjørner CADE 2007 (code trees, inverted path index,
+**Papers.** [de Moura and Bjørner CADE
+2007](https://leodemoura.github.io/files/ematching.pdf) (code trees, inverted path index,
 "the practical overhead ... is searching and maintaining sets of patterns
 that can efficiently retrieve new matches as soon as E-graph operations
-introduce them"). Simplify J. ACM 2005, §5 (mod-time, pattern-element).
-Moskal, Łopuszański and Kiniry, *E-matching for Fun and Profit*, SMT 2007 /
-ENTCS 198(2), 2008. Barbosa, *New techniques for instantiation and proof
-production in SMT solving*, PhD thesis 2017. Bjørner, *Z3 Internals*
-§7.1.2–7.1.3.
+introduce them"). [*Simplify* J. ACM
+2005](https://doi.org/10.1145/1066100.1066102), §5 (mod-time,
+pattern-element). Moskal, Łopuszański and Kiniry, [*E-matching for Fun and
+Profit*](https://doi.org/10.1016/j.entcs.2008.04.078), SMT 2007 / ENTCS 198(2),
+2008. Barbosa, [*New techniques for instantiation and proof production in SMT
+solving*](https://hanielbarbosa.com/papers/phd-official.pdf), PhD thesis 2017.
+Bjørner et al., [*Z3
+Internals*](https://z3prover.github.io/papers/z3internals.html), §7.1.2–7.1.3.
 
 **What would settle it.** `theory::QuantifiersEngine::time_ematching` as a
 fraction of solve time on the gap set, and the ratio of matches found to
@@ -250,10 +258,12 @@ candidates in constant time; and the eager/lazy cost split (R1) is itself the
 budget. veriT's CCFV frames E-matching as E-ground (dis)unification with its
 own pruning.
 
-**Papers.** Barbosa, Fontaine and Reynolds, *Congruence Closure with Free
-Variables*, TACAS 2017. Bansal, Reynolds, King, Barrett and Wies, *Deciding
-Local Theory Extensions via E-matching*, CAV 2015. No paper on cvc5's
-instantiation evaluator exists; PR #9092 is the reference.
+**Papers.** Barbosa, Fontaine and Reynolds, [*Congruence Closure with Free
+Variables*](https://doi.org/10.1007/978-3-662-54580-5_13), TACAS 2017. Bansal,
+Reynolds, King, Barrett and Wies, [*Deciding Local Theory Extensions via
+E-matching*](https://theory.stanford.edu/~barrett/pubs/BRK%2B15-abstract.html),
+CAV 2015. No paper on cvc5's instantiation evaluator exists; [PR
+#9092](https://github.com/cvc5/cvc5/pull/9092) is the reference.
 
 **What would settle it.** The distribution of E-matching time per round on the
 gap set: a heavy tail on few benchmarks is R3, a uniform cost is R2.
@@ -304,10 +314,13 @@ this feature was requested by the Boogie team ... their patterns are
 carefully constructed, and there are no matching loops". The `:weight`
 annotation and generation stamping are the user-facing half.
 
-**Papers.** CADE 2007 (priority queues, promotion/demotion). Bjørner, *Z3
-Internals* §7.1.6. Jakubův, Janota, Piepenbrock and Urban, *Machine Learning
-for Quantifier Selection in cvc5*, ECAI 2024 (learned selection, a budget of
-a different kind).
+**Papers.** [de Moura and Bjørner, CADE
+2007](https://leodemoura.github.io/files/ematching.pdf) (priority queues,
+promotion/demotion). Bjørner et al., [*Z3
+Internals*](https://z3prover.github.io/papers/z3internals.html), §7.1.6.
+Jakubův, Janota, Piepenbrock and Urban, [*Machine Learning for Quantifier
+Selection in cvc5*](https://arxiv.org/abs/2408.14338), ECAI 2024 (learned
+selection, a budget of a different kind).
 
 **What would settle it.** Instances per round and total instances on the gap
 set versus z3's `smt.qi.profile` counts on the same benchmarks. If cvc5 makes
@@ -361,14 +374,19 @@ per branch. z3's `setup_AUFLIA` comment on why macro-finder stays off:
 "MACRO_FINDER is a horrible for AUFLIA and UFNIA benchmarks (boogie
 benchmarks in general). It destroys the existing patterns."
 
-**Papers.** Leino and Pit-Claudel, *Trigger Selection Strategies to Stabilize
-Program Verifiers*, CAV 2016. Moskal, *Programming with Triggers*, SMT 2009.
-Dross, Conchon, Kanig and Paskevich, *Adding Decision Procedures to SMT
-Solvers Using Axioms with Triggers*, JAR 56(4), 2016. Bugariu,
-Ter-Gabrielyan and Müller, *Identifying Overly Restrictive Matching Patterns
-in SMT-based Program Verifiers*, FM 2021. Ge, Garcia and Summers, *A Formal
-Model to Prove Instantiation Termination for E-matching-Based
-Axiomatisations*, CAV 2024.
+**Papers.** Leino and Pit-Claudel, [*Trigger Selection Strategies to Stabilize
+Program
+Verifiers*](https://www.microsoft.com/en-us/research/publication/trigger-selection-strategies-stabilize-program-verifiers/),
+CAV 2016. Moskal, [*Programming with
+Triggers*](https://doi.org/10.1145/1670412.1670416), SMT 2009. Dross, Conchon,
+Kanig and Paskevich, [*Adding Decision Procedures to SMT Solvers Using Axioms
+with Triggers*](https://doi.org/10.1007/s10817-015-9352-2), JAR 56(4), 2016.
+Bugariu, Ter-Gabrielyan and Müller, [*Identifying Overly Restrictive Matching
+Patterns in SMT-based Program
+Verifiers*](https://doi.org/10.1007/978-3-030-90870-6_15), FM 2021. Ge, Garcia
+and Summers, [*A Formal Model to Prove Instantiation Termination for
+E-matching-Based
+Axiomatisations*](https://doi.org/10.1007/978-3-031-63498-7_25), CAV 2024.
 
 **What would settle it.** `-o trigger` on the gap set: how many quantifiers
 have no user pattern (and so get auto-triggers), how many multi-triggers
@@ -408,8 +426,11 @@ shows falsified jumps the eager queue) and `smt.qi.quick_checker` (off by
 default; mode 2 is warned against in code as "too expensive"). SMTInterpol's
 E-matching theory finds conflict and unit instances directly.
 
-**Papers.** Reynolds, Tinelli and de Moura, *Finding Conflicting Instances of
-Quantified Formulas in SMT*, FMCAD 2014. Hoenicke and Schindler VMCAI 2021.
+**Papers.** Reynolds, Tinelli and de Moura, [*Finding Conflicting Instances of
+Quantified Formulas in
+SMT*](https://homepage.cs.uiowa.edu/~tinelli/papers/ReyTD-FMCAD-14.pdf), FMCAD
+2014. [Hoenicke and Schindler VMCAI
+2021](https://doi.org/10.1007/978-3-030-67067-2_24).
 
 **What would settle it.** The baseline already has `--no-cbqi` bundled with
 `--user-pat=strict`; an A/B of each alone says what cbqi costs here.
@@ -438,8 +459,10 @@ evaluator for eager use (R1); `fmfIeval` (2022), `ievalTravTrie` (2023),
 instance is the same test at the same point; fingerprints are the duplicate
 filter.
 
-**Papers.** None on ieval (PR #9092). Hoenicke and Schindler VMCAI 2021 is the
-closest published analogue.
+**Papers.** None on ieval ([PR
+#9092](https://github.com/cvc5/cvc5/pull/9092)). [Hoenicke and Schindler VMCAI
+2021](https://doi.org/10.1007/978-3-030-67067-2_24) is the closest published
+analogue.
 
 **What would settle it.** `Duplicate_Inst_Ent` over `Instantiations_Total` on
 the gap set, and an A/B of `--ieval=off`, `--ieval=use-learn`,
@@ -479,13 +502,17 @@ SAT branch is satisfied and quantifiers remain (`m_last_search_failure =
 QUANTIFIERS`), which is exactly right for benchmarks known unsat. Dafny, F*
 and Boogie set the same. `auto_config=true` would force `mbqi=true`.
 
-**Papers.** Reynolds, Barbosa and Fontaine, *Revisiting Enumerative
-Instantiation*, TACAS 2018. Janota, Barbosa, Fontaine and Reynolds, *Fair and
-Adventurous Enumeration of Quantifier Instantiations*, FMCAD 2021. Ge and de
-Moura, *Complete Instantiation for Quantified Formulas in Satisfiabiliby
-[sic] Modulo Theories*, CAV 2009. Reynolds, Tinelli, Goel and Krstić,
-*Finite Model Finding in SMT*, CAV 2013. Dančo, Hozzová and Janota, *From
-MBQI to Enumerative Instantiation and Back*, SMT 2025.
+**Papers.** Reynolds, Barbosa and Fontaine, [*Revisiting Enumerative
+Instantiation*](https://doi.org/10.1007/978-3-319-89963-3_7), TACAS 2018.
+Janota, Barbosa, Fontaine and Reynolds, [*Fair and Adventurous Enumeration of
+Quantifier Instantiations*](https://arxiv.org/abs/2105.13700), FMCAD 2021. Ge
+and de Moura, [*Complete Instantiation for Quantified Formulas in
+Satisfiabiliby [sic] Modulo
+Theories*](https://doi.org/10.1007/978-3-642-02658-4_25), CAV 2009. Reynolds,
+Tinelli, Goel and Krstić, [*Finite Model Finding in
+SMT*](https://doi.org/10.1007/978-3-642-39799-8_42), CAV 2013. Dančo, Hozzová
+and Janota, [*From MBQI to Enumerative Instantiation and
+Back*](https://ceur-ws.org/Vol-4008/SMT_paper10.pdf), SMT 2025.
 
 **What would settle it.** `-o inst-strategy` on the gap set to see whether
 cegqi ever fires; an A/B of `--no-cegqi` and of `--enum-inst` on the 545
@@ -556,9 +583,12 @@ issue #1151: "lots of 'independent' lemmas also clog up the memory, so you
 don't necessarily want to collect and keep all irrelevant lemmas (or
 quantifier instances) forever."
 
-**Papers.** de Moura and Bjørner CADE 2007. Audemard and Simon, *Predicting
-Learnt Clauses Quality in Modern SAT Solvers*, IJCAI 2009 (LBD). Fazekas,
-Biere and Scholl, *Incremental Inprocessing in SAT Solving*, SAT 2019.
+**Papers.** [de Moura and Bjørner CADE
+2007](https://leodemoura.github.io/files/ematching.pdf). Audemard and Simon,
+[*Predicting Learnt Clauses Quality in Modern SAT
+Solvers*](https://www.ijcai.org/Proceedings/09/Papers/074.pdf), IJCAI 2009
+(LBD). Fazekas, Biere and Scholl, [*Incremental Inprocessing in SAT
+Solving*](https://fmv.jku.at/incrinpr/), SAT 2019.
 
 **What would settle it.** Clause-database size against time on the ten worst
 (MiniSat's `clauses_persistent` count is one added statistic away), and the
@@ -606,9 +636,12 @@ Verus sets `case_split=3`, relevancy-driven structural splitting (Dafny's
 discussion #3362 calls this avoiding "time travelling triggers"). Instances
 also carry a generation, and the cost function reads it (R4).
 
-**Papers.** de Moura and Bjørner, *Relevancy Propagation*, MSR-TR-2007-140.
-Barrett, Dill and Stump, *Checking Satisfiability of First-Order Formulas by
-Incremental Translation to SAT*, CAV 2002 (the justification idea).
+**Papers.** de Moura and Bjørner, [*Relevancy
+Propagation*](https://www.microsoft.com/en-us/research/publication/relevancy-propagation/),
+MSR-TR-2007-140. Barrett, Dill and Stump, [*Checking Satisfiability of
+First-Order Formulas by Incremental Translation to
+SAT*](https://doi.org/10.1007/3-540-45657-0_18), CAV 2002 (the justification
+idea).
 
 **What would settle it.** `--inst-local` and `--inst-defer` on the set are two
 runs; `--jh-rlv-order` is a third. The decision count per benchmark
@@ -656,9 +689,12 @@ modes 3–5 are relevancy-based and refused when `auto_config` is on.
 `smt.phase_selection` [3, caching conservative]. Simplify's relevancy is the
 ancestor; F* sets `smt.relevancy=2` explicitly.
 
-**Papers.** MSR-TR-2007-140. Barrett, Dill and Stump CAV 2002. Goel, Krstić
-and Fuchs, *Deciding array formulas with frugal axiom instantiation*, SMT
-2008.
+**Papers.** [*Relevancy
+Propagation*](https://www.microsoft.com/en-us/research/publication/relevancy-propagation/),
+MSR-TR-2007-140. [Barrett, Dill and Stump CAV
+2002](https://doi.org/10.1007/3-540-45657-0_18). Goel, Krstić and Fuchs,
+[*Deciding array formulas with frugal axiom
+instantiation*](https://doi.org/10.1145/1512464.1512468), SMT 2008.
 
 **What would settle it.** `--preregister-mode=lazy` and `--decision=internal`
 on the set are two cheap runs; `preregRlv` is a build. The measurement that
@@ -692,9 +728,12 @@ inprocessing produces untrusted proof nodes and is incompatible with
 before internalising it, which is the light form; learned-clause
 minimisation is the SAT-level standard.
 
-**Papers.** Sörensson and Biere, *Minimizing Learned Clauses*, SAT 2009.
-Fleury and Biere, *Efficient All-UIP Learned Clause Minimization*, SAT 2021.
-Fazekas, Biere and Scholl SAT 2019. No paper on cvc5's inprocessing.
+**Papers.** Sörensson and Biere, [*Minimizing Learned
+Clauses*](https://doi.org/10.1007/978-3-642-02777-2_23), SAT 2009. Fleury and
+Biere, [*Efficient All-UIP Learned Clause
+Minimization*](https://doi.org/10.1007/978-3-030-80223-3_12), SAT 2021.
+[Fazekas, Biere and Scholl SAT 2019](https://fmv.jku.at/incrinpr/). No paper
+on cvc5's inprocessing.
 
 **What would settle it.** Two runs: `--lemma-inprocess=light` and
 `--conflict-process=min`, with the average lemma size before and after.
@@ -745,11 +784,15 @@ change these (geometric 1.5, phase always-false), which is one reason Verus
 turns it off.
 
 **Papers.** Fazekas, Niemetz, Preiner, Kirchweger, Szeider and Biere,
-*IPASIR-UP: User Propagators for CDCL*, SAT 2023. Biere, Faller, Fazekas,
-Fleury, Froleyks and Pollitt, *CaDiCaL 2.0*, CAV 2024. Bjørner, Eisenhofer
-and Kovács, *Satisfiability Modulo Custom Theories in Z3*, VMCAI 2023.
-Pipatsrisawat and Darwiche, *A Lightweight Component Caching Scheme for
-Satisfiability Solvers*, SAT 2007 (phase saving).
+[*IPASIR-UP: User Propagators for
+CDCL*](https://doi.org/10.4230/LIPIcs.SAT.2023.8), SAT 2023. Biere, Faller,
+Fazekas, Fleury, Froleyks and Pollitt, [*CaDiCaL
+2.0*](https://doi.org/10.1007/978-3-031-65627-9_7), CAV 2024. Bjørner,
+Eisenhofer and Kovács, [*Satisfiability Modulo Custom Theories in
+Z3*](https://doi.org/10.1007/978-3-031-24950-1_5), VMCAI 2023. Pipatsrisawat
+and Darwiche, [*A Lightweight Component Caching Scheme for Satisfiability
+Solvers*](https://doi.org/10.1007/978-3-540-72788-0_28), SAT 2007 (phase
+saving).
 
 **What would settle it.** The baseline rerun with `--sat-solver=cadical` is
 the first experiment of goal 3, because the notes' best-known configuration
@@ -795,13 +838,18 @@ that phase bias is the "model-based" part. `theory_lra` runs `random_update`
 before `assume_eqs` to break value ties. Ground subterms of triggers are
 treated as shared terms (`mam_impl::m_shared_enodes`).
 
-**Papers.** de Moura and Bjørner, *Model-based Theory Combination*, SMT 2007 /
-ENTCS 198(2), 2008. Krstić and Goel, *Architecting Solvers for SAT Modulo
-Theories: Nelson–Oppen with DPLL*, FroCoS 2007. Jovanović and Barrett,
-*Sharing Is Caring: Combination of Theories*, FroCoS 2011 (care graphs).
-Barrett, Nieuwenhuis, Oliveras and Tinelli, *Splitting on Demand in SAT
-Modulo Theories*, LPAR 2006. Bruttomesso, Cimatti, Franzén, Griggio and
-Sebastiani, *Delayed Theory Combination vs. Nelson–Oppen for SMT*, LPAR 2006.
+**Papers.** de Moura and Bjørner, [*Model-based Theory
+Combination*](https://doi.org/10.1016/j.entcs.2008.04.079), SMT 2007 / ENTCS
+198(2), 2008. Krstić and Goel, [*Architecting Solvers for SAT Modulo Theories:
+Nelson–Oppen with DPLL*](https://doi.org/10.1007/978-3-540-74621-8_1), FroCoS
+2007. Jovanović and Barrett, [*Sharing Is Caring: Combination of
+Theories*](https://doi.org/10.1007/978-3-642-24364-6_14), FroCoS 2011 (care
+graphs). Barrett, Nieuwenhuis, Oliveras and Tinelli, [*Splitting on Demand in
+SAT Modulo
+Theories*](https://theory.stanford.edu/~barrett/pubs/BNO%2B06-abstract.html),
+LPAR 2006. Bruttomesso, Cimatti, Franzén, Griggio and Sebastiani, [*Delayed
+Theory Combination vs. Nelson–Oppen for
+SMT*](https://disi.unitn.it/rseba/papers/lpar06_dtc.pdf), LPAR 2006.
 
 **What would settle it.** The number of care-graph splits per benchmark
 (`theory::CombinationCareGraph` statistics) on the gap set; then the PR's
@@ -844,11 +892,14 @@ is "r2 and r1 have at most one theory var"; theories may opt out of
 disequality notifications (`use_diseqs`). One merge, one notification per
 theory variable on the roots.
 
-**Papers.** Nieuwenhuis and Oliveras, *Fast congruence closure and
-extensions*, Inf. Comput. 205(4), 2007. de Moura and Bjørner, *Z3: An
-Efficient SMT Solver*, TACAS 2008. Nelson and Oppen, *Fast Decision
-Procedures Based on Congruence Closure*, J. ACM 27(2), 1980. Barbosa et al.,
-*cvc5: A Versatile and Industrial-Strength SMT Solver*, TACAS 2022.
+**Papers.** Nieuwenhuis and Oliveras, [*Fast congruence closure and
+extensions*](https://doi.org/10.1016/j.ic.2006.08.009), Inf. Comput. 205(4),
+2007. de Moura and Bjørner, [*Z3: An Efficient SMT
+Solver*](https://doi.org/10.1007/978-3-540-78800-3_24), TACAS 2008. Nelson and
+Oppen, [*Fast Decision Procedures Based on Congruence
+Closure*](https://doi.org/10.1145/322186.322198), J. ACM 27(2), 1980. Barbosa
+et al., [*cvc5: A Versatile and Industrial-Strength SMT
+Solver*](https://doi.org/10.1007/978-3-030-99524-9_24), TACAS 2022.
 
 **What would settle it.** `--ee-mode=central` on the set is one run and
 exists today; the `dtMergeNotify-v3` branch is a build. A profile of the ten
@@ -897,13 +948,17 @@ asserted straight into the egraph when the constructor is known; the occurs
 check runs at final check as a DFS. Vampire's approach to datatypes is
 axiomatic (Kovács, Robillard and Voronkov).
 
-**Papers.** Barrett, Shikanian and Tinelli, *An Abstract Decision Procedure
-for a Theory of Inductive Data Types*, JSAT 3, 2007. Reynolds and Blanchette,
-*A Decision Procedure for (Co)datatypes in SMT Solvers*, JAR 58(3), 2017.
-Reynolds, Viswanathan, Barbosa, Tinelli and Barrett, *Datatypes with Shared
-Selectors*, IJCAR 2018. Kovács, Robillard and Voronkov, *Coming to Terms with
-Quantified Reasoning*, POPL 2017. Hojjat and Rümmer, *Deciding and
-Interpolating Algebraic Data Types by Reduction*, 2018.
+**Papers.** Barrett, Shikanian and Tinelli, [*An Abstract Decision Procedure
+for a Theory of Inductive Data
+Types*](https://theory.stanford.edu/~barrett/pubs/BST07-JSAT-abstract.html),
+JSAT 3, 2007. Reynolds and Blanchette, [*A Decision Procedure for (Co)datatypes
+in SMT Solvers*](https://doi.org/10.1007/s10817-016-9372-6), JAR 58(3), 2017.
+Reynolds, Viswanathan, Barbosa, Tinelli and Barrett, [*Datatypes with Shared
+Selectors*](https://theory.stanford.edu/~barrett/pubs/RVB%2B18.pdf), IJCAR
+2018. Kovács, Robillard and Voronkov, [*Coming to Terms with Quantified
+Reasoning*](https://arxiv.org/abs/1611.02908), POPL 2017. Hojjat and Rümmer,
+[*Deciding and Interpolating Algebraic Data Types by
+Reduction*](https://arxiv.org/abs/1801.02367), 2018.
 
 **What would settle it.** `DATATYPES_SPLIT` lemma counts on the gap set (from
 `--stats-internal`), then `--dt-binary-split` as a run and `dtSplitRelevant`
@@ -951,16 +1006,22 @@ phase-lock with the search". Note that Verus sets `smt.arith.solver=2`, the
 legacy simplex, for its default queries, so the z3 the baseline measures is
 not the lra solver.
 
-**Papers.** Dutertre and de Moura, *A Fast Linear-Arithmetic Solver for
-DPLL(T)*, CAV 2006. Jovanović and de Moura, *Cutting to the Chase: Solving
-Linear Integer Arithmetic*, CADE 2011 / JAR 51(1), 2013. Griggio, *A
-Practical Approach to Satisfiability Modulo Linear Integer Arithmetic*, JSAT
-8, 2012. Dillig, Dillig and Aiken, *Cuts from Proofs*, CAV 2009. King,
-*Effective Algorithms for the Satisfiability of Quantifier-Free Formulas Over
-Linear Real and Integer Arithmetic*, PhD thesis, NYU 2014. King, Barrett and
-Tinelli, *Leveraging Linear and Mixed Integer Programming for SMT*, FMCAD
-2014. Bromberger and Weidenbach, *New techniques for linear arithmetic:
-cubes and equalities*, FMSD 51(3), 2017.
+**Papers.** Dutertre and de Moura, [*A Fast Linear-Arithmetic Solver for
+DPLL(T)*](https://doi.org/10.1007/11817963_11), CAV 2006. Jovanović and de
+Moura, [*Cutting to the Chase: Solving Linear Integer
+Arithmetic*](https://doi.org/10.1007/978-3-642-22438-6_26), CADE 2011 / JAR
+51(1), 2013. Griggio, [*A Practical Approach to Satisfiability Modulo Linear
+Integer Arithmetic*](https://doi.org/10.3233/SAT190086), JSAT 8, 2012. Dillig,
+Dillig and Aiken, [*Cuts from
+Proofs*](https://theory.stanford.edu/~aiken/publications/papers/cav09.pdf), CAV
+2009. King, [*Effective Algorithms for the Satisfiability of Quantifier-Free
+Formulas Over Linear Real and Integer
+Arithmetic*](https://cs.nyu.edu/media/publications/king_tim.pdf), PhD thesis,
+NYU 2014. King, Barrett and Tinelli, [*Leveraging Linear and Mixed Integer
+Programming for SMT*](https://theory.stanford.edu/~barrett/pubs/KBT14.pdf),
+FMCAD 2014. Bromberger and Weidenbach, [*New techniques for linear arithmetic:
+cubes and equalities*](https://doi.org/10.1007/s10703-017-0278-7), FMSD 51(3),
+2017.
 
 **What would settle it.** Branch-and-bound and DIO lemma counts per benchmark
 on the gap set; `ai-dioLc` as a build; `--no-dio-solver` as a run.
@@ -999,13 +1060,16 @@ default queries nonlinear reasoning is off entirely; with the lra solver the
 and monomials stay as egraph terms and tableau columns regardless. Verus
 switches to `smt.arith.solver=6` for `by(nonlinear_arith)` queries.
 
-**Papers.** Cimatti, Griggio, Irfan, Roveri and Sebastiani, *Incremental
+**Papers.** Cimatti, Griggio, Irfan, Roveri and Sebastiani, [*Incremental
 Linearization for Satisfiability and Verification Modulo Nonlinear Arithmetic
-and Transcendental Functions*, TOCL 19(3), 2018. Reynolds, Tinelli, Jovanović
-and Barrett, *Designing Theory Solvers with Extensions*, FroCoS 2017.
-Jovanović and de Moura, *Solving Non-linear Arithmetic*, IJCAR 2012. Kremer,
-Reynolds, Barrett and Tinelli, *Cooperating Techniques for Solving Nonlinear
-Real Arithmetic in the cvc5 SMT Solver*, IJCAR 2022.
+and Transcendental Functions*](https://doi.org/10.1145/3230639), TOCL 19(3),
+2018. Reynolds, Tinelli, Jovanović and Barrett, [*Designing Theory Solvers with
+Extensions*](https://theory.stanford.edu/~barrett/pubs/RTJ%2B17%2C-abstract.html),
+FroCoS 2017. Jovanović and de Moura, [*Solving Non-linear
+Arithmetic*](https://dddejan.github.io/papers/jovanovic-ijcar2012.pdf), IJCAR
+2012. Kremer, Reynolds, Barrett and Tinelli, [*Cooperating Techniques for
+Solving Nonlinear Real Arithmetic in the cvc5 SMT
+Solver*](https://doi.org/10.1007/978-3-031-10769-6_7), IJCAR 2022.
 
 **What would settle it.** The gap set split by logic (the results files carry
 the path, and the path carries the logic); then `--nl-ext=none` and
@@ -1050,13 +1114,17 @@ asserted lazily from `relevant_eh`. Verus sends `by(bit_vector)` obligations
 as separate prelude-free queries with solver defaults ("TODO: tune Z3/CVC5
 options for bit-vector queries").
 
-**Papers.** Niemetz, Preiner, Reynolds, Zohar, Barrett and Tinelli, *Towards
-Bit-Width-Independent Proofs in SMT Solvers*, CADE 2019 (JAR 2021). Zohar,
-Irfan, Mann, Niemetz, Nötzli, Preiner, Reynolds, Barrett and Tinelli,
-*Bit-Precise Reasoning via Int-Blasting*, VMCAI 2022. Hadarean, Bansal,
-Jovanović, Barrett and Tinelli, *A Tale of Two Solvers: Eager and Lazy
-Approaches to Bit-Vectors*, CAV 2014. Niemetz, Preiner and Zohar, *Scalable
-Bit-Blasting with Abstractions*, CAV 2024.
+**Papers.** Niemetz, Preiner, Reynolds, Zohar, Barrett and Tinelli, [*Towards
+Bit-Width-Independent Proofs in SMT
+Solvers*](https://theory.stanford.edu/~barrett/pubs/NPR%2B19.pdf), CADE 2019
+(JAR 2021). Zohar, Irfan, Mann, Niemetz, Nötzli, Preiner, Reynolds, Barrett and
+Tinelli, [*Bit-Precise Reasoning via
+Int-Blasting*](https://doi.org/10.1007/978-3-030-94583-1_24), VMCAI 2022.
+Hadarean, Bansal, Jovanović, Barrett and Tinelli, [*A Tale of Two Solvers:
+Eager and Lazy Approaches to
+Bit-Vectors*](https://doi.org/10.1007/978-3-319-08867-9_45), CAV 2014.
+Niemetz, Preiner and Zohar, [*Scalable Bit-Blasting with
+Abstractions*](https://doi.org/10.1007/978-3-031-65627-9_9), CAV 2024.
 
 **What would settle it.** The gap set by logic first: if the UFBVDTNIA share
 of the gap is proportional to its share of the set, bit-vectors are not a
@@ -1116,10 +1184,13 @@ order as written; cvc5's rewriter normalises the order of children of
 commutative operators, which may reorder what the decision heuristic sees
 (reasoning, not measured).
 
-**Papers.** Kim, Somenzi and Jin, *Efficient Term-ITE Conversion for
-Satisfiability Modulo Theories*, SAT 2009 (cited by cvc5's `--ite-simp`).
-Barbosa et al., cvc5, TACAS 2022 (the pass pipeline). Bjørner, de Moura,
-Nachmanson and Wintersteiger, *Programming Z3*, 2019.
+**Papers.** Kim, Somenzi and Jin, [*Efficient Term-ITE Conversion for
+Satisfiability Modulo
+Theories*](https://doi.org/10.1007/978-3-642-02777-2_20), SAT 2009 (cited by
+cvc5's `--ite-simp`). [Barbosa et al., cvc5, TACAS
+2022](https://doi.org/10.1007/978-3-030-99524-9_24) (the pass pipeline).
+Bjørner, de Moura, Nachmanson and Wintersteiger, [*Programming
+Z3*](https://z3prover.github.io/papers/programmingz3.html), 2019.
 
 **What would settle it.** Preprocessing time as a share of solve time on the
 gap set (`--stats`); then `--simplification=none`, `--no-static-learning`,
@@ -1162,10 +1233,13 @@ comment that it "destroys the existing patterns" on Boogie-style benchmarks;
 NNF is forced. Dafny, F* and Verus all tune the *encoding* side (trigger
 selection, `sort_disjunctions`, `der`) rather than the solver's rewriting.
 
-**Papers.** Fontaine and Schurr, *Quantifier Simplification by Unification in
-SMT*, FroCoS 2021. El Ghazi, Ulbrich, Taghdiri and Herda, *Reducing the
-Complexity of Quantified Formulas via Variable Elimination*, SMT 2013.
-Leino and Pit-Claudel CAV 2016 (why verifiers own trigger selection).
+**Papers.** Fontaine and Schurr, [*Quantifier Simplification by Unification in
+SMT*](https://doi.org/10.1007/978-3-030-86205-3_13), FroCoS 2021. El Ghazi,
+Ulbrich, Taghdiri and Herda, [*Reducing the Complexity of Quantified Formulas
+via Variable Elimination*](https://arxiv.org/abs/1408.0700), SMT 2013. [Leino
+and Pit-Claudel CAV
+2016](https://www.microsoft.com/en-us/research/publication/trigger-selection-strategies-stabilize-program-verifiers/)
+(why verifiers own trigger selection).
 
 **What would settle it.** `--user-pat=trust` with `--miniscope-quant=off
 --prenex-quant=none --ite-lift-quant=none --cond-var-split-quant=off` against
@@ -1192,7 +1266,9 @@ broken branch); `sdm-assertTerms`, `skolemLemma` (2022).
 **Elsewhere `(code)`.** z3 `smt.relevancy` [2] — see R11; theory axioms for
 datatype accessors and `bv2int` are created from `relevant_eh`.
 
-**Papers.** MSR-TR-2007-140.
+**Papers.** [de Moura and Bjørner, *Relevancy
+Propagation*](https://www.microsoft.com/en-us/research/publication/relevancy-propagation/),
+MSR-TR-2007-140.
 
 **What would settle it.** `--preregister-mode=lazy` on the set, today. Then the
 branch.
@@ -1224,7 +1300,10 @@ merged); `rlvTermSimplify`, `tdbLLOpts` (2024); `tdbDev1107`, `tdbOpt1108`
 feeds the matcher's candidate queue, `execute_core` asserts relevance, and
 relevancy is backtracked with the search rather than accumulated.
 
-**Papers.** MSR-TR-2007-140; Simplify J. ACM 2005 (the relevance of terms to
+**Papers.** [de Moura and Bjørner, *Relevancy
+Propagation*](https://www.microsoft.com/en-us/research/publication/relevancy-propagation/),
+MSR-TR-2007-140; [*Simplify* J. ACM
+2005](https://doi.org/10.1145/1066100.1066102) (the relevance of terms to
 matching).
 
 **What would settle it.** `--term-db-mode=all` and `=relevant` against the
@@ -1283,10 +1362,12 @@ date from about 2007 and were "geared towards particular kinds of benchmarks
 #7363: "the requirement for :auto_config and :smt.mbqi to be set to false
 enables trigger-based quantifiers".
 
-**Papers.** Leino and Pit-Claudel CAV 2016. Bai, Hawblitzel and Lattuada,
-*Tunable Automation in Automated Program Verification*, 2025 (Verus's
-tunable instantiation levels). Lattuada et al., *Verus: A Practical
-Foundation for Systems Verification*, SOSP 2024.
+**Papers.** [Leino and Pit-Claudel CAV
+2016](https://www.microsoft.com/en-us/research/publication/trigger-selection-strategies-stabilize-program-verifiers/).
+Bai, Hawblitzel and Lattuada, [*Tunable Automation in Automated Program
+Verification*](https://arxiv.org/abs/2512.03926), 2025 (Verus's tunable
+instantiation levels). Lattuada et al., [*Verus: A Practical Foundation for
+Systems Verification*](https://doi.org/10.1145/3694715.3695952), SOSP 2024.
 
 **What would settle it.** This is goal 3 in its cheapest form: the twelve
 single-flag runs above, each against the baseline, then the bundle. The
@@ -1367,17 +1448,24 @@ quantifiers by cost times instances; F*'s `qprofdiff`. Mariposa measures
 instability under semantics-preserving mutation; Cazamariposas localises it;
 SHAKE prunes context for stability (29 % / 41 % on z3 and cvc5).
 
-**Papers.** Becker, Müller and Summers, *The Axiom Profiler: Understanding and
-Debugging SMT Quantifier Instantiations*, TACAS 2019. Fiala and Müller,
-*SMTScope: Automated and Efficient Analysis of SMT Traces*, TACAS 2026.
-Zhou, Bosamiya, Takashima, Li, Heule and Parno, *Mariposa: Measuring SMT
-Instability in Automated Program Verification*, FMCAD 2023. Zhou, Shah, Lin,
-Heule and Parno, *Cazamariposas: Automated Instability Debugging in SMT-Based
-Program Verification*, CADE 2025. Zhou, Bosamiya, Li, Heule and Parno,
-*Context Pruning for More Robust SMT-based Program Verification*, FMCAD 2024.
-Amrollahi, Preiner, Niemetz, Reynolds, Charikar, Tinelli and Barrett,
-*Towards SMT Solver Stability via Input Normalization*, FMCAD 2024. Lattuada
-et al., Verus, OOPSLA 2023.
+**Papers.** Becker, Müller and Summers, [*The Axiom Profiler: Understanding and
+Debugging SMT Quantifier
+Instantiations*](https://doi.org/10.1007/978-3-030-17462-0_6), TACAS 2019.
+Fiala and Müller, [*SMTScope: Automated and Efficient Analysis of SMT
+Traces*](https://doi.org/10.1007/978-3-032-22752-2_12), TACAS 2026. Zhou,
+Bosamiya, Takashima, Li, Heule and Parno, [*Mariposa: Measuring SMT
+Instability in Automated Program
+Verification*](https://doi.org/10.34727/2023/isbn.978-3-85448-060-0_26), FMCAD
+2023. Zhou, Shah, Lin, Heule and Parno, [*Cazamariposas: Automated Instability
+Debugging in SMT-Based Program
+Verification*](https://doi.org/10.1007/978-3-031-99984-0_5), CADE 2025. Zhou,
+Bosamiya, Li, Heule and Parno, [*Context Pruning for More Robust SMT-based
+Program Verification*](https://doi.org/10.34727/2024/isbn.978-3-85448-065-5_12),
+FMCAD 2024. Amrollahi, Preiner, Niemetz, Reynolds, Charikar, Tinelli and
+Barrett, [*Towards SMT Solver Stability via Input
+Normalization*](https://doi.org/10.34727/2025/isbn.978-3-85448-084-6_14),
+FMCAD 2025. Lattuada et al., [*Verus: Verifying Rust Programs using Linear
+Ghost Types*](https://doi.org/10.1145/3586037), OOPSLA 2023.
 
 **What would settle it.** Nothing; this direction is the instrument. Its
 deliverable is the attribution table of goal 2, and the first version of it
