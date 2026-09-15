@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""gap -- the standard reading of a baseline: per-run counts, and the gap set.
+
+    tools/heuresis/gap [--factor 10] [--timeout 30] [--floor 1.0]
+                       [--gapset FILE] [--md] LABEL=RESULTS ...
+
+The first LABEL=RESULTS is the reference (z3); every other run is compared
+against it.  RESULTS is a run-dev results file as the drivers write it: for
+each benchmark a path line ending in .smt2, then the wrapper's result token
+(sat, unsat, unknown, error, ...; absent when `timeout` killed the wrapper),
+then "<user-seconds> <max-rss-kB>" from /usr/bin/time.  Anything else
+(`rm:` noise, "Command exited with non-zero status") is ignored and counted.
+
+Definitions, so the numbers mean one thing:
+  solved      result is sat or unsat
+  timeout     no result token, or user time >= --timeout
+  PAR2        sum over benchmarks of time if solved else 2*timeout
+  gap set     benchmarks where the run is unsolved and the reference solved, or
+              both solved and time(run) >= factor * time(ref) with
+              time(run) >= floor (a floor so 0.5 s vs 0.02 s is not a "gap")
+  ratio       PAR2(run) / PAR2(ref)
+No dependencies beyond Python 3.
+"""
+import argparse, re, sys
+from collections import Counter
+
+RE_TIME = re.compile(r'^([0-9]+(?:\.[0-9]+)?)(?: ([0-9]+))?$')
+SOLVED = {'sat', 'unsat'}
+
+
+def read(path):
+    """-> dict benchmark -> (result, time, mem); plus the count of ignored lines."""
+    out, cur, ignored = {}, None, 0
+    with open(path) as f:
+        for line in f:
+            s = line.strip()
+            if s.endswith('.smt2'):
+                cur = [s, None, None, None]
+                continue
+            if cur is None:
+                ignored += 1
+                continue
+            m = RE_TIME.match(s)
+            if m:
+                cur[2] = float(m.group(1))
+                cur[3] = int(m.group(2)) if m.group(2) else None
+                out[cur[0]] = (cur[1] if cur[1] else 'timeout', cur[2], cur[3])
+                cur = None
+            elif re.fullmatch(r'[a-z][a-z0-9-]*', s):
+                cur[1] = s
+            elif 'interrupted' in s or 'terminated' in s:
+                cur[1] = 'timeout'
+            else:
+                ignored += 1
+    return out, ignored
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument('runs', nargs='+', metavar='LABEL=RESULTS')
+    ap.add_argument('--factor', type=float, default=10.0)
+    ap.add_argument('--timeout', type=float, default=30.0)
+    ap.add_argument('--floor', type=float, default=1.0)
+    ap.add_argument('--gapset', help='write the gap set of the LAST non-reference run here, one benchmark per line')
+    ap.add_argument('--md', action='store_true', help='markdown tables (for a ledger entry)')
+    a = ap.parse_args()
+
+    runs = []
+    for spec in a.runs:
+        label, _, path = spec.partition('=')
+        if not path:
+            sys.exit(f'gap: expected LABEL=RESULTS, got {spec!r}')
+        res, ign = read(path)
+        for b, (r, t, m) in res.items():
+            if r in SOLVED and t >= a.timeout:
+                res[b] = ('timeout', t, m)
+        runs.append((label, path, res, ign))
+
+    def row(cells):
+        return ('| ' + ' | '.join(str(c) for c in cells) + ' |') if a.md else '  '.join(f'{str(c):>9}' for c in cells)
+
+    ref_label, _, ref, _ = runs[0]
+    common = set(ref)
+    for _, _, res, _ in runs[1:]:
+        common &= set(res)
+    n = len(common)
+    print(f'benchmarks: {n} in common' + ''.join(f'; {l}: {len(r)}' for l, _, r, _ in runs))
+    for l, p, r, ign in runs:
+        if ign:
+            print(f'note: {l}: {ign} line(s) ignored in {p}')
+
+    def par2(res):
+        return sum(res[b][1] if res[b][0] in SOLVED else 2 * a.timeout for b in common)
+
+    hdr = ['run', 'solved', 'sat', 'unsat', 'unknown', 'timeout', 'error', 'time(s)', 'PAR2']
+    print(); print(row(hdr))
+    if a.md:
+        print(row(['---'] * len(hdr)))
+    for l, _, res, _ in runs:
+        c = Counter(res[b][0] for b in common)
+        solved = c['sat'] + c['unsat']
+        tsolved = sum(res[b][1] for b in common if res[b][0] in SOLVED)
+        other = sum(v for k, v in c.items() if k not in ('sat', 'unsat', 'unknown', 'timeout'))
+        print(row([l, solved, c['sat'], c['unsat'], c['unknown'], c['timeout'], other, f'{tsolved:.1f}', f'{par2(res):.1f}']))
+
+    gapset = []
+    for l, _, res, _ in runs[1:]:
+        both = only_ref = only_run = disagree = 0
+        gap, slower = [], []
+        for b in sorted(common):
+            rr, rt, _ = ref[b]
+            xr, xt, _ = res[b]
+            if rr in SOLVED and xr in SOLVED:
+                both += 1
+                if rr != xr:
+                    disagree += 1
+                if xt >= a.floor and xt >= a.factor * max(rt, 1e-3):
+                    gap.append((b, rt, xt)); slower.append(xt / max(rt, 1e-3))
+            elif rr in SOLVED:
+                only_ref += 1
+                gap.append((b, rt, None))
+            elif xr in SOLVED:
+                only_run += 1
+        ratio = par2(res) / par2(ref) if par2(ref) else float('nan')
+        print()
+        print(f'{l} vs {ref_label}: both solved {both}, only {ref_label} {only_ref}, only {l} {only_run}, '
+              f'sat/unsat disagreements {disagree}')
+        print(f'{l} vs {ref_label}: PAR2 ratio {ratio:.2f}; gap set {len(gap)} '
+              f'({only_ref} unsolved where {ref_label} solved, {len(gap) - only_ref} solved >= {a.factor:g}x slower)')
+        if gap:
+            worst = sorted(gap, key=lambda g: (g[2] is not None, -(g[2] or 0)))[:10]
+            print(f'  ten of the gap set (benchmark, {ref_label} s, {l} s):')
+            for b, rt, xt in worst:
+                print(f'    {b}  {rt:.2f}  {"timeout" if xt is None else f"{xt:.2f}"}')
+        gapset = gap
+        if disagree:
+            print(f'  WARNING: {disagree} sat/unsat disagreement(s) between {ref_label} and {l}: a bug, not a gap; report it')
+
+    if a.gapset and runs[1:]:
+        with open(a.gapset, 'w') as f:
+            for b, rt, xt in gapset:
+                f.write(f'{b} {rt:.2f} {"timeout" if xt is None else f"{xt:.2f}"}\n')
+        print(f'\ngap set of {runs[-1][0]} written to {a.gapset}')
+
+
+if __name__ == '__main__':
+    main()

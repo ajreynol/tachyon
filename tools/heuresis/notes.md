@@ -103,12 +103,15 @@ see.*
 
 ## The configuration under study
 
-The notes list what has helped on this set, and it is the configuration every
-baseline and A/B in this project runs unless a ledger entry says otherwise:
+The notes list what has helped on this set. The best known configuration —
+the one every A/B in this project runs against unless a ledger entry says
+otherwise — is, as named by a person on 2026-09-14:
 
 ```
---user-pat=strict --no-cbqi --sat-solver=cadical
+--no-cbqi --user-pat=strict
 ```
+
+The other helpers below are candidates to add to it, each an A/B of its own.
 
 | option | why | caveat in the notes |
 | --- | --- | --- |

@@ -6,16 +6,11 @@ tell what is intended from what exists. The goals it serves are numbered in
 
 ## First — goal 0, the set and the baselines
 
-- [ ] **Name the set.** A person's decision. Candidates the notes and the
-      launcher know of: "the verus+sundance set" on which `h-25` was measured;
-      the quantifier benchmark tree and the cvc5-is-slow list that run-dev's
-      naming tables mention. Record in `README.md`, "The set": location on the
-      host, count, how it was selected, date. Then set `QUANT_DIR` in
-      `job_launcher/site.conf` to it.
-- [ ] **Fix the rest of goal 0** in the same section: the cvc5 commit or
-      branch, the z3 version (a binary name in `Z3_BIN` and a version string
-      in the ledger), the timeout (60 s, unless there is a reason), and the
-      factor that defines the gap set (10×, unless there is a reason).
+- [x] **Name the set.** `quant-07-25` on the host, named 2026-09-14; see
+      `README.md`, "The set". Count still to be recorded from the first run.
+- [x] **Fix the rest of goal 0**: 30 s timeout, two cvc5 configurations, the
+      gap factor 10× with a 1 s floor, PAR2 ratio. The z3 version and the cvc5
+      commit are recorded per ledger entry.
 - [ ] **Check `--term-db=relevant`** is or is not in the default
       configuration, and write the answer into `notes.md`, "The configuration
       under study". The notes list it among things that helped without saying
@@ -25,14 +20,16 @@ tell what is intended from what exists. The goals it serves are numbered in
 
 ## Then — goal 1, the gap
 
-- [ ] Run `quant-cvc5.conf` and `quant-z3.conf`, queued, same host, same
-      timeout. One ledger entry with both result files, the gap set (as a
-      list, tracked in the ledger entry), its size, and the aggregate ratio.
-- [ ] Run `quant-cvc5-default.conf` once, so that what the configuration under
-      study buys is a number and not a memory.
-- [ ] The first analysis script, only now: read two run-dev results files,
-      print the gap set and the ratio. Small, in this directory, cited by the
-      ledger entry. Nothing more general until a second experiment needs it.
+- [x] Run `quant-z3.conf`, `quant-cvc5-default.conf` and `quant-cvc5.conf`,
+      queued, same host, same timeout. [Ledger, 2026-09-14](ledger/2026-09-14-baseline.md):
+      PAR2 ratio 4.34, gap set 1049.
+- [ ] One run of cvc5 with the options Verus itself passes to cvc5, if they
+      differ from the best known configuration; the ledger entry says why.
+- [ ] One run of the 545 cvc5 timeouts at a long timeout (20 min), to split
+      "slow" from "stuck" before attributing.
+- [x] The first analysis script: [`gap`](gap) reads run-dev results files and
+      prints the counts, the PAR2 ratio and the gap set. Nothing more general
+      until a second experiment needs it.
 
 ## Then — goal 2, the attribution
 

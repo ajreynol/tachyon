@@ -4,3 +4,28 @@
 # Appended by job_launcher/submit, which copies what run-dev's submit wrote to its own
 # log during the call.  Tracked on purpose: it is the experimental record that
 # tools/heuresis/ledger/ cites.  Do not edit entries by hand.
+# 2026-09-14 16:45 [dev1:~/benchmarks/quant-07-25] (quant-z3.conf)
+# queued 1/3 in window quant-091426
+# heuresis baseline: z3 on the set
+solve_dir_rec_par_z3 -t 30 z3-4.8.17 z3_solve.sh quant-091426
+
+# 2026-09-14 16:45 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-default.conf)
+# queued 2/3 in window quant-091426
+# heuresis baseline: cvc5 default options on the set
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091426-default -q
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-14 16:45 [dev1:~/benchmarks/quant-07-25] (quant-cvc5.conf)
+# queued 3/3 in window quant-091426
+# heuresis baseline: cvc5 best known configuration on the set
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091426-u-ss -q --no-cbqi --user-pat=strict
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-14 17:09 [dev1:~/benchmarks/quant-07-25] (quant-z3.conf)
+# heuresis baseline: z3 on the set, Verus options
+solve_dir_rec_par_z3 -t 30 z3-4.15.4 z3_solve.sh quant-091426-z3-4.15.4 auto_config=false smt.mbqi=false smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.nl=false
+
+# 2026-09-14 17:39 [dev1:~/benchmarks/quant-07-25] (quant-z3.conf)
+# heuresis baseline: z3 on the set, Verus options
+solve_dir_rec_par_z3 -t 30 z3-4.8.17 z3_solve.sh quant-091426-z3-4.8.17 auto_config=false smt.mbqi=false smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.nl=false
+

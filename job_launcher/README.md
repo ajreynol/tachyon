@@ -78,6 +78,14 @@ record this repository cites.
 
 `job_launcher/status` is run-dev's `status` against this site file. Read-only.
 
+**Finished windows stay open** (run-dev leaves them for post-mortem), and the
+next launch can fail with tmux's `create window failed: index in use` before
+anything is logged. Close the finished window first:
+
+```bash
+job_launcher/submit -k quant-091426      # the NAME of the finished job
+```
+
 **Where the checkout is found**, in order: `$RUN_DEV` in the environment,
 `RUN_DEV=` in `job_launcher/site.conf`, `../run-dev` beside this repository.
 

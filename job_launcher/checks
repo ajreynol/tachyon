@@ -21,6 +21,11 @@ note() { echo "  ok: $*"; }
 
 # Public files = tracked + untracked-but-not-ignored.
 PUBLIC=$( { git ls-files; git ls-files --others --exclude-standard; } | sort -u )
+# The records are exempt from the personal-data check: the launch log and the
+# ledger name the host and the binaries on purpose, because a result that does
+# not say where and with what it was produced is not a record.
+RECORDS='^(job_launcher/log\.txt|tools/[^/]+/ledger/)'
+PUBLIC_NONRECORD=$(echo "$PUBLIC" | grep -vE "$RECORDS")
 
 # ---- 1. every script parses -------------------------------------------------
 BAD=0
@@ -40,13 +45,13 @@ addpat "$(git config user.name 2>/dev/null | tr ' ' '\n' | head -1)"
 addpat "$(git config user.name 2>/dev/null | tr ' ' '\n' | tail -1)"
 addpat "$(git config user.email 2>/dev/null | cut -d@ -f1)"
 if [ -f job_launcher/site.conf ]; then
-  DEFAULT_HOST=""; REPO=""; REPO_BINARY=""; BUILDDIR=""; QUANT_DIR=""; CVC5_BIN=""; Z3_BIN=""
+  DEFAULT_HOST=""; REPO=""; REPO_BINARY=""; CVC5_BIN=""; Z3_BIN=""
   # shellcheck disable=SC1091
   source job_launcher/site.conf 2>/dev/null || true
+  # Host, repo and binary names are personal; the benchmark set's name is not
+  # (the research project has to be able to say which set it is about).
   addpat "$DEFAULT_HOST"; addpat "$REPO_BINARY"; addpat "$(basename "${REPO:-}")"
-  addpat "$(basename "${BUILDDIR:-}")"; addpat "$(basename "${QUANT_DIR:-}")"
-  [ "${CVC5_BIN:-cvc5}" = cvc5 ] || addpat "$CVC5_BIN"
-  [ "${Z3_BIN:-z3}" = z3 ] || addpat "$Z3_BIN"
+  # CVC5_BIN / Z3_BIN are versions or build names, not personal; not patterns.
 fi
 BAD=0
 for P in $PATS; do
@@ -54,10 +59,10 @@ for P in $PATS; do
   while IFS= read -r f; do
     [ -f "$f" ] || continue
     sed -E 's#https?://[^ )>]+##g' "$f" | grep -qi -- "$P" && HITS="$HITS $f"
-  done <<< "$PUBLIC"
+  done <<< "$PUBLIC_NONRECORD"
   [ -z "$HITS" ] || { err "personal pattern '$P' appears in:$HITS"; BAD=1; }
 done
-[ $BAD = 0 ] && note "no personal data in public files ($(echo $PATS | wc -w | tr -d ' ') patterns checked)"
+[ $BAD = 0 ] && note "no personal data in public files ($(echo $PATS | wc -w | tr -d ' ') patterns checked; records exempt)"
 
 # ---- 3. every tracked config resolves against the site template ------------
 BAD=0

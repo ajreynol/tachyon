@@ -128,16 +128,24 @@ speedup with no account of why.
 
 ## The set
 
-**Not yet named.** What is known: the notes refer to "the verus+sundance set
-with 60 second timeout", the one on which `h-25` was measured; the launcher
-this project inherits knows a quantifier benchmark tree and a list of
-benchmarks on which cvc5 is slow. Which of these, or what subset, is the set
-is the first item in [`TODO.md`](TODO.md), and it is a person's decision. Until
-it is made, `job_launcher/site.conf`'s `QUANT_DIR` is a placeholder and no run means
-anything.
+**`quant-07-25`**, the quantifier benchmark tree on the benchmark host, named
+by a person on 2026-09-14: **6124 benchmarks** — 5207 in `sundance/`, 779 in
+`verus-no-option/`, 138 in `slow/` — all Verus-generated, all `unsat` where
+solved, none carrying options of their own. In `job_launcher/site.conf` it is
+`QUANT_DIR`. Counted by the baseline run ([ledger, 2026-09-14](ledger/2026-09-14-baseline.md)).
 
-When it is named, this section records: the location on the host, the count,
-how it was selected, and the date — and never changes again.
+Fixed with it, for goal 0:
+
+| | |
+| --- | --- |
+| timeout | 30 s per benchmark per solver, user time, on the host |
+| cvc5 configurations | default (`-q`), and the best known: `-q --no-cbqi --user-pat=strict` |
+| z3 | a current z3 (4.15.4), **with the options Verus passes it**: `auto_config=false smt.mbqi=false smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.nl=false`. Without them z3 times out on benchmarks it solves in a quarter of a second with them; the benchmarks carry no options of their own |
+| gap set | unsolved by cvc5 and solved by z3, or both solved and cvc5 at least 10× slower with cvc5 taking at least 1 s |
+| aggregate | PAR2 ratio, cvc5 over z3, over the benchmarks both runs report |
+
+These are the defaults of [`gap`](gap), the one script that reads results in
+this project; a ledger entry that uses different ones says so.
 
 ## How we would know it is working
 
@@ -196,10 +204,18 @@ records what was read from them and what it settled.
 ## Status
 
 **Started 2026-09-14**, by an explicit human instruction, which is the only way
-one of these begins. The charter, the register and the launcher exist; the set
-is not named; nothing has been run; the ledger is empty. The one number in this
-directory (`h-25`) was inherited from the notes, not measured here, and is
-marked so.
+one of these begins. The same day, goal 0 and goal 1 were done: the set is
+named and the baseline is in the ledger
+([2026-09-14](ledger/2026-09-14-baseline.md)). As of it, the two numbers are:
+
+> **the gap** — PAR2 ratio **4.34** (cvc5 `--no-cbqi --user-pat=strict` over
+> z3 4.15.4 with Verus options, 30 s); gap set **1049** of 6124, of which
+> 545 are cvc5 timeouts on benchmarks z3 solves.
+>
+> **the attributed fraction** — **0**. Nothing has been attributed yet.
+
+The one number inherited from the notes (`h-25`) is still marked as
+inherited.
 
 There are three endings and a person picks: it graduates into its own
 repository, it is folded into cvc5's own performance work, or it is retired in

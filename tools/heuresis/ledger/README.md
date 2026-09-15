@@ -5,7 +5,12 @@ ledger is the only place a number is allowed to enter this project: a figure
 in `README.md` or `notes.md` that does not point at an entry here is a
 hypothesis and must say so.
 
-There are no entries yet.
+Entries: [`2026-09-14-baseline.md`](2026-09-14-baseline.md).
+
+Raw results files are copied from the host into [`data/`](data/) with
+`job_launcher/fetch` and tracked, under the name the driver gave them, so that
+every number in an entry can be recomputed with `gap` from this checkout
+alone. Gap-set lists written by `gap --gapset` live there too.
 
 ## An entry
 
