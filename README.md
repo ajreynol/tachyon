@@ -91,6 +91,6 @@ repository is modelled on:
 ## Status
 
 Set up on 2026-09-14. The current ranked work is maintained in
-[`tools/heuresis/TODO.md`](tools/heuresis/TODO.md); its entries refer to the
+[`tools/heuresis/docs/todo.md`](tools/heuresis/docs/todo.md); its entries refer to the
 research registry in
 [`tools/heuresis/docs/directions.md`](tools/heuresis/docs/directions.md).
