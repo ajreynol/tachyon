@@ -26,13 +26,13 @@ displayed as `ajreynol:NAME` and linked to that branch in `ajreynol/CVC4`; a
 branch marked *merged* has no commits beyond `main`. "Best known" means the
 configuration under study, `--no-cbqi --user-pat=strict`.
 
-**Effort levels.** Each direction is classified `Low`, `Medium`, or `High`
-on two axes. *Risk* combines implementation size, architectural reach,
-correctness exposure, and the chance of regressions. *Gain* is expected value
-to this project if the hypothesis is right: either how much of the performance
-gap it could close or how much important uncertainty it removes. The argument
-after each classification matters more than the label. These are priors, not
-measured claims; attribution should change them.
+**Effort levels.** Each direction is classified on two color-coded axes:
+*Risk* runs 🟢 Low → 🟡 Medium → 🔴 High and combines implementation size,
+architectural reach, correctness exposure, and the chance of regressions;
+*Gain* runs 🔴 Low → 🟡 Medium → 🟢 High and estimates project value if the
+hypothesis is right, either in performance gap closed or important uncertainty
+removed. The argument after each classification matters more than the badge.
+These are priors, not measured claims; attribution should change them.
 
 ## The map
 
@@ -66,7 +66,7 @@ difference; R5–R8 are the policies around it.
 
 ## R1 — Eager instantiation: instantiate during search, not only at full effort
 
-**Effort.** High Risk / High Gain — this changes when quantifiers run and
+**Effort.** 🔴 High Risk / 🟢 High Gain — this changes when quantifiers run and
 touches SAT propagation, pacing, and backtracking; z3's eager chain is the
 largest structural difference identified for this workload.
 
@@ -167,7 +167,7 @@ instantiation drowns.
 
 ## R2 — Incremental E-matching: match what changed, not everything
 
-**Effort.** High Risk / High Gain — persistent indices and merge notifications
+**Effort.** 🔴 High Risk / 🟢 High Gain — persistent indices and merge notifications
 cut across the term database and equality engine, but eliminating full rescans
 could remove a multiplicative cost from every instantiation round.
 
@@ -241,7 +241,7 @@ where the gap is, whatever z3 does.
 
 ## R3 — Worst-case E-matching: failure caching and early pruning
 
-**Effort.** Medium Risk / Medium Gain — the change is localized to matcher
+**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the change is localized to matcher
 state but cache validity is subtle; it targets a severe tail on a small,
 not-yet-measured subset rather than the whole gap.
 
@@ -291,7 +291,7 @@ gap set: a heavy tail on few benchmarks is R3, a uniform cost is R2.
 
 ## R4 — Instantiation budgeting: how many instances per round, and which
 
-**Effort.** High Risk / High Gain — budgets create fairness and completeness
+**Effort.** 🔴 High Risk / 🟢 High Gain — budgets create fairness and completeness
 obligations and interact with R1 and R9, while a successful policy could stop
 the instance and clause explosions predicted to dominate the gap.
 
@@ -354,7 +354,7 @@ R9) is the direction; if the counts are similar, the cost is elsewhere.
 
 ## R5 — Trigger selection: strict user patterns, multi-triggers, and what strictness disables
 
-**Effort.** Medium Risk / Medium Gain — trigger changes are contained but can
+**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — trigger changes are contained but can
 silently alter completeness and matching loops; strict patterns already help
 in a bundle, though their isolated share is unknown.
 
@@ -424,7 +424,7 @@ there are, and an A/B of `trust` vs `strict` alone (the baseline measured
 
 ## R6 — Conflict-based instantiation: off for this domain, and why that is right or wrong
 
-**Effort.** Low Risk / Medium Gain — the engine and off switch already exist,
+**Effort.** 🟢 Low Risk / 🟡 Medium Gain — the engine and off switch already exist,
 so the first work is an isolated run; the current baseline suggests disabling
 it helps, but that effect is still bundled with strict patterns.
 
@@ -470,7 +470,7 @@ SMT*](https://homepage.cs.uiowa.edu/~tinelli/papers/ReyTD-FMCAD-14.pdf), FMCAD
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
 
-**Effort.** Low Risk / Medium Gain — existing modes bracket the experiment and
+**Effort.** 🟢 Low Risk / 🟡 Medium Gain — existing modes bracket the experiment and
 the evaluator is localized; avoiding expensive or duplicate instances could
 matter broadly if its current checks dominate matching time.
 
@@ -507,7 +507,7 @@ the gap set, and an A/B of `--ieval=off`, `--ieval=use-learn`,
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
-**Effort.** Medium Risk / Low Gain — coordinating fallback engines has
+**Effort.** 🟡 Medium Risk / 🔴 Low Gain — coordinating fallback engines has
 completeness consequences, while Verus deliberately disables MBQI and supplies
 patterns, making these engines unlikely to explain much of this set.
 
@@ -573,7 +573,7 @@ backtracking and only keeps what conflicts taught it.
 
 ## R9 — Deleting instantiation lemmas: garbage collection, or scoping them to the branch
 
-**Effort.** High Risk / High Gain — sound deletion requires SAT callbacks and
+**Effort.** 🔴 High Risk / 🟢 High Gain — sound deletion requires SAT callbacks and
 scoped duplicate fingerprints across two backends; if stale instances dominate
 the clause database, it removes a cost paid throughout the search.
 
@@ -643,7 +643,7 @@ notification plumbing first.
 
 ## R10 — Where instance lemmas sit in the decision order: local, deferred, gated
 
-**Effort.** Medium Risk / High Gain — existing flags and branches keep the
+**Effort.** 🟡 Medium Risk / 🟢 High Gain — existing flags and branches keep the
 change narrower than deletion, and deprioritizing thousands of instance
 lemmas could recover much of its benefit without changing clause lifetime.
 
@@ -698,7 +698,7 @@ runs; `--jh-rlv-order` is a third. The decision count per benchmark
 
 ## R11 — Decision heuristic versus relevancy: what the SAT solver is made to decide on
 
-**Effort.** High Risk / High Gain — relevancy crosses assertions, theory
+**Effort.** 🔴 High Risk / 🟢 High Gain — relevancy crosses assertions, theory
 registration, propagation, and decisions; z3 uses it to suppress work at each
 of those boundaries, so its possible reach is equally broad.
 
@@ -756,7 +756,7 @@ decision count.
 
 ## R12 — Lemma inprocessing and conflict minimisation
 
-**Effort.** Low Risk / Medium Gain — mainline switches already expose the
+**Effort.** 🟢 Low Risk / 🟡 Medium Gain — mainline switches already expose the
 experiment and transformations are checked locally; they may shrink every
 instance lemma, but cannot fix a bad instantiation policy.
 
@@ -797,7 +797,7 @@ on cvc5's inprocessing.
 
 ## R13 — The SAT backend: CaDiCaL, MiniSat, restarts, units
 
-**Effort.** Low Risk / Medium Gain — both SAT backends and their switch already
+**Effort.** 🟢 Low Risk / 🟡 Medium Gain — both SAT backends and their switch already
 exist, making the baseline correction cheap; backend behavior can improve the
 whole search but is unlikely to explain quantifier-specific pathologies alone.
 
@@ -871,7 +871,7 @@ reading of `notes.md`, unless the attribution says otherwise; two of them
 
 ## R14 — Theory combination: care graph or model-based
 
-**Effort.** High Risk / Medium Gain — a second combination architecture changes
+**Effort.** 🔴 High Risk / 🟡 Medium Gain — a second combination architecture changes
 contracts across every theory and has known logic-specific losses; it may avoid
 many care splits, but their share of this gap has not been measured.
 
@@ -922,7 +922,7 @@ branch as a build.
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
 
-**Effort.** High Risk / Medium Gain — shared equality ownership and notification
+**Effort.** 🔴 High Risk / 🟡 Medium Gain — shared equality ownership and notification
 semantics reach every theory; a mainline central mode lowers experiment risk,
 but the expected gain remains workload-dependent.
 
@@ -979,7 +979,7 @@ worst says what fraction of time is in the equality engines at all.
 
 ## R16 — Datatypes: when to split, on what, and whether to have them at all
 
-**Effort.** Medium Risk / Medium Gain — the work is confined mostly to datatype
+**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the work is confined mostly to datatype
 split gating, but missed splits threaten progress; Verus uses datatypes heavily,
 so avoiding irrelevant splits may affect a meaningful subset.
 
@@ -1045,7 +1045,7 @@ as a build.
 
 ## R17 — Linear integer arithmetic: branch and bound, cuts, and the Diophantine solver
 
-**Effort.** High Risk / Medium Gain — integer reasoning is correctness-critical
+**Effort.** 🔴 High Risk / 🟡 Medium Gain — integer reasoning is correctness-critical
 and scheduling changes can trade progress for delay; arithmetic is common here,
 but only profiling can separate it from quantifier-driven cost.
 
@@ -1111,7 +1111,7 @@ on the gap set; [`ajreynol:ai-dioLc`](https://github.com/ajreynol/CVC4/tree/ai-d
 
 ## R18 — Nonlinear arithmetic: off, light, or lazy
 
-**Effort.** Low Risk / Low Gain — an existing flag matches Verus's policy and
+**Effort.** 🟢 Low Risk / 🔴 Low Gain — an existing flag matches Verus's policy and
 makes the experiment cheap; it applies only to the NIA subset and does not
 address the dominant trigger-driven mechanism.
 
@@ -1165,7 +1165,7 @@ nonlinear off, the extension was pure cost here.
 
 ## R19 — Bit-vectors inside quantified problems
 
-**Effort.** High Risk / Low Gain — delaying bit-blasting must preserve progress
+**Effort.** 🔴 High Risk / 🔴 Low Gain — delaying bit-blasting must preserve progress
 across generated terms and theory combination, while only the bit-vector subset
 can benefit.
 
@@ -1230,7 +1230,7 @@ measured win so far; R22 and R23 have one-flag experiments.
 
 ## R20 — Preprocessing: `distinct`, non-clausal simplification, ITE
 
-**Effort.** Low Risk / Medium Gain — preprocessing rewrites are localized and
+**Effort.** 🟢 Low Risk / 🟡 Medium Gain — preprocessing rewrites are localized and
 lazy `distinct` already produced the register's one measured speedup; further
 wins are plausible but cannot explain search-heavy timeouts by themselves.
 
@@ -1293,7 +1293,7 @@ gap set (`--stats`); then `--simplification=none`, `--no-static-learning`,
 
 ## R21 — Quantifier preprocessing: what is done to a quantifier before it is ever matched
 
-**Effort.** High Risk / Medium Gain — rewrites must preserve binders, annotations,
+**Effort.** 🔴 High Risk / 🟡 Medium Gain — rewrites must preserve binders, annotations,
 and trigger intent, so semantic risk is high; avoiding harmful preprocessing
 could help all patterned quantifiers if the profiles implicate it.
 
@@ -1350,7 +1350,7 @@ and Pit-Claudel CAV
 
 ## R22 — Preregistration: which literals the theories are told about
 
-**Effort.** Medium Risk / Medium Gain — the active branch demonstrates bounded
+**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the active branch demonstrates bounded
 plumbing but relevance mistakes can hide needed theory facts; the gain depends
 on how much eager preregistration pollutes this set.
 
@@ -1382,7 +1382,7 @@ branch.
 
 ## R23 — Term-database relevance: which ground terms E-matching may use
 
-**Effort.** Medium Risk / High Gain — eligibility and last-resort fallback are
+**Effort.** 🟡 Medium Risk / 🟢 High Gain — eligibility and last-resort fallback are
 subtle, but z3's matcher is relevance-driven and reducing the candidate term
 set would compound across every E-matching round.
 
@@ -1427,7 +1427,7 @@ term-database size and instance counts.
 
 ## R24 — A domain configuration: run cvc5 the way Verus runs z3
 
-**Effort.** Low Risk / High Gain — it composes existing options and is easy to
+**Effort.** 🟢 Low Risk / 🟢 High Gain — it composes existing options and is easy to
 revert, while the first two bundled choices already improve PAR2 and the full
 bundle is the cheapest plausible path to a substantial result.
 
@@ -1491,7 +1491,7 @@ the attribution.
 
 ## R25 — Low-level engineering: the constant factors
 
-**Effort.** Low Risk / Medium Gain — profile-led constant-factor fixes are
+**Effort.** 🟢 Low Risk / 🟡 Medium Gain — profile-led constant-factor fixes are
 usually isolated and individually safe; several may accumulate, but no single
 one is expected to explain the structural timeout gap.
 
@@ -1527,7 +1527,7 @@ the direction for those ten.
 
 ## R26 — Attribution instrumentation: the tools goal 2 needs
 
-**Effort.** Low Risk / High Gain — instrumentation is largely outside solving
+**Effort.** 🟢 Low Risk / 🟢 High Gain — instrumentation is largely outside solving
 semantics, and trustworthy attribution removes the central uncertainty that
 currently blocks every high-risk implementation.
 
@@ -1596,7 +1596,7 @@ needs only `--stats-internal` and `-o inst` on the gap set.
 
 ## R27 — SMT-LIB parser throughput: pay less before solving
 
-**Effort.** Medium Risk / Medium Gain — lexer and term-construction changes are
+**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — lexer and term-construction changes are
 contained in the front end, but its compliance and ownership surface is broad;
 large generated inputs may benefit substantially, while parsing cannot explain
 search-heavy timeouts unless measurement shows it consumes their budget.
