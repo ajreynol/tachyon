@@ -183,13 +183,16 @@ on it.
 | --- | --- |
 | the launcher: configs, site file, results format, host conventions | [`job_launcher/`](../../job_launcher/), and [run-dev](https://github.com/ajreynol/run-dev) |
 | the register of hypotheses, with each one's branch or pull request | [`notes.md`](notes.md), a summary of performance notes dated 2026-09-14 |
-| the research directions, with flags, branches, z3's mechanisms and papers | [`docs/directions.md`](docs/directions.md), written 2026-09-15 from cvc5 and z3 source, the fork's 801 branches, and the literature |
+| the research directions, with risk/gain estimates, flags, branches, z3's mechanisms and papers | [`docs/directions.md`](docs/directions.md), written 2026-09-15 from cvc5 and z3 source, the fork's 801 branches, and the literature |
 | the configuration under study | [`notes.md`](notes.md#the-configuration-under-study) |
 | the one measured number, and the only one | [`h-25`](notes.md#f--preprocessing): 1.75× average, lazy `distinct`, 60 s |
 | what the notes say z3 has that cvc5 does not | [`notes.md`](notes.md#what-z3-has-according-to-the-notes) |
 | the shape — charter, goals in order, wishue, ledger, three endings | dokimasia's [`tools/`](https://github.com/ajreynol/dokimasia/tree/main/tools) |
 
 ## Using it
+
+[`TODO.md`](TODO.md) is the active top-ten queue;
+[`docs/directions.md`](docs/directions.md) is the registry it refers to.
 
 ```bash
 cp job_launcher/site.conf.example job_launcher/site.conf       # once; QUANT_DIR is the set
@@ -217,10 +220,11 @@ named and the baseline is in the ledger
 
 The one number inherited from the notes (`h-25`) is still marked as
 inherited. On 2026-09-15 the register was expanded into
-[`docs/directions.md`](docs/directions.md): twenty-six research directions,
+[`docs/directions.md`](docs/directions.md): twenty-seven research directions,
 each with the cvc5 flags that test it, what the fork has tried, what z3 does
-in its code, and the papers — and a list of what to run first. Two caveats
-on the baseline were found while writing it
+in its code, the papers, and an argued risk/gain estimate. The active
+recommendation is the ranked list in [`TODO.md`](TODO.md). Two caveats on the
+baseline were found while writing it
 ([ledger, 2026-09-15](ledger/2026-09-15-baseline-caveats.md)).
 
 There are three endings and a person picks: it graduates into its own

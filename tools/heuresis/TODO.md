@@ -1,73 +1,216 @@
-# heuresis — the plan
+# heuresis — active top ten
 
-Nothing has been run. This is the order the work goes in, so that a reader can
-tell what is intended from what exists. The goals it serves are numbered in
-[`README.md`](README.md); the rows it refers to are in [`notes.md`](notes.md).
+This is the evolving answer to one question: **what should an AI agent or a
+human work on next?** It assumes the hypotheses, evidence, flags, branches,
+papers, and effort arguments in [`docs/directions.md`](docs/directions.md) and
+refers to them by `R1`–`R27`. That document is the registry; this one is the
+queue.
 
-## First — goal 0, the set and the baselines
+**Updated.** 2026-09-15.
 
-- [x] **Name the set.** `quant-07-25` on the host, named 2026-09-14; see
-      `README.md`, "The set". Count still to be recorded from the first run.
-- [x] **Fix the rest of goal 0**: 30 s timeout, two cvc5 configurations, the
-      gap factor 10× with a 1 s floor, PAR2 ratio. The z3 version and the cvc5
-      commit are recorded per ledger entry.
-- [ ] **Check `--term-db=relevant`** is or is not in the default
-      configuration, and write the answer into `notes.md`, "The configuration
-      under study". The notes list it among things that helped without saying
-      whether it is on.
-- [ ] `cp job_launcher/site.conf.example job_launcher/site.conf`, `job_launcher/checks`, and a dry run of
-      `quant-cvc5.conf` and `quant-z3.conf`.
+## How to maintain this list
 
-## Then — goal 1, the gap
+- Keep exactly ten entries, in priority order. Rank is the recommendation.
+- Move an entry when evidence changes its expected value, not merely because
+  somebody has started it. Record completed experiments in [`ledger/`](ledger/)
+  and replace them here with the next concrete action.
+- `ready` means work can begin now, `waiting` names work whose prerequisites
+  are earlier in the list, and `conditional` means attribution must justify it.
+- `Who` names the best lead, not an exclusive owner. An agent can prepare code,
+  configs, analysis, and ledger drafts; a human chooses the fixed set, grants
+  access to the benchmark host, and decides whether work goes upstream.
+- Every effort is an argued `Low`, `Medium`, or `High` implementation *Risk*
+  paired with expected project *Gain*. Queue entries judge the immediate task;
+  RX entries judge the eventual solver change. These are priors and must move
+  when measurements arrive.
 
-- [x] Run `quant-z3.conf`, `quant-cvc5-default.conf` and `quant-cvc5.conf`,
-      queued, same host, same timeout. [Ledger, 2026-09-14](ledger/2026-09-14-baseline.md):
-      PAR2 ratio 4.34, gap set 1049.
-- [ ] One run of cvc5 with the options Verus itself passes to cvc5, if they
-      differ from the best known configuration; the ledger entry says why.
-- [ ] One run of the 545 cvc5 timeouts at a long timeout (20 min), to split
-      "slow" from "stuck" before attributing.
-- [x] The first analysis script: [`gap`](gap) reads run-dev results files and
-      prints the counts, the PAR2 ratio and the gap set. Nothing more general
-      until a second experiment needs it.
+## 1 — Correct and freeze the two baselines
 
-## Then — goal 3 in its cheapest form (from `docs/directions.md`)
+**Status.** `ready`
 
-- [ ] Rerun the two baselines with what was missing: cvc5 with
-      `--sat-solver=cadical`; z3 with all nine Verus options (the config is
-      already updated). Ledger entries for both.
-- [ ] The twelve single-flag runs listed under "What to run first" in
-      [`docs/directions.md`](docs/directions.md), each against the baseline,
-      one ledger entry each. This table is the first draft of the
-      attribution.
+**Who.** `agent + human`
 
-## Then — goal 2, the attribution
+**Directions.** R13, R24
 
-- [ ] `quant-cvc5-stats.conf` on the set; per gap benchmark, the counters that
-      distinguish the register's classes (instantiation rounds and counts,
-      lemmas sent, decisions, branch-and-bound lemmas, datatype splits,
-      preprocessing time). Which counters, exactly, is decided by looking at
-      the first ten gap benchmarks by hand.
-- [ ] Profiles of the ten worst, through run-dev's `get_profile`.
-- [ ] The attribution table: one row per gap benchmark, one column per class
-      of `notes.md`, and the fraction each column explains. This is the
-      project's first result and the second number in `README.md`.
-- [ ] Rewrite or delete `notes.md`, "A reading of the register", according to
-      what the table says.
+**Effort.** Low Risk / High Gain — these are config and ledger changes, and
+every later comparison is misleading until the baselines match the intended
+CaDiCaL and Verus configurations.
 
-## Then — goal 3
+**Work.** Rerun cvc5 with CaDiCaL despite incremental mode, and rerun z3 with
+all Verus options. Keep the same 6,124 inputs, 30-second timeout, host, and gap
+definition.
 
-- [ ] Pick the top row. If it has a branch, `BRANCH=` in a copy of
-      `quant-cvc5.conf`; if it is an option, add it to `OPTS`. A/B against the
-      baseline, one ledger entry, whether or not it helped.
-- [ ] Repeat down the ranking while a row explains a share worth the run.
+**Done when.** Both corrected runs have configs, launcher log entries, result
+files, and ledger rows, and the README names them as the comparison baselines.
 
-## Not yet
+## 2 — Settle the remaining configuration facts
 
-- **Any code on the register's branches.** Until the attribution says which
-  row is worth it, working a branch is building before finding out.
-- **An analysis library.** run-dev's notebooks are self-contained on purpose;
-  the first helper needed twice is the one to extract, and not before.
-- **Widening the set.** A second set is a second project.
-- **Anything upstream.** No pull request, no issue comment, no push from
-  here. A person carries a result, if there is one.
+**Status.** `ready`
+
+**Who.** `agent`
+
+**Directions.** R23, R24
+
+**Effort.** Low Risk / Medium Gain — this is source inspection and
+documentation, but it prevents a default from being tested or credited twice.
+
+**Work.** Establish whether `--term-db-mode=relevant` is already selected by
+the effective defaults, and record the exact options Verus passes to cvc5.
+
+**Done when.** `notes.md` and the baseline ledger distinguish explicit flags,
+effective defaults, and options supplied by Verus, with source locations.
+
+## 3 — Split the 545 timeouts into slow and stuck
+
+**Status.** `ready`
+
+**Who.** `agent + human`
+
+**Directions.** R26
+
+**Effort.** Low Risk / High Gain — one longer run has little technical risk and
+separates finite slowdowns from non-progress, which changes both profiling and
+the likely remedy.
+
+**Work.** Run the corrected cvc5 baseline on the timeout subset at 20 minutes.
+Use the result to distinguish finite slowdowns from matching loops or other
+non-progress behavior before choosing profiles.
+
+**Done when.** Every current timeout is classified as solved at long timeout or
+still stuck, and both counts are recorded in the ledger.
+
+## 4 — Build the attribution extractor
+
+**Status.** `ready`
+
+**Who.** `agent`
+
+**Directions.** R26
+
+**Effort.** Medium Risk / High Gain — counter formats and partial runs make a
+trustworthy extractor nontrivial, while its output is the evidence needed to
+choose among all high-risk solver changes.
+
+**Work.** Read cvc5 `--stats-internal` and diagnostic output per benchmark and
+emit the counters named by R1–R27: instantiation rounds and totals, E-matching
+time, duplicate reasons, lemma counts, decisions, datatype splits, arithmetic
+lemmas, preprocessing time, and parser measurements.
+
+**Done when.** One command produces a stable row per benchmark, rejects missing
+or malformed input, and has fixture tests for solved, timeout, and partial runs.
+
+## 5 — Measure SMT-LIB parser cost and test the existing branch
+
+**Status.** `ready`
+
+**Who.** `agent + human`
+
+**Directions.** R27
+
+**Effort.** Low Risk / Medium Gain — `--parse-only` and an existing branch make
+the hypothesis cheap to reject; any win is limited to the fraction of runtime
+spent before solving.
+
+**Work.** Record file size and cvc5 `--parse-only` time across the set, compare
+with z3 on identical inputs, and A/B
+[`ajreynol:ai-parserOpt`](https://github.com/ajreynol/CVC4/tree/ai-parserOpt)
+on the solved-but-slow slice.
+
+**Done when.** The ledger reports parser share and throughput distributions,
+the branch's delta, and whether R27 stays in or leaves this top ten.
+
+## 6 — Profile ten representative gap benchmarks
+
+**Status.** `waiting`
+
+**Who.** `agent + human`
+
+**Directions.** R25, R26, R27
+
+**Effort.** Low Risk / High Gain — profiles do not change solver semantics and
+can eliminate whole classes of speculation before implementation begins.
+
+**Work.** After items 1 and 3, choose both solved-but-slow and still-stuck
+examples. Collect stats, instantiation traces, parse profiles, and callgrind
+profiles, then map each dominant cost to one or more RX entries without
+claiming attribution yet.
+
+**Done when.** Ten ledger-backed case summaries identify dominant functions,
+counter signatures, and plausible RX mappings.
+
+## 7 — Run the cheap single-flag screen
+
+**Status.** `waiting`
+
+**Who.** `agent + human`
+
+**Directions.** R5, R6, R7, R8, R10, R12, R13, R15, R16, R18, R20, R22, R23
+
+**Effort.** Low Risk / High Gain — all flags already exist and are reversible;
+the matrix can find a useful bundle or falsify many directions at once.
+
+**Work.** Run the mainline flag matrix under “What to run first” in
+`directions.md`, first on the gap set and then on the full set for changes that
+survive. Change one choice per run.
+
+**Done when.** Each flag has a comparable ledger row reporting gap-set size,
+PAR2 ratio, wins, losses, and timeouts against the corrected baseline.
+
+## 8 — Publish the first attribution table and rerank this file
+
+**Status.** `waiting`
+
+**Who.** `agent + human`
+
+**Directions.** R26
+
+**Effort.** Medium Risk / High Gain — combining noisy signals risks false
+precision, but a reviewed table converts the register into the project's first
+result and determines where implementation effort belongs.
+
+**Work.** Combine the extractor, profiles, long-timeout classification,
+parser measurements, and single-flag deltas into one row per gap benchmark and
+one column per hypothesis class. Preserve ambiguity instead of forcing a winner.
+
+**Done when.** The README's attributed fraction is nonzero and ledger-backed,
+the top two or three directions have measured shares, and this top ten is
+reranked from those shares.
+
+## 9 — Test existing branches for the leading measured rows
+
+**Status.** `waiting`
+
+**Who.** `agent + human`
+
+**Directions.** R3, R9, R10, R16, R17, R19, R22, R27
+
+**Effort.** Medium Risk / High Gain — stale branches may need compatibility
+repairs, but restricting work to measured leaders makes each A/B capable of
+removing a known share of the gap.
+
+**Work.** Select only branches whose RX rows rank highly in item 8. Start with
+the smallest plausible implementation, run an A/B on the gap set, and promote
+only clear wins to the full set.
+
+**Done when.** Every tested branch has a ledger row and the leading measured
+direction has either a reproducible improvement or a documented falsification.
+
+## 10 — Implement the highest-leverage structural change
+
+**Status.** `conditional`
+
+**Who.** `agent + human`
+
+**Directions.** R1, R2, R4, R9
+
+**Effort.** High Risk / High Gain — eager, incremental, budgeted,
+backtrack-aware instantiation spans several correctness-critical subsystems,
+but it targets the central structural difference from z3.
+
+**Work.** Proceed only if attribution shows that full-effort rounds and matcher
+rework dominate the gap. Treat eager instantiation, incremental matching,
+budgets, and instance lifetime as one design with staged milestones.
+
+**Done when.** A reviewed design preserves completeness boundaries, targeted
+regressions pass, and an A/B ledger row shows how much of the attributed share
+the implementation actually removes.

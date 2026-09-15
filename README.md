@@ -90,7 +90,7 @@ repository is modelled on:
 
 ## Status
 
-Set up on 2026-09-14. The launcher is written and unrun; the research project
-has its charter and register and no ledger row. The first things to happen are
-in [`tools/heuresis/TODO.md`](tools/heuresis/TODO.md), and the first of them
-is a person's decision: which benchmarks, exactly.
+Set up on 2026-09-14. The current ranked work is maintained in
+[`tools/heuresis/TODO.md`](tools/heuresis/TODO.md); its entries refer to the
+research registry in
+[`tools/heuresis/docs/directions.md`](tools/heuresis/docs/directions.md).
