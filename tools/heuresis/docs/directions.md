@@ -5,26 +5,44 @@ and the same four inventories: the cvc5 flags that test it today,
 what has been tried, what z3 and others do, and the papers.** Written
 2026-09-15 from the performance notes
 summarised in [`../notes.md`](../notes.md) (the `h-N` rows referenced below),
-from cvc5 `main` at `f294265` and z3 `master` at `2d2fb04` read on that day,
-from the 801 branches of the `ajreynol/CVC4` fork as fetched on 2026-08-26,
+from cvc5 `main` at
+[`f294265`](https://github.com/cvc5/cvc5/commit/f294265c2b939a8e6cee8551f5a08afe5fb01efa)
+and z3 `master` at
+[`2d2fb04`](https://github.com/Z3Prover/z3/commit/2d2fb04fe3f1ab2111b550645f7c49198a3165f6)
+read on that day,
+from the 847 remote branch refs of the `ajreynol/CVC4` fork (excluding its
+symbolic remote `HEAD`) as fetched on 2026-08-26,
 and from the literature. Directions are not mutually exclusive; several
 are the same mechanism seen from different sides, and the grouping says
 which.
 
-*What this document is not.* It is not an attribution. No direction below
-has been measured against the set; the only number the project owns is the
-baseline ([ledger, 2026-09-14](../ledger/2026-09-14-baseline.md)): PAR2 ratio
-4.34, gap set 1049 of 6124, 545 of them cvc5 timeouts on benchmarks z3 solves.
-The inventories say what *could* be tested and how; goal 2 of the charter
-decides what *is*. Where a claim about z3 or cvc5 rests on code read today it
-says `(code)`; where on a paper, it cites; where on the notes, it names the
-`h-` row; where on reasoning alone, it says so.
+*What this document is not.* It is not an attribution of the remaining gap.
+The project baseline ([ledger,
+2026-09-14](../ledger/2026-09-14-baseline.md)) measures a PAR2 ratio of 4.34,
+a gap set of 1049 of 6124, and 545 cvc5 timeouts on benchmarks z3 solves. It
+also measures `--no-cbqi --user-pat=strict` only as a bundle: relative to
+cvc5's default, cvc5 PAR2 improves from 53390 to 43942, but the two flags'
+individual shares are unknown. Separately, the notes inherit one measured
+direction, lazy large-`distinct` handling (R20), at 1.75× average speedup on
+the Verus+Sundance set with a 60-second timeout. Everything else remains a
+hypothesis or an unmeasured branch. The inventories say what *could* be
+tested and how; goal 2 of the charter decides what *is*. Where a claim about
+z3 or cvc5 rests on code read today it says `(code)`; where on a paper, it
+cites; where on the notes, it names the `h-` row; where on reasoning alone,
+it says so.
 
 **Conventions.** A cvc5 flag is given as `--name` with its default in
 brackets; `none` means the feature does not exist in cvc5. Fork branches are
 displayed as `ajreynol:NAME` and linked to that branch in `ajreynol/CVC4`; a
-branch marked *merged* has no commits beyond `main`. "Best known" means the
-configuration under study, `--no-cbqi --user-pat=strict`.
+parenthesized "commits" count means
+`git rev-list --count origin/master..origin/NAME` at that fetched snapshot.
+It is an archaeology aid, not an estimate of patch size: long-lived branches
+can contain merge and update commits. A feature marked *merged* means its
+intended behavior or option was found in the pinned cvc5 source; it does not
+mean the fork commit is an ancestor of `main`, because upstream often
+squash-merges. "Open" and "unmerged" are statuses as checked on 2026-09-15.
+"Best known" means the configuration under study,
+`--no-cbqi --user-pat=strict`.
 
 **Effort levels.** Each direction is classified on two color-coded axes:
 *Risk* runs 🟢 Low → 🟡 Medium → 🔴 High and combines implementation size,
@@ -48,21 +66,50 @@ The baseline says half the gap set is timeouts and half is solved-but-slow.
 The reading in `notes.md` (*A reading of the register*) predicts that groups A
 and B carry most of it. That is a prediction, and goal 2 exists to test it.
 
+## Fork archaeology: the highest-signal branches
+
+The fork is a design notebook, not a benchmark result. The table below records
+what is actually present at the fetched tips and the next discriminating step.
+"Ahead" uses the convention above; the source delta is the three-dot diff from
+the merge base to the branch over `src/` and the regression CMake list. Neither
+number proves that a branch is good, current, or reviewable as one patch.
+
+| direction | branch evidence at the fetched tip | concrete mechanism | next branch step |
+| --- | --- | --- | --- |
+| R1 | [`ajreynol:eagerCbqi`](https://github.com/ajreynol/CVC4/tree/eagerCbqi): 204 ahead, 2024-10-09; 62 files, +5285/−235 | evaluator-backed eager term database with conflict/propagation modes and instantiation levels | Rebase only after a small run separates evaluator cost from the benefit of earlier instances. |
+| R1/R2 | [`ajreynol:eagerInst3`](https://github.com/ajreynol/CVC4/tree/eagerInst3): 179 ahead, 2026-04-16; 39 files, +3780/−37; 1713-line `eager_inst.cpp` | persistent ground trie fed by equality-engine notifications; verified ancestry `macrosEagerInst` → `macroEagerInstMt` → `eagerInst3` | Run its shipped Verus cases, then a fixed 50-case gap slice with instance, round, and memory counters. |
+| R1/R4 | [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/CVC4/tree/claude-eagerInst): 5 ahead, 2026-06-12; 14 files, +1464/−8, excluding two large SMT2 inputs | smaller notification-driven matcher with generation, pair, and per-round budgets | Sweep the three limits on the same slice before comparing it with the two older eager designs. |
+| R2/R7 | [`ajreynol:ai-emFilter`](https://github.com/ajreynol/CVC4/tree/ai-emFilter): 11 ahead, 2026-04-27; 20 files, +758/−15 | `--filter-e-matching` and supporting equality/entailment filters | Count candidate matches rejected, time spent filtering, and net instances saved. |
+| R3 | [`ajreynol:ai-prepared13`](https://github.com/ajreynol/CVC4/tree/ai-prepared13): 11 ahead, 2026-06-10; 4 files, +291/−6 | prepared-term indexing work concentrated in four source files | Profile lookup time and index size before treating the small file count as low risk. |
+| R9/R10 | [`ajreynol:ai-instDefer`](https://github.com/ajreynol/CVC4/tree/ai-instDefer): 2 ahead, 2026-06-15; 11 files, +116/−32; [`ajreynol:ai-jhRlvInst`](https://github.com/ajreynol/CVC4/tree/ai-jhRlvInst): 3 ahead, 2026-06-18; 10 files, +327/−18 | global duplicate recording with local-style justification, and quantifier-relevance activation in the justification heuristic | Compare each alone with `--inst-local`; neither branch implements SAT clause deletion. |
+| R11/R22 | [`ajreynol:preregRlv`](https://github.com/ajreynol/CVC4/tree/preregRlv): 155 ahead, 2026-04-23; 10 files, +836/−13 | relevance-aware preregistration; related upstream [PR #9503](https://github.com/cvc5/cvc5/pull/9503) remains open | First compare `--preregister-mode=lazy`; build the branch only if the cheap flag moves the target counters. |
+| R14 | [`ajreynol:mbtc25`](https://github.com/ajreynol/CVC4/tree/mbtc25): 29 ahead, 2026-01-13; 16 files, +371/−84 | model-based theory combination; related upstream [PR #12095](https://github.com/cvc5/cvc5/pull/12095) remains open | Add an explicit care-pair/split counter, then compare against care-graph combination. |
+| R15 | [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/CVC4/tree/dtMergeNotify-v3): 31 ahead, 2026-05-22; 13 files, +405/−73; verified ancestry `dtMergeNotify` → `v2` → `v3` | datatype merge-notification experiments, distinct from upstream context-notification PR #9724 | Isolate notification count and callback time before attributing a solver-level win. |
+| R16 | [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/CVC4/tree/dtSplitRelevant): 2 ahead, 2026-06-10; 3 files, +62/−8 | `--dt-split-relevant`, a small relevance gate around datatype splitting | Measure eligible versus suppressed splits and check that incompleteness is not introduced. |
+| R17 | [`ajreynol:ai-dioLc`](https://github.com/ajreynol/CVC4/tree/ai-dioLc): 3 ahead, 2026-06-16; 6 files, +95/−2; [`ajreynol:deferBlock`](https://github.com/ajreynol/CVC4/tree/deferBlock): 19 ahead, 2025-08-26; 15 files, +330/−21 | last-call Diophantine timing and deferred arithmetic blocking | Restrict to NIA/LIA cases and record branch lemmas, full/last-call checks, and conflicts. |
+| R19 | [`ajreynol:bitblastLc`](https://github.com/ajreynol/CVC4/tree/bitblastLc): 1 ahead, 2025-06-12; 2 files, +28/−1 | last-call bit-blasting | Run only the bit-vector slice and inspect unknown/completeness behavior as well as time. |
+| R24 | [`ajreynol:verusDev`](https://github.com/ajreynol/CVC4/tree/verusDev): 23 ahead, 2026-02-04; 10 files, +141/−33 | a mixed Verus-oriented line: relevance delay, recheck, function assignment, datatype splitting | Decompose it into the corresponding main flags/features; do not benchmark the aggregate as attribution. |
+| R25 | [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/CVC4/tree/lowLevelOptMore): 11 ahead, 2019-12-16; 3 files, +105/−33 | old, compact constant-factor work | Treat it as profiling history; reproduce the hotspot on current main before porting code. |
+| R26 | [`ajreynol:qdebugStats`](https://github.com/ajreynol/CVC4/tree/qdebugStats): 29 ahead, 2026-01-29; 19 files, +532/−15 | E-matching debug statistics plus an `AnalyzeEE` module | Inventory which counters remain absent on main and port only those required by the attribution table. |
+| R27 | [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/CVC4/tree/ai-parserOpt): 2 ahead, 2026-03-12; 7 files, +228/−144 | stack reservation, `from_chars`, static `string_view` token tables, and less argument-vector movement | Measure parse-only wall time, allocations, and bytes/s before and after on large generated inputs. |
+
 ---
 
 # Group A — when and how much to instantiate
 
 The structural difference the notes name first (`h-16`, `h-18`), and the one
-the z3 code confirms most sharply `(code)`: z3 turns an E-matching match into
-a clause *during propagation* when its cost is below `smt.qi.eager_threshold`,
-E-matches only terms that relevancy has marked, finds new matches
-incrementally from a candidate queue fed by merges, and deletes the instance
-clauses again on backtracking. cvc5 does none of these four things: it
-instantiates only at `EFFORT_FULL`/`LAST_CALL` (and skips one round in three
-by default, `--inst-when-phase=2`), rebuilds every trigger index from scratch
-each round, enumerates every match a trigger has with no budget, and keeps
-every instance forever (group B). R1–R4 are the four halves of that
-difference; R5–R8 are the policies around it.
+the z3 code confirms most sharply `(code)`: z3 can turn an E-matching match
+into a clause *during propagation* when its cost is below
+`smt.qi.eager_threshold`, E-matches only terms that relevancy has marked,
+finds new matches incrementally from a candidate queue fed by merges, and
+deletes the instance clauses again on backtracking. cvc5 does not combine
+these four mechanisms: it instantiates only at `EFFORT_FULL`/`LAST_CALL` (and
+skips one round in three by default, `--inst-when-phase=2`), rebuilds every
+trigger index from scratch each round, enumerates every match a trigger has
+with no budget, and by default keeps every instance for the current user
+context (group B).
+R1–R4 are the four halves of that difference; R5–R8 are the policies around
+it.
 
 ## R1 — Eager instantiation: instantiate during search, not only at full effort
 
@@ -72,13 +119,14 @@ largest structural difference identified for this workload.
 
 *Rows `h-16`. Coupled to R2 (incrementality), R4 (budget), R9 (deletion).*
 
-**The hypothesis.** A Verus proof obligation is a chain of trigger-driven
-instantiations, each of which creates the ground terms that fire the next. z3
-walks that chain inside unit propagation, with no SAT decision in between;
-cvc5 must first let the SAT solver complete a propositional model, then runs
-one E-matching round, then returns to the SAT solver. On a chain of depth *d*
-that is *d* full checks against a growing clause set. The notes call this the
-lack of eager instantiation and record three attempts.
+**The hypothesis.** A Verus proof obligation can contain a chain of
+trigger-driven instantiations, each of which creates the ground terms that
+fire the next. z3 can walk such a chain inside propagation without requiring
+a SAT decision between every link; cvc5 first lets the SAT solver reach a
+full-effort theory check, runs an E-matching round, and returns to the SAT
+solver. In the worst case, a chain of depth *d* therefore requires *d* full
+checks against a growing clause set. The notes call this the lack of eager
+instantiation and record three attempts.
 
 **In cvc5 today `(code)`.**
 - `--inst-when` [`full-last-call`]: modes `full`, `full-delay`,
@@ -96,13 +144,16 @@ lack of eager instantiation and record three attempts.
 - `none` for eager instantiation itself: no option instantiates below full
   effort.
 
-**Tried.** Three generations of design in the fork, none on `main`.
-Generation 1, [`ajreynol:eagerCbqi`](https://github.com/ajreynol/CVC4/tree/eagerCbqi) (2024-10, 204 commits): an "eager term database"
+**Tried.** Three design lines in the fork, none on `main`; the labels below
+do not imply ancestry. Line A,
+[`ajreynol:eagerCbqi`](https://github.com/ajreynol/CVC4/tree/eagerCbqi)
+(2024-10, 204 commits): an "eager term database"
 built on the instantiation evaluator that adds only conflicting,
 unit-propagating or non-entailed instances eagerly (`--eager-inst-when=eqc|
 eqc-delay|asserted|std-check`, `--eager-inst-mode=conflict|prop|unit-prop|…`,
 `--eager-inst-trigger=narrow|all`, `--track-inst-level`,
-`--inst-level-buffer=N`). Generation 2, [`ajreynol:macrosEagerInst`](https://github.com/ajreynol/CVC4/tree/macrosEagerInst) →
+`--inst-level-buffer=N`). Line B has verified ancestry
+[`ajreynol:macrosEagerInst`](https://github.com/ajreynol/CVC4/tree/macrosEagerInst) →
 [`ajreynol:macroEagerInstMt`](https://github.com/ajreynol/CVC4/tree/macroEagerInstMt) → [`ajreynol:eagerInst3`](https://github.com/ajreynol/CVC4/tree/eagerInst3) (2024-09 to 2026-04, 1713 lines of
 `eager_inst.cpp`): E-matching over a ground trie fed by master-engine
 notifications, with `--eager-inst-term=eqc|eqc-merge|assert`,
@@ -110,7 +161,7 @@ notifications, with `--eager-inst-term=eqc|eqc-merge|assert`,
 `--eager-inst-simple` ("do not search modulo equality to match operators"),
 `--eager-inst-macro-only`, `--eager-inst-gcong`, and `--defer-block`; it
 ships `verus-16s.smt2` and `verus-mim-40s.smt2` as regressions;
-[`ajreynol:ai-extEagerInst3-1`](https://github.com/ajreynol/CVC4/tree/ai-extEagerInst3-1) adds auto-triggers on top. Generation 3, restarted
+[`ajreynol:ai-extEagerInst3-1`](https://github.com/ajreynol/CVC4/tree/ai-extEagerInst3-1) adds auto-triggers on top. Line C, started
 in 2026-04: [`ajreynol:ai-eagerInst1`](https://github.com/ajreynol/CVC4/tree/ai-eagerInst1) (a skeleton), [`ajreynol:ai-eagerInst2`](https://github.com/ajreynol/CVC4/tree/ai-eagerInst2) ("a small
 incremental term database that is populated only from notification events
 … a lightweight eager matcher for user-provided patterns"), and
@@ -162,8 +213,10 @@ Internals*](https://z3prover.github.io/papers/z3internals.html), §7.1.5–7.1.6
 full-effort rounds per benchmark (`QuantifiersEngine::Rounds_Instantiation_Full`)
 against z3's instance generation depth; if cvc5's rounds track z3's depth,
 the cost is rounds, and R1 is the direction. Then the cheapest existing
-branch against the set, with R9 in place, because without deletion eager
-instantiation drowns.
+branch against the set with clause-lifetime and memory counters. The notes
+report that eager attempts drowned without deletion, but `--inst-local` is
+not deletion (R9); a genuine lifetime experiment must follow if the eager
+signal is positive.
 
 ## R2 — Incremental E-matching: match what changed, not everything
 
@@ -207,7 +260,8 @@ that can exclude failed root candidates for the round); [`ajreynol:ai-quantOpt-1
 (candidate caching per pattern arity); [`ajreynol:emExp`](https://github.com/ajreynol/CVC4/tree/emExp) (2025, records the context
 level at which each term entered the database); [`ajreynol:emStratify`](https://github.com/ajreynol/CVC4/tree/emStratify) (2023,
 `--e-matching-stratify-ieval`); [`ajreynol:emFailMasks`](https://github.com/ajreynol/CVC4/tree/emFailMasks) (2022,
-`--inst-track-fail-masks`); [`ajreynol:fixEm`](https://github.com/ajreynol/CVC4/tree/fixEm) (merged). None on `main`.
+`--inst-track-fail-masks`); [`ajreynol:fixEm`](https://github.com/ajreynol/CVC4/tree/fixEm) (merged). None of the branch-only incremental
+matchers above was found on pinned `main`; the `fixEm` repair was.
 
 **Elsewhere `(code)`.** z3 `smt/mam.cpp`: triggers compile into code trees
 shared per top symbol; each enode root carries two 64-bit approximate label
@@ -258,7 +312,7 @@ pushes one variable at a time and tests `isFeasible()` — "infeasible if all
 extensions of the current variable assignment lead to instantiations that are
 entailed by the ground context"; `use-learn` generalises a failed substitution
 and caches it. `--inst-no-entail` [`true`] rejects a completed instance that
-is already entailed (counter `Instantiate::Duplicate_Inst_Ent`). The
+is already entailed (counter `Instantiate::Duplicate_Inst_Entailed`). The
 evaluator is reset each round (`resetAll`). `--multi-trigger-linear` [`true`]
 bounds multi-trigger instances linearly in the number of ground terms.
 
@@ -301,8 +355,8 @@ the instance and clause explosions predicted to dominate the gap.
 sends the cheap ones now, the expensive ones at final check, and the very
 expensive ones never. A budget — per round, per trigger, per ground term, or
 by generation — would keep the clause set small (R9) and the SAT search short,
-at the price of completeness that the Verus workload does not need (all unsat,
-all trigger-driven).
+at the price of completeness this benchmark set may not need (its obligations
+are unsat and its source encoding is designed around triggers).
 
 **In cvc5 today `(code)`.** No per-round or per-trigger cap:
 `InstMatchGenerator::addInstantiations` loops `while (getNextMatch(m) > 0)`
@@ -360,9 +414,13 @@ in a bundle, though their isolated share is unknown.
 
 *Rows in the notes: `--user-pat=strict` under "things that helped".*
 
-**The hypothesis.** Verus supplies a trigger for every quantifier and designs
-them for z3's semantics: user patterns only, no inferred ones, matching loops
-avoided by construction. cvc5's default `trust` already uses only user
+**The hypothesis.** Verus's VIR-to-AIR lowering requires at least one manual
+or automatically selected trigger for the ordinary quantifiers it lowers
+(`build_triggers(..., allow_empty=false)`) and designs them for z3's
+semantics: user patterns only, no solver-inferred ones, with loop avoidance as
+an encoding goal. Generated SMT should still be measured rather than assuming
+that every quantifier from every encoding path is patterned. cvc5's default
+`trust` already uses only user
 patterns when present, but leaves the quantifier open to the other modules;
 `strict` closes it, and is in the best-known configuration. What else
 `strict` changes, and whether the multi-trigger and selection policies are
@@ -390,7 +448,8 @@ triggers based on terms in nested quantifiers"), [`ajreynol:nestedTriggers`](htt
 (merged: user triggers distinguished in `-o trigger`); [`ajreynol:eagerCbqi`](https://github.com/ajreynol/CVC4/tree/eagerCbqi)'s
 `--eager-inst-trigger=narrow` ("use the most constrained trigger") and
 `--eager-inst-merge-triggers` ("combine triggers that are equivalent modulo
-ground subterms"). All stale except the merged output change.
+ground subterms"). None was measured on the set; only the `userTriggerOut2`
+output distinction was found on pinned `main`.
 
 **Elsewhere `(code)`.** z3 `pattern_inference_cfg::reduce_quantifier` returns
 immediately when a quantifier has any pattern: nothing is added, the weight is
@@ -486,11 +545,12 @@ has measured it on this set.
 **In cvc5 today `(code)`.** `--ieval` [`use`], `--inst-no-entail` [`true`];
 trigger matching runs the evaluator in `NO_ENTAIL` mode; QCF in
 `CONFLICT`/`PROP` mode. Counters `Instantiate::Duplicate_Inst`,
-`Duplicate_Inst_Eq`, `Duplicate_Inst_Ent`.
+`Duplicate_Inst_Eq`, `Duplicate_Inst_Entailed`.
 
 **Tried.** [`ajreynol:instEval`](https://github.com/ajreynol/CVC4/tree/instEval) (2022, merged as `--ieval`); [`ajreynol:eagerCbqi`](https://github.com/ajreynol/CVC4/tree/eagerCbqi) extends the
 evaluator for eager use (R1); [`ajreynol:fmfIeval`](https://github.com/ajreynol/CVC4/tree/fmfIeval) (2022), [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/CVC4/tree/ievalTravTrie) (2023),
-[`ajreynol:emStratify`](https://github.com/ajreynol/CVC4/tree/emStratify) (2023), [`ajreynol:cacheEntCheck`](https://github.com/ajreynol/CVC4/tree/cacheEntCheck) (2021); all stale.
+[`ajreynol:emStratify`](https://github.com/ajreynol/CVC4/tree/emStratify) (2023), [`ajreynol:cacheEntCheck`](https://github.com/ajreynol/CVC4/tree/cacheEntCheck) (2021). Apart from merged `instEval`, these tips date
+from 2021–23; none was measured on the set.
 
 **Elsewhere `(code)`.** z3's `smt_checker::is_sat` before internalising an
 instance is the same test at the same point; fingerprints are the duplicate
@@ -501,7 +561,8 @@ filter.
 2021](https://doi.org/10.1007/978-3-030-67067-2_24) is the closest published
 analogue.
 
-**What would settle it.** `Duplicate_Inst_Ent` over `Instantiations_Total` on
+**What would settle it.** `Duplicate_Inst_Entailed` over
+`Instantiations_Total` on
 the gap set, and an A/B of `--ieval=off`, `--ieval=use-learn`,
 `--no-inst-no-entail`.
 
@@ -565,7 +626,8 @@ timeouts.
 
 Downstream of group A. A solver that instantiates eagerly must forget; one
 that keeps everything must at least decide on it in a sensible order and keep
-the SAT core from drowning. The code says cvc5 keeps everything `(code)`:
+the SAT core from drowning. The code says cvc5 keeps everything for the
+current user context `(code)`:
 `LemmaProperty::REMOVABLE` is declared and never set by any theory, MiniSat's
 `reduceDB` touches only `clauses_removable`, and the CaDiCaL propagator hands
 every theory lemma over as irredundant. z3 deletes every instance clause on
@@ -585,15 +647,21 @@ propagation, every justification pass and every decision pays for them. z3
 throws them away and pays to re-derive; cvc5 keeps them and pays to carry
 them. On this workload, where z3 wins, forgetting is the better trade.
 
-**In cvc5 today `(code)`.** `--inst-local` [`false`] (PR #12121, from the fork's
-[`ajreynol:instVolatile`](https://github.com/ajreynol/CVC4/tree/instVolatile)): instantiation lemmas are local to the SAT context, dropped on
-backtrack, and re-derived if needed — `LemmaProperty::LOCAL`. Otherwise
-`Instantiate::addInstantiation` sends `LemmaProperty::INPROCESS`, never
-`REMOVABLE`. MiniSat: `clauses_persistent` are exempt from `reduceDB`;
-CaDiCaL: `add_clause(clause, forgettable=false)`; the only forgettable
-clauses in the whole propagator are two tautology "pacifiers". The catch that
-makes a one-line `REMOVABLE` experiment unsound: cvc5 caches sent instances
-in `inst_match_trie` for the whole user context, so a clause the SAT solver
+**In cvc5 today `(code)`.** `--inst-local` [`false`] ([PR
+#12121](https://github.com/cvc5/cvc5/pull/12121), from the fork's
+[`ajreynol:instVolatile`](https://github.com/ajreynol/CVC4/tree/instVolatile))
+makes selected E-matching and conflict-based-instantiation duplicate caches
+SAT-context-dependent, marks their lemmas `LemmaProperty::LOCAL`, and lets the
+prop layer guard local lemmas and ignore out-of-scope ones during
+justification. It does **not** tell the SAT
+solver to delete the clause on pop; the PR explicitly leaves that part
+unimplemented. Otherwise `Instantiate::addInstantiation` sends
+`LemmaProperty::INPROCESS`, never `REMOVABLE`. MiniSat:
+`clauses_persistent` are exempt from `reduceDB`; CaDiCaL:
+`add_clause(clause, forgettable=false)`; the only forgettable clauses in the
+whole propagator are two tautology "pacifiers". The catch that makes a
+one-line `REMOVABLE` experiment unsound: cvc5 caches sent instances in
+`inst_match_trie` for the whole user context, so a clause the SAT solver
 forgot would never be re-sent. z3 scopes its fingerprint set for exactly this
 reason. Deletion therefore needs a deletion *notification* back to the
 quantifiers module, which is what the fork's [`ajreynol:satNotify`](https://github.com/ajreynol/CVC4/tree/satNotify) / [`ajreynol:notifySatClause`](https://github.com/ajreynol/CVC4/tree/notifySatClause)
@@ -610,7 +678,9 @@ of inst-local that avoids re-deriving instantiations after backtracking");
 module that holds lemmas back, with arithmetic branch-and-bound hooks);
 [`ajreynol:smtLazyAssert`](https://github.com/ajreynol/CVC4/tree/smtLazyAssert) (2022); [`ajreynol:satNotify`](https://github.com/ajreynol/CVC4/tree/satNotify), [`ajreynol:notifySatClause`](https://github.com/ajreynol/CVC4/tree/notifySatClause) (the deletion
 callback). None but `--inst-local` is on `main`; `--inst-local` has not been
-measured on the set.
+measured on the set. Its upstream PR also reports significantly worse overall
+performance despite improvements on some cases, so merge status is not
+positive performance evidence.
 
 **Elsewhere `(code)`.** z3: instance clauses are `CLS_AUX`, stored in
 `m_aux_clauses`, and `context::pop_scope_core` runs `del_clauses(m_aux_clauses,
@@ -637,8 +707,9 @@ Solving*](https://fmv.jku.at/incrinpr/), SAT 2019.
 
 **What would settle it.** Clause-database size against time on the ten worst
 (MiniSat's `clauses_persistent` count is one added statistic away), and the
-fraction of instance clauses that are ever used in a conflict. Then
-`--inst-local` on the set, then `--inst-defer`. A true GC needs the
+fraction of instance clauses that are ever used in a conflict. Run
+`--inst-local` to test its scoped-cache/justification approximation and then
+`--inst-defer`; neither run tests clause deletion. A true GC needs the
 notification plumbing first.
 
 ## R10 — Where instance lemmas sit in the decision order: local, deferred, gated
@@ -674,8 +745,8 @@ heuristic"); [`ajreynol:instLastCallDelay`](https://github.com/ajreynol/CVC4/tre
 valuation still needs a check); [`ajreynol:termOrigin`](https://github.com/ajreynol/CVC4/tree/termOrigin) (`--inst-nested-max-level=N`,
 `--track-term-origins`: a lemma-origin DAG over terms, i.e. z3's generation);
 [`ajreynol:instFullPreempt`](https://github.com/ajreynol/CVC4/tree/instFullPreempt) (2024, `--inst-when=full-preempt`: instantiate before
-theory combination and before other theories have checked). All active or
-unmerged; none measured on the set.
+theory combination and before other theories have checked). None of these
+branch-only options was found on pinned `main`; none was measured on the set.
 
 **Elsewhere `(code)`.** z3 `smt.case_split` [1] = `CS_ACTIVITY_DELAY_NEW`:
 `dact_case_split_queue` keeps Boolean variables created while searching in a
@@ -721,7 +792,8 @@ asserted; `relevant` does not exist on `main`); `--relevance-filter`
 `NEEDS_JUSTIFY` bookkeeping today); `--random-freq` [`0.0`]; no phase-saving
 options are exposed for MiniSat.
 
-**Tried.** [`ajreynol:preregRlv`](https://github.com/ajreynol/CVC4/tree/preregRlv) (2024–2026, 155 commits, PR #9503:
+**Tried.** [`ajreynol:preregRlv`](https://github.com/ajreynol/CVC4/tree/preregRlv) (2024–2026, 155 commits, [PR
+#9503](https://github.com/cvc5/cvc5/pull/9503):
 `--preregister-mode=rlv` "Preregister literals when they become relevant";
 `RelevantPreregistrar`: "we want to preregister only the literals that, if
 they were to be T-propagated, could contribute towards a SAT conflict in the
@@ -772,8 +844,10 @@ apply to instantiation lemmas because those carry `LemmaProperty::INPROCESS`.
 **In cvc5 today `(code)`.** `--lemma-inprocess` [`none`] (`light` / `full`),
 `--lemma-inprocess-subs` [`simple`] (`all`), `--lemma-inprocess-infer-eq-lit`
 [`false`], `--conflict-process` [`none`] (`min` / `min-ext`). All expert;
-inprocessing produces untrusted proof nodes and is incompatible with
-`--deep-restart`. Implementation `prop/lemma_inprocess.cpp`,
+inprocessing returns trusted nodes without a proof generator and therefore
+does not support proof production. `--deep-restart` independently does not
+support proofs; the source does not declare the two experimental features
+incompatible with each other. Implementation `prop/lemma_inprocess.cpp`,
 `prop/zero_level_learner.cpp`.
 
 **Tried.** Developed upstream; no fork branch. Adjacent: [`ajreynol:subConflict`](https://github.com/ajreynol/CVC4/tree/subConflict) (2024,
@@ -889,7 +963,8 @@ its model already makes true.
 bit-vectors are present]; `--ee-mode` (R15); `--inst-when-phase` [`2`]
 (R1). No `--shared-terms` option.
 
-**Tried.** [`ajreynol:mbtc25`](https://github.com/ajreynol/CVC4/tree/mbtc25) (2026-01, 29 commits, PR #12095: `--tc-mode=model-based`
+**Tried.** [`ajreynol:mbtc25`](https://github.com/ajreynol/CVC4/tree/mbtc25) (2026-01, 29 commits, [PR
+#12095](https://github.com/cvc5/cvc5/pull/12095): `--tc-mode=model-based`
 "Use model-based theory combination": build a model, find congruent but
 unmerged applications, split on their unequal arguments; status "30 failures
 only"); [`ajreynol:mbtc2`](https://github.com/ajreynol/CVC4/tree/mbtc2) (2019); [`ajreynol:noHoApplyCg`](https://github.com/ajreynol/CVC4/tree/noHoApplyCg) (partly merged); [`ajreynol:sharedSolverCentral`](https://github.com/ajreynol/CVC4/tree/sharedSolverCentral)
@@ -916,9 +991,9 @@ LPAR 2006. Bruttomesso, Cimatti, Franzén, Griggio and Sebastiani, [*Delayed
 Theory Combination vs. Nelson–Oppen for
 SMT*](https://disi.unitn.it/rseba/papers/lpar06_dtc.pdf), LPAR 2006.
 
-**What would settle it.** The number of care-graph splits per benchmark
-(`theory::CombinationCareGraph` statistics) on the gap set; then the PR's
-branch as a build.
+**What would settle it.** Add a counter for care pairs/splits and record it on
+the gap set; current main exposes per-theory `computeCareGraphTime` timers but
+not that count. Then build the PR branch.
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
 
@@ -941,14 +1016,18 @@ applicable theories use the central engine; auto-enables
 `eqNotifyTriggerTermEquality`, `eqNotifyConstantTermMerge`,
 `eqNotifyNewClass`, `eqNotifyMerge`, `eqNotifyDisequal`; the quantifiers
 engine hooks the master engine (`MasterNotifyClass`) and marks relevance on
-merge (R23). PR #9724 (notifications only when the caller has been used) is
-the notes' low-level optimisation; whether it landed is not stated.
+merge (R23). Open [PR #9724](https://github.com/cvc5/cvc5/pull/9724) is a
+different, lower-level optimisation: replace an always-notified
+`ContextNotifyObject` with a dynamic object that requests a pop notification
+only after `markNeedsRestore()`. Its reported incremental `Kind2` improvement
+is evidence about context-restoration traffic, not equality-merge callbacks;
+it was still unmerged on 2026-09-15.
 
 **Tried.** [`ajreynol:centralEe`](https://github.com/ajreynol/CVC4/tree/centralEe), [`ajreynol:centralEeDev`](https://github.com/ajreynol/CVC4/tree/centralEeDev) (2021, merged: `--ee-mode=central`);
 [`ajreynol:dtMergeNotify`](https://github.com/ajreynol/CVC4/tree/dtMergeNotify),
 [`ajreynol:dtMergeNotify-v2`](https://github.com/ajreynol/CVC4/tree/dtMergeNotify-v2),
 [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/CVC4/tree/dtMergeNotify-v3)
-(2026-05, active: datatypes under the central
+(tip 2026-05-22: datatypes under the central
 engine without `notifyFact`, pending inferences valid in the SAT context,
 `Theory::getFactTheory`, regressions named `central-ee-verus-prereg` and
 `central-ee-splinterdb-*`); [`ajreynol:dtEecNotDone`](https://github.com/ajreynol/CVC4/tree/dtEecNotDone) (merged); [`ajreynol:ai-eecFixes-0430`](https://github.com/ajreynol/CVC4/tree/ai-eecFixes-0430),
@@ -985,13 +1064,15 @@ so avoiding irrelevant splits may affect a meaningful subset.
 
 *Rows `h-23`, `h-24`.*
 
-**The hypothesis.** Verus encodes Rust types as datatypes (`Poly` boxing,
-`Option`, records), so every benchmark has datatype terms in the thousands,
-nearly all of which never need a constructor decision. cvc5 considers every
-datatype equivalence class for splitting; z3 splits infinite datatypes only
-at final check, and only after relevancy has had its say, with the phase
-biased to the non-recursive constructor. Two of the fork's most recent
-branches, and one merged change from [`ajreynol:verusDev`](https://github.com/ajreynol/CVC4/tree/verusDev), are about exactly this.
+**The hypothesis.** Verus encodes Rust types with datatypes (`Poly` boxing,
+`Option`, records), so datatype terms may be numerous even when most never
+need a constructor decision. Their prevalence and scale on this corpus must
+be measured; the source alone does not justify "every benchmark" or
+"thousands". cvc5 considers every datatype equivalence class for splitting;
+z3 splits infinite datatypes only at final check, and only after relevancy has
+had its say, with the phase
+biased to the non-recursive constructor. Two fork branch lines, and one
+merged change from [`ajreynol:verusDev`](https://github.com/ajreynol/CVC4/tree/verusDev), are about exactly this.
 
 **In cvc5 today `(code)`.** `TheoryDatatypes::checkSplit` iterates every
 datatype equivalence class; skips a class that already has a constructor
@@ -1054,9 +1135,10 @@ but only profiling can separate it from quantifier-driven cost.
 **The hypothesis.** Verus arithmetic is mostly bounds and clipping
 (`nClip`, `uClip`) over integers that are otherwise uninterpreted; cvc5's
 integer solver runs its Diophantine solver and branch-and-bound at every full
-check and can branch forever, while z3 does all integer reasoning at final
-check, delegates a branch to the SAT solver as an atom, and periodises the
-expensive handlers with randomised gates.
+check and can branch forever, while z3's solver 6 propagates rational bounds
+during search but defers integrality checks, cuts, and integer branching to
+final check, delegates a branch to the SAT solver as an atom, and periodises
+the expensive handlers with randomised gates.
 
 **In cvc5 today `(code)`.** `--arith-brab` [`true`], `--dio-solver` [`true`;
 off only for quantifier-free nonlinear logics], `--dio-turns` [`10`],
@@ -1072,7 +1154,8 @@ these logics.
 hooks "BB only"; the notes: block or delay the lemmas); [`ajreynol:ai-dioLc`](https://github.com/ajreynol/CVC4/tree/ai-dioLc) (2026-06,
 `--dio-solver-last-call` "defer Diophantine equation solver conflict
 detection to last call effort, instead of running it at every full effort
-check"); cvc5 PR #12178 (Daniel Larraz: DIO handles nonlinear monomials;
+check"); cvc5 [PR #12178](https://github.com/cvc5/cvc5/pull/12178)
+(Daniel Larraz: DIO handles nonlinear monomials;
 disabled it for quantifier-free nonlinear logics); [`ajreynol:liaSplitDelay`](https://github.com/ajreynol/CVC4/tree/liaSplitDelay) (2023);
 [`ajreynol:linearSolverSub`](https://github.com/ajreynol/CVC4/tree/linearSolverSub) (2024, `--arith-sub-solver`); [`ajreynol:limitArith`](https://github.com/ajreynol/CVC4/tree/limitArith) (2024);
 [`ajreynol:elimArith`](https://github.com/ajreynol/CVC4/tree/elimArith), [`ajreynol:elimArithU`](https://github.com/ajreynol/CVC4/tree/elimArithU), [`ajreynol:noArith`](https://github.com/ajreynol/CVC4/tree/noArith) (2024, the notes' inconclusive
@@ -1246,7 +1329,8 @@ while setting `batch` anyway.
 
 **In cvc5 today `(code)`.** `distinct`: the rewriter blasts up to 10 children;
 `--distinct-elim-threshold` [`0`; runs only when set] blasts up to N;
-otherwise `theory/uf/distinct_extension.cpp` handles it lazily (PR #12136,
+otherwise `theory/uf/distinct_extension.cpp` handles it lazily ([PR
+#12136](https://github.com/cvc5/cvc5/pull/12136),
 from the fork's [`ajreynol:distinctExt`](https://github.com/ajreynol/CVC4/tree/distinctExt)). `--simplification` [`batch`] (`none`),
 `--static-learning` [`true`], `--arith-static-learning` [`true`],
 `--learned-rewrite` [`false`], `--ite-simp` [`false`; implies
@@ -1350,7 +1434,7 @@ and Pit-Claudel CAV
 
 ## R22 — Preregistration: which literals the theories are told about
 
-**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the active branch demonstrates bounded
+**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the long-lived branch demonstrates bounded
 plumbing but relevance mistakes can hide needed theory facts; the gain depends
 on how much eager preregistration pollutes this set.
 
@@ -1366,8 +1450,9 @@ long-lived branch.
 **In cvc5 today `(code)`.** `--preregister-mode` [`eager`] (`lazy`: when
 asserted); `--relevance-filter` [`false`]; `prop/theory_preregistrar.cpp`.
 
-**Tried.** [`ajreynol:preregRlv`](https://github.com/ajreynol/CVC4/tree/preregRlv) (R11: `--preregister-mode=rlv`, 552 lines, PR #9503,
-branch since 2024-04, still active 2026-04); [`ajreynol:satRlv`](https://github.com/ajreynol/CVC4/tree/satRlv) (2022, the notes' old
+**Tried.** [`ajreynol:preregRlv`](https://github.com/ajreynol/CVC4/tree/preregRlv) (R11: `--preregister-mode=rlv`, 552 lines, [PR
+#9503](https://github.com/cvc5/cvc5/pull/9503),
+branch since 2024-04, tip dated 2026-04-23); [`ajreynol:satRlv`](https://github.com/ajreynol/CVC4/tree/satRlv) (2022, the notes' old
 broken branch); [`ajreynol:sdm-assertTerms`](https://github.com/ajreynol/CVC4/tree/sdm-assertTerms), [`ajreynol:skolemLemma`](https://github.com/ajreynol/CVC4/tree/skolemLemma) (2022).
 
 **Elsewhere `(code)`.** z3 `smt.relevancy` [2] — see R11; theory axioms for
@@ -1428,19 +1513,21 @@ term-database size and instance counts.
 ## R24 — A domain configuration: run cvc5 the way Verus runs z3
 
 **Effort.** 🟢 Low Risk / 🟢 High Gain — it composes existing options and is easy to
-revert, while the first two bundled choices already improve PAR2 and the full
-bundle is the cheapest plausible path to a substantial result.
+revert, while the existing two-flag baseline bundle already improves PAR2 and
+a measured larger bundle is the cheapest plausible path to a substantial
+result.
 
 *The notes' "things that helped", made into one object.*
 
 **The hypothesis.** Verus hands z3 nine options and hands cvc5 one
-(`incremental=true`, plus `(set-logic ALL)`). Every z3 option in that list
-corresponds to a cvc5 decision that is currently made by a default tuned for
-SMT-LIB: no MBQI, no auto-configuration, strict patterns, delayed units,
-nonlinear off, relevancy-based case splits. A cvc5 configuration assembled
-from the directions above — and a mode that sets it — is the cheapest thing
-this project can deliver, and the baseline shows its first two flags are
-worth a factor of 1.2 on PAR2.
+(`incremental=true`, plus `(set-logic ALL)`). Most of the z3 choices suggest
+an analogous cvc5 policy worth isolating—quantifier modules and patterns,
+incrementality/backend, nonlinear reasoning, and relevance—even though the
+option sets are not one-to-one. A cvc5 configuration assembled from the
+directions above — and a mode that sets it — is the cheapest thing this
+project can deliver. The baseline shows that the existing
+`--no-cbqi --user-pat=strict` bundle improves cvc5's PAR2 by a factor of 1.2;
+its flags have not been isolated.
 
 **In cvc5 today `(code)`.** No Verus- or Dafny-specific option, comment or
 regression exists. `-q` is `--quiet` and changes nothing about solving.
@@ -1466,12 +1553,16 @@ is the closest thing to a bundle so far.
 for `by(nonlinear_arith)`; bit-vector queries with defaults; rlimit scaled at
 3,000,000 per second. With `auto_config=true` z3 would apply its AUFLIA
 preset and silently replace the eager threshold with 7, turn MBQI on, and
-change phase and restart policy. Dafny: the same list with
-`smt.qi.eager_threshold=44`, `smt.case_split=3` restored after it was dropped
-("time travelling triggers", dafny discussion #3362). F*: `smt.mbqi=false`,
-`auto_config=false`, `smt.case_split=3`, `smt.relevancy=2`,
-`rewriter.enable_der=false`, `rewriter.sort_disjunctions=false`,
-`pi.decompose_patterns=false`. Boogie issue #73 records that the defaults
+change phase and restart policy. Dafny, through Boogie, also gets
+`smt.mbqi=false`; Dafny itself sets `auto_config=false`, `type_check=true`,
+`smt.qi.eager_threshold=44`, `smt.delay_units=true`, model-completion options,
+and `smt.case_split=3` ("time travelling triggers", Dafny discussion #3362).
+It sets `smt.arith.nl=false` only for arithmetic mode 3 or higher; this is not
+the same nine-option preset as Verus. F*: `smt.mbqi=false`,
+`auto_config=false`, `smt.case_split=3`, `smt.relevancy=2`, and, for z3
+4.12.3 or newer, `rewriter.enable_der=false`,
+`rewriter.sort_disjunctions=false`, `pi.decompose_patterns=false`, and
+`smt.arith.solver=6`. Boogie issue #73 records that the defaults
 date from about 2007 and were "geared towards particular kinds of benchmarks
 (quantifier-heavy, etc.)" with no per-option rationale; Leino on z3 issue
 #7363: "the requirement for :auto_config and :smt.mbqi to be set to false
@@ -1501,13 +1592,13 @@ when the algorithmic directions are done, and sometimes the head.*
 **The hypothesis.** Some of the 10–20× cases in the gap set (306 of the 504
 solved-but-slow) are not a different algorithm but the same algorithm with
 larger constants: node hashing, the trie indices of the term database,
-equality-engine notification overhead, memory. A profile finds these in an
-afternoon, and the fork has three old branches of exactly this kind.
+equality-engine notification overhead, memory. A targeted profile can expose
+these, and the fork has several old branches of exactly this kind.
 
 **In cvc5 today `(code)`.** Nothing to configure; `job_launcher`'s host
-scripts include `get_profile` (callgrind) and `get_backtrace`. PR #9724 (fire
-equality-engine notifications only when the caller has been used) is the
-notes' example.
+scripts include `get_profile` (callgrind) and `get_backtrace`. Open [PR
+#9724](https://github.com/cvc5/cvc5/pull/9724), described precisely in R15,
+is the notes' context-notification example.
 
 **Tried.** [`ajreynol:perfDataStructures`](https://github.com/ajreynol/CVC4/tree/perfDataStructures) (2018, 31 commits), [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/CVC4/tree/lowLevelOptMore) (2019),
 [`ajreynol:optTdbTNode`](https://github.com/ajreynol/CVC4/tree/optTdbTNode) (2019), [`ajreynol:tdbLLOpts`](https://github.com/ajreynol/CVC4/tree/tdbLLOpts) (2024), [`ajreynol:minorOpt-0516`](https://github.com/ajreynol/CVC4/tree/minorOpt-0516) (2025, partly
@@ -1541,16 +1632,22 @@ Verus's `--profile`, Mariposa, Cazamariposas, SHAKE) and none of them reads
 cvc5's output. Building the cvc5 side is the project's own instrument, and
 it is also what makes a Verus user able to debug a cvc5 slowdown at all.
 
-**In cvc5 today `(code)`.** `-o inst` (instantiations as they happen, and
-`(num-instantiations <qid> <n>)` per round), `-o inst-strategy` (which module
-ran), `-o trigger` (selected triggers; [`ajreynol:userTriggerOut2`](https://github.com/ajreynol/CVC4/tree/userTriggerOut2) distinguishes user
+**In cvc5 today `(code)`.** `-o inst` (`(num-instantiations <qid> <n>)` for
+named quantifiers at the end of each instantiation round; unnamed formulas
+require `--print-inst-full`), `-o inst-strategy` (which module ran),
+`-o trigger` (selected triggers; [`ajreynol:userTriggerOut2`](https://github.com/ajreynol/CVC4/tree/userTriggerOut2) distinguishes user
 ones), `-o lemmas`, `-o incomplete` (why unknown), `-o options-auto`,
 `-o learned-lits`; `--dump-instantiations`, `--print-inst` [`list`] (`num`),
-`--print-inst-full`; `--stats-internal` with `Instantiate::Instantiations_Total`,
-`Duplicate_Inst`, `Duplicate_Inst_Eq`, `Duplicate_Inst_Ent`,
-`QuantifiersEngine::time_ematching`, `time_conflict_based_inst`,
-`Rounds_Instantiation_Full`, `Rounds_Instantiation_Last_Call`, `Triggers`,
-`Triggers_Multi`, and the CaDiCaL propagator counters. No matching-loop
+`--print-inst-full`; `--stats-internal` with
+`Instantiate::Instantiations_Total`, `Instantiate::Duplicate_Inst`,
+`Instantiate::Duplicate_Inst_Eq`,
+`Instantiate::Duplicate_Inst_Entailed`,
+`theory::QuantifiersEngine::time_ematching`,
+`theory::QuantifiersEngine::time_conflict_based_inst`,
+`QuantifiersEngine::Rounds_Instantiation_Full`,
+`QuantifiersEngine::Rounds_Instantiation_Last_Call`,
+`QuantifiersEngine::Triggers`, `QuantifiersEngine::Triggers_Multi`, and the
+CaDiCaL propagator counters. No matching-loop
 detection, no instantiation graph, no per-quantifier cost on `main`.
 
 **Tried.** [`ajreynol:qdebugStats`](https://github.com/ajreynol/CVC4/tree/qdebugStats) (2026-01, 29 commits, "debug stats for
@@ -1559,9 +1656,17 @@ e-matching", an `AnalyzeEE` module, unmerged); [`ajreynol:debugDumpLemmas`](http
 lemma-origin DAG, i.e. an instantiation graph); [`ajreynol:trackInferId`](https://github.com/ajreynol/CVC4/tree/trackInferId) (2024,
 `--track-lemma-inference-ids`); [`ajreynol:uclHistogram`](https://github.com/ajreynol/CVC4/tree/uclHistogram), [`ajreynol:oclTimestamp`](https://github.com/ajreynol/CVC4/tree/oclTimestamp) (2024);
 [`ajreynol:miscStats`](https://github.com/ajreynol/CVC4/tree/miscStats) (2023); [`ajreynol:dfcPp`](https://github.com/ajreynol/CVC4/tree/dfcPp) (2021, difficulty). Outside the fork, in
-September 2026: BasisResearch/cvc5 pull requests adding `(get-info
-:matching-loops)`, `--inst-graph` and `(get-info :inst-pressure)`, with
-matching Verus-side `-V matching-loops` support — not upstream, and not
+September 2026: BasisResearch/cvc5 fork PRs
+[#3](https://github.com/BasisResearch/cvc5/pull/3),
+[#4](https://github.com/BasisResearch/cvc5/pull/4), and
+[#6](https://github.com/BasisResearch/cvc5/pull/6) add `(get-info
+:matching-loops)`, `--inst-graph`, and `(get-info :inst-pressure)`;
+BasisResearch/Verus fork PRs
+[#20](https://github.com/BasisResearch/verus/pull/20),
+[#21](https://github.com/BasisResearch/verus/pull/21), and
+[#22](https://github.com/BasisResearch/verus/pull/22) add the corresponding
+instantiation graph, `-V matching-loops`, and `-V inst-pressure` plumbing.
+Those PRs are closed in the forks, not upstream cvc5/Verus, and were not
 evaluated here.
 
 **Elsewhere.** z3 `smt.qi.profile` (per-quantifier instances and cost),
@@ -1688,7 +1793,8 @@ front-end design work.
 (R10), [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/CVC4/tree/dtSplitRelevant) (R16), [`ajreynol:ai-dioLc`](https://github.com/ajreynol/CVC4/tree/ai-dioLc) (R17), [`ajreynol:ai-prepared13`](https://github.com/ajreynol/CVC4/tree/ai-prepared13) (R3),
 [`ajreynol:preregRlv`](https://github.com/ajreynol/CVC4/tree/preregRlv) (R22), [`ajreynol:mbtc25`](https://github.com/ajreynol/CVC4/tree/mbtc25) (R14), [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/CVC4/tree/dtMergeNotify-v3) (R15), [`ajreynol:deferBlock`](https://github.com/ajreynol/CVC4/tree/deferBlock)
 (R9/R17), [`ajreynol:bitblastLc`](https://github.com/ajreynol/CVC4/tree/bitblastLc) (R19), and [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/CVC4/tree/claude-eagerInst) with its pacing limits
-(R1) — the only eager-instantiation branch designed with a budget — plus
+(R1) — the eager branch here with explicit per-round, pair, and generation
+budgets — plus
 [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/CVC4/tree/ai-parserOpt) (R27).
 
 **Design work.** R1 with R2 and R9 together: eager, incremental,
@@ -1703,22 +1809,32 @@ expensive direction, and the attribution has to earn it.
 
 - The performance notes of 2026-09-14, as summarised in
   [`../notes.md`](../notes.md).
-- cvc5 `main` at `f294265` (2026-09-14): `src/options/*.toml`,
+- cvc5 `main` at
+  [`f294265`](https://github.com/cvc5/cvc5/commit/f294265c2b939a8e6cee8551f5a08afe5fb01efa)
+  (2026-09-14): `src/options/*.toml`,
   `src/smt/set_defaults.cpp`, `src/theory/quantifiers/`, `src/prop/`,
   `src/theory/datatypes/`, `src/theory/arith/`, read 2026-09-15.
-- z3 `master` at `2d2fb04` (2026-09-14): `src/smt/qi_queue.cpp`,
+- z3 `master` at
+  [`2d2fb04`](https://github.com/Z3Prover/z3/commit/2d2fb04fe3f1ab2111b550645f7c49198a3165f6)
+  (2026-09-14): `src/smt/qi_queue.cpp`,
   `smt_quantifier.cpp`, `mam.cpp`, `smt_context.cpp`, `smt_relevancy.cpp`,
   `smt_case_split_queue.cpp`, `theory_datatype.cpp`, `theory_lra.cpp`,
   `theory_bv.cpp`, `smt_setup.cpp`, `src/params/*.pyg`,
   `src/math/lp/int_solver.cpp`, `dioph_eq.cpp`, `src/ast/pattern/`,
   `src/solver/assertions/asserted_formulas.cpp`, read 2026-09-15.
-- The `ajreynol/CVC4` fork, 801 branches as fetched into the local checkout
-  on 2026-08-26 plus 52 newer ones; commit subjects, diffstats and option
-  help text read 2026-09-15. Merged/unmerged status was checked by looking
-  for each branch's added lines in `main`, since upstream squash-merges.
-- Verus `source/air/src/context.rs` and `source/rust_verify/src/verifier.rs`;
-  Dafny `Source/DafnyCore/DafnyOptions.cs`; Boogie
-  `Source/Provers/SMTLib/Z3.cs`; F* `src/smtencoding/FStarC.SMTEncoding.Z3.fst`;
+- The [`ajreynol/CVC4`](https://github.com/ajreynol/CVC4) fork, 847 remote
+  branch refs excluding the symbolic
+  remote `HEAD`, as fetched into the local checkout on 2026-08-26; commit
+  subjects, tip dates, merge-base diffstats and option help text read
+  2026-09-15. All 170 distinct branch URLs used here resolved to those refs,
+  and their displayed names matched the URL targets. Feature status was
+  checked semantically against pinned cvc5 source and upstream PR state, not
+  inferred from Git ancestry.
+- Verus at `a29e888` (2026-09-15),
+  `source/air/src/context.rs` and `source/rust_verify/src/verifier.rs`; Dafny
+  at `98ac8c0` (2026-08-31), `Source/DafnyCore/DafnyOptions.cs`; Boogie at
+  `bb44ad3` (2026-08-20), `Source/Provers/SMTLib/Z3.cs`; F* at `c08d36a`
+  (2026-09-14), `src/smtencoding/FStarC.SMTEncoding.Z3.fst`;
   z3 issues #1151, #7363; Dafny discussion #3362; Boogie issue #73.
 - Papers as cited, verified against publisher or dblp pages on 2026-09-15;
   where a citation could not be verified the text says so.
