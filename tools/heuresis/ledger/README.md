@@ -5,7 +5,7 @@ ledger is the only place a number is allowed to enter this project: a figure
 in `README.md` or `notes.md` that does not point at an entry here is a
 hypothesis and must say so.
 
-Entries: [`2026-09-14-baseline.md`](2026-09-14-baseline.md).
+Entries: [`2026-09-14-baseline.md`](2026-09-14-baseline.md); [`2026-09-15-baseline-caveats.md`](2026-09-15-baseline-caveats.md) (a correction entry, nothing run).
 
 Raw results files are copied from the host into [`data/`](data/) with
 `job_launcher/fetch` and tracked, under the name the driver gave them, so that

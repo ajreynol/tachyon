@@ -41,9 +41,10 @@ PATS=""
 addpat() { [ -n "${1:-}" ] && [ ${#1} -ge 3 ] && PATS="$PATS $1"; }
 addpat "$(whoami)"
 addpat "$(basename "$HOME")"
-addpat "$(git config user.name 2>/dev/null | tr ' ' '\n' | head -1)"
-addpat "$(git config user.name 2>/dev/null | tr ' ' '\n' | tail -1)"
 addpat "$(git config user.email 2>/dev/null | cut -d@ -f1)"
+# The git user's name is deliberately not a pattern: a research repository
+# cites its author's papers by name.  Usernames, home directories and the
+# email's local part are machine identity and stay patterns.
 if [ -f job_launcher/site.conf ]; then
   DEFAULT_HOST=""; REPO=""; REPO_BINARY=""; CVC5_BIN=""; Z3_BIN=""
   # shellcheck disable=SC1091
@@ -58,7 +59,7 @@ for P in $PATS; do
   HITS=""
   while IFS= read -r f; do
     [ -f "$f" ] || continue
-    sed -E 's#https?://[^ )>]+##g' "$f" | grep -qi -- "$P" && HITS="$HITS $f"
+    sed -E 's#https?://[^ )>]+##g' "$f" | grep -qiw -- "$P" && HITS="$HITS $f"
   done <<< "$PUBLIC_NONRECORD"
   [ -z "$HITS" ] || { err "personal pattern '$P' appears in:$HITS"; BAD=1; }
 done

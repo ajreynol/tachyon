@@ -50,7 +50,7 @@ were tuned elsewhere.*
 | h-10 | **The DIO solver is slow.** It was fixed to handle non-linear monomials ([cvc5#12178](https://github.com/cvc5/cvc5/pull/12178), which also disabled it for quantifier-free non-linear logics); candidate: move it, at least partly, to last-call effort. | branch | [`ai-dioLc`](https://github.com/ajreynol/CVC4/tree/ai-dioLc) | share of time in the DIO solver on gap benchmarks, from a profile; A/B |
 | h-11 | **Eliminate arithmetic at preprocessing** (a debugging experiment, not a proposal). Involved: datatype fields carry arithmetic, and it disturbs trigger selection. Too many things changed at once to conclude anything. | inconclusive | — | not worth repeating as an experiment; superseded by attribution |
 | h-12 | **Incremental performance** is related to the quantifier-instantiation problems. A question in the notes, not a claim. | idea | — | whether the set is incremental at all; if not, close |
-| h-13 | **AC reasoning over multiplication**: infer terms equal by associativity and commutativity of `*`. Very incomplete. | main (default) | [`arithFlattenEq`](https://github.com/ajreynol/CVC4/tree/arithFlattenEq) | count of non-linear terms on the set; A/B with it disabled |
+| h-13 | **AC reasoning over multiplication**: infer terms equal by associativity and commutativity of `*`. Very incomplete. | main (default) | the notes link a branch `arithFlattenEq` that does not exist in the fork; the merged work is `arithFlattenCollect2` (2025-04) | count of non-linear terms on the set; A/B with it disabled |
 | h-14 | **Instability** in non-linear arithmetic: consider sending some lemmas eagerly. | idea | — | variance across seeds or orderings on gap benchmarks |
 
 ## C — Instantiation
@@ -117,7 +117,7 @@ The other helpers below are candidates to add to it, each an A/B of its own.
 | --- | --- | --- |
 | `--user-pat=strict` | preserve user-provided triggers exactly | odd semantics: `(forall x. false :pattern (P x))` should be a conflict but needs a `P` term |
 | `--no-cbqi` | conflict-based instantiation is a loss here (h-15) | an order-of-magnitude win on sledgehammer problems; the notes say it should be off by default on Verus benchmarks |
-| `--sat-solver=cadical` | faster SAT core | not the default yet |
+| `--sat-solver=cadical` | faster SAT core | the default since 2026-08, **but** `--incremental` defaults to true and forces MiniSat unless the SAT solver is set explicitly; the 2026-09-14 baseline ran MiniSat ([ledger](ledger/2026-09-15-baseline-caveats.md)) |
 | `--term-db=relevant` | filter congruent terms; ignore ground terms preregistered but not asserted; recently made incremental | whether it is default is not stated; check before assuming it is in the baseline |
 | `--enum-inst` | solves more | and times out more; not enabled by default |
 

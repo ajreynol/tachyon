@@ -31,6 +31,16 @@ tell what is intended from what exists. The goals it serves are numbered in
       prints the counts, the PAR2 ratio and the gap set. Nothing more general
       until a second experiment needs it.
 
+## Then — goal 3 in its cheapest form (from `docs/directions.md`)
+
+- [ ] Rerun the two baselines with what was missing: cvc5 with
+      `--sat-solver=cadical`; z3 with all nine Verus options (the config is
+      already updated). Ledger entries for both.
+- [ ] The twelve single-flag runs listed under "What to run first" in
+      [`docs/directions.md`](docs/directions.md), each against the baseline,
+      one ledger entry each. This table is the first draft of the
+      attribution.
+
 ## Then — goal 2, the attribution
 
 - [ ] `quant-cvc5-stats.conf` on the set; per gap benchmark, the counters that
