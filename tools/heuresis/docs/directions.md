@@ -1,6 +1,6 @@
 # Research directions: what would make cvc5 catch up to z3 on Verus-style quantified benchmarks
 
-**Twenty-seven directions, R1 to R27, each with an argued risk/gain estimate
+**Twenty-six directions, R1–R23 and R25–R27, each with an argued risk/gain estimate
 and the same four inventories: the cvc5 flags that test it today,
 what has been tried, what z3 and others do, and the papers.** Written
 2026-09-15 from the performance notes
@@ -15,6 +15,10 @@ symbolic remote `HEAD`) as fetched on 2026-08-26,
 and from the literature. Directions are not mutually exclusive; several
 are the same mechanism seen from different sides, and the grouping says
 which.
+
+**Direction identifiers are stable.** Retired directions are deleted without
+renumbering the survivors, so gaps are intentional; Git history is the record
+of what was retired and why.
 
 *What this document is not.* It is not an attribution of the remaining gap.
 The project baseline ([ledger,
@@ -60,7 +64,7 @@ These are priors, not measured claims; attribution should change them.
 | B — what happens to lemmas afterwards | R9–R13 | the lemma lifecycle and the SAT search around it: deletion, ordering, relevance, the SAT core |
 | C — the ground engine | R14–R19 | theory combination, congruence closure, datatypes, arithmetic, bit-vectors |
 | D — before the search | R20–R23 | preprocessing and what the search is made to look at |
-| E — cross-cutting | R24–R27 | configuration, low-level engineering, instrumentation, and input parsing |
+| E — cross-cutting | R25–R27 | low-level engineering, instrumentation, and input parsing |
 
 The baseline says half the gap set is timeouts and half is solved-but-slow.
 The reading in `notes.md` (*A reading of the register*) predicts that groups A
@@ -88,7 +92,6 @@ number proves that a branch is good, current, or reviewable as one patch.
 | R16 | [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant): 2 ahead, 2026-06-10; 3 files, +62/−8 | `--dt-split-relevant`, a small relevance gate around datatype splitting | Measure eligible versus suppressed splits and check that incompleteness is not introduced. |
 | R17 | [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc): 3 ahead, 2026-06-16; 6 files, +95/−2; [`ajreynol:deferBlock`](https://github.com/ajreynol/cvc5/tree/deferBlock): 19 ahead, 2025-08-26; 15 files, +330/−21 | last-call Diophantine timing and deferred arithmetic blocking | Restrict to NIA/LIA cases and record branch lemmas, full/last-call checks, and conflicts. |
 | R19 | [`ajreynol:bitblastLc`](https://github.com/ajreynol/cvc5/tree/bitblastLc): 1 ahead, 2025-06-12; 2 files, +28/−1 | last-call bit-blasting | Run only the bit-vector slice and inspect unknown/completeness behavior as well as time. |
-| R24 | [`ajreynol:verusDev`](https://github.com/ajreynol/cvc5/tree/verusDev): 23 ahead, 2026-02-04; 10 files, +141/−33 | a mixed Verus-oriented line: relevance delay, recheck, function assignment, datatype splitting | Decompose it into the corresponding main flags/features; do not benchmark the aggregate as attribution. |
 | R25 | [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/cvc5/tree/lowLevelOptMore): 11 ahead, 2019-12-16; 3 files, +105/−33 | old, compact constant-factor work | Treat it as profiling history; reproduce the hotspot on current main before porting code. |
 | R26 | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats): 29 ahead, 2026-01-29; 19 files, +532/−15 | E-matching debug statistics plus an `AnalyzeEE` module | Inventory which counters remain absent on main and port only those required by the attribution table. |
 | R27 | [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt): 2 ahead, 2026-03-12; 7 files, +228/−144 | stack reservation, `from_chars`, static `string_view` token tables, and less argument-vector movement | Measure parse-only wall time, allocations, and bytes/s before and after on large generated inputs. |
@@ -1509,76 +1512,6 @@ term-database size and instance counts.
 ---
 
 # Group E — cross-cutting
-
-## R24 — A domain configuration: run cvc5 the way Verus runs z3
-
-**Effort.** 🟢 Low Risk / 🟢 High Gain — it composes existing options and is easy to
-revert, while the existing two-flag baseline bundle already improves PAR2 and
-a measured larger bundle is the cheapest plausible path to a substantial
-result.
-
-*The notes' "things that helped", made into one object.*
-
-**The hypothesis.** Verus hands z3 nine options and hands cvc5 one
-(`incremental=true`, plus `(set-logic ALL)`). Most of the z3 choices suggest
-an analogous cvc5 policy worth isolating—quantifier modules and patterns,
-incrementality/backend, nonlinear reasoning, and relevance—even though the
-option sets are not one-to-one. A cvc5 configuration assembled from the
-directions above — and a mode that sets it — is the cheapest thing this
-project can deliver. The baseline shows that the existing
-`--no-cbqi --user-pat=strict` bundle improves cvc5's PAR2 by a factor of 1.2;
-its flags have not been isolated.
-
-**In cvc5 today `(code)`.** No Verus- or Dafny-specific option, comment or
-regression exists. `-q` is `--quiet` and changes nothing about solving.
-`--safe-mode=safe|stable` forbids expert options and allows one regular
-option, so it is unusable for tuning. `-o options-auto` prints every option
-`set_defaults.cpp` flipped. The candidate bundle from this document, each
-flag existing on `main`: `--no-incremental` (or `--sat-solver=cadical`),
-`--user-pat=strict`, `--no-cbqi`, `--no-cegqi`, `--preregister-mode=lazy`,
-`--inst-local` or `--jh-rlv-order`, `--nl-ext=none` for NIA,
-`--lemma-inprocess=light`, `--dt-binary-split`, `--ee-mode=central`,
-`--simplification=none`. Each is one run; the bundle is one more.
-
-**Tried.** [`ajreynol:verusDev`](https://github.com/ajreynol/cvc5/tree/verusDev) (2025-11 to 2026-02, merged in pieces: the
-`relevant-all-delay` default, the last-resort recheck, delayed function
-assignment, datatype splitting over equivalence classes). The notes'
-"u-ssc" configuration (`--user-pat=strict --no-cbqi --sat-solver=cadical`)
-is the closest thing to a bundle so far.
-
-**Elsewhere `(code)`.** Verus (`source/air/src/context.rs`): `auto_config=false`,
-`smt.mbqi=false`, `smt.case_split=3`, `smt.qi.eager_threshold=100`,
-`smt.delay_units=true`, `smt.arith.solver=2`, `smt.arith.nl=false`,
-`pi.enabled=false`, `rewriter.sort_disjunctions=false`; `smt.arith.solver=6`
-for `by(nonlinear_arith)`; bit-vector queries with defaults; rlimit scaled at
-3,000,000 per second. With `auto_config=true` z3 would apply its AUFLIA
-preset and silently replace the eager threshold with 7, turn MBQI on, and
-change phase and restart policy. Dafny, through Boogie, also gets
-`smt.mbqi=false`; Dafny itself sets `auto_config=false`, `type_check=true`,
-`smt.qi.eager_threshold=44`, `smt.delay_units=true`, model-completion options,
-and `smt.case_split=3` ("time travelling triggers", Dafny discussion #3362).
-It sets `smt.arith.nl=false` only for arithmetic mode 3 or higher; this is not
-the same nine-option preset as Verus. F*: `smt.mbqi=false`,
-`auto_config=false`, `smt.case_split=3`, `smt.relevancy=2`, and, for z3
-4.12.3 or newer, `rewriter.enable_der=false`,
-`rewriter.sort_disjunctions=false`, `pi.decompose_patterns=false`, and
-`smt.arith.solver=6`. Boogie issue #73 records that the defaults
-date from about 2007 and were "geared towards particular kinds of benchmarks
-(quantifier-heavy, etc.)" with no per-option rationale; Leino on z3 issue
-#7363: "the requirement for :auto_config and :smt.mbqi to be set to false
-enables trigger-based quantifiers".
-
-**Papers.** [Leino and Pit-Claudel CAV
-2016](https://www.microsoft.com/en-us/research/publication/trigger-selection-strategies-stabilize-program-verifiers/).
-Bai, Hawblitzel and Lattuada, [*Tunable Automation in Automated Program
-Verification*](https://arxiv.org/abs/2512.03926), 2025 (Verus's tunable
-instantiation levels). Lattuada et al., [*Verus: A Practical Foundation for
-Systems Verification*](https://doi.org/10.1145/3694715.3695952), SOSP 2024.
-
-**What would settle it.** This is goal 3 in its cheapest form: the twelve
-single-flag runs above, each against the baseline, then the bundle. The
-result is a table with one row per flag, which is also the first draft of
-the attribution.
 
 ## R25 — Low-level engineering: the constant factors
 

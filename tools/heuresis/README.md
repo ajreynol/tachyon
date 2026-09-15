@@ -220,7 +220,7 @@ named and the baseline is in the ledger
 
 The one number inherited from the notes (`h-25`) is still marked as
 inherited. On 2026-09-15 the register was expanded into
-[`docs/directions.md`](docs/directions.md): twenty-seven research directions,
+[`docs/directions.md`](docs/directions.md): twenty-six active research directions,
 each with the cvc5 flags that test it, what the fork has tried, what z3 does
 in its code, the papers, and an argued risk/gain estimate. The active
 recommendation is the ranked list in [`docs/todo.md`](docs/todo.md). Two caveats on the
