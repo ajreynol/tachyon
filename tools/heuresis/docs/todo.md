@@ -56,3 +56,28 @@ maintainer supplies it.
 | 8 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | Capture branch-and-bound and Diophantine lemma counts on the relevant gap slice before testing `--no-dio-solver` or building [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc). |  |
 | 9 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | Capture `DATATYPES_SPLIT` counts on the gap set, then test `--dt-binary-split` if splitting is material. |  |
 | 10 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Capture `--stats-internal` and `-o inst` for the first ten gap benchmarks and define the smallest normalized result schema. |  |
+
+## Branch maintenance
+
+**Current recommendation:** fast-forward `ajreynol:master`, then rebase
+`ajreynol:ai-instDefer`. Do not rebase `qdebugStats` wholesale yet, and leave
+the remaining branches alone until their prerequisite measurement is positive.
+
+This is the AI agent's rebase assessment, not part of the human priority
+ranking. It is intentionally evidence-sensitive: a stale experimental branch
+does not need maintenance until its cheaper prerequisite experiment points to
+it. Counts below are commits unique to current upstream `main` / unique to the
+branch, audited 2026-09-15 against
+[`cvc5:main@2900761`](https://github.com/cvc5/cvc5/commit/2900761a7c2e2c0e99e2cf669cffa3740ea9a138).
+
+| recommendation | branch | directions | behind / ahead | reason or trigger |
+| --- | --- | --- | ---: | --- |
+| 🔵 Update base first | [`ajreynol:master`](https://github.com/ajreynol/cvc5/tree/master) | all | 29 / 0 | Fast-forward the fork's base before rebasing an experiment. |
+| 🟢 Rebase now | [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | R9, R10 | 127 / 2 | Both priority lists rank this area highly, and a disposable trial rebase onto current upstream `main` completed cleanly. |
+| 🟠 Inspect, then port selectively | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | R26 | 394 / 29 | A trial rebase conflicts in `candidate_generator.{cpp,h}` and `term_database.cpp`. First inventory what current `main` still lacks after the statistics run; port only the needed counters. |
+| ⚪ Wait for an equality-engine profile | [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | R15 | 175 / 31 | Rebase only if equality-engine time is material on the ten worst benchmarks. |
+| ⚪ Wait for parser timing | [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | R27 | 313 / 2 | Rebase only if `--parse-only` shows a material front-end share. |
+| ⚪ Wait for arithmetic counters | [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | R17 | 126 / 3 | Rebase only if Diophantine or branch-and-bound lemmas identify the relevant slice. |
+| ⚪ Wait for datatype counters | [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | R16 | 135 / 2 | Rebase only if `DATATYPES_SPLIT` is material and the mainline binary-split experiment is promising. |
+| ⚪ Wait for the mainline option | [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | R22 | 217 / 155 | Its rebase surface is large; test `--preregister-mode=lazy` first. |
+| ⚪ Wait for eager-instantiation attribution | [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | R1 | 135 / 5 | Rebase only if full-effort-round and instance-depth measurements support an eager experiment. |
