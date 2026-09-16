@@ -1,6 +1,6 @@
 # heuresis
 
-**Eunoia listing:** unadvertised
+**Eunoia listing:** advertised
 
 *Find the cvc5 shortcomings worth pursuing in the quantified benchmarks where
 z3 is much faster.*
@@ -23,9 +23,8 @@ looks.
 
 **An independent child project.** Heuresis keeps its own notes and ledger and
 uses the shared [`job_launcher/`](../../job_launcher/) for experiments. Nothing
-else here depends on it. The maintainer chose on 2026-09-16 to keep it
-unadvertised in Eunoia and off the parent repository's front page; the work
-remains available in this directory.
+else here depends on it. It is advertised in Eunoia listings, and the work
+lives in this directory.
 
 **What it has delivered, and who decides what comes next.** The set is named and
 fixed, the gap is measured ([2026-09-14](ledger/2026-09-14-baseline.md)), and the

@@ -1,6 +1,6 @@
 # metagraphe
 
-**Eunoia listing:** unadvertised
+**Eunoia listing:** advertised
 
 *Which useful rewrites is cvc5 missing, especially for strings and bit-vectors?*
 
@@ -113,7 +113,7 @@ rewrite probes record their exact commands directly in the ledger.
 ## Status
 
 **Started 2026-09-16**, by explicit human instruction, with strings and
-bit-vectors as the main focus and an unadvertised Eunoia listing. The charter,
+bit-vectors as the main focus and an advertised Eunoia listing. The charter,
 search areas, initial queue, and evidence format are in place. No cvc5 baseline
 has been pinned for this project, no experiments have run, and no missing
 rewrite has been established. The first task is the baseline and a small probe
