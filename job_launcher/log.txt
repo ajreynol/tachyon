@@ -142,3 +142,54 @@ solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-ee-central-ie
 stats_dir_rec_par_cvc5 -t 30 cvc5 quant-091626-u-sc-cbqi-conflict-stats-stats -q --user-pat=strict --sat-solver=cadical --cbqi-mode=conflict
 # cvc5: git 5cc03f4b9 on branch main
 
+# 2026-09-16 12:12 [dev1:~/cvc5-ajr] (build master)
+# build master + make regress
+[blocking] build master + make regress
+# built from master@d7d03b082c
+# result: success (1m46s)
+
+# 2026-09-16 12:15 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current-ee-central.conf)
+# queued 1/2 in window quant-091626-u-ssc-current-ee-central
+# heuresis R15: current-main central equality comparator
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-current-ee-central -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central
+# ajr-cvc5: git d7d03b082c on branch master
+
+# 2026-09-16 12:15 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current-ee-central-ieval-off.conf)
+# queued 2/2 in window quant-091626-u-ssc-current-ee-central
+# heuresis R7/R15: current-main central equality and evaluator-off comparator
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-current-ee-central-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# ajr-cvc5: git d7d03b082c on branch master
+
+# 2026-09-16 12:29 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current.conf)
+# heuresis: current-main fixed quantifier/CaDiCaL control
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-current -q --no-cbqi --user-pat=strict --sat-solver=cadical
+# ajr-cvc5: git d7d03b082c on branch master
+
+# 2026-09-16 12:37 [dev1:~/cvc5-ajr] (build ai-eecNoShare)
+# build ai-eecNoShare + make regress
+[blocking] build ai-eecNoShare + make regress
+# built from ai-eecNoShare@c2f448675e
+# result: success (1m47s)
+
+# 2026-09-16 12:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ai-eec-no-share.conf)
+# heuresis R15: rebased ai-eecNoShare with central equality and evaluator off
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eec-no-share -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# built from ai-eecNoShare@c2f448675e
+
+# 2026-09-16 12:47 [dev1:~/cvc5-ajr] (build ievalTravTrie)
+# build ievalTravTrie + make regress
+[blocking] build ievalTravTrie + make regress
+# built from ievalTravTrie@78e6fd0889
+# result: success (1m49s)
+
+# 2026-09-16 12:49 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ieval-trav-trie.conf)
+# heuresis R7: rebased ievalTravTrie with central equality
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-ieval-trav-trie -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central
+# built from ievalTravTrie@78e6fd0889
+
+# 2026-09-16 12:57 [dev1:~/cvc5-ajr] (build master)
+# build master
+[blocking] build master
+# built from master@d7d03b082c
+# result: success (22s)
+

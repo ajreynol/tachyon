@@ -1,5 +1,6 @@
 # Full per-benchmark job output is retained locally or on the execution host.
-# Commit compact gap sets and derived summaries instead.
+# Commit only small processed summaries; keep generated benchmark lists local.
 results-*.txt
 stats-*.txt
+gapset-*.txt
 !stats-*-processed.txt

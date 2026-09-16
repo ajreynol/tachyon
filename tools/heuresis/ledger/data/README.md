@@ -1,16 +1,16 @@
 # Experiment data retention
 
-This directory tracks compact evidence needed for ongoing work: gap-set lists
-and small processed summaries. Full `results-*.txt` and unprocessed
-`stats-*.txt` job outputs are intentionally local-only because they are large
-and reproducible from the recorded configuration, command, solver revision,
-and benchmark set.
+This directory tracks only small processed summaries. Full `results-*.txt`,
+unprocessed `stats-*.txt`, and generated `gapset-*.txt` benchmark lists are
+intentionally local-only. They are reproducible from the recorded
+configuration, command, solver revision, benchmark set, and comparison
+definition.
 
 Ledger entries still name each raw artifact exactly. Use
 `job_launcher/fetch` to restore an artifact from its execution host under that
 name when recomputing a comparison. The ignore rules preserve such a local
 copy without offering it to Git.
 
-Do not ignore a derived artifact merely because it came from a job. If an
-artifact is compact and necessary to continue the research—such as a gap set
-used as the input to a follow-up experiment—track it.
+If a generated list is needed as input to a follow-up experiment, recreate or
+fetch it locally under its recorded name. Record aggregate conclusions and
+the generation command in the ledger rather than committing the full list.

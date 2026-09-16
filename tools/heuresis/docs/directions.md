@@ -26,7 +26,7 @@ and from the literature. Directions are not mutually exclusive; several
 are the same mechanism seen from different sides, and the grouping says
 which. The branches selected for possible rebasing were checked again on
 2026-09-16 against live upstream
-[`main@835ccd95e`](https://github.com/cvc5/cvc5/commit/835ccd95ed1071828ddaba1de736e925b694ed28);
+[`main@d7d03b082c`](https://github.com/cvc5/cvc5/commit/d7d03b082c56ad8e7226e0b5385973d82b16d626);
 those newer divergence counts are labeled where used.
 
 **Direction identifiers are stable.** Retired directions are deleted without
@@ -36,13 +36,13 @@ of what was retired and why.
 *What this document is not.* It is not yet a complete attribution of the
 remaining gap. Repeated fixed-control runs measure a PAR2 ratio of 1.75–1.76
 and gap sets of 1071–1073 of 6124 for explicit CaDiCaL against z3 with all
-nine current Verus options. The best measured option combination on that
-installed cvc5 binary—central equality plus evaluator-off—improves this to
-**1.52 / 789** ([ledger](../ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
+nine current Verus options. Central equality plus evaluator-off was repeated
+on current main and improves this to **1.52 / 796**
+([ledger](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)).
 The host sweeps also separated the two quantifier flags, tested the selected
 mainline controls, and captured whole-set internal statistics. Those measured
-updates are recorded under the affected directions and in the ledger; fork
-branches remain unmeasured unless a direction says otherwise. Separately, the
+updates are recorded under the affected directions and in the ledger; two
+rebased fork branches are now measured where stated. Separately, the
 notes inherit lazy large-`distinct` handling (R20) at 1.75× average speedup on
 the Verus+Sundance set with a 60-second timeout. The inventories say what
 *could* be tested and how; goal 2 of the charter decides what *is*. Where a
@@ -62,8 +62,8 @@ mean the fork commit is an ancestor of `main`, because upstream often
 squash-merges. "Open" and "unmerged" are statuses as checked on 2026-09-15.
 "Best known" means the measured configuration under study,
 `--no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central
---ieval=off`. It was measured on `main@5cc03f4b9`; repeat it on current main
-before treating it as a new default.
+--ieval=off`. It was reproduced on `main@d7d03b082c`, but needs cross-corpus
+evaluation before being treated as a new default.
 
 **Effort levels.** Each direction is classified on two color-coded axes:
 *Risk* runs 🟢 Low → 🟡 Medium → 🔴 High and combines implementation size,
@@ -83,7 +83,7 @@ These are priors, not measured claims; attribution should change them.
 | D — before the search | R20–R23 | preprocessing and what the search is made to look at |
 | E — cross-cutting | R25–R27 | low-level engineering, instrumentation, and input parsing |
 
-The corrected best-known gap is 534 cvc5-unsolved cases and 539
+The current best-known gap is 461 cvc5-unsolved cases and 335
 solved-but-slow cases. The first stats run supports substantial group-A work
 but does not yet assign one direction per benchmark. The reading in
 `notes.md` (*A reading of the register*) predicts that groups A and B carry
@@ -101,14 +101,14 @@ number proves that a branch is good, current, or reviewable as one patch.
 | --- | --- | --- | --- |
 | R28 | [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi): 204 ahead, 1265 behind current `main`, 2024-10-09; 64 files, +5298/−236 | evaluator-backed eager term database with conflict/propagation modes and instantiation levels | Use mainline conflict-only controls to define a narrow modern experiment; do not blindly rebase this 204-commit prototype. |
 | R1/R2 | [`ajreynol:eagerInst3`](https://github.com/ajreynol/cvc5/tree/eagerInst3): 179 ahead, 2026-04-16; 39 files, +3780/−37; 1713-line `eager_inst.cpp` | persistent ground trie fed by equality-engine notifications; verified ancestry `macrosEagerInst` → `macroEagerInstMt` → `eagerInst3` | Run its shipped Verus cases, then a fixed 50-case gap slice with instance, round, and memory counters. |
-| R1/R4 | [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst): 137 behind / 5 ahead current `main`, 2026-06-12; 14 implementation files, +1464/−8, plus 11 SMT2 tests (two large) | smaller notification-driven matcher with generation, pair, and per-round budgets | Rebase now—a disposable trial was clean—then sweep the three limits on a fixed slice of the 789-case gap. |
+| R1/R4 | [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst): 138 behind / 5 ahead current `main`, 2026-06-12; 14 implementation files, +1464/−8, plus 11 SMT2 tests (two large) | smaller notification-driven matcher with generation, pair, and per-round budgets | Push the rebased tip—the published ref is still stale—then sweep the three limits on a fixed slice of the 796-case gap. |
 | R2/R7 | [`ajreynol:ai-emFilter`](https://github.com/ajreynol/cvc5/tree/ai-emFilter): 11 ahead, 2026-04-27; 20 files, +758/−15 | `--filter-e-matching` and supporting equality/entailment filters | Count candidate matches rejected, time spent filtering, and net instances saved. |
-| R7 | [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie): 2 ahead, 2186 behind current `main`, 2023-11-06; 8 files, +165/−43 | makes the partial instantiation evaluator traverse term tries as assignments arrive, rejecting infeasible matches earlier | Rebase to current main; a disposable trial rebase was clean, and disabling the current evaluator cut PAR2 3.1%. |
+| R7 | [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie): contains current main via merge; 320 history commits ahead but an effective 8-file, +165/−43 source diff | makes the partial instantiation evaluator traverse term tries as assignments arrive, rejecting infeasible matches earlier | Regression-clean but neutral on the whole set (+0.09% PAR2, one net lost solve); prefer evaluator-work counters or a fresh focused port. |
 | R3 | [`ajreynol:ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13): 11 ahead, 2026-06-10; 4 files, +291/−6 | prepared-term indexing work concentrated in four source files | Profile lookup time and index size before treating the small file count as low risk. |
 | R9/R10 | [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer): 2 ahead, 2026-06-15; 11 files, +116/−32; [`ajreynol:ai-jhRlvInst`](https://github.com/ajreynol/cvc5/tree/ai-jhRlvInst): 3 ahead, 2026-06-18; 10 files, +327/−18 | global duplicate recording with local-style justification, and quantifier-relevance activation in the justification heuristic | Compare each alone with `--inst-local`; neither branch implements SAT clause deletion. |
 | R11/R22 | [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv): 155 ahead, 2026-04-23; 10 files, +836/−13 | relevance-aware preregistration; related upstream [PR #9503](https://github.com/cvc5/cvc5/pull/9503) remains open | First compare `--preregister-mode=lazy`; build the branch only if the cheap flag moves the target counters. |
 | R14 | [`ajreynol:mbtc25`](https://github.com/ajreynol/cvc5/tree/mbtc25): 29 ahead, 2026-01-13; 16 files, +371/−84 | model-based theory combination; related upstream [PR #12095](https://github.com/cvc5/cvc5/pull/12095) remains open | Add an explicit care-pair/split counter, then compare against care-graph combination. |
-| R15 | [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare): 1 ahead, 201 behind current `main`, 2026-04-29; 1 file, +9/−3 | avoids redundant `propagateSharedEquality` calls for theories whose explanations use the central equality engine | Rebase to current main; a disposable trial rebase was clean, and central equality cut whole-set PAR2 by 9.6%. |
+| R15 | [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare): contains current main via merge; 2 history commits ahead, with one effective source commit in 1 file, +9/−3 | avoids redundant `propagateSharedEquality` calls for theories whose explanations use the central equality engine | Regression-clean but only −0.20% PAR2 / two net solves; count skipped propagations and their cost before an upstream proposal. |
 | R15 | [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3): 31 ahead, 2026-05-22; 13 files, +405/−73; verified ancestry `dtMergeNotify` → `v2` → `v3` | datatype merge-notification experiments, distinct from upstream context-notification PR #9724 | Isolate notification count and callback time before attributing a solver-level win. |
 | R16 | [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant): 2 ahead, 2026-06-10; 3 files, +62/−8 | `--dt-split-relevant`, a small relevance gate around datatype splitting | Measure eligible versus suppressed splits and check that incompleteness is not introduced. |
 | R17 | [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc): 3 ahead, 2026-06-16; 6 files, +95/−2; [`ajreynol:deferBlock`](https://github.com/ajreynol/cvc5/tree/deferBlock): 19 ahead, 2025-08-26; 15 files, +330/−21 | last-call Diophantine timing and deferred arithmetic blocking | Restrict to NIA/LIA cases and record branch lemmas, full/last-call checks, and conflicts. |
@@ -232,11 +232,11 @@ Internals*](https://z3prover.github.io/papers/z3internals.html), §7.1.5–7.1.6
 run](../ledger/2026-09-15-attribution-stats.md) measured 31,334 full
 instantiation rounds on the then-current 1122-case gap: 1121 cases were nonzero,
 with median 22 and p90 54. The missing comparison is z3's instance-generation
-depth on a fixed sample. Rebase the five-commit
+depth on a fixed sample. Push the rebased tip of the five-commit
 [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
-branch—137 behind / 5 ahead current main, with a clean disposable trial—and
-test its existing pacing on a slice of the new 789-case gap against the
-combined control. Record time-to-first-useful-instance, full rounds,
+branch—the published ref is still 138 behind / 5 ahead current main—and test
+its existing pacing on a slice of the new 796-case gap against the combined
+control. Record time-to-first-useful-instance, full rounds,
 clause-lifetime, and memory. The notes report that eager attempts drowned
 without deletion, but `--inst-local` is not deletion (R9); a genuine lifetime
 experiment must follow if the eager signal is positive.
@@ -605,13 +605,14 @@ the mechanisms: `--ieval=off` solves 16 net additional cases and cuts PAR2
 3.1%, while generalized learning preserves the control's status results and
 slightly worsens PAR2, and disabling only the completed-instance entailment
 check is also slightly worse. Thus the signal is the incremental partial
-evaluator, not positive entailment filtering in general. Rebase and test
-[`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie),
-the compact trie-aware alternative whose disposable trial rebase was clean;
-record evaluator pushes, early rejections, completed matches, and evaluator
-time. Evaluator-off also composes with central equality: the [combined
-run](../ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)
-cuts another 4.2% PAR2 versus central alone.
+evaluator, not positive entailment filtering in general. The [current-main
+and branch run](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)
+reproduces evaluator-off's composition with central equality but finds
+[`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie)
+neutral against evaluator-on (+0.09% PAR2, one net lost solve) and 3.91% worse
+than evaluator-off. Do not upstream it from timing evidence. If revisited,
+record evaluator pushes, early rejections, completed matches, time, and memory
+in a fresh focused port.
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
@@ -729,12 +730,13 @@ Solvers*](https://leodemoura.github.io/files/ematching.pdf), CADE 2007.
 **Evidence and next step.** The [2026-09-16 controls and
 statistics](../ledger/2026-09-16-conflict-instantiation.md) rule out “run
 mainline QCF earlier” as the implementation: 272,280 structural QCF rounds
-produce only 54 conflict lemmas, and both enabled modes regress. Rebase the
+produce only 54 conflict lemmas, and both enabled modes regress. Use the
 compact [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
-branch as the current-main bounded eager-matching substrate, then add only the
-assignment-sensitive conflict/unit acceptance and counters. Compare it with
-ordinary E-matching on the 789-case current gap, recording full rounds, eager
-candidates, accepted conflicts/units, clauses, and memory. Mine old
+branch as the current-main bounded eager-matching substrate after its rebased
+tip is pushed, then add only the assignment-sensitive conflict/unit acceptance
+and counters. Compare it with ordinary E-matching on the 796-case current gap,
+recording full rounds, eager candidates, accepted conflicts/units, clauses,
+and memory. Mine old
 `eagerCbqi` for design and tests; do not rebase all 204 commits.
 
 ---
@@ -1180,18 +1182,16 @@ Closure*](https://doi.org/10.1145/322186.322198), J. ACM 27(2), 1980. Barbosa
 et al., [*cvc5: A Versatile and Industrial-Strength SMT
 Solver*](https://doi.org/10.1007/978-3-030-99524-9_24), TACAS 2022.
 
-**Evidence and next step.** The [2026-09-16 whole-set
-control](../ledger/2026-09-16-datatype-and-equality-controls.md) makes this
-one of the strongest measured directions: `--ee-mode=central` solves 5611
-versus 5548, removes 85 timeouts, and lowers PAR2 9.6%; paired, it rescues 84
-cases, loses 21, and makes 75 common solves at least 2× faster with no 2×
-slowdowns. Combined with evaluator-off, it reaches 5625 solves and lowers
-PAR2 13.4% versus the fresh control ([composition
-run](../ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
-First rebuild and repeat on current main, which is 79 commits ahead of the
-installed binary. Then rebase and test the one-commit
-[`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare);
-its disposable trial rebase was clean. Mine the larger
+**Evidence and next step.** The [current-main whole-set
+run](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) confirms
+this as one of the strongest measured directions: `--ee-mode=central` solves
+5616 versus 5546 and lowers PAR2 10.3%; combined with evaluator-off it reaches
+5623 solves and lowers PAR2 13.6%. The one-effective-commit
+[`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare)
+passes regressions but adds only two net solves and lowers PAR2 0.20%, with
+nearly balanced 2× speedups/slowdowns. Do not claim a performance win yet;
+count skipped `propagateSharedEquality` calls and callback time, then test a
+second corpus if the avoided work is material. Mine the larger
 [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3)
 selectively: its first replayed commit conflicts on current main.
 
@@ -1855,10 +1855,9 @@ those measurements are:
 
 | run | direction | measured trigger |
 | --- | --- | --- |
-| rebuild current main and repeat control / central / evaluator-off / combined | R7, R15 | the combined old-binary run cuts PAR2 13.4% and the gap from 1071 to 789 |
-| [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) after rebase | R15 | one commit and a clean trial rebase; central equality is the strongest measured direction |
-| [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) after rebase | R7 | two commits and a clean trial rebase; evaluator-off cuts PAR2 3.1% |
-| [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) after rebase | R1, R28 | five commits and a clean trial rebase; use its pacing as the substrate for conflict/unit acceptance |
+| skipped shared-equality propagation count/time, then a second corpus | R15 | current central mode cuts PAR2 10.3%, while `ai-eecNoShare` itself moves it only −0.20% |
+| evaluator pushes, early trie rejections, and evaluator time | R7 | `ievalTravTrie` is neutral and evaluator-off remains 3.9% better |
+| [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) after its rebased tip is pushed | R1, R28 | the published ref remains 138 behind / 5 ahead; use its pacing as the substrate for conflict/unit acceptance |
 | `--parse-only` | R27 | needed to interpret the low but non-parser-specific `processAssertionsTime` |
 
 In parallel, add or selectively port the new-versus-rediscovered E-match

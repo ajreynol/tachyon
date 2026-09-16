@@ -18,13 +18,15 @@ Entries:
 - [`2026-09-16-entailment-filtering.md`](2026-09-16-entailment-filtering.md)
 - [`2026-09-16-combined-central-equality-and-evaluator-off.md`](2026-09-16-combined-central-equality-and-evaluator-off.md)
 - [`2026-09-16-conflict-instantiation.md`](2026-09-16-conflict-instantiation.md)
+- [`2026-09-16-rebased-equality-and-evaluator-branches.md`](2026-09-16-rebased-equality-and-evaluator-branches.md)
 
 Full results and statistics files remain on the execution host and may be
 copied into [`data/`](data/) with `job_launcher/fetch` for local analysis, but
 they are ignored by Git. Each entry records the exact raw artifact name,
-command, solver revision, and aggregate result. Compact evidence needed for
-follow-up work—such as gap-set lists written by `gap --gapset` and processed
-summaries—is tracked. See the [data-retention policy](data/README.md).
+command, solver revision, and aggregate result. Generated benchmark lists,
+including gap sets written by `gap --gapset`, also remain local; only small
+processed summaries are tracked. See the [data-retention
+policy](data/README.md).
 
 ## An entry
 

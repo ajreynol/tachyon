@@ -182,7 +182,7 @@ Fixed with it, for goal 0:
 | | |
 | --- | --- |
 | timeout | 30 s per benchmark per solver, user time, on the host |
-| cvc5 configurations | default (`-q`), the quantifier control (`-q --no-cbqi --user-pat=strict`), and the best measured configuration on installed `main@5cc03f4b9`: that control plus explicit `--sat-solver=cadical --ee-mode=central --ieval=off` |
+| cvc5 configurations | default (`-q`), the quantifier control (`-q --no-cbqi --user-pat=strict`), and the best measured configuration on current `main@d7d03b082c`: that control plus explicit `--sat-solver=cadical --ee-mode=central --ieval=off` |
 | z3 | z3 4.15.4, **with all nine options current Verus passes it**: `auto_config=false smt.mbqi=false smt.case_split=3 smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.solver=2 smt.arith.nl=false pi.enabled=false rewriter.sort_disjunctions=false`. The benchmarks carry no options of their own |
 | gap set | unsolved by cvc5 and solved by z3, or both solved and cvc5 at least 10× slower with cvc5 taking at least 1 s |
 | aggregate | PAR2 ratio, cvc5 over z3, over the benchmarks both runs report |
@@ -267,12 +267,13 @@ numbers are:
 
 > **the gap** — PAR2 ratio **1.52** (cvc5 `--no-cbqi
 > --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off` over
-> z3 4.15.4 with all nine current Verus options, 30 s); gap set **789** of
-> 6124, comprising 460 cvc5-unsolved cases where z3 solves and 329 cases both
-> solve but cvc5 is at least 10× slower. This best measured configuration ran
-> on installed `main@5cc03f4b9`, 79 commits behind current main, and must be
-> repeated there. The z3 baseline itself has 310 unknowns, so the ratio is not
-> all cvc5 progress.
+> z3 4.15.4 with all nine current Verus options, 30 s); gap set **796** of
+> 6124, comprising 461 cvc5-unsolved cases where z3 solves and 335 cases both
+> solve but cvc5 is at least 10× slower. This best measured configuration was
+> reproduced on current `main@d7d03b082c` and lowers PAR2 13.6% versus the
+> current-main fixed control ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)).
+> The z3 baseline itself has 310 unknowns, so the ratio is not all cvc5
+> progress.
 >
 > **the attributed fraction** — **0**. Whole-set statistics now identify
 > promising mechanisms, but the per-benchmark attribution table does not yet
