@@ -10,16 +10,10 @@ A human may be inspired by that analysis to tackle a finding independently,
 at their discretion. That follow-up is outside this repository's discovery
 work; finding a diamond is a useful result whether or not anyone pursues it.
 
-Two things live here, and they are kept apart on purpose:
-
-| | | |
-| --- | --- | --- |
-| [`job_launcher/`](job_launcher/) | **run experiments** — the job configs, site file and log for this repository's benchmark runs, driving a pinned checkout of [run-dev](https://github.com/ajreynol/run-dev) | tooling |
-| [`tools/heuresis/`](tools/heuresis/) | **find cvc5 shortcomings on quantified benchmarks** — the question, the register of hypotheses with the evidence for each, the plan, and the ledger | research project |
-
-The first exists so that the second can produce numbers, and so that anybody
-with a benchmark host can reproduce them without editing a script. The second
-is the reason the repository exists.
+The shared [`job_launcher/`](job_launcher/) runs reproducible experiments through
+a pinned checkout of [run-dev](https://github.com/ajreynol/run-dev). Each research
+project keeps its own question, hypotheses, priorities, and evidence. The
+launcher supplies measurements; the research explains what they reveal.
 
 ## On the name
 
@@ -68,20 +62,6 @@ job_launcher/status
 The details — where run-dev is found, what the wrappers add and do not add,
 how a config stays portable — are in [`job_launcher/README.md`](job_launcher/README.md).
 
-## `tools/heuresis/` — the question
-
-There is a set of quantified benchmarks, from verification tooling, on which z3
-is much faster than cvc5. This is the current search ground: the project asks
-**which cvc5 shortcomings the gap reveals, and which deserve further
-investigation**. Profiles, comparisons, and focused experiments turn candidates
-into findings that a human can assess and pursue independently. A finding can
-be valuable while its remedy and much of the overall gap remain open. The
-charter, goals, and criteria for a useful finding are in
-[`tools/heuresis/README.md`](tools/heuresis/README.md); the register of
-hypotheses it starts from — a summary of a set of performance notes, one row per
-candidate cause with its state and what would settle it — is
-[`tools/heuresis/notes.md`](tools/heuresis/notes.md).
-
 ## Conventions
 
 Borrowed from [dokimasia](https://github.com/ajreynol/dokimasia), which this
@@ -99,22 +79,15 @@ repository is modelled on:
 - **Written for a reader who was not here.** Every document says what was
   checked and what was reasoned, and which is which.
 
-## Status
-
-Set up on 2026-09-14. The current ranked work is maintained in
-[`tools/heuresis/docs/todo.md`](tools/heuresis/docs/todo.md); its entries refer to the
-research registry in
-[`tools/heuresis/docs/directions.md`](tools/heuresis/docs/directions.md).
-
 ## How this repository is maintained
 
 This repository is part of the **Eunoia ecosystem** and follows its shared
 repository policy, kept by [kanon](https://github.com/ajreynol/kanon) in
 [`docs/policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md).
 
-**Written by AI agents, under a human maintainer who owns the question.** A
-person started the research project here, named and fixed the benchmark set,
-and keeps a ranking of what to work on next in their own name. The agents write
+**Written by AI agents, under a human maintainer who owns the questions.** A
+person starts each research project, sets its scope, and owns any priorities
+recorded in their name. The agents write
 the documents, the register of directions, the job configs and the ledger
 entries, and keep a ranking of their own beside the maintainer's rather than
 mirroring it. Their analysis is intended to inspire independent human work on

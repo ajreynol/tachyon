@@ -1,5 +1,7 @@
 # heuresis
 
+**Eunoia listing:** unadvertised
+
 *Find the cvc5 shortcomings worth pursuing in the quantified benchmarks where
 z3 is much faster.*
 
@@ -19,17 +21,11 @@ claim about cvc5 that a row in the ledger does not back: a hypothesis is a
 hypothesis until it has been run against the set, however good the branch
 looks.
 
-**Not an island, and that is a decision rather than drift.** The code half of
-the property holds: heuresis reads its own notes and ledger, it launches
-experiments through [`job_launcher/`](../../job_launcher/), and nothing else here depends on it —
-delete this directory and `job_launcher/` is exactly as functional, which is
-what lets the launcher be reused for the next question. The half that does not
-hold is the silence. A research project is meant to go unadvertised, so that
-speculative work does not borrow a shipped tool's credibility; heuresis is named
-on this repository's front page, in its table and in a section of its own. There
-is no shipped tool here whose credibility could be borrowed: tachyon was created
-to ask this question, and `job_launcher/` exists so that this project can answer
-it. So the front page says so.
+**An independent child project.** Heuresis keeps its own notes and ledger and
+uses the shared [`job_launcher/`](../../job_launcher/) for experiments. Nothing
+else here depends on it. The maintainer chose on 2026-09-16 to keep it
+unadvertised in Eunoia and off the parent repository's front page; the work
+remains available in this directory.
 
 **What it has delivered, and who decides what comes next.** The set is named and
 fixed, the gap is measured ([2026-09-14](ledger/2026-09-14-baseline.md)), and the

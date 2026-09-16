@@ -1,10 +1,10 @@
 # job_launcher/ — this repository's experiments, on run-dev
 
 [run-dev](https://github.com/ajreynol/run-dev) launches benchmark jobs on a
-remote host and records them. This directory is *one project's use of it*: the
+remote host and records them. This directory is *this repository's use of it*: the
 configs, the site file, and the log that run-dev keeps private and git-ignored,
 because in run-dev they carry one person's hosts and history. Here they are the
-experimental record — the thing `tools/heuresis/ledger/` cites — so here they
+experimental record cited by the individual research ledgers, so here they
 are tracked, and made portable so that they can be.
 
 Nothing of run-dev is copied. Its scripts, drivers, wrappers and docs are used

@@ -20,7 +20,7 @@ BASELINE_BRANCH=master        # branch that `submit --baseline` builds against
 
 # ---- names the tracked configs use.  A config never contains a path or a
 #      binary name; it says DIR=$QUANT_DIR, BINARY=$CVC5_BIN, and so on.
-QUANT_DIR='~/benchmarks/quant'   # the set under study: tools/heuresis/README.md, "The set"
+QUANT_DIR='~/benchmarks/quant'   # the quantified benchmark set used by quant-*.conf
 CVC5_BIN=cvc5                    # the cvc5 being measured (= REPO_BINARY if submit builds it)
 Z3_BIN=z3                        # the comparison point; record its version in the ledger
 
