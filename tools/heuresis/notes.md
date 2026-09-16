@@ -103,21 +103,21 @@ see.*
 
 ## The configuration under study
 
-The notes list what has helped on this set. The best known configuration —
-the one every A/B in this project runs against unless a ledger entry says
-otherwise — is, as named by a person on 2026-09-14:
+The notes list what has helped on this set. The best measured configuration —
+the one future A/Bs use unless a ledger entry says otherwise — is:
 
 ```
---no-cbqi --user-pat=strict
+--no-cbqi --user-pat=strict --sat-solver=cadical
 ```
 
-The other helpers below are candidates to add to it, each an A/B of its own.
+The first three rows are its measured components; the remaining helpers are
+candidates to test one at a time.
 
 | option | why | caveat in the notes |
 | --- | --- | --- |
 | `--user-pat=strict` | preserve user-provided triggers exactly | odd semantics: `(forall x. false :pattern (P x))` should be a conflict but needs a `P` term |
 | `--no-cbqi` | conflict-based instantiation is a loss here (h-15) | an order-of-magnitude win on sledgehammer problems; the notes say it should be off by default on Verus benchmarks |
-| `--sat-solver=cadical` | faster SAT core | the default since 2026-08, **but** `--incremental` defaults to true and forces MiniSat unless the SAT solver is set explicitly; the 2026-09-14 baseline ran MiniSat ([ledger](ledger/2026-09-15-baseline-caveats.md)) |
+| `--sat-solver=cadical` | faster SAT core; explicit selection cut PAR2 6.5% and rescued 55 benchmarks | the declared default since 2026-08, **but** `--incremental` defaults to true and forces MiniSat unless the SAT solver is set explicitly ([ledger](ledger/2026-09-15-sat-and-instance-order.md)) |
 | `--term-db=relevant` | filter congruent terms; ignore ground terms preregistered but not asserted; recently made incremental | whether it is default is not stated; check before assuming it is in the baseline |
 | `--enum-inst` | solves more | and times out more; not enabled by default |
 

@@ -182,8 +182,8 @@ Fixed with it, for goal 0:
 | | |
 | --- | --- |
 | timeout | 30 s per benchmark per solver, user time, on the host |
-| cvc5 configurations | default (`-q`), and the best known: `-q --no-cbqi --user-pat=strict` |
-| z3 | a current z3 (4.15.4), **with the options Verus passes it**: `auto_config=false smt.mbqi=false smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.nl=false`. Without them z3 times out on benchmarks it solves in a quarter of a second with them; the benchmarks carry no options of their own |
+| cvc5 configurations | default (`-q`), the quantifier control (`-q --no-cbqi --user-pat=strict`), and the best measured configuration: that control plus explicit `--sat-solver=cadical` |
+| z3 | z3 4.15.4, **with all nine options current Verus passes it**: `auto_config=false smt.mbqi=false smt.case_split=3 smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.solver=2 smt.arith.nl=false pi.enabled=false rewriter.sort_disjunctions=false`. The benchmarks carry no options of their own |
 | gap set | unsolved by cvc5 and solved by z3, or both solved and cvc5 at least 10× slower with cvc5 taking at least 1 s |
 | aggregate | PAR2 ratio, cvc5 over z3, over the benchmarks both runs report |
 
@@ -258,24 +258,36 @@ records what was read from them and what it settled.
 ## Status
 
 **Started 2026-09-14**, by an explicit human instruction, which is the only way
-one of these begins. The same day, goal 0 and goal 1 were done: the set is
-named and the baseline is in the ledger
-([2026-09-14](ledger/2026-09-14-baseline.md)). As of it, the two numbers are:
+one of these begins. The set and original baseline are in the
+[2026-09-14 ledger](ledger/2026-09-14-baseline.md). Two caveats found the next
+day were both rerun: the complete current Verus z3 option list
+([ledger](ledger/2026-09-15-z3-full-verus-options.md)) and explicit CaDiCaL
+([ledger](ledger/2026-09-15-sat-and-instance-order.md)). The current two
+numbers are:
 
-> **the gap** — PAR2 ratio **4.34** (cvc5 `--no-cbqi --user-pat=strict` over
-> z3 4.15.4 with Verus options, 30 s); gap set **1049** of 6124, of which
-> 545 are cvc5 timeouts on benchmarks z3 solves.
+> **the gap** — PAR2 ratio **1.75** (cvc5 `--no-cbqi
+> --user-pat=strict --sat-solver=cadical` over z3 4.15.4 with all nine current
+> Verus options, 30 s); gap set **1073** of 6124, comprising 534 cvc5-unsolved
+> cases where z3 solves and 539 cases both solve but cvc5 is at least 10×
+> slower. The z3 baseline itself has 310 unknowns, so this smaller ratio is
+> not all cvc5 progress.
 >
-> **the attributed fraction** — **0**. Nothing has been attributed yet.
+> **the attributed fraction** — **0**. Whole-set statistics now identify
+> promising mechanisms, but the per-benchmark attribution table does not yet
+> exist.
 
-The one number inherited from the notes (`h-25`) is still marked as
-inherited. On 2026-09-15 the register was expanded into
-[`docs/directions.md`](docs/directions.md): twenty-six active research directions,
-each with the cvc5 flags that test it, what the fork has tried, what z3 does
-in its code, the papers, and an argued risk/gain estimate. The active
-recommendation is the ranked list in [`docs/todo.md`](docs/todo.md). Two caveats on the
-baseline were found while writing it
-([ledger, 2026-09-15](ledger/2026-09-15-baseline-caveats.md)).
+The quantifier control without explicit CaDiCaL is ratio 1.88 with a gap of
+1122. Its first whole-set statistics run shows that those 18.3% of benchmarks
+consume 86.0% of cvc5 time and that E-matching consumes 27.8% within that gap
+([ledger](ledger/2026-09-15-attribution-stats.md)). This is evidence for the
+next attribution work, not yet an attributed fraction.
+
+The one number inherited from the notes (`h-25`) remains marked as inherited.
+The register is [`docs/directions.md`](docs/directions.md): twenty-six active
+research directions, each with testing flags, fork work, the corresponding z3
+mechanism, papers, and an argued risk/gain estimate. The evidence-sensitive AI
+ranking and the separate human-maintainer ranking are in
+[`docs/todo.md`](docs/todo.md).
 
 There are three endings and a person picks: it graduates into its own
 repository, it is folded into cvc5's own performance work, or it is retired in

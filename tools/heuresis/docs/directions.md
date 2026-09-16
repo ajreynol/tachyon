@@ -30,20 +30,20 @@ which.
 renumbering the survivors, so gaps are intentional; Git history is the record
 of what was retired and why.
 
-*What this document is not.* It is not an attribution of the remaining gap.
-The project baseline ([ledger,
-2026-09-14](../ledger/2026-09-14-baseline.md)) measures a PAR2 ratio of 4.34,
-a gap set of 1049 of 6124, and 545 cvc5 timeouts on benchmarks z3 solves. It
-also measures `--no-cbqi --user-pat=strict` only as a bundle: relative to
-cvc5's default, cvc5 PAR2 improves from 53390 to 43942, but the two flags'
-individual shares are unknown. Separately, the notes inherit one measured
-direction, lazy large-`distinct` handling (R20), at 1.75× average speedup on
-the Verus+Sundance set with a 60-second timeout. Everything else remains a
-hypothesis or an unmeasured branch. The inventories say what *could* be
-tested and how; goal 2 of the charter decides what *is*. Where a claim about
-z3 or cvc5 rests on code read today it says `(code)`; where on a paper, it
-cites; where on the notes, it names the `h-` row; where on reasoning alone,
-it says so.
+*What this document is not.* It is not yet a complete attribution of the
+remaining gap. The corrected current baseline measures a PAR2 ratio of 1.75
+and a gap set of 1073 of 6124 for explicit CaDiCaL against z3 with all nine
+current Verus options ([ledger](../ledger/2026-09-15-z3-full-verus-options.md)).
+The first host sweep also separated the two quantifier flags, tested three
+mainline controls, and captured whole-set internal statistics. Those measured
+updates are recorded under the affected directions and in the ledger; fork
+branches remain unmeasured unless a direction says otherwise. Separately, the
+notes inherit lazy large-`distinct` handling (R20) at 1.75× average speedup on
+the Verus+Sundance set with a 60-second timeout. The inventories say what
+*could* be tested and how; goal 2 of the charter decides what *is*. Where a
+claim about z3 or cvc5 rests on code read today it says `(code)`; where on a
+paper, it cites; where on the notes, it names the `h-` row; where on reasoning
+alone, it says so.
 
 **Conventions.** A cvc5 flag is given as `--name` with its default in
 brackets; `none` means the feature does not exist in cvc5. Fork branches are
@@ -55,8 +55,8 @@ can contain merge and update commits. A feature marked *merged* means its
 intended behavior or option was found in the pinned cvc5 source; it does not
 mean the fork commit is an ancestor of `main`, because upstream often
 squash-merges. "Open" and "unmerged" are statuses as checked on 2026-09-15.
-"Best known" means the configuration under study,
-`--no-cbqi --user-pat=strict`.
+"Best known" means the measured configuration under study,
+`--no-cbqi --user-pat=strict --sat-solver=cadical`.
 
 **Effort levels.** Each direction is classified on two color-coded axes:
 *Risk* runs 🟢 Low → 🟡 Medium → 🔴 High and combines implementation size,
@@ -76,9 +76,11 @@ These are priors, not measured claims; attribution should change them.
 | D — before the search | R20–R23 | preprocessing and what the search is made to look at |
 | E — cross-cutting | R25–R27 | low-level engineering, instrumentation, and input parsing |
 
-The baseline says half the gap set is timeouts and half is solved-but-slow.
-The reading in `notes.md` (*A reading of the register*) predicts that groups A
-and B carry most of it. That is a prediction, and goal 2 exists to test it.
+The corrected best-known gap is 534 cvc5-unsolved cases and 539
+solved-but-slow cases. The first stats run supports substantial group-A work
+but does not yet assign one direction per benchmark. The reading in
+`notes.md` (*A reading of the register*) predicts that groups A and B carry
+most of the gap; goal 2 exists to test that prediction.
 
 ## Fork archaeology: the highest-signal branches
 
@@ -222,14 +224,14 @@ Theories*](https://theory.stanford.edu/~barrett/pubs/GBT09-abstract.html), CADE
 2007. Bjørner et al., [*Z3
 Internals*](https://z3prover.github.io/papers/z3internals.html), §7.1.5–7.1.6.
 
-**What would settle it.** The attribution first: on the gap set, the number of
-full-effort rounds per benchmark (`QuantifiersEngine::Rounds_Instantiation_Full`)
-against z3's instance generation depth; if cvc5's rounds track z3's depth,
-the cost is rounds, and R1 is the direction. Then the cheapest existing
-branch against the set with clause-lifetime and memory counters. The notes
-report that eager attempts drowned without deletion, but `--inst-local` is
-not deletion (R9); a genuine lifetime experiment must follow if the eager
-signal is positive.
+**Evidence and next step.** The [2026-09-15 statistics
+run](../ledger/2026-09-15-attribution-stats.md) measured 31,334 full
+instantiation rounds on the current 1122-case gap: 1121 cases were nonzero,
+with median 22 and p90 54. The missing comparison is z3's instance-generation
+depth on a fixed sample. If the two track, test the cheapest eager branch with
+clause-lifetime and memory counters. The notes report that eager attempts
+drowned without deletion, but `--inst-local` is not deletion (R9); a genuine
+lifetime experiment must follow if the eager signal is positive.
 
 ## R2 — Incremental E-matching: match what changed, not everything
 
@@ -301,10 +303,12 @@ solving*](https://hanielbarbosa.com/papers/phd-official.pdf), PhD thesis 2017.
 Bjørner et al., [*Z3
 Internals*](https://z3prover.github.io/papers/z3internals.html), §7.1.2–7.1.3.
 
-**What would settle it.** `theory::QuantifiersEngine::time_ematching` as a
-fraction of solve time on the gap set, and the ratio of matches found to
-matches re-found (a counter to add). If E-matching time is small, R2 is not
-where the gap is, whatever z3 does.
+**Evidence and next step.** The [2026-09-15 statistics
+run](../ledger/2026-09-15-attribution-stats.md) measures E-matching at 6015 s,
+or 27.8% of total time, on the current gap set. The timer prerequisite is
+therefore positive. Add the still-missing counter for matches found versus
+matches rediscovered; that ratio decides whether incrementality, rather than
+matching work that was genuinely new, is the target.
 
 ## R3 — Worst-case E-matching: failure caching and early pruning
 
@@ -537,8 +541,13 @@ SMT*](https://homepage.cs.uiowa.edu/~tinelli/papers/ReyTD-FMCAD-14.pdf), FMCAD
 2014. [Hoenicke and Schindler VMCAI
 2021](https://doi.org/10.1007/978-3-030-67067-2_24).
 
-**What would settle it.** The baseline already has `--no-cbqi` bundled with
-`--user-pat=strict`; an A/B of each alone says what cbqi costs here.
+**Evidence and next step.** The [four-arm 2026-09-15
+run](../ledger/2026-09-15-quantifier-controls.md) did that A/B. `--no-cbqi`
+alone rescues 96 default failures, strict patterns rescue 90, and 87 overlap;
+the combined arm rescues 93. Either option recovers nearly all of the bundle's
+aggregate gain, consistent with strict ownership already excluding CBQI for
+most relevant patterned quantifiers. Measure pattern coverage and inspect the
+small disjoint rescue/loss sets before another global R6 experiment.
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
 
@@ -552,8 +561,8 @@ matter broadly if its current checks dominate matching time.
 by default and the notes list it among things that help elsewhere. On a
 workload that is all unsat and trigger-driven, entailed instances may be
 rare, and the evaluator's per-round reset may cost more than it saves — or it
-may be the only thing standing between cvc5 and an instance explosion. Nobody
-has measured it on this set.
+may be the only thing standing between cvc5 and an instance explosion. The
+counter is now measured below; the option A/B is not.
 
 **In cvc5 today `(code)`.** `--ieval` [`use`], `--inst-no-entail` [`true`];
 trigger matching runs the evaluator in `NO_ENTAIL` mode; QCF in
@@ -574,10 +583,11 @@ filter.
 2021](https://doi.org/10.1007/978-3-030-67067-2_24) is the closest published
 analogue.
 
-**What would settle it.** `Duplicate_Inst_Entailed` over
-`Instantiations_Total` on
-the gap set, and an A/B of `--ieval=off`, `--ieval=use-learn`,
-`--no-inst-no-entail`.
+**Evidence and next step.** The [2026-09-15 statistics
+run](../ledger/2026-09-15-attribution-stats.md) records 247,662 entailed
+duplicates on 985 of 1122 gap cases, 8.1% of total gap-set instantiations.
+That is large enough to run the existing A/B: `--ieval=off`,
+`--ieval=use-learn`, and `--no-inst-no-entail`.
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
@@ -630,8 +640,8 @@ and Janota, [*From MBQI to Enumerative Instantiation and
 Back*](https://ceur-ws.org/Vol-4008/SMT_paper10.pdf), SMT 2025.
 
 **What would settle it.** `-o inst-strategy` on the gap set to see whether
-cegqi ever fires; an A/B of `--no-cegqi` and of `--enum-inst` on the 545
-timeouts.
+cegqi ever fires; an A/B of `--no-cegqi` and of `--enum-inst` on the current
+cvc5-unsolved gap slice.
 
 ---
 
@@ -690,10 +700,13 @@ of inst-local that avoids re-deriving instantiations after backtracking");
 `--defer-block` with `--defer-block-mode=subsolve|delay`, a theory-engine
 module that holds lemmas back, with arithmetic branch-and-bound hooks);
 [`ajreynol:smtLazyAssert`](https://github.com/ajreynol/cvc5/tree/smtLazyAssert) (2022); [`ajreynol:satNotify`](https://github.com/ajreynol/cvc5/tree/satNotify), [`ajreynol:notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause) (the deletion
-callback). None but `--inst-local` is on `main`; `--inst-local` has not been
-measured on the set. Its upstream PR also reports significantly worse overall
-performance despite improvements on some cases, so merge status is not
-positive performance evidence.
+callback). None but `--inst-local` is on `main`. The [2026-09-15
+run](../ledger/2026-09-15-sat-and-instance-order.md) measured it on this set:
+it rescues 84 control failures and loses 75 control solves, while raising
+PAR2 1.2% and making 480 common solves at least 2× slower. Its upstream PR
+also reports significantly worse overall performance despite improvements on
+some cases, so neither merge status nor this global result is positive
+performance evidence.
 
 **Elsewhere `(code)`.** z3: instance clauses are `CLS_AUX`, stored in
 `m_aux_clauses`, and `context::pop_scope_core` runs `del_clauses(m_aux_clauses,
@@ -718,12 +731,12 @@ Solvers*](https://www.ijcai.org/Proceedings/09/Papers/074.pdf), IJCAI 2009
 (LBD). Fazekas, Biere and Scholl, [*Incremental Inprocessing in SAT
 Solving*](https://fmv.jku.at/incrinpr/), SAT 2019.
 
-**What would settle it.** Clause-database size against time on the ten worst
-(MiniSat's `clauses_persistent` count is one added statistic away), and the
-fraction of instance clauses that are ever used in a conflict. Run
-`--inst-local` to test its scoped-cache/justification approximation and then
-`--inst-defer`; neither run tests clause deletion. A true GC needs the
-notification plumbing first.
+**Evidence and next step.** Current stats show 29.9 million clause literals
+and 69.9 million decisions across the gap, but not live persistent-clause
+count or instance-clause conflict use. Add those two counters. The negative,
+high-variance `--inst-local` result above tests its scoped-cache/justification
+approximation, not deletion; classify its helped cases before trying
+`--inst-defer`. A true GC still needs the notification plumbing first.
 
 ## R10 — Where instance lemmas sit in the decision order: local, deferred, gated
 
@@ -759,7 +772,8 @@ valuation still needs a check); [`ajreynol:termOrigin`](https://github.com/ajrey
 `--track-term-origins`: a lemma-origin DAG over terms, i.e. z3's generation);
 [`ajreynol:instFullPreempt`](https://github.com/ajreynol/cvc5/tree/instFullPreempt) (2024, `--inst-when=full-preempt`: instantiate before
 theory combination and before other theories have checked). None of these
-branch-only options was found on pinned `main`; none was measured on the set.
+branch-only options was found on pinned `main`. The two mainline controls were
+measured on the set on 2026-09-15.
 
 **Elsewhere `(code)`.** z3 `smt.case_split` [1] = `CS_ACTIVITY_DELAY_NEW`:
 `dact_case_split_queue` keeps Boolean variables created while searching in a
@@ -776,9 +790,12 @@ First-Order Formulas by Incremental Translation to
 SAT*](https://doi.org/10.1007/3-540-45657-0_18), CAV 2002 (the justification
 idea).
 
-**What would settle it.** `--inst-local` and `--inst-defer` on the set are two
-runs; `--jh-rlv-order` is a third. The decision count per benchmark
-(`prop::decisions`) before and after says whether the heuristic was the cost.
+**Evidence and next step.** In the [2026-09-15
+run](../ledger/2026-09-15-sat-and-instance-order.md), `--inst-local` raises
+PAR2 1.2% and the gap from 1122 to 1332; `--jh-rlv-order` raises PAR2 7.2%,
+loses 66 net solves, but reduces time on the cases it still solves. These are
+negative as global policies but heterogeneous. Classify their wins and losses
+with `sat::decisions` before building or rebasing `--inst-defer`.
 
 ## R11 — Decision heuristic versus relevancy: what the SAT solver is made to decide on
 
@@ -942,11 +959,12 @@ and Darwiche, [*A Lightweight Component Caching Scheme for Satisfiability
 Solvers*](https://doi.org/10.1007/978-3-540-72788-0_28), SAT 2007 (phase
 saving).
 
-**What would settle it.** The baseline rerun with `--sat-solver=cadical` is
-the first experiment of goal 3, because the notes' best-known configuration
-included it and the ledger's did not. Then restart intervals on MiniSat, and
-a CaDiCaL `delay_units` analogue if the propagator statistics show restarts
-after units.
+**Evidence and next step.** The [2026-09-15
+run](../ledger/2026-09-15-sat-and-instance-order.md) explicitly selected
+CaDiCaL: it rescues 55 control failures, loses none, removes 50 timeouts, and
+cuts PAR2 6.5%; the current gap falls from 1122 to 1073. It is now the control
+configuration. Classify its 55 rescues and its 116 at-least-2× regressions
+before designing a narrower SAT-policy experiment.
 
 ---
 
@@ -1065,9 +1083,12 @@ Closure*](https://doi.org/10.1145/322186.322198), J. ACM 27(2), 1980. Barbosa
 et al., [*cvc5: A Versatile and Industrial-Strength SMT
 Solver*](https://doi.org/10.1007/978-3-030-99524-9_24), TACAS 2022.
 
-**What would settle it.** `--ee-mode=central` on the set is one run and
-exists today; the [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) branch is a build. A profile of the ten
-worst says what fraction of time is in the equality engines at all.
+**Evidence and next step.** The [2026-09-15 statistics
+run](../ledger/2026-09-15-attribution-stats.md) records UF checks at 10.1% of
+gap time and large per-theory equality-engine term/merge counts, but no
+equality-engine-specific timer; UF time is not a substitute. Run the existing
+`--ee-mode=central` control before building
+[`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3).
 
 ## R16 — Datatypes: when to split, on what, and whether to have them at all
 
@@ -1079,9 +1100,9 @@ so avoiding irrelevant splits may affect a meaningful subset.
 
 **The hypothesis.** Verus encodes Rust types with datatypes (`Poly` boxing,
 `Option`, records), so datatype terms may be numerous even when most never
-need a constructor decision. Their prevalence and scale on this corpus must
-be measured; the source alone does not justify "every benchmark" or
-"thousands". cvc5 considers every datatype equivalence class for splitting;
+need a constructor decision. Source alone did not justify “every benchmark”
+or “thousands”; the measurement below now quantifies the relevant subset.
+cvc5 considers every datatype equivalence class for splitting;
 z3 splits infinite datatypes only at final check, and only after relevancy has
 had its say, with the phase
 biased to the non-recursive constructor. Two fork branch lines, and one
@@ -1133,9 +1154,12 @@ Reasoning*](https://arxiv.org/abs/1611.02908), POPL 2017. Hojjat and Rümmer,
 [*Deciding and Interpolating Algebraic Data Types by
 Reduction*](https://arxiv.org/abs/1801.02367), 2018.
 
-**What would settle it.** `DATATYPES_SPLIT` lemma counts on the gap set (from
-`--stats-internal`), then `--dt-binary-split` as a run and [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant)
-as a build.
+**Evidence and next step.** The [2026-09-15 statistics
+run](../ledger/2026-09-15-attribution-stats.md) records 27,484
+`DATATYPES_SPLIT` lemmas on 920 of 1122 gap cases (median 7, p90 79). Run
+`--dt-binary-split` next; build or rebase
+[`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant)
+only if the cheap mainline control is promising.
 
 ## R17 — Linear integer arithmetic: branch and bound, cuts, and the Diophantine solver
 
@@ -1202,8 +1226,12 @@ FMCAD 2014. Bromberger and Weidenbach, [*New techniques for linear arithmetic:
 cubes and equalities*](https://doi.org/10.1007/s10703-017-0278-7), FMSD 51(3),
 2017.
 
-**What would settle it.** Branch-and-bound and DIO lemma counts per benchmark
-on the gap set; [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) as a build; `--no-dio-solver` as a run.
+**Evidence and next step.** The [2026-09-15 statistics
+run](../ledger/2026-09-15-attribution-stats.md) finds DIO conflict calls on 283
+gap cases, DIO cut calls on 242, and external branch-and-bound on 278. These
+counters narrow R17 to roughly one quarter of the gap rather than supporting
+a global policy. Classify that slice before running `--no-dio-solver` or
+building [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc).
 
 ## R18 — Nonlinear arithmetic: off, light, or lazy
 
@@ -1532,8 +1560,8 @@ one is expected to explain the structural timeout gap.
 *Rows `h-22`. Not a research direction on its own; the tail that remains
 when the algorithmic directions are done, and sometimes the head.*
 
-**The hypothesis.** Some of the 10–20× cases in the gap set (306 of the 504
-solved-but-slow) are not a different algorithm but the same algorithm with
+**The hypothesis.** Some of the 10–20× solved-but-slow cases in the gap are
+not a different algorithm but the same algorithm with
 larger constants: node hashing, the trie indices of the term database,
 equality-engine notification overhead, memory. A targeted profile can expose
 these, and the fork has several old branches of exactly this kind.
@@ -1638,10 +1666,15 @@ Normalization*](https://doi.org/10.34727/2025/isbn.978-3-85448-084-6_14),
 FMCAD 2025. Lattuada et al., [*Verus: Verifying Rust Programs using Linear
 Ghost Types*](https://doi.org/10.1145/3586037), OOPSLA 2023.
 
-**What would settle it.** Nothing; this direction is the instrument. Its
-deliverable is evidence for the attribution table of goal 2 and the findings
-it supports. Start with `--stats-internal` and `-o inst` on a promising gap
-sample; expand coverage when the question needs it.
+**Evidence and next step.** This direction is the instrument: its deliverable
+is evidence for goal 2's attribution table and the findings it supports. The
+first whole-set `--stats-internal` capture is in the [2026-09-15
+ledger](../ledger/2026-09-15-attribution-stats.md). It already reprioritizes
+several directions, but does not raise the project's attributed fraction;
+normalize its per-benchmark evidence next. Current `main` still lacks
+new-versus-rediscovered E-match, persistent-clause, and instance-clause
+conflict-use counters. Inspect `qdebugStats` and port only what supplies those
+gaps.
 
 ## R27 — SMT-LIB parser throughput: pay less before solving
 
@@ -1655,8 +1688,8 @@ search-heavy timeouts unless measurement shows it consumes their budget.
 **The hypothesis.** Verus emits large, repetitive SMT-LIB files. Before cvc5
 can make one SAT decision it must scan every byte, allocate token strings,
 resolve every symbol, construct every API term, and execute declarations. That
-fixed cost can be a material fraction of the 504 solved-but-slow cases and can
-distort comparisons on fast solves. It is a different hypothesis from R20:
+fixed cost could be material in solved-but-slow cases and can distort
+comparisons on fast solves. It is a different hypothesis from R20:
 R27 is turning bytes into commands and terms; R20 begins after assertions exist.
 
 **In cvc5 today `(code)`.** `FileInput` wraps a `std::ifstream`; the hand-written
@@ -1691,61 +1724,39 @@ on identical inputs, not parser architecture by name.
 **Papers.** None specific to SMT-LIB parser throughput; the cvc5 pull requests
 and the two solver front ends above are the relevant primary sources.
 
-**What would settle it.** Time `--parse-only` on every benchmark and record file
-bytes, token and term counts, peak memory, and parse-only time as a fraction of
-end-to-end cvc5 time. Compare the same inputs with z3's front end, then A/B
-[`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt)
-on the solved-but-slow slice. If parsing is not a
-material share there, R27 leaves the top ten; if it is, a profile decides
-whether lexing, symbol lookup, API term construction, or command execution is
-the actual target.
+**Evidence and next step.** The 2026-09-15 stats put
+`processAssertionsTime` at only 0.9% of total gap time, but that is not a
+parse-only timer and does not settle R27. Time `--parse-only` and record file
+bytes, token and term counts, peak memory, and its fraction of end-to-end time
+before rebasing
+[`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt).
+R27 leaves the active top ten pending that cheaper measurement; if it returns,
+a profile should identify lexing, symbol lookup, API term construction, or
+command execution as the actual target.
 
 ---
 
-# What to run first, as a prediction
+# What to run next
 
-The directions are not ranked by expected share of the gap — that is goal
-2's job — but by what one run costs today. Everything in the first list is a
-config change in [`job_launcher/configs/`](../../../job_launcher/configs/)
-against the baseline; everything in the second is a `BRANCH=` build of a
-fork branch; the third needs design work and is where the notes and the z3
-code agree the structural difference lives.
+The live order is [`todo.md`](todo.md), which is deliberately updated as
+evidence arrives. The first host sweep completed the explicit-CaDiCaL,
+`--inst-local`, `--jh-rlv-order`, quantifier-control factorial, corrected z3,
+and whole-set-statistics runs. The next cheap mainline controls supported by
+those measurements are:
 
-**Parser measurement.** `--parse-only` on the set, then
-[`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt)
-on the solved-but-slow slice (R27). This is cheap enough to reject before any
-front-end design work.
-
-**Flags on `main`, one run each.**
-
-| run | direction | why first |
+| run | direction | measured trigger |
 | --- | --- | --- |
-| `--sat-solver=cadical` | R13 | the baseline ran MiniSat by accident of `--incremental`; the notes' best-known configuration had CaDiCaL |
-| `--ee-mode=central` | R15 | one flag; the notes' direction 3 |
-| `--preregister-mode=lazy` | R22 | one flag; the notes' `h-28` |
-| `--inst-local`, then `--jh-rlv-order` | R10 | the merged half of the lemma-lifecycle work |
-| `--term-db-mode=all` / `relevant` | R23 | brackets the current default |
-| `--no-cegqi` | R8 | cegqi is auto-enabled and may cost rounds on unpatterned quantifiers |
-| `--nl-ext=none` on the NIA subset | R18 | Verus runs z3 with nonlinear off |
-| `--lemma-inprocess=light`, `--conflict-process=min` | R12 | the notes' experimental rows |
-| `--dt-binary-split` | R16 | one flag |
-| `--simplification=none`, `--no-static-learning` | R20 | the comment in `set_defaults.cpp` |
-| `--ieval=off`, `--ieval=use-learn` | R7 | what entailment filtering costs here |
-| `--user-pat=trust` alone; `--no-cbqi` alone | R5, R6 | the baseline measured them together |
+| `--dt-binary-split` | R16 | 27,484 split lemmas on 920 gap cases |
+| `--ieval=off`, `--ieval=use-learn`, `--no-inst-no-entail` | R7 | entailed duplicates are 8.1% of gap-set instances |
+| `--ee-mode=central` | R15 | UF checks take 10.1% of gap time, while equality-engine time itself is still missing |
+| `--parse-only` | R27 | needed to interpret the low but non-parser-specific `processAssertionsTime` |
 
-**Fork branches, one build each.** [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) (R9/R10), [`ajreynol:ai-jhRlvInst`](https://github.com/ajreynol/cvc5/tree/ai-jhRlvInst)
-(R10), [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) (R16), [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) (R17), [`ajreynol:ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) (R3),
-[`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) (R22), [`ajreynol:mbtc25`](https://github.com/ajreynol/cvc5/tree/mbtc25) (R14), [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) (R15), [`ajreynol:deferBlock`](https://github.com/ajreynol/cvc5/tree/deferBlock)
-(R9/R17), [`ajreynol:bitblastLc`](https://github.com/ajreynol/cvc5/tree/bitblastLc) (R19), and [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) with its pacing limits
-(R1) — the eager branch here with explicit per-round, pair, and generation
-budgets — plus
-[`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) (R27).
-
-**Design work.** R1 with R2 and R9 together: eager, incremental,
-forgetting. The notes' three attempts at R1 each ran into the absence of R9
-("clauses are not deleted, can encounter infinite branch and bound, matching
-loops"), and the z3 code says the three are one mechanism. It is the
-expensive direction, and the attribution has to earn it.
+Before a branch build, add or selectively port the new-versus-rediscovered
+E-match counter (R2) and the persistent-clause/conflict-use counters (R9).
+Do not build every historical branch: the evidence-sensitive rebase decision
+for each maintained fork branch is in `todo.md`, “Branch maintenance.” The
+expensive combined design remains R1 + R2 + R9 — eager, incremental,
+forgetting — and the attribution still has to earn it.
 
 ---
 

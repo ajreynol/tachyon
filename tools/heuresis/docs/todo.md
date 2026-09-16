@@ -24,21 +24,24 @@ Each direction comes from [`directions.md`](directions.md). After completing a
 step, record the evidence in [`../ledger/`](../ledger/), rerank the ten
 directions, and replace or refine that direction's possible first steps.
 
-**Updated.** 2026-09-15.
+The ranking now incorporates the first whole-set attribution statistics and
+option A/Bs ([evidence](../ledger/2026-09-15-attribution-stats.md)); it should
+continue to move when evidence changes.
+
+**Updated.** 2026-09-15 after the first evidence sweep.
 
 | rank | research direction | effort | next possible step |
 | ---: | --- | --- | --- |
-| 1 | [R13 — The SAT backend](directions.md#r13--the-sat-backend-cadical-minisat-restarts-units) | 🟢 Low Risk / 🟡 Medium Gain | Confirm the effective backend on one baseline command with `-o options-auto`, then rerun the fixed baseline with explicit `--sat-solver=cadical`. |
-| 2 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Capture `--stats-internal` and `-o inst` for the first ten gap benchmarks and define the smallest normalized result schema. |
-|  |  |  | Build [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) and identify which of its counters are still missing from main. |
-| 3 | [R27 — SMT-LIB parser throughput](directions.md#r27--smt-lib-parser-throughput-pay-less-before-solving) | 🟡 Medium Risk / 🟡 Medium Gain | Measure `--parse-only` wall time and input bytes across the corpus; build [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) only if parsing is material. |
-| 4 | [R23 — Term-database relevance](directions.md#r23--term-database-relevance-which-ground-terms-e-matching-may-use) | 🟡 Medium Risk / 🟢 High Gain | Compare `--term-db-mode=all`, `relevant`, and `relevant-all-delay`, recording instances, unknowns, time, and the last-call fallback. |
-| 5 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟡 Medium Risk / 🟢 High Gain | Run `--inst-local` and `--jh-rlv-order` separately; compare decision counts before considering [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer). |
-| 6 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🔴 High Risk / 🟢 High Gain | Instrument persistent SAT-clause count and instantiation-clause conflict use on the ten worst benchmarks before designing deletion. |
-| 7 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | Compare cvc5 full-effort round counts with z3 instance-generation depth on a fixed gap sample before selecting an eager branch. |
-| 8 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🔴 High Risk / 🟢 High Gain | Measure E-matching's share of solve time; add a new-versus-rediscovered match counter only if that share is material. |
-| 9 | [R4 — Instantiation budgeting](directions.md#r4--instantiation-budgeting-how-many-instances-per-round-and-which) | 🔴 High Risk / 🟢 High Gain | Compare instances per round and total instances in cvc5 and z3 profiles before selecting a budget policy. |
-| 10 | [R22 — Preregistration](directions.md#r22--preregistration-which-literals-the-theories-are-told-about) | 🟡 Medium Risk / 🟡 Medium Gain | Run `--preregister-mode=lazy` on the gap set; build [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) only if the mainline experiment moves the target counters. |
+| 1 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🔴 High Risk / 🟢 High Gain | Add a new-versus-rediscovered E-match counter now that E-matching is measured at 27.8% of gap-set time. |
+| 2 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🔴 High Risk / 🟢 High Gain | Add persistent-clause count and instance-clause conflict-use counters before designing deletion. |
+| 3 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | Run `--dt-binary-split`; 920 gap cases emitted 27,484 datatype-split lemmas. |
+| 4 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Turn the captured whole-set statistics into the first normalized per-benchmark attribution table. |
+| 5 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | Compare the measured cvc5 full-effort rounds with z3 instance-generation depth on a fixed gap sample. |
+| 6 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟢 Low Risk / 🟡 Medium Gain | Compare `--ieval=off`, `--ieval=use-learn`, and `--no-inst-no-entail`; entailed duplicates are 8.1% of gap-set instances. |
+| 7 | [R13 — The SAT backend](directions.md#r13--the-sat-backend-cadical-minisat-restarts-units) | 🟢 Low Risk / 🟡 Medium Gain | Make explicit CaDiCaL the control and classify its 55 rescued benchmarks and 116 at-least-2× regressions. |
+| 8 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🔴 High Risk / 🟡 Medium Gain | Run the existing `--ee-mode=central` control; UF time is material but is not an equality-engine timer. |
+| 9 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟡 Medium Risk / 🟢 High Gain | Classify the disjoint wins and losses from the two negative global controls before building or rebasing `ai-instDefer`. |
+| 10 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | Isolate the roughly one-quarter of gap cases with DIO or branch-and-bound activity before testing a policy change. |
 
 ## Human-maintainer priorities
 
@@ -54,22 +57,23 @@ maintainer supplies it.
 
 | rank | research direction | effort | next possible step | human rationale |
 | ---: | --- | --- | --- | --- |
-| 1 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🔴 High Risk / 🟢 High Gain | Instrument persistent SAT-clause count and instantiation-clause conflict use on the ten worst benchmarks before designing deletion. |  |
-| 2 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | Compare cvc5 full-effort round counts with z3 instance-generation depth on a fixed gap sample before selecting an eager branch. |  |
-| 3 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🔴 High Risk / 🟢 High Gain | Measure E-matching's share of solve time; add a new-versus-rediscovered match counter only if that share is material. |  |
-| 4 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🔴 High Risk / 🟡 Medium Gain | Profile equality-engine time on the ten worst benchmarks, then run `--ee-mode=central` if it is material. |  |
-| 5 | [R6 — Conflict-based instantiation](directions.md#r6--conflict-based-instantiation-off-for-this-domain-and-why-that-is-right-or-wrong) | 🟢 Low Risk / 🟡 Medium Gain | Run `--no-cbqi` alone against the fixed baseline to isolate CBQI's effect from strict user patterns. |  |
-| 6 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟡 Medium Risk / 🟢 High Gain | Run `--inst-local` and `--jh-rlv-order` separately; compare decision counts before considering [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer). |  |
-| 7 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟢 Low Risk / 🟡 Medium Gain | Capture the entailed-to-total-instantiation ratio, then compare `--ieval=off`, `--ieval=use-learn`, and `--no-inst-no-entail`. |  |
-| 8 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | Capture branch-and-bound and Diophantine lemma counts on the relevant gap slice before testing `--no-dio-solver` or building [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc). |  |
-| 9 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | Capture `DATATYPES_SPLIT` counts on the gap set, then test `--dt-binary-split` if splitting is material. |  |
-| 10 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Capture `--stats-internal` and `-o inst` for the first ten gap benchmarks and define the smallest normalized result schema. |  |
+| 1 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🔴 High Risk / 🟢 High Gain | Add persistent-clause count and instance-clause conflict-use counters before designing deletion. |  |
+| 2 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | Compare the measured cvc5 full-effort rounds with z3 instance-generation depth on a fixed gap sample. |  |
+| 3 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🔴 High Risk / 🟢 High Gain | Add a new-versus-rediscovered E-match counter now that E-matching is measured at 27.8% of gap-set time. |  |
+| 4 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🔴 High Risk / 🟡 Medium Gain | Run `--ee-mode=central`; the existing UF timer does not isolate equality-engine cost. |  |
+| 5 | [R6 — Conflict-based instantiation](directions.md#r6--conflict-based-instantiation-off-for-this-domain-and-why-that-is-right-or-wrong) | 🟢 Low Risk / 🟡 Medium Gain | Inspect the 9 `--no-cbqi`-only and 3 strict-only rescues and measure user-pattern coverage before another global run. |  |
+| 6 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟡 Medium Risk / 🟢 High Gain | Classify the rescues and losses from `--inst-local` and `--jh-rlv-order` before considering [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer). |  |
+| 7 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟢 Low Risk / 🟡 Medium Gain | Compare `--ieval=off`, `--ieval=use-learn`, and `--no-inst-no-entail`; the entailed-instance ratio is now measured. |  |
+| 8 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | Isolate the 283 DIO-conflict and 278 branch-and-bound gap cases before testing `--no-dio-solver` or building [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc). |  |
+| 9 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | Run `--dt-binary-split`; datatype splitting is now measured as material on 920 gap cases. |  |
+| 10 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Turn the captured whole-set statistics into the first normalized per-benchmark attribution table. |  |
 
 ## Branch maintenance
 
-**Current recommendation:** fast-forward `ajreynol:master`, then rebase
-`ajreynol:ai-instDefer`. Do not rebase `qdebugStats` wholesale yet, and leave
-the remaining branches alone until their prerequisite measurement is positive.
+**Current recommendation:** fast-forward `ajreynol:master`, but do not urgently
+rebase an experimental branch. Port only the missing counters from
+`qdebugStats`; run the cheap mainline datatype and equality-engine controls
+before reconsidering their branches.
 
 This is the AI agent's rebase assessment, not part of the human priority
 ranking. It is intentionally evidence-sensitive: a stale experimental branch
@@ -81,11 +85,11 @@ branch, audited 2026-09-15 against
 | recommendation | branch | directions | behind / ahead | reason or trigger |
 | --- | --- | --- | ---: | --- |
 | 🔵 Update base first | [`ajreynol:master`](https://github.com/ajreynol/cvc5/tree/master) | all | 29 / 0 | Fast-forward the fork's base before rebasing an experiment. |
-| 🟢 Rebase now | [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | R9, R10 | 127 / 2 | Both priority lists rank this area highly, and a disposable trial rebase onto current upstream `main` completed cleanly. |
-| 🟠 Inspect, then port selectively | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | R26 | 394 / 29 | A trial rebase conflicts in `candidate_generator.{cpp,h}` and `term_database.cpp`. First inventory what current `main` still lacks after the statistics run; port only the needed counters. |
+| 🟡 Defer despite clean trial rebase | [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | R9, R10 | 127 / 2 | A disposable trial rebase was clean, but both mainline global ordering controls regressed; classify the helped subset before maintaining this branch. |
+| 🟠 Port selectively; do not rebase wholesale | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | R26 | 394 / 29 | A trial rebase conflicts in `candidate_generator.{cpp,h}` and `term_database.cpp`; current main still needs new-versus-rediscovered E-match and clause-use counters, not all 29 commits. |
 | ⚪ Wait for an equality-engine profile | [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | R15 | 175 / 31 | Rebase only if equality-engine time is material on the ten worst benchmarks. |
 | ⚪ Wait for parser timing | [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | R27 | 313 / 2 | Rebase only if `--parse-only` shows a material front-end share. |
-| ⚪ Wait for arithmetic counters | [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | R17 | 126 / 3 | Rebase only if Diophantine or branch-and-bound lemmas identify the relevant slice. |
-| ⚪ Wait for datatype counters | [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | R16 | 135 / 2 | Rebase only if `DATATYPES_SPLIT` is material and the mainline binary-split experiment is promising. |
+| ⚪ Wait for slice analysis | [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | R17 | 126 / 3 | DIO and branch-and-bound activity appears on only about one quarter of the gap; classify that slice before maintaining the branch. |
+| 🟡 Run the mainline control first | [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | R16 | 135 / 2 | `DATATYPES_SPLIT` is material on 920 gap cases; run `--dt-binary-split`, then rebase this two-commit branch only if that signal is positive. |
 | ⚪ Wait for the mainline option | [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | R22 | 217 / 155 | Its rebase surface is large; test `--preregister-mode=lazy` first. |
 | ⚪ Wait for eager-instantiation attribution | [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | R1 | 135 / 5 | Rebase only if full-effort-round and instance-depth measurements support an eager experiment. |
