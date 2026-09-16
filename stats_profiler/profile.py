@@ -3,6 +3,7 @@
 import argparse
 import csv
 import fnmatch
+import importlib.util
 import json
 import math
 import re
@@ -137,6 +138,14 @@ def analyze(records, config):
     return rows, summary
 
 
+def load_plots():
+    """plots.py sits beside this script and is only needed for --pdf."""
+    spec = importlib.util.spec_from_file_location("stats_plots", Path(__file__).with_name("plots.py"))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def write_report(output, records, config, warnings, source):
     rows, summary = analyze(records, config)
     output.mkdir(parents=True, exist_ok=True)
@@ -155,7 +164,7 @@ def write_report(output, records, config, warnings, source):
         for row in rows:
             writer.writerow([row[k] for k in ("id", "benchmark", "status", "excluded", "total", "accounted",
                 "coverage", "residual", "gap", "excess")] + [";".join(row["missing"])] + row["values"])
-    return summary
+    return rows, summary
 
 
 def main(argv=None):
@@ -165,6 +174,9 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, default=Path("stats_profiler/output"))
     parser.add_argument("--list-timers", action="store_true", help="list observed timers and exit")
     parser.add_argument("--benchmarks", type=Path, help="restrict to exact benchmark paths, one per line")
+    parser.add_argument("--pdf", action="store_true", help="also write the CDF and pie PDFs")
+    parser.add_argument("--max-share", type=float, default=100.0,
+                        help="upper bound of the PDF share-of-total axis, in percent (default: 100)")
     args = parser.parse_args(argv)
     try:
         records, warnings = read_stats(args.input)
@@ -186,8 +198,12 @@ def main(argv=None):
         warnings.extend(notices)
         if not any(config["total"] in r["timers"] for r in records):
             raise ValueError(f"Total timer {config['total']!r} was not found in any benchmark.")
-        summary = write_report(args.output, records, config, warnings, args.input.name)
+        rows, summary = write_report(args.output, records, config, warnings, args.input.name)
         print(f"Report: {args.output / 'index.html'}")
+        if args.pdf:
+            for path in load_plots().write_plots(args.output, rows, summary, dict(config, warnings=warnings),
+                                                 args.input.name, args.max_share):
+                print(f"Plot: {path}")
         print(json.dumps(summary, indent=2))
         for warning in warnings:
             print(f"warning: {warning}", file=sys.stderr)

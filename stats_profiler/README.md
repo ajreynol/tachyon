@@ -2,8 +2,9 @@
 
 Explore how much of a job's measured solver time is covered by a configurable
 set of `--stats-internal` timers. Produces a standalone interactive HTML report,
-plus `benchmarks.csv` and `summary.json`. Requires Python 3.9+; no dependencies,
-server, or network access. Open the HTML directly in a browser.
+plus `benchmarks.csv`, `summary.json`, and — with `--pdf` — vector PDF plots.
+Requires Python 3.9+; no dependencies, server, or network access. Open the HTML
+directly in a browser. **Start with [the worked example](#the-worked-example)**.
 
 ```bash
 python3 stats_profiler/profile.py /path/to/stats-job.txt --output scratch/profile
@@ -11,6 +12,8 @@ python3 stats_profiler/profile.py /path/to/stats-job.txt --list-timers
 python3 stats_profiler/profile.py /path/to/stats-job.txt \
   --config my-timers.json --benchmarks /path/to/benchmark-list.txt \
   --output scratch/profile-subset
+python3 stats_profiler/profile.py /path/to/stats-job.txt \
+  --config stats_profiler/quant-07-25.json --output scratch/profile --pdf
 ```
 
 Use the **raw** `stats-*.txt` produced by the launcher's
@@ -18,7 +21,9 @@ Use the **raw** `stats-*.txt` produced by the launcher's
 starts with a benchmark path ending in `.smt2` (or `.smt2.gz`), followed by
 solver output and `key = value` statistics. A single benchmark's output can
 be used by prepending its path. The input must have grouped, non-interleaved
-benchmark blocks, as the driver emits. No remote job is launched or fetched.
+benchmark blocks, as the driver emits. `profile.py` only ever reads a local
+file; launching a job and copying its output back is the launcher's half of
+[the worked example](#the-worked-example).
 
 The report includes:
 
@@ -29,6 +34,91 @@ The report includes:
   configurable total timer, and missing-data policy.
 - Sortable, paginated benchmark details, including incomplete runs.
 - A configuration download to reproduce the selected categories with the CLI.
+
+## The worked example
+
+[`quant-07-25.json`](quant-07-25.json) is the example configuration: eight named
+cvc5 timers against `global::totalTime`, with everything else left over as misc.
+It is a **list of timers, not a claim about them**; read
+[Choosing a partition](#choosing-a-partition) before treating the slices as a
+decomposition.
+
+| | |
+| --- | --- |
+| set | `$QUANT_DIR` (`quant-07-25`), on the host `DEFAULT_HOST` names in `job_launcher/site.conf` |
+| job | [`quant-cvc5-stats.conf`](../job_launcher/configs/quant-cvc5-stats.conf), driver `stats_dir_rec_par_cvc5`, 30 s per benchmark |
+| timers | `TheoryEngine::combineTheoriesTime`, `theory::uf::checkTime`, `theory::datatypes::checkTime`, `prop::CnfStream::cnfConversionTime`, `theory::QuantifiersEngine::time_ematching`, `theory::arith::checkTime`, `smt::SolverEngine::processAssertionsTime`, `JustifyStrategy::getNextTime` |
+| total | `global::totalTime`; misc is whatever none of the eight account for |
+
+Everything machine-specific — which host, where the set is — stays in
+`job_launcher/site.conf`, so the commands below are the same for anyone who has
+copied [`site.conf.example`](../job_launcher/site.conf.example) and edited it once.
+
+```bash
+# 1. run the stats job on the host.  It queues in a tmux window there and
+#    writes ~/analysis/stats/stats-cvc5-quant-<MMDDYY>-u-ssc-stats.txt.
+job_launcher/submit -n quant-cvc5-stats.conf        # dry run first: prints the name
+job_launcher/submit    quant-cvc5-stats.conf
+job_launcher/status                                 # the window closes when it finishes
+
+# 2. copy the raw stats file back (read-only on the host).  An earlier stats
+#    job can be fetched by name without launching anything.
+job_launcher/fetch -d scratch/stats quant-<MMDDYY>-u-ssc-stats
+
+# 3. profile it and write the PDFs.
+python3 stats_profiler/profile.py \
+  scratch/stats/stats-cvc5-quant-<MMDDYY>-u-ssc-stats.txt \
+  --config stats_profiler/quant-07-25.json \
+  --output scratch/profile-quant-07-25 --pdf
+```
+
+Step 3 prints every file it wrote and the aggregate summary. `--pdf` is the only
+addition to the usual run; drop it for the HTML report alone. To replot without
+reparsing 30 MB of stats — a different axis, say — run the plotter on its own:
+
+```bash
+python3 stats_profiler/plots.py scratch/profile-quant-07-25/summary.json --max-share 60
+```
+
+The run behind the current output is `quant-091526-u-ss-stats`
+([log](../job_launcher/log.txt),
+[ledger](../tools/heuresis/ledger/2026-09-15-attribution-stats.md)), which
+predates the explicit CaDiCaL option now in the config; a fresh submit measures
+`u-ssc` instead and the two are not interchangeable.
+
+## The plots
+
+`--pdf` writes vector PDFs beside the HTML, each page 720x450 pt, drawn with
+base-14 fonts and no embedded resources:
+
+| file | what it shows |
+| --- | --- |
+| `cdf-<n>-<timer>.pdf` | one timer's distribution over benchmarks |
+| `cdf-all.pdf` | all eight on one axis |
+| `pie-total.pdf` | cumulative seconds per timer, plus misc, with the table beside it |
+| `plots.pdf` | every page above, in order |
+
+A CDF page is an **empirical survival curve**, not a cumulative one: a point
+`(x, y)` reads *for y% of the benchmarks this timer was at least x% of
+`global::totalTime`*. The x-axis is the same 0-100% on every page so the eight
+are directly comparable, `--max-share` narrows it, and shares past the axis are
+clipped by the plot box and counted in the footer. Median and p90 are marked on
+the curve. The thin vertical rule is that timer's **cumulative** share — its
+slice of the pie — which is a different quantity: the pie weights a benchmark by
+its seconds, the curve weights every benchmark equally. A timer can be a small
+slice and still dominate most runs, or the reverse; that divergence is the point
+of having both.
+
+The pie is part-to-whole over included runs only, and its misc slice is the
+signed residual `global::totalTime - sum(timers)` in aggregate. If the timers
+over-count the total there is no misc slice, the chart says so, and the negative
+share stays visible in the table rather than being clipped away.
+
+Each category keeps one colour across every page, in the fixed order of a
+palette validated for colour-vision deficiency; misc is grey because it is a
+residual and not a category. That ordering is why the plotter refuses more than
+eight categories instead of inventing a ninth colour — combine categories, or
+plot a subset.
 
 ## Choosing a partition
 
@@ -127,3 +217,7 @@ them before sharing. Default output is ignored at `stats_profiler/output/`.
 python3 -m unittest discover -s stats_profiler/tests -v
 job_launcher/checks
 ```
+
+The PDF writer is checked structurally — object offsets, the cross-reference
+table, stream lengths, escaping, and the refusals — but no test can tell you a
+chart is legible. Render a page and look at it before citing one.

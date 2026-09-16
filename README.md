@@ -67,11 +67,18 @@ how a config stays portable — are in [`job_launcher/README.md`](job_launcher/R
 [`stats_profiler/`](stats_profiler/) turns raw cvc5 `--stats-internal` job output
 into an interactive offline report: configurable timing categories, benchmark
 distributions, totals, and uncovered or over-counted time. It also exports CSV
-and JSON for further analysis. Requires only Python 3.9+.
+and JSON for further analysis, and vector PDF plots — a distribution per timer
+and a cumulative-time pie — for citing in a ledger entry. Requires only
+Python 3.9+.
 
 ```bash
 python3 stats_profiler/profile.py /path/to/stats-job.txt --output scratch/profile
 ```
+
+Its [worked example](stats_profiler/README.md#the-worked-example) runs the
+launcher's [`quant-cvc5-stats.conf`](job_launcher/configs/quant-cvc5-stats.conf)
+over `$QUANT_DIR` (`quant-07-25`) and profiles the result against the eight
+timers in [`quant-07-25.json`](stats_profiler/quant-07-25.json).
 
 ## Conventions
 
