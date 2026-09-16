@@ -4,4 +4,6 @@ job_launcher/site.conf
 *.docx
 .DS_Store
 __pycache__/
+# working space, never committed
+scratch/
 *.local.md
