@@ -24,9 +24,9 @@ The driver wall time was 382 s.
 
 ## 4. What came back
 
-The raw file is
-[`data/results-cvc5_solve.sh-quant-091626-u-ssc-ee-central-ieval-off.txt`](data/results-cvc5_solve.sh-quant-091626-u-ssc-ee-central-ieval-off.txt),
-read by [`gap`](../gap):
+The local-only raw artifact is
+`data/results-cvc5_solve.sh-quant-091626-u-ssc-ee-central-ieval-off.txt` (see
+the [data-retention policy](data/README.md)), read by [`gap`](../gap):
 
 | arm | solved | unknown | timeout | time on solved (s) | PAR2 |
 | --- | ---: | ---: | ---: | ---: | ---: |

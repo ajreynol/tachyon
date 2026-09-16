@@ -61,11 +61,12 @@ Against corrected z3, conflict mode has PAR2 ratio / gap size 1.78 / 1115;
 propagation/equality is 1.78 / 1122, compared with 1.76 / 1071 for no QCF.
 No arm produced `sat` or a sat/unsat disagreement.
 
-The raw statistics file is
-[`data/stats-cvc5-quant-091626-u-sc-cbqi-conflict-stats-stats.txt`](data/stats-cvc5-quant-091626-u-sc-cbqi-conflict-stats-stats.txt).
-It contains 6124 benchmark blocks. Timer units were normalized to seconds,
-absent counters were zero, and `QUANTIFIERS_INST_CBQI_CONFLICT` was read from
-the map-valued `theory::quantifiers::inferencesLemma` statistic.
+The local-only raw statistics artifact is
+`data/stats-cvc5-quant-091626-u-sc-cbqi-conflict-stats-stats.txt` (see the
+[data-retention policy](data/README.md)). It contains 6124 benchmark blocks.
+Timer units were normalized to seconds, absent counters were zero, and
+`QUANTIFIERS_INST_CBQI_CONFLICT` was read from the map-valued
+`theory::quantifiers::inferencesLemma` statistic.
 
 | scope | total cvc5 time (s) | QCF time (s) | share of total | QCF rounds | cases with rounds | QCF conflict lemmas | cases with lemmas |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |

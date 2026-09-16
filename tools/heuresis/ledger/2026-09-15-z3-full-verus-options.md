@@ -23,10 +23,11 @@ The binary reports `Z3 version 4.15.4 - 64 bit`. Driver wall time was 95 s.
 
 ## 4. What came back
 
-The new raw file is
-[`data/results-z3_solve.sh-quant-091526-z3-4.15.4.txt`](data/results-z3_solve.sh-quant-091526-z3-4.15.4.txt).
-The comparison below uses [`gap`](../gap); the old row is the five-option run
-from the 2026-09-14 baseline.
+The local-only raw artifact is
+`data/results-z3_solve.sh-quant-091526-z3-4.15.4.txt` (see the
+[data-retention policy](data/README.md)). The comparison below uses
+[`gap`](../gap); the old row is the five-option run from the 2026-09-14
+baseline.
 
 | z3 4.15.4 options | solved | unknown | timeout | time on solved (s) | PAR2 |
 | --- | ---: | ---: | ---: | ---: | ---: |
