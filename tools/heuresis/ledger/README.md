@@ -19,6 +19,7 @@ Entries:
 - [`2026-09-16-combined-central-equality-and-evaluator-off.md`](2026-09-16-combined-central-equality-and-evaluator-off.md)
 - [`2026-09-16-conflict-instantiation.md`](2026-09-16-conflict-instantiation.md)
 - [`2026-09-16-rebased-equality-and-evaluator-branches.md`](2026-09-16-rebased-equality-and-evaluator-branches.md)
+- [`2026-09-16-bounded-eager-instantiation.md`](2026-09-16-bounded-eager-instantiation.md)
 
 Full results and statistics files remain on the execution host and may be
 copied into [`data/`](data/) with `job_launcher/fetch` for local analysis, but

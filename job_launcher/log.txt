@@ -193,3 +193,24 @@ solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-ieval-tra
 # built from master@d7d03b082c
 # result: success (22s)
 
+# 2026-09-16 15:20 [dev1:~/cvc5-ajr] (build claude-eagerInst)
+# build claude-eagerInst + make regress
+[blocking] build claude-eagerInst + make regress
+# built from claude-eagerInst@995b23bcfa
+# result: success (1m49s)
+
+# 2026-09-16 15:23 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-off.conf)
+# heuresis R1/R28: claude-eagerInst with the module off (sanity control)
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 15:30 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst.conf)
+# heuresis R1/R28: claude-eagerInst eager instantiation at branch defaults
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 15:37 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-rlv.conf)
+# heuresis R1/R28: claude-eagerInst eager instantiation with relevancy deferral
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-rlv -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
+# built from claude-eagerInst@995b23bcfa
+
