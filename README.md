@@ -62,6 +62,17 @@ job_launcher/status
 The details — where run-dev is found, what the wrappers add and do not add,
 how a config stays portable — are in [`job_launcher/README.md`](job_launcher/README.md).
 
+## `stats_profiler/` — timing coverage of a stats job
+
+[`stats_profiler/`](stats_profiler/) turns raw cvc5 `--stats-internal` job output
+into an interactive offline report: configurable timing categories, benchmark
+distributions, totals, and uncovered or over-counted time. It also exports CSV
+and JSON for further analysis. Requires only Python 3.9+.
+
+```bash
+python3 stats_profiler/profile.py /path/to/stats-job.txt --output scratch/profile
+```
+
 ## Conventions
 
 Borrowed from [dokimasia](https://github.com/ajreynol/dokimasia), which this

@@ -1,0 +1,9 @@
+{
+  "total": "global::totalTime",
+  "missing": "zero",
+  "categories": [
+    {"name": "Process assertions", "add": ["smt::SolverEngine::processAssertionsTime"]},
+    {"name": "Theory checks", "add": ["theory::*::checkTime"]},
+    {"name": "Theory combination", "add": ["TheoryEngine::combineTheoriesTime"]}
+  ]
+}
