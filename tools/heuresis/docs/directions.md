@@ -29,6 +29,12 @@ which. The branches selected for possible rebasing were checked again on
 [`main@d7d03b082c`](https://github.com/cvc5/cvc5/commit/d7d03b082c56ad8e7226e0b5385973d82b16d626);
 those newer divergence counts are labeled where used.
 
+**Inventory summary:** the registry names **200 distinct concrete cvc5-style
+command-line options** (including experimental fork options) and links
+**170 distinct branches** in [`ajreynol/cvc5`](https://github.com/ajreynol/cvc5).
+The option count excludes the generic `--name` notation, Git's `--count`, and
+the wildcard families `--cadical-*` and `--replay-*`.
+
 **Direction identifiers are stable.** Retired directions are deleted without
 renumbering the survivors, so gaps are intentional; Git history is the record
 of what was retired and why.
