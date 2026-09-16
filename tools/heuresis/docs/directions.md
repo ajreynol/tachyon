@@ -1,4 +1,14 @@
-# Research directions: what would make cvc5 catch up to z3 on Verus-style quantified benchmarks
+# Research directions: candidate cvc5 shortcomings on Verus-style quantified benchmarks
+
+The registry supports the project's purpose: **find the diamond in the rough**.
+Each direction is a place to look for a concrete cvc5 performance shortcoming
+or a research question grounded in one. When evidence supports a useful
+finding, record it here with links to its ledger entries, reproduction details,
+and remaining uncertainties, following the
+[charter](../README.md#what-makes-a-useful-finding). A human may pursue it
+independently at their discretion; discovery continues without waiting for
+that follow-up. The possible implementations below help investigate candidates
+and inform future work.
 
 **Twenty-six directions, R1–R23 and R25–R27, each with an argued risk/gain estimate
 and the same four inventories: the cvc5 flags that test it today,
@@ -1629,8 +1639,9 @@ FMCAD 2025. Lattuada et al., [*Verus: Verifying Rust Programs using Linear
 Ghost Types*](https://doi.org/10.1145/3586037), OOPSLA 2023.
 
 **What would settle it.** Nothing; this direction is the instrument. Its
-deliverable is the attribution table of goal 2, and the first version of it
-needs only `--stats-internal` and `-o inst` on the gap set.
+deliverable is evidence for the attribution table of goal 2 and the findings
+it supports. Start with `--stats-internal` and `-o inst` on a promising gap
+sample; expand coverage when the question needs it.
 
 ## R27 — SMT-LIB parser throughput: pay less before solving
 

@@ -1,12 +1,20 @@
 # heuresis
 
-*What would make cvc5 fast on the quantified benchmarks where z3 is much
-faster?*
+*Find the cvc5 shortcomings worth pursuing in the quantified benchmarks where
+z3 is much faster.*
+
+**Find the diamond in the rough.** A diamond is a concrete cvc5 performance
+shortcoming or a research topic grounded in a cvc5 limitation. This project
+investigates candidates and records enough evidence to make the promising ones
+understandable and worth a human's attention. A human may then tackle one
+independently, inspired by the analysis and at their own discretion. That is
+an optional consequence of discovery, with no required handoff, acceptance,
+or follow-up step in this project's workflow.
 
 **A research project, in the shape of
 [dokimasia](https://github.com/ajreynol/dokimasia)'s.** It has a question, goals
 in a fixed order, a register of hypotheses with the evidence for each, a ledger
-of what was run, and two numbers that say whether it is working. It makes no
+of what was run, and findings a human can assess independently. It makes no
 claim about cvc5 that a row in the ledger does not back: a hypothesis is a
 hypothesis until it has been run against the set, however good the branch
 looks.
@@ -26,9 +34,10 @@ it. So the front page says so.
 **What it has delivered, and who decides what comes next.** The set is named and
 fixed, the gap is measured ([2026-09-14](ledger/2026-09-14-baseline.md)), and the
 register of directions has been written from source. Nothing has been attributed
-yet, and the attribution is the result this project exists to produce — so none
-of the three endings at the end of this page is ready to be picked. That choice
-is open, and it belongs to this repository's human maintainer.
+yet; the next work is to establish which candidates expose a concrete cvc5
+shortcoming or a research question worth pursuing. The human maintainer steers
+this search. Any independent work inspired by a finding is their choice, and
+discovery here can continue regardless.
 
 ## On the name
 
@@ -50,10 +59,9 @@ out.*
 ## The charter
 
 **The question.** There is a set of quantified SMT benchmarks — from Verus and
-related verification tooling — on which z3 is much faster than cvc5. Not
-marginally: by enough that the reason must be structural rather than a matter
-of tuning. **Which structural differences account for the gap, in what
-proportion, and what is the cheapest change to cvc5 that closes most of it?**
+related verification tooling — on which z3 is much faster than cvc5.
+**Which cvc5 performance shortcomings or research questions does this gap
+reveal, and what evidence makes them worth a human's further investigation?**
 
 **Why this and not "make cvc5 faster".** Because the register already exists,
 and it is long. The performance notes this project starts from
@@ -76,10 +84,15 @@ knows, because the gap has never been decomposed.
   does*; it is *what does this benchmark need, and which solver supplies it*.
   Where the answer is a design z3 has and cvc5 lacks, the report says so and
   estimates the cost; it does not pretend that an option would do.
-- **Attribution before construction.** No hypothesis is worked on until the
-  attribution table says how much of the gap it could explain. A branch that
-  exists but has never been run against the set is not evidence for anything,
-  and the notes contain several.
+- **Evidence before construction.** Use profiles, counters, and focused
+  experiments to establish a shortcoming and its significance. An option or
+  experimental branch can help test an explanation; its existence alone is
+  not evidence. A useful finding can emerge before the whole gap is attributed
+  or a remedy is implemented.
+- **Discovery has its own endpoint.** Record a finding when the evidence
+  supports a specific shortcoming or a well-motivated research question.
+  Further solver development and research may follow independently at a
+  human's discretion. Continue the search without waiting for that choice.
 - **Only measured claims.** Every number here comes from a row in
   [`ledger/`](ledger/) with a config in [`job_launcher/configs/`](../../job_launcher/configs/)
   and an entry in [`job_launcher/log.txt`](../../job_launcher/log.txt) beside it. A claim
@@ -97,25 +110,27 @@ knows, because the gap has never been decomposed.
    *gap set* is every benchmark where cvc5 is slower than z3 by more than a
    fixed factor, or times out where z3 does not. Two numbers come out: the
    size of the gap set, and one aggregate ratio.
-2. **Attribute the gap.** For every benchmark in the gap set: where does
-   cvc5's time go, and which row of the register explains it? One row per
-   benchmark, one column per hypothesis class, filled from `--stats-internal`
-   and profiles rather than from reading the benchmark. Most of the register
-   will explain almost nothing. The result is the two or three rows that
-   explain most of it, with the fraction beside each.
-3. **Test the top row.** An A/B on the set through `job_launcher/`: the same
-   configuration with one change — a branch, or an option — and a ledger
-   entry saying what happened, whether or not it helped. Then the next row.
-4. **Close the gap, or say what it would take.** Either the changes land on
-   `main` and the number moves, or the attribution says the remainder is a
-   design difference — eager instantiation, say — with an estimated cost.
-   Either is the report.
+2. **Attribute the gap.** On promising benchmarks in the gap set, determine
+   where cvc5's time goes and which hypotheses the evidence supports. Build
+   the attribution table from `--stats-internal`, profiles, and experiments;
+   record the affected benchmarks and the scope actually measured. Use it to
+   identify specific shortcomings and research questions. Full coverage of
+   the gap set is not a prerequisite for a finding.
+3. **Test promising candidates.** Use a focused experiment to distinguish
+   explanations or establish significance. An A/B through `job_launcher/`
+   may change one option or use an experimental branch; record what happened
+   in the ledger, whether or not it helped. Expand to the full set when the
+   claim needs it. A finished fix is not required to establish a shortcoming.
+4. **Make the finding clear.** Write down the cvc5 shortcoming or research
+   question, why it matters, the evidence and how to reproduce it, and what
+   remains uncertain. Link it from the relevant research direction. A human
+   should be able to understand it and decide independently whether to pursue
+   it. Return to discovery without waiting for human follow-up.
 
 **The wishue** — the outcome if this went unusually well, and not a
-commitment. cvc5 within a small constant factor of z3 on the set, with the
-changes on `main`, and the attribution table as the central figure of a paper:
-for each structural difference between the two solvers, how much of the gap it
-explained, measured.
+commitment. A finding here inspires a human to make a substantial cvc5
+improvement or develop a research contribution. This project's contribution
+is the discovery and its evidence; the subsequent work proceeds independently.
 
 **Out of scope**, explicitly, because a research project with no boundary
 becomes a general performance effort:
@@ -126,19 +141,37 @@ becomes a general performance effort:
   change that helps here and hurts elsewhere is reported as exactly that.
   Deciding a default is cvc5's.
 - **Correctness.** A wrong answer or a crash found along the way is a bug and
-  goes to cvc5's tracker as one. It is not a row here.
+  is recorded for a person to report to cvc5's tracker. It is not a row here.
 - **Reimplementing z3.** The oracle is consulted, not copied.
+- **Developing a finding into a finished solution.** Focused prototypes and
+  measurements serve discovery. Owning the eventual fix, solver redesign, or
+  publication is beyond this project's scope.
 - **Sending anything upstream.** A branch and a measurement are in scope.
   Opening a pull request is a person's act, and nothing here does it.
 - **Building instruments before the attribution asks for them.** A statistics
   pipeline, a profiler harness, an analysis library: each is built when a
   goal needs it and not before.
 
-**Is there a paper in it?** Possibly, and only from goal 2. An attribution —
-*on this set, this fraction of the gap between two mature solvers is explained
-by these three differences, and here is the measurement* — is a result whether
-or not the gap then closes. A list of thirty ideas is not one, and neither is a
-speedup with no account of why.
+**Is there a paper in it?** A finding might motivate one: an attribution result,
+a recurring performance failure, or an open question about a cvc5 design
+limitation. Developing that into a research contribution is a human's
+independent decision. The finding must make clear what the evidence establishes
+and what remains a hypothesis.
+
+## What makes a useful finding
+
+A finding should stand on its own: name the specific cvc5 shortcoming or open
+research question, explain why it matters on the observed benchmarks, and link
+the relevant ledger entries, inputs, configurations, and reproduction commands.
+Separate measured behavior from the proposed explanation, and state the
+uncertainties, confounds, and limits of the evidence. An unresolved mechanism
+can itself be the research question; say what observation motivates it and what
+further experiment could distinguish the explanations.
+
+Record the analysis with the relevant entry in [`docs/directions.md`](docs/directions.md)
+and its supporting ledger entries. A fix, a complete decomposition of the gap,
+and a human commitment to pursue the result are unnecessary. The purpose is to
+give a human a solid starting point whenever they choose to use it.
 
 ## The set
 
@@ -163,7 +196,12 @@ this project; a ledger entry that uses different ones says so.
 
 ## How we would know it is working
 
-Two numbers, and neither is "cvc5 got faster":
+The primary result is a useful finding: a specific cvc5 shortcoming or research
+question supported well enough for a human to assess and pursue independently.
+Its value does not depend on whether a human takes it up, a patch lands, or the
+overall gap closes.
+
+Two diagnostics guide the search:
 
 > **the gap** — on the set, at the fixed timeout: the size of the gap set, and
 > the aggregate ratio between the two solvers.
@@ -171,8 +209,9 @@ Two numbers, and neither is "cvc5 got faster":
 > **the attributed fraction** — of the gap set, what fraction is assigned to a
 > row of the register with a ledger entry behind the assignment.
 
-The second is the project's own number and moves first. The first is the one
-that matters and moves later, if the attribution was right.
+These numbers show the scale of the problem and how much has been explained.
+They help prioritize discovery; a finding on a small part of the set can still
+be the diamond.
 
 ### The operating constraint: feedback latency
 
@@ -187,9 +226,10 @@ fast each returns an answer:
 | **4** | the set, A/B, at the fixed timeout | an hour or more | the number |
 | **5** | the set at a long timeout | hours | what the timeouts were hiding |
 
-Goal 2 lives on rows 1 and 2. Goal 3 starts on row 3 and ends on row 4. Row 5
-is done once, for the baseline, and otherwise only when a row-4 result depends
-on it.
+Goal 2 starts on rows 1 and 2. Goal 3 uses the smallest experiment that can
+resolve the question, expanding to rows 3 and 4 when needed to establish the
+scope of a finding. Row 5 is used when timeouts obscure the answer. Goal 4
+records the finding as soon as the evidence supports it.
 
 ## What it inherits, and where
 

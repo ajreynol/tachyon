@@ -1,13 +1,21 @@
 # tachyon
 
-*What would make cvc5 fast?*
+*Find the diamond in the rough.*
+
+Tachyon exists to uncover cvc5 shortcomings worth a human's attention: a
+concrete performance problem or a research topic grounded in an observed
+limitation. Its work is to investigate candidates and make the promising ones
+clear, with reproducible evidence and an account of what remains unknown.
+A human may be inspired by that analysis to tackle a finding independently,
+at their discretion. That follow-up is outside this repository's discovery
+work; finding a diamond is a useful result whether or not anyone pursues it.
 
 Two things live here, and they are kept apart on purpose:
 
 | | | |
 | --- | --- | --- |
 | [`job_launcher/`](job_launcher/) | **run experiments** — the job configs, site file and log for this repository's benchmark runs, driving a pinned checkout of [run-dev](https://github.com/ajreynol/run-dev) | tooling |
-| [`tools/heuresis/`](tools/heuresis/) | **what would make cvc5 fast on quantified benchmarks** — the question, the register of hypotheses with the evidence for each, the plan, and the ledger | research project |
+| [`tools/heuresis/`](tools/heuresis/) | **find cvc5 shortcomings on quantified benchmarks** — the question, the register of hypotheses with the evidence for each, the plan, and the ledger | research project |
 
 The first exists so that the second can produce numbers, and so that anybody
 with a benchmark host can reproduce them without editing a script. The second
@@ -63,11 +71,12 @@ how a config stays portable — are in [`job_launcher/README.md`](job_launcher/R
 ## `tools/heuresis/` — the question
 
 There is a set of quantified benchmarks, from verification tooling, on which z3
-is much faster than cvc5 — by enough that the reason must be structural. The
-project asks **which structural differences account for the gap, in what
-proportion, and what is the cheapest change to cvc5 that closes most of it**,
-and it insists on the attribution before any building. The charter, the goals
-in order, and the two numbers that say whether it is working are in
+is much faster than cvc5. This is the current search ground: the project asks
+**which cvc5 shortcomings the gap reveals, and which deserve further
+investigation**. Profiles, comparisons, and focused experiments turn candidates
+into findings that a human can assess and pursue independently. A finding can
+be valuable while its remedy and much of the overall gap remain open. The
+charter, goals, and criteria for a useful finding are in
 [`tools/heuresis/README.md`](tools/heuresis/README.md); the register of
 hypotheses it starts from — a summary of a set of performance notes, one row per
 candidate cause with its state and what would settle it — is
@@ -108,7 +117,9 @@ person started the research project here, named and fixed the benchmark set,
 and keeps a ranking of what to work on next in their own name. The agents write
 the documents, the register of directions, the job configs and the ledger
 entries, and keep a ranking of their own beside the maintainer's rather than
-mirroring it.
+mirroring it. Their analysis is intended to inspire independent human work on
+the shortcomings it uncovers. Choosing and pursuing that work is the person's
+discretion; discovery here does not wait for a finding to be taken up.
 
 **What that supervision leaves out.** Nobody reads every line before it is
 committed. Every number here comes from a single run on one benchmark host,

@@ -6,6 +6,14 @@ Google Doc of cvc5 performance notes, its structured
 [`notes.md`](../notes.md) summary, and the subsequent source audit in
 [`directions.md`](directions.md).
 
+**Purpose of the queue.** Find cvc5 shortcomings and research questions worth
+a human's attention. The next steps gather enough evidence to expose a useful
+finding. Once one emerges, record it with its research direction and ledger
+links, using the [charter's criteria](../README.md#what-makes-a-useful-finding).
+A human may independently pursue it at their discretion. Continue discovery
+without waiting for that decision; implementation suggestions serve as possible
+experiments or starting points for later work.
+
 ## AI-agent priorities
 
 The table contains ten research directions in priority order. Normally a
