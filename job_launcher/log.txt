@@ -82,3 +82,63 @@ solve_dir_rec_par_z3 -t 30 z3-4.15.4 z3_solve.sh quant-091526-z3-4.15.4 auto_con
 stats_dir_rec_par_cvc5 -t 30 cvc5 quant-091526-u-ss-stats -q --no-cbqi --user-pat=strict
 # cvc5: git 5cc03f4b9 on branch main
 
+# 2026-09-16 10:08 [dev1:~/benchmarks/quant-07-25] (quant-cvc5.conf)
+# queued 1/4 in window quant-091626-u-ssc
+# heuresis baseline: cvc5 best known configuration on the set
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc -q --no-cbqi --user-pat=strict --sat-solver=cadical
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:08 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-dt-binary-split.conf)
+# queued 2/4 in window quant-091626-u-ssc
+# heuresis R16: best-known cvc5 configuration with binary datatype splits
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-dt-binary -q --no-cbqi --user-pat=strict --sat-solver=cadical --dt-binary-split
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:08 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ee-central.conf)
+# queued 3/4 in window quant-091626-u-ssc
+# heuresis R15: best-known cvc5 configuration with central equality engine
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-ee-central -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:08 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-cbqi-conflict.conf)
+# queued 4/4 in window quant-091626-u-ssc
+# heuresis R6/R28: strict patterns with conflict-only CBQI
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-sc-cbqi-conflict -q --user-pat=strict --sat-solver=cadical --cbqi-mode=conflict
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ieval-off.conf)
+# queued 1/4 in window quant-091626-u-ssc-ieval-off
+# heuresis R7: best-known cvc5 configuration with instantiation evaluation off
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ieval=off
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ieval-use-learn.conf)
+# queued 2/4 in window quant-091626-u-ssc-ieval-off
+# heuresis R7: best-known cvc5 configuration with evaluator learning
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-ieval-use-learn -q --no-cbqi --user-pat=strict --sat-solver=cadical --ieval=use-learn
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-no-inst-no-entail.conf)
+# queued 3/4 in window quant-091626-u-ssc-ieval-off
+# heuresis R7: best-known cvc5 configuration without inst-no-entail
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-no-inst-no-entail -q --no-cbqi --user-pat=strict --sat-solver=cadical --no-inst-no-entail
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-cbqi-prop-eq.conf)
+# queued 4/4 in window quant-091626-u-ssc-ieval-off
+# heuresis R6/R28: strict patterns with propagation/equality CBQI
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-sc-cbqi-prop-eq -q --user-pat=strict --sat-solver=cadical --cbqi-mode=prop-eq
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 11:10 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ee-central-ieval-off.conf)
+# queued 1/2 in window quant-091626-u-ssc-ee-central-ieval-off
+# heuresis R7/R15: central equality engine with instantiation evaluation off
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-ee-central-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 11:10 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-cbqi-conflict-stats.conf)
+# queued 2/2 in window quant-091626-u-ssc-ee-central-ieval-off
+# heuresis R6/R28: internal statistics with conflict-only CBQI
+stats_dir_rec_par_cvc5 -t 30 cvc5 quant-091626-u-sc-cbqi-conflict-stats-stats -q --user-pat=strict --sat-solver=cadical --cbqi-mode=conflict
+# cvc5: git 5cc03f4b9 on branch main
+

@@ -28,20 +28,22 @@ The ranking now incorporates the first whole-set attribution statistics and
 option A/Bs ([evidence](../ledger/2026-09-15-attribution-stats.md)); it should
 continue to move when evidence changes.
 
-**Updated.** 2026-09-15 after the first evidence sweep.
+**Updated.** 2026-09-16 after the equality, evaluator, datatype, QCF, and
+composition runs. This remains the AI agent's independent ordering even where
+it differs from the human-maintainer list.
 
 | rank | research direction | effort | next possible step |
 | ---: | --- | --- | --- |
-| 1 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🔴 High Risk / 🟢 High Gain | Add a new-versus-rediscovered E-match counter now that E-matching is measured at 27.8% of gap-set time. |
-| 2 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🔴 High Risk / 🟢 High Gain | Add persistent-clause count and instance-clause conflict-use counters before designing deletion. |
-| 3 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | Run `--dt-binary-split`; 920 gap cases emitted 27,484 datatype-split lemmas. |
-| 4 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Turn the captured whole-set statistics into the first normalized per-benchmark attribution table. |
-| 5 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | Compare the measured cvc5 full-effort rounds with z3 instance-generation depth on a fixed gap sample. |
-| 6 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟢 Low Risk / 🟡 Medium Gain | Compare `--ieval=off`, `--ieval=use-learn`, and `--no-inst-no-entail`; entailed duplicates are 8.1% of gap-set instances. |
-| 7 | [R13 — The SAT backend](directions.md#r13--the-sat-backend-cadical-minisat-restarts-units) | 🟢 Low Risk / 🟡 Medium Gain | Make explicit CaDiCaL the control and classify its 55 rescued benchmarks and 116 at-least-2× regressions. |
-| 8 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🔴 High Risk / 🟡 Medium Gain | Run the existing `--ee-mode=central` control; UF time is material but is not an equality-engine timer. |
-| 9 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟡 Medium Risk / 🟢 High Gain | Classify the disjoint wins and losses from the two negative global controls before building or rebasing `ai-instDefer`. |
-| 10 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | Isolate the roughly one-quarter of gap cases with DIO or branch-and-bound activity before testing a policy change. |
+| 1 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🔴 High Risk / 🟢 High Gain | Rebuild current main, repeat control / central / evaluator-off / combined, then test rebased [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) against the combined comparator. |
+| 2 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🔴 High Risk / 🟢 High Gain | Add a new-versus-rediscovered E-match counter now that E-matching is measured at 27.8% of gap-set time. |
+| 3 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🔴 High Risk / 🟢 High Gain | Add persistent-clause count and instance-clause conflict-use counters before designing deletion. |
+| 4 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟢 Low Risk / 🟡 Medium Gain | Test rebased [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) with evaluator pushes, early rejections, completed matches, and evaluator time recorded. |
+| 5 | [R28 — Eager conflict-based instantiation](directions.md#r28--eager-conflict-based-instantiation-find-a-useful-instance-before-full-effort) | 🔴 High Risk / 🟢 High Gain | Use rebased [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) as the bounded eager matcher, then add conflict/unit acceptance instead of invoking structural QCF earlier. |
+| 6 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | On the rebased bounded eager branch, compare time-to-first useful instance and full-effort rounds on a fixed slice of the 789-case gap. |
+| 7 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Produce the first normalized per-benchmark attribution table for the new 789-case gap. |
+| 8 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟡 Medium Risk / 🟢 High Gain | Classify the disjoint wins and losses from the two negative global controls before building or rebasing `ai-instDefer`. |
+| 9 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | Isolate the roughly one-quarter of the old gap with DIO or branch-and-bound activity, intersect it with the new gap, then test a policy change. |
+| 10 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | Add eligible-versus-suppressed split counters before pursuing relevance gating; global binary splitting worsened PAR2 1.15%. |
 
 ## Human-maintainer priorities
 
@@ -58,38 +60,45 @@ maintainer supplies it.
 | rank | research direction | effort | next possible step | human rationale |
 | ---: | --- | --- | --- | --- |
 | 1 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🔴 High Risk / 🟢 High Gain | Add persistent-clause count and instance-clause conflict-use counters before designing deletion. |  |
-| 2 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | Compare the measured cvc5 full-effort rounds with z3 instance-generation depth on a fixed gap sample. |  |
+| 2 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | Test the rebased bounded eager branch on a fixed slice of the new gap with full-round and time-to-first-useful-instance counters. |  |
 | 3 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🔴 High Risk / 🟢 High Gain | Add a new-versus-rediscovered E-match counter now that E-matching is measured at 27.8% of gap-set time. |  |
-| 4 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🔴 High Risk / 🟡 Medium Gain | Run `--ee-mode=central`; the existing UF timer does not isolate equality-engine cost. |  |
-| 5 | [R6 — Conflict-based instantiation](directions.md#r6--conflict-based-instantiation-off-for-this-domain-and-why-that-is-right-or-wrong) | 🟢 Low Risk / 🟡 Medium Gain | Inspect the 9 `--no-cbqi`-only and 3 strict-only rescues and measure user-pattern coverage before another global run. |  |
+| 4 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🔴 High Risk / 🟢 High Gain | Repeat the four-arm experiment on current main, then test rebased [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare). |  |
+| 5 | [R6 — Conflict-based instantiation](directions.md#r6--conflict-based-instantiation-off-for-this-domain-and-why-that-is-right-or-wrong) | 🟢 Low Risk / 🟡 Medium Gain | Classify the 49 benchmarks that emit any QCF conflict lemma before doing further work on structural QCF. |  |
 | 6 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟡 Medium Risk / 🟢 High Gain | Classify the rescues and losses from `--inst-local` and `--jh-rlv-order` before considering [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer). |  |
-| 7 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟢 Low Risk / 🟡 Medium Gain | Compare `--ieval=off`, `--ieval=use-learn`, and `--no-inst-no-entail`; the entailed-instance ratio is now measured. |  |
-| 8 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | Isolate the 283 DIO-conflict and 278 branch-and-bound gap cases before testing `--no-dio-solver` or building [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc). |  |
-| 9 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | Run `--dt-binary-split`; datatype splitting is now measured as material on 920 gap cases. |  |
-| 10 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Turn the captured whole-set statistics into the first normalized per-benchmark attribution table. |  |
+| 7 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟢 Low Risk / 🟡 Medium Gain | Test rebased [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) with evaluator-work counters against evaluator-off. |  |
+| 8 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | Intersect the 283 DIO-conflict and 278 branch-and-bound cases with the new gap before testing `--no-dio-solver` or [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc). |  |
+| 9 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | Add eligible-versus-suppressed split counters before testing relevance gating; global binary splitting was negative. |  |
+| 10 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Produce the first normalized per-benchmark attribution table for the new 789-case gap. |  |
 
 ## Branch maintenance
 
-**Current recommendation:** fast-forward `ajreynol:master`, but do not urgently
-rebase an experimental branch. Port only the missing counters from
-`qdebugStats`; run the cheap mainline datatype and equality-engine controls
-before reconsidering their branches.
+**Concrete request to the maintainer:** please rebase
+[`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare),
+[`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie),
+and [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
+onto current cvc5 `main`. If doing one first, use `ai-eecNoShare`; it is one
+commit and follows the strongest measured control. The fork's `master`
+already matches upstream, so no base fast-forward is needed.
 
 This is the AI agent's rebase assessment, not part of the human priority
 ranking. It is intentionally evidence-sensitive: a stale experimental branch
 does not need maintenance until its cheaper prerequisite experiment points to
 it. Counts below are commits unique to current upstream `main` / unique to the
-branch, audited 2026-09-15 against
-[`cvc5:main@2900761`](https://github.com/cvc5/cvc5/commit/2900761a7c2e2c0e99e2cf669cffa3740ea9a138).
+branch, live-audited 2026-09-16 against
+[`cvc5:main@835ccd95e`](https://github.com/cvc5/cvc5/commit/835ccd95ed1071828ddaba1de736e925b694ed28).
+“Clean trial” means a disposable local rebase, never a mutation of the fork.
 
 | recommendation | branch | directions | behind / ahead | reason or trigger |
 | --- | --- | --- | ---: | --- |
-| 🔵 Update base first | [`ajreynol:master`](https://github.com/ajreynol/cvc5/tree/master) | all | 29 / 0 | Fast-forward the fork's base before rebasing an experiment. |
-| 🟡 Defer despite clean trial rebase | [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | R9, R10 | 127 / 2 | A disposable trial rebase was clean, but both mainline global ordering controls regressed; classify the helped subset before maintaining this branch. |
-| 🟠 Port selectively; do not rebase wholesale | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | R26 | 394 / 29 | A trial rebase conflicts in `candidate_generator.{cpp,h}` and `term_database.cpp`; current main still needs new-versus-rediscovered E-match and clause-use counters, not all 29 commits. |
-| ⚪ Wait for an equality-engine profile | [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | R15 | 175 / 31 | Rebase only if equality-engine time is material on the ten worst benchmarks. |
-| ⚪ Wait for parser timing | [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | R27 | 313 / 2 | Rebase only if `--parse-only` shows a material front-end share. |
-| ⚪ Wait for slice analysis | [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | R17 | 126 / 3 | DIO and branch-and-bound activity appears on only about one quarter of the gap; classify that slice before maintaining the branch. |
-| 🟡 Run the mainline control first | [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | R16 | 135 / 2 | `DATATYPES_SPLIT` is material on 920 gap cases; run `--dt-binary-split`, then rebase this two-commit branch only if that signal is positive. |
-| ⚪ Wait for the mainline option | [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | R22 | 217 / 155 | Its rebase surface is large; test `--preregister-mode=lazy` first. |
-| ⚪ Wait for eager-instantiation attribution | [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | R1 | 135 / 5 | Rebase only if full-effort-round and instance-depth measurements support an eager experiment. |
+| ✅ No base action | [`ajreynol:master`](https://github.com/ajreynol/cvc5/tree/master) | all | 0 / 0 | The fork base already equals current upstream main. |
+| 🔵 Please rebase now | [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | R15 | 201 / 1 | Clean trial; central equality cuts PAR2 9.6%, and this one-file patch removes redundant shared-equality propagation under that mode. |
+| 🔵 Please rebase now | [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | R7 | 2186 / 2 | Clean trial; evaluator-off cuts PAR2 3.1%, and this compact branch changes the implicated partial-evaluation traversal. |
+| 🔵 Please rebase now | [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | R1, R28 | 137 / 5 | Clean trial; its budgets make it the practical current substrate for an eager conflict/unit experiment. |
+| 🟠 Mine; do not rebase wholesale | [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi) | R28 | 1265 / 204 | Its first replayed commit conflicts in equality and quantifier-engine files; retain its conflict/unit modes as design evidence. |
+| 🟡 Do not rebase yet | [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | R6 | 217 / 4 | Clean trial, but current QCF emits only 54 conflict lemmas after 272,280 rounds and costs 0.24% directly; this branch optimizes the wrong first target for this corpus. |
+| 🟡 Instrument first | [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | R16 | 137 / 2 | Clean trial, but global binary splitting was negative; count eligible and suppressed relevance-gated splits before maintaining the branch. |
+| 🟠 Port selectively; do not rebase wholesale | [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | R15 | 177 / 31 | Its first replayed commit conflicts in `inference_manager.cpp`; start with the clean one-commit equality branch instead. |
+| 🟠 Port selectively; do not rebase wholesale | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | R26 | 396 / 29 | Port only the missing new-versus-rediscovered E-match and clause-use counters. |
+| 🟡 Defer despite clean trial rebase | [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | R9, R10 | 129 / 2 | Both mainline global ordering controls regressed; classify their helped subsets first. |
+| ⚪ Wait for parser timing | [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | R27 | 315 / 2 | Rebase only if `--parse-only` shows a material front-end share. |
+| ⚪ Wait for slice analysis | [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | R17 | 128 / 3 | Intersect DIO and branch-and-bound activity with the new 789-case gap before maintaining the branch. |

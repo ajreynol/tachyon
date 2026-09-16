@@ -182,7 +182,7 @@ Fixed with it, for goal 0:
 | | |
 | --- | --- |
 | timeout | 30 s per benchmark per solver, user time, on the host |
-| cvc5 configurations | default (`-q`), the quantifier control (`-q --no-cbqi --user-pat=strict`), and the best measured configuration: that control plus explicit `--sat-solver=cadical` |
+| cvc5 configurations | default (`-q`), the quantifier control (`-q --no-cbqi --user-pat=strict`), and the best measured configuration on installed `main@5cc03f4b9`: that control plus explicit `--sat-solver=cadical --ee-mode=central --ieval=off` |
 | z3 | z3 4.15.4, **with all nine options current Verus passes it**: `auto_config=false smt.mbqi=false smt.case_split=3 smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.solver=2 smt.arith.nl=false pi.enabled=false rewriter.sort_disjunctions=false`. The benchmarks carry no options of their own |
 | gap set | unsolved by cvc5 and solved by z3, or both solved and cvc5 at least 10× slower with cvc5 taking at least 1 s |
 | aggregate | PAR2 ratio, cvc5 over z3, over the benchmarks both runs report |
@@ -265,25 +265,29 @@ day were both rerun: the complete current Verus z3 option list
 ([ledger](ledger/2026-09-15-sat-and-instance-order.md)). The current two
 numbers are:
 
-> **the gap** — PAR2 ratio **1.75** (cvc5 `--no-cbqi
-> --user-pat=strict --sat-solver=cadical` over z3 4.15.4 with all nine current
-> Verus options, 30 s); gap set **1073** of 6124, comprising 534 cvc5-unsolved
-> cases where z3 solves and 539 cases both solve but cvc5 is at least 10×
-> slower. The z3 baseline itself has 310 unknowns, so this smaller ratio is
-> not all cvc5 progress.
+> **the gap** — PAR2 ratio **1.52** (cvc5 `--no-cbqi
+> --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off` over
+> z3 4.15.4 with all nine current Verus options, 30 s); gap set **789** of
+> 6124, comprising 460 cvc5-unsolved cases where z3 solves and 329 cases both
+> solve but cvc5 is at least 10× slower. This best measured configuration ran
+> on installed `main@5cc03f4b9`, 79 commits behind current main, and must be
+> repeated there. The z3 baseline itself has 310 unknowns, so the ratio is not
+> all cvc5 progress.
 >
 > **the attributed fraction** — **0**. Whole-set statistics now identify
 > promising mechanisms, but the per-benchmark attribution table does not yet
 > exist.
 
-The quantifier control without explicit CaDiCaL is ratio 1.88 with a gap of
-1122. Its first whole-set statistics run shows that those 18.3% of benchmarks
-consume 86.0% of cvc5 time and that E-matching consumes 27.8% within that gap
-([ledger](ledger/2026-09-15-attribution-stats.md)). This is evidence for the
-next attribution work, not yet an attributed fraction.
+The fresh explicit-CaDiCaL control is ratio 1.76 with a gap of 1071. Central
+equality alone cuts PAR2 9.6%, evaluator-off alone cuts it 3.1%, and together
+they cut it 13.4% ([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
+The first whole-set statistics run also shows that the earlier 1122-case gap,
+18.3% of the corpus, consumes 86.0% of cvc5 time and that E-matching consumes
+27.8% within it ([ledger](ledger/2026-09-15-attribution-stats.md)). This is
+evidence for the next attribution work, not yet an attributed fraction.
 
 The one number inherited from the notes (`h-25`) remains marked as inherited.
-The register is [`docs/directions.md`](docs/directions.md): twenty-six active
+The register is [`docs/directions.md`](docs/directions.md): twenty-seven active
 research directions, each with testing flags, fork work, the corresponding z3
 mechanism, papers, and an argued risk/gain estimate. The evidence-sensitive AI
 ranking and the separate human-maintainer ranking are in

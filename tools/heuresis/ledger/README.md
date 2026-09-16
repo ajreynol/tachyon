@@ -14,6 +14,10 @@ Entries:
 - [`2026-09-15-sat-and-instance-order.md`](2026-09-15-sat-and-instance-order.md)
 - [`2026-09-15-z3-full-verus-options.md`](2026-09-15-z3-full-verus-options.md)
 - [`2026-09-15-attribution-stats.md`](2026-09-15-attribution-stats.md)
+- [`2026-09-16-datatype-and-equality-controls.md`](2026-09-16-datatype-and-equality-controls.md)
+- [`2026-09-16-entailment-filtering.md`](2026-09-16-entailment-filtering.md)
+- [`2026-09-16-combined-central-equality-and-evaluator-off.md`](2026-09-16-combined-central-equality-and-evaluator-off.md)
+- [`2026-09-16-conflict-instantiation.md`](2026-09-16-conflict-instantiation.md)
 
 Raw results files are copied from the host into [`data/`](data/) with
 `job_launcher/fetch` and tracked, under the name the driver gave them, so that
