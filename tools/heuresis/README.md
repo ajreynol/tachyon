@@ -1,6 +1,6 @@
 # heuresis
 
-**Eunoia listing:** unadvertised
+**Eunoia listing:** advertised
 
 *Find the cvc5 shortcomings worth pursuing in the quantified benchmarks where
 z3 is much faster.*

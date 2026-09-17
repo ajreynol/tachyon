@@ -1,6 +1,6 @@
 # metagraphe
 
-**Eunoia listing:** unadvertised
+**Eunoia listing:** advertised
 
 *Which useful rewrites is cvc5 missing, especially for strings and bit-vectors?*
 
