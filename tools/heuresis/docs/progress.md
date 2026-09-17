@@ -55,6 +55,15 @@ today, reachable only by passing options. Moving `best` down is progress;
 moving its options into cvc5's own defaults is a separate question this table
 does not address.
 
+> ⚠️ **`best` segfaults.** `--ee-mode=central` and `--ieval=off` together crash
+> cvc5 on at least 2 of the 6124 benchmarks, deterministically, on current main
+> and on every earlier main tested
+> ([2026-09-17](../ledger/2026-09-17-central-ieval-segfault.md)). Either flag
+> alone is fine. The PAR2 effect is nil — both benchmarks are unsolved in every
+> arm regardless — so the history below is unaffected, but **this is not a
+> configuration to recommend to anyone** until the crash is fixed, and the count
+> of affected benchmarks is unknown rather than known to be 2.
+
 ## The targets — z3
 
 These do not move with cvc5 and are not part of the history. They are what we
@@ -149,6 +158,12 @@ regressions and wins an A/B is not an entry here; a merged commit is.
 | PR | direction | what it changes | landed | effect on this table |
 | --- | --- | --- | --- | --- |
 | *(none yet)* | | | | |
+
+**Ready to file now:** the `--ee-mode=central --ieval=off` segfault
+([2026-09-17](../ledger/2026-09-17-central-ieval-segfault.md)) — a
+reproducible crash on current main with a backtrace and a two-flag bisection.
+Not a performance change, so it will not move a row, but it is the first
+upstream-reportable defect this project has produced.
 
 **Standing candidates**, from the ledger, none yet proposed upstream:
 

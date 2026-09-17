@@ -239,3 +239,9 @@ solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-in
 solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-rlv-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
 # built from claude-eagerInst@995b23bcfa
 
+# 2026-09-17 10:01 [dev1:~/cvc5-ajr] (build master)
+# build master
+[blocking] build master
+# built from master@95050cf815
+# result: success (1m08s)
+

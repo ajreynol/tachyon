@@ -21,6 +21,7 @@ Entries:
 - [`2026-09-16-rebased-equality-and-evaluator-branches.md`](2026-09-16-rebased-equality-and-evaluator-branches.md)
 - [`2026-09-16-bounded-eager-instantiation.md`](2026-09-16-bounded-eager-instantiation.md)
 - [`2026-09-16-eager-counters-and-timeout-sensitivity.md`](2026-09-16-eager-counters-and-timeout-sensitivity.md)
+- [`2026-09-17-central-ieval-segfault.md`](2026-09-17-central-ieval-segfault.md)
 
 Full results and statistics files remain on the execution host and may be
 copied into [`data/`](data/) with `job_launcher/fetch` for local analysis, but
