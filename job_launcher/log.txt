@@ -275,3 +275,14 @@ stats_dir_rec_par_cvc5 -t 30 cvc5 quant-091726-u-ssc-stats -q --no-cbqi --user-p
 solve_dir_rec_par_cvc5 -t 300 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-best-t300 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
 # ajr-cvc5: git 67954d09dc on branch master
 
+# 2026-09-17 16:51 [dev1:~/cvc5-ajr] (build master)
+# build master
+[blocking] build master
+# built from master@a07d513075
+# result: success (7s)
+
+# 2026-09-17 16:53 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-verus-140.conf)
+# heuresis progress: verus configuration at the 1.4.0 release
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-140 -q --no-cbqi --user-pat=strict --sat-solver=cadical
+# ajr-cvc5: git a07d513075 on branch master
+
