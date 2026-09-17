@@ -30,11 +30,11 @@ defined against the corrected nine-option z3 run.
 
 ## 4. What came back
 
-The raw file
-[`data/stats-cvc5-quant-091526-u-ss-stats.txt`](data/stats-cvc5-quant-091526-u-ss-stats.txt)
-contains 6124 benchmark blocks and 186 distinct keys. The driver also emitted
-a `-processed` file containing only five empty proof-summary headings; it is
-tracked for provenance but was not used.
+The local-only raw artifact
+`data/stats-cvc5-quant-091526-u-ss-stats.txt` contains 6124 benchmark blocks
+and 186 distinct keys (see the [data-retention policy](data/README.md)). The
+driver also emitted a `-processed` file containing only five empty
+proof-summary headings; it is tracked for provenance but was not used.
 
 For this entry, every `key = value` statistic was associated with the
 preceding benchmark path, timer units were normalized to seconds, absent

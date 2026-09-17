@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cvc5 timing profiler</title>
+<style>
+:root{font:15px system-ui,sans-serif;color:#172838;background:#eef2f6;color-scheme:light}*{box-sizing:border-box}body{margin:0}main{max-width:1440px;margin:auto;padding:28px}h1{font-size:30px;letter-spacing:-1px;margin:0}h2{font-size:19px;margin:0 0 14px}h3{font-size:15px}p{line-height:1.55}.muted,small{color:#586979}header{margin-bottom:24px}.layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:20px}section,aside,.card{background:white;border:1px solid #dce3eb;border-radius:12px;padding:20px;margin-bottom:20px}aside{align-self:start;position:sticky;top:16px;max-height:95vh;overflow:auto}label{display:block;margin:12px 0 6px}input,select,button{font:inherit}input[type=search],select{width:100%;padding:8px;border:1px solid #b9c5d0;border-radius:6px;background:white}button{padding:7px 12px;border:1px solid #aabaca;border-radius:6px;background:#f1f6fc;cursor:pointer}button:disabled{opacity:.5;cursor:default}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{margin:0;padding:15px}.card strong{display:block;font-size:24px;margin:5px 0}.cards{margin-bottom:20px}.warning{color:#894100;background:#fff5e7;padding:12px;border-radius:6px;line-height:1.5}.category{display:flex;gap:8px;align-items:start;font-size:14px}.swatch{display:inline-block;width:10px;height:10px;border-radius:3px;flex-shrink:0;margin-top:5px}.category input{margin-top:4px}.category span:last-child{overflow-wrap:anywhere}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:9px 10px;border-bottom:1px solid #e5eaf0;text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}th{color:#526779;font-weight:600}td.path{white-space:normal;min-width:260px;overflow-wrap:anywhere}svg{width:100%;display:block}svg text{font-family:system-ui,sans-serif;font-size:12px;fill:#536577}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.toolbar select{width:auto}.toolbar label{margin:0}.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px}.legend span{display:flex;gap:6px}.barrow{display:grid;grid-template-columns:170px minmax(0,1fr) 130px;gap:10px;align-items:center;margin:12px 0;font-size:13px}.track{background:#edf1f5;border-radius:4px;overflow:hidden}.bar{height:17px;min-width:1px}.barrow>span:last-child{text-align:right}.empty{padding:30px;color:#586979;text-align:center}details{margin:16px 0}summary{cursor:pointer}pre{white-space:pre-wrap;font-size:12px;overflow-wrap:anywhere}a{color:#1768a0}@media(max-width:850px){main{padding:16px}.layout{grid-template-columns:1fr}aside{position:static;max-height:none}.metrics{grid-template-columns:repeat(2,1fr)}.barrow{grid-template-columns:130px minmax(0,1fr) 105px}}
+</style>
+<main>
+<header><h1>cvc5 timing profiler</h1><p class="muted" id="source"></p></header>
+<div class="layout">
+<aside>
+<h2>Timing partition</h2>
+<p class="muted">Select categories to account for total time. Changes update every chart and table.</p>
+<label for="total">Total timer</label><select id="total"></select>
+<label for="missing">Missing category timers</label><select id="missing"><option value="zero">Treat as zero (report missing)</option><option value="exclude">Exclude incomplete runs</option></select>
+<div id="categories"></div>
+<label for="timer">Add an observed timer</label><select id="timer"></select><button id="add" style="margin-top:8px">Add category</button>
+<p><button id="save">Save selected config</button></p>
+<p class="muted">Edit the saved JSON to group timers or subtract children, then regenerate the report with <code>--config</code>.</p>
+<details><summary>Effective category expressions</summary><pre id="expressions"></pre></details>
+</aside>
+<div>
+<section><div class="toolbar"><label for="filter">Benchmark filter</label><input id="filter" type="search" placeholder="Path contains…" style="flex:1;min-width:180px"><label for="status">Result</label><select id="status"><option value="">All results</option></select></div><p id="cohort" class="muted"></p><div id="warnings" class="warning" hidden></div></section>
+<div class="metrics cards" id="metrics" aria-live="polite"></div>
+<section><h2>Totals across benchmarks</h2><p class="muted">Shares use Σ timer seconds / Σ total seconds. Gap and excess are summed separately per run so they cannot cancel each other out.</p><div id="totals"></div></section>
+<section><h2>Coverage distribution</h2><p class="muted">One observation per included run. Above 100% indicates over-counting; negative categories can also invalidate a partition.</p><div id="histogram"></div></section>
+<section><div class="toolbar"><h2 style="flex:1">Category distributions</h2><label for="units">Show</label><select id="units"><option value="percent">Percent of each run’s total</option><option value="seconds">Seconds</option></select></div><p class="muted">Empirical cumulative distributions: the vertical axis is the fraction of runs at or below the horizontal value. Hover points for values.</p><div id="cdf"></div><div class="legend" id="legend"></div><div class="scroll"><table><thead><tr><th>Category</th><th>Total (s)</th><th>Share</th><th>Median</th><th>p90</th><th>p99</th><th>Missing runs</th></tr></thead><tbody id="distribution"></tbody></table></div></section>
+<section><div class="toolbar"><h2 style="flex:1">Benchmark details</h2><label for="sort">Sort by</label><select id="sort"><option value="gap">Largest gap</option><option value="excess">Largest excess</option><option value="total">Longest total</option><option value="coverage">Highest coverage</option><option value="benchmark">Benchmark path</option></select></div><p class="muted">Excluded runs remain visible. Click a benchmark to inspect its timing categories and missing timers.</p><div class="scroll"><table><thead><tr><th>Benchmark / result</th><th>Total (s)</th><th>Tracked (s)</th><th>Coverage</th><th>Gap (s)</th><th>Excess (s)</th><th>Data</th></tr></thead><tbody id="benchmarks"></tbody></table></div><p class="toolbar"><button id="prev">Previous</button><span id="page"></span><button id="next">Next</button></p></section>
+<section><h2>How to read this report</h2><p>A 100% sum alone does not prove a partition: timers may overlap, omit work, or use different scopes. Verify nesting in the solver version used by the job. No values are clipped or normalized to force 100%. Negative category values are retained and flagged.</p><p>Gap = max(total − tracked, 0); excess = max(tracked − total, 0). Net residual = total − tracked. Missing or zero totals are excluded from aggregates and distributions. Missing category values follow the selected policy; omitted zero stats and interrupted output cannot be distinguished automatically. “Unreported” does not imply timeout.</p><p>The CSV and JSON beside this HTML contain the original command-line configuration’s results. Browser changes are temporary; save the configuration and rerun to update exports.</p><details><summary>Input diagnostics</summary><pre id="diagnostics"></pre></details></section>
+</div></div></main>
+<script id="data" type="application/json">__PROFILE_DATA__</script>
+<script>
+'use strict';
+const data=JSON.parse(document.getElementById('data').textContent);
+const $=id=>document.getElementById(id), colors=['#2563eb','#0d9488','#9333ea','#d97706','#db2777','#4f46e5','#0891b2','#65851b'];
+const keys=[...new Set(data.records.flatMap(r=>Object.keys(r.timers)))].sort();
+let categories=data.config.categories.map(c=>({...c,enabled:true})), page=0;
+const fmt=n=>n==null?'—':n.toLocaleString(undefined,{maximumFractionDigits:3});
+const pct=n=>n==null?'—':fmt(n*100)+'%';
+const sum=xs=>xs.reduce((a,b)=>a+b,0);
+function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
+function option(select,value,label){const o=el('option',label);o.value=value;select.append(o);}
+function color(i){return colors[i%colors.length];}
+function quantile(a,p){if(!a.length)return null;const pos=(a.length-1)*p,l=Math.floor(pos);return a[l]+(a[Math.ceil(pos)]-a[l])*(pos-l);}
+function download(name,body){const url=URL.createObjectURL(new Blob([body],{type:'application/json'}));const a=el('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function selected(){return categories.filter(c=>c.enabled);}
+function renderControls(){
+  $('categories').replaceChildren();
+  categories.forEach((c,i)=>{const label=el('label',undefined,'category'),input=el('input');input.type='checkbox';input.checked=c.enabled;
+    input.onchange=()=>{c.enabled=input.checked;page=0;render();};const swatch=el('span',undefined,'swatch');swatch.style.background=color(i);
+    label.append(input,swatch,el('span',c.name));$('categories').append(label);});
+}
+function calculate(){
+  const active=selected(),totalKey=$('total').value,needle=$('filter').value.toLowerCase(),status=$('status').value;
+  return data.records.map((r,i)=>({...r,id:i+1})).filter(r=>r.benchmark.toLowerCase().includes(needle)&&(!status||r.status===status)).map(r=>{
+    const total=r.timers[totalKey],missing=[...new Set(active.flatMap(c=>Object.keys(c.terms)))].filter(k=>r.timers[k]===undefined);
+    const values=active.map(c=>sum(Object.entries(c.terms).map(([k,w])=>(r.timers[k]??0)*w))),accounted=sum(values),residual=total===undefined?null:total-accounted;
+    const excluded=total===undefined?'missing total':total===0?'zero total':missing.length&&$('missing').value==='exclude'?'missing category timers':'';
+    return {...r,total,values,accounted,missing,excluded,residual,coverage:total?accounted/total:null,gap:residual===null?null:Math.max(0,residual),excess:residual===null?null:Math.max(0,-residual)};
+  });
+}
+function metric(title,value,detail){const card=el('div',undefined,'card');card.append(el('small',title),el('strong',value),el('small',detail));$('metrics').append(card);}
+function svgNode(tag,attrs,text){const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
+function chart(target,label){const s=svgNode('svg',{viewBox:'0 0 800 260',role:'img','aria-label':label});s.append(svgNode('title',{},label));$(target).replaceChildren(s);return s;}
+function axes(s,lo,hi,yLabel){
+  for(let i=0;i<=4;i++){const y=220-i*48;s.append(svgNode('line',{x1:55,x2:780,y1:y,y2:y,stroke:'#e4eaf0'}),svgNode('text',{x:46,y:y+4,'text-anchor':'end'},i*25+'%'));}
+  for(let i=0;i<=5;i++)s.append(svgNode('text',{x:55+i*145,y:245,'text-anchor':'middle'},fmt(lo+(hi-lo)*i/5)));
+  s.append(svgNode('text',{x:55,y:15},yLabel));
+}
+function histogram(rows){
+  if(!rows.length){$('histogram').replaceChildren(el('p','No included runs.','empty'));return;}
+  const s=chart('histogram','Histogram of timing coverage, with explicit bins above 100%'),edges=[-Infinity,0,.25,.5,.75,.9,1,1.1,1.25,1.5,Infinity];
+  const labels=['<0%','0–25','25–50','50–75','75–90','90–100','100–110','110–125','125–150','≥150%'],bins=Array(10).fill(0);
+  rows.forEach(r=>{let b=edges.findIndex((edge,i)=>i>0&&(r.coverage<edge||(edge===1&&r.coverage===1)));bins[b-1]++;});
+  const max=Math.max(1,...bins);
+  bins.forEach((n,i)=>{const x=58+i*72,height=n/max*175;const rect=svgNode('rect',{x,y:210-height,width:57,height,rx:3,fill:i>=6?'#dc5b35':'#2563eb'});rect.append(svgNode('title',{},labels[i]+': '+n+' runs'));s.append(rect,svgNode('text',{x:x+28,y:200-height,'text-anchor':'middle'},n),svgNode('text',{x:x+28,y:235,'text-anchor':'middle'},labels[i]));});
+}
+function distributions(rows,active,total){
+  $('distribution').replaceChildren();$('legend').replaceChildren();
+  const series=active.map((c,i)=>({name:c.name,color:color(categories.indexOf(c)),seconds:rows.map(r=>r.values[i]),missing:rows.filter(r=>Object.keys(c.terms).some(k=>r.timers[k]===undefined)).length}));
+  series.push({name:'Uncovered gap',color:'#64748b',seconds:rows.map(r=>r.gap),missing:0},{name:'Over-counted excess',color:'#dc5b35',seconds:rows.map(r=>r.excess),missing:0});
+  const percent=$('units').value==='percent';
+  series.forEach(c=>{c.values=c.seconds.map((v,i)=>percent?v/rows[i].total*100:v).sort((a,b)=>a-b);const tr=el('tr');
+    [c.name,fmt(sum(c.seconds)),pct(total?sum(c.seconds)/total:null),...([.5,.9,.99].map(p=>{const q=quantile(c.values,p);return fmt(q)+(q===null?'':percent?'%':' s');})),c.missing].forEach(v=>tr.append(el('td',v)));$('distribution').append(tr);
+    const l=el('span'),sw=el('i',undefined,'swatch');sw.style.background=c.color;l.append(sw,el('span',c.name));$('legend').append(l);});
+  if(!rows.length){$('cdf').replaceChildren(el('p','No included runs.','empty'));return;}
+  const lo=Math.min(0,...series.map(c=>c.values[0])),hi=Math.max(1,...series.map(c=>c.values[c.values.length-1]));
+  const s=chart('cdf','Cumulative distribution of category time');axes(s,lo,hi,percent?'Fraction of runs · x: share of run total (%)':'Fraction of runs · x: seconds');
+  series.forEach(c=>{
+    // Sample ranks only for drawing; statistics above always use every run.
+    const step=Math.max(1,Math.ceil(c.values.length/400)),indices=[];
+    for(let i=0;i<c.values.length;i+=step)indices.push(i);
+    if(indices[indices.length-1]!==c.values.length-1)indices.push(c.values.length-1);
+    let d='',previousY=220;
+    indices.forEach((i,j)=>{const x=55+(c.values[i]-lo)/(hi-lo)*725,y=220-(i+1)/c.values.length*192;d+=(j?' H':'M')+x+(j?' V'+y:' '+previousY+' V'+y);previousY=y;
+      const point=svgNode('circle',{cx:x,cy:y,r:3,fill:c.color,'fill-opacity':0});point.append(svgNode('title',{},c.name+': '+fmt(c.values[i])+(percent?'%':' s')+'; '+pct((i+1)/c.values.length)+' of runs'));s.append(point);});
+    s.prepend(svgNode('path',{d,fill:'none',stroke:c.color,'stroke-width':2}));
+  });
+}
+function render(){
+  const active=selected(),rows=calculate(),included=rows.filter(r=>!r.excluded),total=sum(included.map(r=>r.total)),accounted=sum(included.map(r=>r.accounted)),gap=sum(included.map(r=>r.gap)),excess=sum(included.map(r=>r.excess));
+  $('cohort').textContent=`${rows.length} matching runs · ${included.length} included · ${rows.length-included.length} excluded · ${rows.filter(r=>r.missing.length).length} missing category timers`;
+  $('metrics').replaceChildren();metric('Total time',fmt(total)+' s',included.length+' included runs');metric('Tracked coverage',pct(total?accounted/total:null),fmt(accounted)+' seconds tracked');metric('Uncovered gap',fmt(gap)+' s',pct(total?gap/total:null)+' of total');metric('Over-counted excess',fmt(excess)+' s',pct(total?excess/total:null)+' of total');metric('Net residual',fmt(total-accounted)+' s','Gap minus excess');metric('Negative categories',included.filter(r=>r.values.some(v=>v<0)).length+' runs','Check subtraction and nesting');
+  const warnings=[];if(!active.length)warnings.push('No categories selected.');
+  const weights={};active.forEach(c=>Object.entries(c.terms).forEach(([k,w])=>{weights[k]=(weights[k]??0)+w;}));
+  if(Object.values(weights).some(w=>w>1))warnings.push('Some timers are counted more than once across selected categories.');
+  if(active.some(c=>$('total').value in c.terms))warnings.push('The selected total timer is also used in a category; this is not a valid partition.');
+  $('save').disabled=!active.length||active.some(c=>$('total').value in c.terms);
+  if(active.some(c=>!Object.keys(c.terms).length))warnings.push('Some categories have no matched timer terms. Check the input diagnostics.');
+  if(excess>0)warnings.push('Some runs exceed 100% coverage. Check timer overlap, scope, and rounding.');
+  if(included.some(r=>r.values.some(v=>v<0)))warnings.push('Negative category values are retained; check parent/child subtraction.');
+  if(rows.some(r=>r.missing.length)&&$('missing').value==='zero')warnings.push('Missing category timers contribute zero; incomplete output may inflate gaps.');
+  $('warnings').hidden=!warnings.length;$('warnings').textContent=warnings.join(' ');
+  $('expressions').textContent=active.map(c=>c.name+'\n'+Object.entries(c.terms).map(([k,w])=>(w>0?'+ ':'− ')+k).join('\n')).join('\n\n');
+  $('totals').replaceChildren();
+  const totals=active.map((c,i)=>({name:c.name,value:sum(included.map(r=>r.values[i])),color:color(categories.indexOf(c))}));
+  totals.push({name:'Uncovered gap',value:gap,color:'#64748b'},{name:'Over-counted excess',value:excess,color:'#dc5b35'});
+  const scale=Math.max(total,1e-12,...totals.map(c=>Math.abs(c.value)));
+  totals.forEach(c=>{const row=el('div',undefined,'barrow'),track=el('div',undefined,'track'),bar=el('div',undefined,'bar');bar.style.width=Math.abs(c.value)/scale*100+'%';bar.style.background=c.color;track.append(bar);row.append(el('span',c.name),track,el('span',fmt(c.value)+' s · '+pct(total?c.value/total:null)));$('totals').append(row);});
+  histogram(included);distributions(included,active,total);renderRows(rows,active);
+}
+function renderRows(rows,active){
+  const sort=$('sort').value;rows.sort(sort==='benchmark'?(a,b)=>a.benchmark.localeCompare(b.benchmark):(a,b)=>(b[sort]??-Infinity)-(a[sort]??-Infinity));
+  const pages=Math.max(1,Math.ceil(rows.length/50));page=Math.min(page,pages-1);$('benchmarks').replaceChildren();
+  rows.slice(page*50,page*50+50).forEach(r=>{const tr=el('tr'),td=el('td',undefined,'path'),details=el('details'),summary=el('summary',r.benchmark+' · '+r.status+' · run '+r.id);details.append(summary);
+    const pre=el('pre',active.map((c,i)=>c.name+': '+fmt(r.values[i])+' s').join('\n')+'\nMissing: '+(r.missing.join(', ')||'none'));details.append(pre);td.append(details);tr.append(td);
+    [fmt(r.total),fmt(r.accounted),pct(r.coverage),fmt(r.gap),fmt(r.excess),r.excluded||(r.missing.length?r.missing.length+' missing':'complete')].forEach(v=>tr.append(el('td',v)));$('benchmarks').append(tr);});
+  $('page').textContent=`Page ${page+1} of ${pages}`;$('prev').disabled=page===0;$('next').disabled=page===pages-1;
+}
+$('source').textContent=data.source+' · '+data.records.length+' benchmark runs · seconds normalized from printed timer units';
+keys.forEach(k=>{option($('total'),k,k);option($('timer'),k,k);});
+$('total').value=data.config.total;$('missing').value=data.config.missing;
+[...new Set(data.records.map(r=>r.status))].sort().forEach(s=>option($('status'),s,s));
+$('diagnostics').textContent=data.warnings.join('\n')||'No parser or configuration warnings.';
+for(const id of ['total','missing','filter','status','units','sort'])$(id).addEventListener('input',()=>{page=0;render();});
+$('prev').onclick=()=>{page--;render();};$('next').onclick=()=>{page++;render();};
+$('add').onclick=()=>{const key=$('timer').value;if(key===$('total').value)return;let c=categories.find(c=>c.name===key);if(c)c.enabled=true;else categories.push({name:key,terms:{[key]:1},enabled:true});renderControls();render();};
+$('save').onclick=()=>download('timing-config.json',JSON.stringify({total:$('total').value,missing:$('missing').value,categories:selected().map(c=>({name:c.name,add:Object.keys(c.terms).filter(k=>c.terms[k]>0),subtract:Object.keys(c.terms).filter(k=>c.terms[k]<0)}))},null,2)+'\n');
+renderControls();render();
+</script>
+</html>

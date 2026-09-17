@@ -14,11 +14,22 @@ Entries:
 - [`2026-09-15-sat-and-instance-order.md`](2026-09-15-sat-and-instance-order.md)
 - [`2026-09-15-z3-full-verus-options.md`](2026-09-15-z3-full-verus-options.md)
 - [`2026-09-15-attribution-stats.md`](2026-09-15-attribution-stats.md)
+- [`2026-09-16-datatype-and-equality-controls.md`](2026-09-16-datatype-and-equality-controls.md)
+- [`2026-09-16-entailment-filtering.md`](2026-09-16-entailment-filtering.md)
+- [`2026-09-16-combined-central-equality-and-evaluator-off.md`](2026-09-16-combined-central-equality-and-evaluator-off.md)
+- [`2026-09-16-conflict-instantiation.md`](2026-09-16-conflict-instantiation.md)
+- [`2026-09-16-rebased-equality-and-evaluator-branches.md`](2026-09-16-rebased-equality-and-evaluator-branches.md)
+- [`2026-09-16-bounded-eager-instantiation.md`](2026-09-16-bounded-eager-instantiation.md)
+- [`2026-09-16-eager-counters-and-timeout-sensitivity.md`](2026-09-16-eager-counters-and-timeout-sensitivity.md)
+- [`2026-09-17-central-ieval-segfault.md`](2026-09-17-central-ieval-segfault.md)
 
-Raw results files are copied from the host into [`data/`](data/) with
-`job_launcher/fetch` and tracked, under the name the driver gave them, so that
-every number in an entry can be recomputed with `gap` from this checkout
-alone. Gap-set lists written by `gap --gapset` live there too.
+Full results and statistics files remain on the execution host and may be
+copied into [`data/`](data/) with `job_launcher/fetch` for local analysis, but
+they are ignored by Git. Each entry records the exact raw artifact name,
+command, solver revision, and aggregate result. Generated benchmark lists,
+including gap sets written by `gap --gapset`, also remain local; only small
+processed summaries are tracked. See the [data-retention
+policy](data/README.md).
 
 ## An entry
 

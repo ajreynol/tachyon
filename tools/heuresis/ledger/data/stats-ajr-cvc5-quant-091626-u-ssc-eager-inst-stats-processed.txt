@@ -1,0 +1,5 @@
+=== Final proof size: === Final rule counts:
+=== DSL_REWRITE rule counts:
+=== THEORY_REWRITE rule counts:
+=== Number of trust rewrite rules: === Number of trust: === Number of trust lemmas:
+=== Number of Eunoia unhandled:

@@ -82,3 +82,166 @@ solve_dir_rec_par_z3 -t 30 z3-4.15.4 z3_solve.sh quant-091526-z3-4.15.4 auto_con
 stats_dir_rec_par_cvc5 -t 30 cvc5 quant-091526-u-ss-stats -q --no-cbqi --user-pat=strict
 # cvc5: git 5cc03f4b9 on branch main
 
+# 2026-09-16 10:08 [dev1:~/benchmarks/quant-07-25] (quant-cvc5.conf)
+# queued 1/4 in window quant-091626-u-ssc
+# heuresis baseline: cvc5 best known configuration on the set
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc -q --no-cbqi --user-pat=strict --sat-solver=cadical
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:08 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-dt-binary-split.conf)
+# queued 2/4 in window quant-091626-u-ssc
+# heuresis R16: best-known cvc5 configuration with binary datatype splits
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-dt-binary -q --no-cbqi --user-pat=strict --sat-solver=cadical --dt-binary-split
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:08 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ee-central.conf)
+# queued 3/4 in window quant-091626-u-ssc
+# heuresis R15: best-known cvc5 configuration with central equality engine
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-ee-central -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:08 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-cbqi-conflict.conf)
+# queued 4/4 in window quant-091626-u-ssc
+# heuresis R6/R28: strict patterns with conflict-only CBQI
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-sc-cbqi-conflict -q --user-pat=strict --sat-solver=cadical --cbqi-mode=conflict
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ieval-off.conf)
+# queued 1/4 in window quant-091626-u-ssc-ieval-off
+# heuresis R7: best-known cvc5 configuration with instantiation evaluation off
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ieval=off
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ieval-use-learn.conf)
+# queued 2/4 in window quant-091626-u-ssc-ieval-off
+# heuresis R7: best-known cvc5 configuration with evaluator learning
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-ieval-use-learn -q --no-cbqi --user-pat=strict --sat-solver=cadical --ieval=use-learn
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-no-inst-no-entail.conf)
+# queued 3/4 in window quant-091626-u-ssc-ieval-off
+# heuresis R7: best-known cvc5 configuration without inst-no-entail
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-no-inst-no-entail -q --no-cbqi --user-pat=strict --sat-solver=cadical --no-inst-no-entail
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 10:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-cbqi-prop-eq.conf)
+# queued 4/4 in window quant-091626-u-ssc-ieval-off
+# heuresis R6/R28: strict patterns with propagation/equality CBQI
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-sc-cbqi-prop-eq -q --user-pat=strict --sat-solver=cadical --cbqi-mode=prop-eq
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 11:10 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ee-central-ieval-off.conf)
+# queued 1/2 in window quant-091626-u-ssc-ee-central-ieval-off
+# heuresis R7/R15: central equality engine with instantiation evaluation off
+solve_dir_rec_par_cvc5 -t 30 cvc5 cvc5_solve.sh quant-091626-u-ssc-ee-central-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 11:10 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-cbqi-conflict-stats.conf)
+# queued 2/2 in window quant-091626-u-ssc-ee-central-ieval-off
+# heuresis R6/R28: internal statistics with conflict-only CBQI
+stats_dir_rec_par_cvc5 -t 30 cvc5 quant-091626-u-sc-cbqi-conflict-stats-stats -q --user-pat=strict --sat-solver=cadical --cbqi-mode=conflict
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-16 12:12 [dev1:~/cvc5-ajr] (build master)
+# build master + make regress
+[blocking] build master + make regress
+# built from master@d7d03b082c
+# result: success (1m46s)
+
+# 2026-09-16 12:15 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current-ee-central.conf)
+# queued 1/2 in window quant-091626-u-ssc-current-ee-central
+# heuresis R15: current-main central equality comparator
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-current-ee-central -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central
+# ajr-cvc5: git d7d03b082c on branch master
+
+# 2026-09-16 12:15 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current-ee-central-ieval-off.conf)
+# queued 2/2 in window quant-091626-u-ssc-current-ee-central
+# heuresis R7/R15: current-main central equality and evaluator-off comparator
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-current-ee-central-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# ajr-cvc5: git d7d03b082c on branch master
+
+# 2026-09-16 12:29 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current.conf)
+# heuresis: current-main fixed quantifier/CaDiCaL control
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-current -q --no-cbqi --user-pat=strict --sat-solver=cadical
+# ajr-cvc5: git d7d03b082c on branch master
+
+# 2026-09-16 12:37 [dev1:~/cvc5-ajr] (build ai-eecNoShare)
+# build ai-eecNoShare + make regress
+[blocking] build ai-eecNoShare + make regress
+# built from ai-eecNoShare@c2f448675e
+# result: success (1m47s)
+
+# 2026-09-16 12:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ai-eec-no-share.conf)
+# heuresis R15: rebased ai-eecNoShare with central equality and evaluator off
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eec-no-share -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# built from ai-eecNoShare@c2f448675e
+
+# 2026-09-16 12:47 [dev1:~/cvc5-ajr] (build ievalTravTrie)
+# build ievalTravTrie + make regress
+[blocking] build ievalTravTrie + make regress
+# built from ievalTravTrie@78e6fd0889
+# result: success (1m49s)
+
+# 2026-09-16 12:49 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-ieval-trav-trie.conf)
+# heuresis R7: rebased ievalTravTrie with central equality
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-ieval-trav-trie -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central
+# built from ievalTravTrie@78e6fd0889
+
+# 2026-09-16 12:57 [dev1:~/cvc5-ajr] (build master)
+# build master
+[blocking] build master
+# built from master@d7d03b082c
+# result: success (22s)
+
+# 2026-09-16 15:20 [dev1:~/cvc5-ajr] (build claude-eagerInst)
+# build claude-eagerInst + make regress
+[blocking] build claude-eagerInst + make regress
+# built from claude-eagerInst@995b23bcfa
+# result: success (1m49s)
+
+# 2026-09-16 15:23 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-off.conf)
+# heuresis R1/R28: claude-eagerInst with the module off (sanity control)
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 15:30 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst.conf)
+# heuresis R1/R28: claude-eagerInst eager instantiation at branch defaults
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 15:37 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-rlv.conf)
+# heuresis R1/R28: claude-eagerInst eager instantiation with relevancy deferral
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-rlv -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 16:38 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-stats.conf)
+# heuresis R1/R28 (S2): eager-instantiation counters at branch defaults
+stats_dir_rec_par_cvc5 -t 30 ajr-cvc5 quant-091626-u-ssc-eager-inst-stats -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 16:46 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-rlv-stats.conf)
+# heuresis R1/R28 (S2): eager-instantiation counters with relevancy deferral
+stats_dir_rec_par_cvc5 -t 30 ajr-cvc5 quant-091626-u-ssc-eager-inst-rlv-stats -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 16:53 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-off-t120.conf)
+# heuresis R1/R28 (S7): eager arm 'off' at a 120 s timeout
+solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-off-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 17:11 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-t120.conf)
+# heuresis R1/R28 (S7): eager arm 'inst' at a 120 s timeout
+solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 17:33 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-rlv-t120.conf)
+# heuresis R1/R28 (S7): eager arm 'inst-rlv' at a 120 s timeout
+solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-rlv-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-17 10:01 [dev1:~/cvc5-ajr] (build master)
+# build master
+[blocking] build master
+# built from master@95050cf815
+# result: success (1m08s)
+

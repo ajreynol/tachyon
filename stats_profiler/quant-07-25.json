@@ -1,0 +1,14 @@
+{
+  "total": "global::totalTime",
+  "missing": "zero",
+  "categories": [
+    {"name": "TheoryEngine::combineTheoriesTime", "add": ["TheoryEngine::combineTheoriesTime"]},
+    {"name": "theory::uf::checkTime", "add": ["theory::uf::checkTime"]},
+    {"name": "theory::datatypes::checkTime", "add": ["theory::datatypes::checkTime"]},
+    {"name": "prop::CnfStream::cnfConversionTime", "add": ["prop::CnfStream::cnfConversionTime"]},
+    {"name": "theory::QuantifiersEngine::time_ematching", "add": ["theory::QuantifiersEngine::time_ematching"]},
+    {"name": "theory::arith::checkTime", "add": ["theory::arith::checkTime"]},
+    {"name": "smt::SolverEngine::processAssertionsTime", "add": ["smt::SolverEngine::processAssertionsTime"]},
+    {"name": "JustifyStrategy::getNextTime", "add": ["JustifyStrategy::getNextTime"]}
+  ]
+}

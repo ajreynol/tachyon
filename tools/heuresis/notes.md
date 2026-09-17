@@ -60,9 +60,9 @@ does not.*
 
 | id | hypothesis | state | where | what would settle it |
 | --- | --- | --- | --- | --- |
-| h-15 | **Conflict-based instantiation has exponential behaviour**, seen in rare cases (`mu_test.smt2`, from Marco Roveri). On this set it is disabled outright (see [the configuration](#the-configuration-under-study)). | branch | [`ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | closed for the set by `--no-cbqi`; the branch matters elsewhere |
-| h-16 | **No eager instantiation**, in the sense of [de Moura and Bjørner's *Efficient E-matching*](https://leodemoura.github.io/files/ematching.pdf): cvc5 instantiates only at full effort. An implementation exists and has three problems: performance (clauses are not deleted, infinite branch and bound, matching loops; no lazy-vs-eager dynamic policy), generality (user patterns only, no auto-generated ones), and E-matching is not incremental. Two assistant-written attempts followed, one from scratch and one extending it. | branch ×3 | [`eagerInst3`](https://github.com/ajreynol/cvc5/tree/eagerInst3), [`ai-eagerInst2`](https://github.com/ajreynol/cvc5/tree/ai-eagerInst2), [`ai-extEagerInst3-1`](https://github.com/ajreynol/cvc5/tree/ai-extEagerInst3-1) | the attribution: how much of the gap is *instantiation rounds that could have fired earlier*; then whichever branch is closest, A/B |
-| h-17 | **E-matching has exponential behaviour** (best example: `prepared_13.smt2`, from Kartik). Candidate: cache the state at which matching failed, for a better worst case. `--ieval=on` is another route via entailment, with more advanced settings (`ieval=use-learn`). | branch | [`ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) | time in E-matching per gap benchmark, from a profile; A/B |
+| h-15 | **Conflict-based instantiation has exponential behaviour**, seen in rare cases (`mu_test.smt2`, from Marco Roveri). On this set it is disabled outright (see [the configuration](#the-configuration-under-study)). | branch | [`ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | settled for this set: enabled modes regress and 272,280 QCF rounds emit only 54 conflict lemmas ([ledger](ledger/2026-09-16-conflict-instantiation.md)); the branch matters elsewhere |
+| h-16 | **No eager instantiation**, in the sense of [de Moura and Bjørner's *Efficient E-matching*](https://leodemoura.github.io/files/ematching.pdf): cvc5 instantiates only at full effort. An implementation exists and has three problems: performance (clauses are not deleted, infinite branch and bound, matching loops; no lazy-vs-eager dynamic policy), generality (user patterns only, no auto-generated ones), and E-matching is not incremental. Two assistant-written attempts followed, one from scratch and one extending it. | branch ×3 | [`eagerInst3`](https://github.com/ajreynol/cvc5/tree/eagerInst3), [`ai-eagerInst2`](https://github.com/ajreynol/cvc5/tree/ai-eagerInst2), [`claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | push the rebased compact bounded branch; A/B time-to-first-useful-instance and full rounds on a fixed gap slice |
+| h-17 | **E-matching has exponential behaviour** (best example: `prepared_13.smt2`, from Kartik). Candidate: cache the state at which matching failed, for a better worst case. `--ieval=use` is another route via entailment, with more advanced settings (`--ieval=use-learn`). | branch | [`ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) | time in E-matching per gap benchmark, from a profile; A/B |
 | h-18 | **No mod-time optimization**: compute only the triggers worth recomputing, from a diff of the E-graph. A key component of the z3 and Simplify papers, and by itself a poor fit for cvc5 because cvc5 lacks eager instantiation (h-16). | sketch | [`ai-emFilter`](https://github.com/ajreynol/cvc5/tree/ai-emFilter) | coupled to h-16; measure the fraction of trigger evaluations that find nothing new |
 | h-19 | **Trigger policies** that limit instantiations per round — for instance, not considering multiple matches for the same ground term in one round. | idea | — | distribution of instantiations per round on gap benchmarks |
 
@@ -70,7 +70,7 @@ does not.*
 
 | id | hypothesis | state | where | what would settle it |
 | --- | --- | --- | --- | --- |
-| h-20 | **Distributed equality engines** cost something the central mode does not. `--ee-mode=central` exists on `main`; a branch merges specifically UF and datatypes, at the price of making datatypes a second-class theory (no theory combination, no assertion stack of its own). The notes float merging engines in the default distributed mode. | main (option) + branch | `--ee-mode=central`, [`dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | A/B with `--ee-mode=central`; then the branch |
+| h-20 | **Distributed equality engines** cost something the central mode does not. `--ee-mode=central` exists on `main`; a branch merges specifically UF and datatypes, at the price of making datatypes a second-class theory (no theory combination, no assertion stack of its own). The notes float merging engines in the default distributed mode. | main (option) + branch | `--ee-mode=central`, [`ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare), [`dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | current-main central mode cuts PAR2 10.3%; `ai-eecNoShare` passes regressions but changes PAR2 only −0.20%, so count skipped propagation work before upstreaming ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
 | h-21 | **Care graph vs. model-based theory combination.** Model-based is much simpler and typically comparable, worse in some logics (QF_ABV). | pr | [cvc5#12095](https://github.com/cvc5/cvc5/pull/12095) | A/B on the set |
 | h-22 | **Equality-engine notifications**: fire them only when the caller has been used; a low-level optimization. | pr | [cvc5#9724](https://github.com/cvc5/cvc5/pull/9724) | a profile: share of time in notification callbacks |
 
@@ -79,7 +79,7 @@ does not.*
 | id | hypothesis | state | where | what would settle it |
 | --- | --- | --- | --- | --- |
 | h-23 | **No elimination of datatypes** at preprocessing. | sketch | [`dtElim`](https://github.com/ajreynol/cvc5/tree/dtElim) | how much of the set is datatype-heavy; the sketch's completeness |
-| h-24 | **Datatype splitting is too liberal.** Conservative variant: split only on relevant datatype terms, those in currently asserted terms. A more liberal variant was suggested by Kartik (the notes break off mid-sentence describing it). | branch | [`dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | count of datatype splits per gap benchmark; A/B |
+| h-24 | **Datatype splitting is too liberal.** Conservative variant: split only on relevant datatype terms, those in currently asserted terms. A more liberal variant was suggested by Kartik (the notes break off mid-sentence describing it). | branch | [`dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | split count is measured and global binary splitting regresses; add eligible/suppressed relevance counters before the branch ([ledger](ledger/2026-09-16-datatype-and-equality-controls.md)) |
 
 ## F — Preprocessing
 
@@ -107,10 +107,10 @@ The notes list what has helped on this set. The best measured configuration —
 the one future A/Bs use unless a ledger entry says otherwise — is:
 
 ```
---no-cbqi --user-pat=strict --sat-solver=cadical
+--no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
 ```
 
-The first three rows are its measured components; the remaining helpers are
+The first five rows are its measured components; the remaining helpers are
 candidates to test one at a time.
 
 | option | why | caveat in the notes |
@@ -118,6 +118,8 @@ candidates to test one at a time.
 | `--user-pat=strict` | preserve user-provided triggers exactly | odd semantics: `(forall x. false :pattern (P x))` should be a conflict but needs a `P` term |
 | `--no-cbqi` | conflict-based instantiation is a loss here (h-15) | an order-of-magnitude win on sledgehammer problems; the notes say it should be off by default on Verus benchmarks |
 | `--sat-solver=cadical` | faster SAT core; explicit selection cut PAR2 6.5% and rescued 55 benchmarks | the declared default since 2026-08, **but** `--incremental` defaults to true and forces MiniSat unless the SAT solver is set explicitly ([ledger](ledger/2026-09-15-sat-and-instance-order.md)) |
+| `--ee-mode=central` | 70 net additional solves and 10.3% lower PAR2 on current main | broad correctness surface; test a second corpus before treating this as a default ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| `--ieval=off` | composes with central equality for 77 net solves and 13.6% lower PAR2 than the current-main control | points specifically at partial-evaluator cost or pruning; `ievalTravTrie` is neutral, so instrument before redesigning ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
 | `--term-db=relevant` | filter congruent terms; ignore ground terms preregistered but not asserted; recently made incremental | whether it is default is not stated; check before assuming it is in the baseline |
 | `--enum-inst` | solves more | and times out more; not enabled by default |
 
@@ -129,7 +131,7 @@ Recorded so that a later reader does not rediscover them as candidates.
   improvement on sledgehammer; off for this set.
 - **Entailment filtering** (`--inst-no-entail`, default on): a quick
   entailment test on each instantiation, discarding those already entailed.
-- **Incremental entailment filtering** (`--ieval=on`, default on): the same
+- **Incremental entailment filtering** (`--ieval=use`, default): the same
   test as instantiations are built, so an entailed instantiation can be
   discarded after a partial assignment to its variables.
 
