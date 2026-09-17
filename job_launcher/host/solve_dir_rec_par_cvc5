@@ -42,6 +42,11 @@ WRAP="$SCRIPT -b $HOME/analysis/binaries/$BINARY-$TEST"
 echo "Per-benchmark command: $WRAP BENCH $@"
 
 
+# Where the wrappers record why a benchmark failed.  One line per failure;
+# absent or empty means nothing failed.
+export HEURESIS_ERRLOG=$HOME/analysis/data/errors-$SCRIPT-$TEST.txt
+: > "$HEURESIS_ERRLOG"
+
 find -name "*.smt2" > tmp.txt
 
 echo -n "Num benchmarks: "

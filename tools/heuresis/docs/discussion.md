@@ -13,7 +13,8 @@ Performance work lives in [`progress.md`](progress.md) and the
 ## 1. Segfault with `--ee-mode=central --ieval=off`
 
 **Status:** reproducible on current `main`, not yet filed upstream.
-**Evidence:** [ledger 2026-09-17](../ledger/2026-09-17-central-ieval-segfault.md).
+**Evidence:** [ledger 2026-09-17](../ledger/2026-09-17-central-ieval-segfault.md),
+scope in [2026-09-17 segfault-scope](../ledger/2026-09-17-segfault-scope-and-failure-logging.md).
 
 ### Summary
 
@@ -99,10 +100,13 @@ shared-terms database into equality-engine explanation.
 - **The cause.** No debug build was made. Whether this is a null dereference, a
   dangling `EqProof*`, or an out-of-bounds index is not known, and no argument
   values were recovered.
-- **The scope.** Two benchmarks out of 6124 are known to crash, but they were
-  found incidentally: the fault needs ~20 s of CPU to reach, and shorter runs
-  kill the process first. The set has not been swept, so the true count is
-  unknown and could be larger.
+- **The scope, now measured.** A 300 s sweep of the whole set in the crashing
+  configuration finds **exactly two** crashes — the same two — among the
+  **5845** benchmarks that reach a terminal answer
+  ([ledger](../ledger/2026-09-17-segfault-scope-and-failure-logging.md)). This
+  is a floor rather than a total: 279 benchmarks still hit the 300 s timeout
+  and never got the chance to crash. So: rare, reproducible, and not
+  widespread.
 - **A minimal reproducer.** Both triggers are large Verus-generated files; no
   reduction was attempted.
 

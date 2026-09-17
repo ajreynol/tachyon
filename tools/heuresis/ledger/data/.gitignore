@@ -4,3 +4,6 @@ results-*.txt
 stats-*.txt
 gapset-*.txt
 !stats-*-processed.txt
+# errors-*.txt is one line per failed benchmark and is only written when
+# something failed, so it is small by nature and worth tracking: it is the
+# record of which benchmarks crashed and why.  Not ignored, deliberately.

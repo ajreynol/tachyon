@@ -61,8 +61,10 @@ does not address.
 > ([2026-09-17](../ledger/2026-09-17-central-ieval-segfault.md)). Either flag
 > alone is fine. The PAR2 effect is nil — both benchmarks are unsolved in every
 > arm regardless — so the history below is unaffected, but **this is not a
-> configuration to recommend to anyone** until the crash is fixed, and the count
-> of affected benchmarks is unknown rather than known to be 2.
+> configuration to recommend to anyone** until the crash is fixed. A 300 s sweep
+> puts the count at exactly two among the 5845 benchmarks that reach a terminal
+> answer — rare, but a floor rather than a total, since 279 still time out
+> ([2026-09-17](../ledger/2026-09-17-segfault-scope-and-failure-logging.md)).
 
 ## The targets — z3
 

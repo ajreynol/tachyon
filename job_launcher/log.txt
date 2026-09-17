@@ -261,3 +261,17 @@ solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-current-e
 # built from master@95050cf815
 # result: success (2s)
 
+# 2026-09-17 11:25 [dev1:~/benchmarks/quant-07-25] (quant-z3.conf)
+# heuresis baseline: z3 on the set, Verus options
+solve_dir_rec_par_z3 -t 30 z3-4.15.4 z3_solve.sh quant-091726-z3-4.15.4 auto_config=false smt.mbqi=false smt.case_split=3 smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.solver=2 smt.arith.nl=false pi.enabled=false rewriter.sort_disjunctions=false
+
+# 2026-09-17 11:27 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-stats.conf)
+# heuresis attribution: internal statistics on the set
+stats_dir_rec_par_cvc5 -t 30 cvc5 quant-091726-u-ssc-stats -q --no-cbqi --user-pat=strict --sat-solver=cadical
+# cvc5: git 5cc03f4b9 on branch main
+
+# 2026-09-17 11:36 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-best-t300.conf)
+# heuresis S12: best configuration at 300 s, to size the segfault
+solve_dir_rec_par_cvc5 -t 300 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-best-t300 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# ajr-cvc5: git 67954d09dc on branch master
+

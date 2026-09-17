@@ -22,6 +22,17 @@ while [ $# -gt 0 ]; do
 done
 [ -n "$BIN" ] || { echo "$(basename "$0"): -b is required" >&2; exit 2; }
 [ $# -ge 1 ] || { echo "$(basename "$0"): no benchmark given" >&2; exit 2; }
+BENCH=$1
+
+# Why a failure happened is recorded to $HEURESIS_ERRLOG when the drivers set
+# it.  It deliberately does NOT go into the result token: tools/heuresis/gap
+# has a fixed column list (solved/sat/unsat/unknown/timeout/error), so a token
+# like "error-segfault" would be counted in no column and the benchmark would
+# quietly leave the accounting.  The token stays "error"; the reason goes here.
+log_reason() {
+  [ -n "${HEURESIS_ERRLOG:-}" ] || return 0
+  printf '%s\t%s\n' "$1" "$(printf '%s' "$2" | head -1 | tr -d '\t' | cut -c1-200)" >> "$HEURESIS_ERRLOG"
+}
 
 function trywith {
   limit=$1; shift;
@@ -36,6 +47,7 @@ function trywith {
       # maybe incremental
       if echo "$result" | grep -vqE '^(sat|unsat|unsupported)$'; then
         echo "error"
+        log_reason "$BENCH" "$result"
       else
         echo "success"
       fi

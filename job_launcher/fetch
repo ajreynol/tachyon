@@ -2,7 +2,8 @@
 # fetch -- copy results files for job NAMEs from the host into a local directory.
 #   job_launcher/fetch [-H HOST] [-d DIR] NAME...
 #   Copies HOST:~/analysis/data/results-*-NAME.txt (and ~/analysis/stats/*NAME*
-#   for stats jobs) into DIR (default: scratch/results/ under the current directory).
+#   for stats jobs, and any non-empty errors-*-NAME.txt) into DIR
+#   (default: scratch/results/ under the current directory).
 #   Read-only on the host.  HOST defaults to DEFAULT_HOST from the site file.
 set -euo pipefail
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -30,7 +31,10 @@ HOST=${FETCH_HOST:-$DEFAULT_HOST}
 mkdir -p "$DEST"
 for N in "$@"; do
   # bash -c on the remote: the login shell may be zsh, which complains about a glob with no match
-  FILES=$(ssh -q "$HOST" bash -c "'for f in analysis/data/results-*-$N.txt analysis/stats/*$N*; do [ ! -e \"\$f\" ] || printf \"%s\\n\" \"\$f\"; done; exit 0'" </dev/null) \
+  # errors-*: the sidecar the wrappers write when a benchmark fails.  -s rather
+  # than -e, so an empty one is skipped and its presence locally means
+  # something actually failed.
+  FILES=$(ssh -q "$HOST" bash -c "'for f in analysis/data/results-*-$N.txt analysis/stats/*$N*; do [ ! -e \"\$f\" ] || printf \"%s\\n\" \"\$f\"; done; for f in analysis/data/errors-*-$N.txt; do [ ! -s \"\$f\" ] || printf \"%s\\n\" \"\$f\"; done; exit 0'" </dev/null) \
     || { echo "fetch: could not list results for $N on $HOST" >&2; exit 1; }
   [ -n "$FILES" ] || { echo "fetch: no results for $N on $HOST" >&2; exit 1; }
   while IFS= read -r F; do
