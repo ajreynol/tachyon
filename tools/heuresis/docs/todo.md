@@ -6,6 +6,10 @@ Google Doc of cvc5 performance notes, its structured
 [`notes.md`](../notes.md) summary, and the subsequent source audit in
 [`directions.md`](directions.md).
 
+**The measuring stick is [`progress.md`](progress.md).** Every goal and rank
+below is justified by whether it eventually moves a number there. A direction
+that cannot be traced to that table is not a priority, however interesting.
+
 **Purpose of the queue.** Find cvc5 shortcomings and research questions worth
 a human's attention. The next steps gather enough evidence to expose a useful
 finding. Once one emerges, record it with its research direction and ledger

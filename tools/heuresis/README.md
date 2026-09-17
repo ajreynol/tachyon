@@ -240,7 +240,12 @@ records the finding as soon as the evidence supports it.
 
 ## Using it
 
-[`docs/todo.md`](docs/todo.md) is the active top-ten queue;
+[`docs/progress.md`](docs/progress.md) is the measuring stick: a history of
+cvc5 `main` revisions on this set, the z3 targets they are measured against,
+and the record of what this project has actually landed upstream. Read it
+first — it is what everything else is trying to move, and it doubles as a
+monitor for upstream changes that make these benchmarks worse.
+[`docs/todo.md`](docs/todo.md) is the active short-term queue and top ten;
 [`docs/directions.md`](docs/directions.md) is the registry it refers to.
 
 ```bash
