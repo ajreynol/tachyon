@@ -7,7 +7,7 @@
 #      repository never contains them;
 #   3. every tracked config resolves against the site template with the
 #      variables submit requires set;
-#   4. the run-dev pin, reported (a mismatch is a note, not a failure: the
+#   4. the launcher pin, reported (a mismatch is a note, not a failure: the
 #      checkout may simply be absent where this runs).
 #   Run before committing.
 set -uo pipefail
@@ -85,17 +85,17 @@ DIR is a literal path in the config"
 done
 [ $BAD = 0 ] && note "all configs resolve against job_launcher/site.conf.example"
 
-# ---- 4. the run-dev pin -----------------------------------------------------
-WANT=$(sed -n 's/^commit=//p' job_launcher/run-dev.lock | tail -1)
-RD=${RUN_DEV:-}
-if [ -z "$RD" ] && [ -f job_launcher/site.conf ]; then RD=$(sed -n 's/^RUN_DEV=//p' job_launcher/site.conf | tail -1); fi
-RD=${RD:-$ROOT/../run-dev}; RD=${RD/#\~/$HOME}
-if [ -d "$RD/.git" ]; then
+# ---- 4. the launcher pin ----------------------------------------------------
+WANT=$(sed -n 's/^commit=//p' job_launcher/launcher.lock | tail -1)
+RD=${LAUNCHER_DIR:-}
+if [ -z "$RD" ] && [ -f job_launcher/site.conf ]; then RD=$(sed -n 's/^LAUNCHER_DIR=//p' job_launcher/site.conf | tail -1); fi
+RD=${RD/#\~/$HOME}
+if [ -n "$RD" ] && [ -d "$RD/.git" ]; then
   HAVE=$(git -C "$RD" rev-parse HEAD 2>/dev/null || echo unknown)
-  if [ "$HAVE" = "$WANT" ]; then note "run-dev at $RD is at the pinned commit ${WANT:0:10}"
-  else echo "note: run-dev at $RD is at ${HAVE:0:10}, lock pins ${WANT:0:10} (re-test, then update job_launcher/run-dev.lock)"; fi
+  if [ "$HAVE" = "$WANT" ]; then note "the launcher at $RD is at the pinned commit ${WANT:0:10}"
+  else echo "note: the launcher at $RD is at ${HAVE:0:10}, lock pins ${WANT:0:10} (re-test, then update job_launcher/launcher.lock)"; fi
 else
-  echo "note: no run-dev checkout found (RUN_DEV unset, no job_launcher/site.conf, no ../run-dev); pin not checked"
+  echo "note: no launcher checkout found (LAUNCHER_DIR unset or not set in job_launcher/site.conf); pin not checked"
 fi
 
 [ $FAIL = 0 ] && echo "checks: all passed" || { echo "checks: FAILED"; exit 1; }

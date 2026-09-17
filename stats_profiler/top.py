@@ -15,7 +15,7 @@ TOKEN = re.compile(r"[a-z][a-z0-9-]*")
 
 
 def read_results(path, timeout):
-    """-> benchmark -> (result, user seconds), from a run-dev results file.
+    """-> benchmark -> (result, user seconds), from a driver results file.
 
     The format is the drivers': a path line ending in .smt2, the wrapper's
     result token (absent when it was killed), then "<user-seconds> <max-rss>".

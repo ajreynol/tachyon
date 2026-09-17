@@ -15,7 +15,7 @@ Find out what it was.
 ## 2. What was run
 
 **This entry is a diagnosis, not a benchmark run.** Nothing went through a
-run-dev config; the commands were issued directly on the execution host
+launcher config; the commands were issued directly on the execution host
 against two named files. The only launcher record is the `master` build that
 produced the binary
 ([`job_launcher/log.txt`](../../../job_launcher/log.txt)). The ledger's usual

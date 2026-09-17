@@ -5,7 +5,7 @@
                        [--gapset FILE] [--md] LABEL=RESULTS ...
 
 The first LABEL=RESULTS is the reference (z3); every other run is compared
-against it.  RESULTS is a run-dev results file as the drivers write it: for
+against it.  RESULTS is a results file as the drivers write it: for
 each benchmark a path line ending in .smt2, then the wrapper's result token
 (sat, unsat, unknown, error, ...; absent when `timeout` killed the wrapper),
 then "<user-seconds> <max-rss-kB>" from /usr/bin/time.  Anything else

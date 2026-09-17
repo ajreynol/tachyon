@@ -79,11 +79,11 @@ the next work. See [its README](tools/metagraphe/README.md) and its
 
 ### [`job_launcher/`](job_launcher/) — experiments, independent of any one machine
 
-[run-dev](https://github.com/ajreynol/run-dev) is a launcher for remote
-benchmark jobs: it validates a config, opens a tmux window on a benchmark host,
-runs one driver there, and logs the launch with the solver's branch and commit.
-What run-dev deliberately does *not* track is the job configs and the log,
-because there they carry one person's hosts and history. Here they are the
+The launcher runs remote benchmark jobs: it validates a config, opens a tmux
+window on a benchmark host, runs one driver there, and logs the launch with the
+solver's branch and commit. What a launcher deliberately does *not* track is
+the job configs and the log, because there they carry one person's hosts and
+history. Here they are the
 experimental record, so here they are tracked — and everything about a person's
 machines stays in one git-ignored `site.conf`.
 
@@ -104,8 +104,8 @@ job_launcher/submit    quant-cvc5.conf quant-z3.conf # launch, queued, logged
 job_launcher/status
 ```
 
-The details — where run-dev is found, which commit the wrappers were written
-against, what they add and do not add, how a config stays portable — are in
+The details — where the launcher is found, which commit the wrappers were
+written against, what they add and do not add, how a config stays portable — are in
 [`job_launcher/README.md`](job_launcher/README.md).
 
 ### [`stats_profiler/`](stats_profiler/) — timing coverage of a stats job

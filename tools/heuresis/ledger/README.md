@@ -33,7 +33,7 @@ policy](data/README.md).
 
 ## An entry
 
-`ledger/YYYY-MM-DD-<name>.md`, where `<name>` is the run-dev job NAME (or
+`ledger/YYYY-MM-DD-<name>.md`, where `<name>` is the launcher job NAME (or
 the two NAMEs of an A/B, joined by `-vs-`). Each entry carries, in this order:
 
 1. **What was asked.** The goal or the row of `notes.md` this run serves.

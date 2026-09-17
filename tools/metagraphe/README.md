@@ -1,7 +1,5 @@
 # metagraphe
 
-**Eunoia listing:** advertised
-
 *Which useful rewrites is cvc5 missing, especially for strings and bit-vectors?*
 
 A child research project for finding concrete gaps in cvc5's rewriting and

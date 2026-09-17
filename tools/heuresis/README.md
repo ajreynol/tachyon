@@ -1,7 +1,5 @@
 # heuresis
 
-**Eunoia listing:** advertised
-
 *Find the cvc5 shortcomings worth pursuing in the quantified benchmarks where
 z3 is much faster.*
 
@@ -234,7 +232,7 @@ records the finding as soon as the evidence supports it.
 
 | inherited | where it was established |
 | --- | --- |
-| the launcher: configs, site file, results format, host conventions | [`job_launcher/`](../../job_launcher/), and [run-dev](https://github.com/ajreynol/run-dev) |
+| the launcher: configs, site file, results format, host conventions | [`job_launcher/`](../../job_launcher/) |
 | the register of hypotheses, with each one's branch or pull request | [`notes.md`](notes.md), a summary of performance notes dated 2026-09-14 |
 | the research directions, with risk/gain estimates, flags, branches, z3's mechanisms and papers | [`docs/directions.md`](docs/directions.md), written 2026-09-15 from cvc5 and z3 source, the fork's 847 remote branch refs, and the literature |
 | the configuration under study | [`notes.md`](notes.md#the-configuration-under-study) |

@@ -1,18 +1,18 @@
 #!/bin/bash
-# submit -- this repository's front end to run-dev's submit.
-#   job_launcher/submit [run-dev flags] CONFIG...        CONFIG resolves against job_launcher/configs/
-#   job_launcher/submit -n CONFIG...                      dry run (run-dev's -n)
-#   job_launcher/submit -b BRANCH [-r | -x CONFIG]        build / regress (run-dev's, unchanged)
-#   job_launcher/submit -k NAME...                        close a finished tmux window
+# submit -- this repository's front end to the launcher's submit.
+#   job_launcher/submit [launcher flags] CONFIG...       CONFIG resolves against job_launcher/configs/
+#   job_launcher/submit -n CONFIG...                     dry run (the launcher's -n)
+#   job_launcher/submit -b BRANCH [-r | -x CONFIG]       build / regress (the launcher's, unchanged)
+#   job_launcher/submit -k NAME...                       close a finished tmux window
 #
-#   Everything is run-dev's submit -- flags, config variables, checks, refusals,
+#   Everything is the launcher's submit -- flags, config variables, checks, refusals,
 #   see `job_launcher/submit -h` -- with exactly four things added:
-#     * the site file is job_launcher/site.conf (passed as SUBMIT_SITE), never run-dev's;
+#     * the site file is job_launcher/site.conf (passed as SUBMIT_SITE), never the launcher's;
 #     * a bare CONFIG name is looked up in job_launcher/configs/ first;
-#     * the log entries run-dev appends to its own log.txt during this call are
+#     * the log entries the launcher appends to its own log.txt during this call are
 #       copied to job_launcher/log.txt, which is the tracked record;
-#     * a warning if the run-dev checkout is not at the commit in run-dev.lock.
-#   Anything run-dev writes for itself (configs/.gen/ for --baseline and -x,
+#     * a warning if the checkout is not at the commit in launcher.lock.
+#   Anything the launcher writes for itself (configs/.gen/ for --baseline and -x,
 #   its own log.txt) it still writes there.
 set -euo pipefail
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -20,7 +20,7 @@ HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "$HERE/common.sh"
 
 if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
-  sed -n '2,16p' "$0"; echo; echo "---- run-dev's submit -h:"; exec "$RUN_DEV/submit" -h
+  sed -n '2,16p' "$0"; echo; echo "---- the launcher's submit -h:"; exec "$LAUNCHER_DIR/submit" -h
 fi
 
 # Resolve bare config names.  The argument after -b/--build is a branch and is
@@ -35,11 +35,11 @@ for A in "$@"; do
   PREV=$A
 done
 
-RDLOG=$RUN_DEV/log.txt
+RDLOG=$LAUNCHER_DIR/log.txt
 lines() { [ -f "$1" ] && echo $(( $(wc -l < "$1") )) || echo 0; }
 BEFORE=$(lines "$RDLOG")
 RC=0
-SUBMIT_SITE=$SITE "$RUN_DEV/submit" "${ARGS[@]}" || RC=$?
+SUBMIT_SITE=$SITE "$LAUNCHER_DIR/submit" "${ARGS[@]}" || RC=$?
 AFTER=$(lines "$RDLOG")
 if [ "$AFTER" -gt "$BEFORE" ]; then
   tail -n +"$((BEFORE + 1))" "$RDLOG" >> "$HERE/log.txt"
