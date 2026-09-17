@@ -37,7 +37,7 @@ The report includes:
 
 ## The worked example
 
-[`quant-07-25.json`](quant-07-25.json) is the example configuration: eight named
+[`quant-07-25.json`](../stats_profiler/quant-07-25.json) is the example configuration: eight named
 cvc5 timers against `global::totalTime`, with everything else left over as misc.
 It is a **list of timers, not a claim about them**; read
 [Choosing a partition](#choosing-a-partition) before treating the slices as a
@@ -59,32 +59,33 @@ copied [`site.conf.example`](../job_launcher/site.conf.example) and edited it on
 #    writes ~/analysis/stats/stats-cvc5-quant-<MMDDYY>-u-ssc-stats.txt.
 job_launcher/submit -n quant-cvc5-stats.conf        # dry run first: prints the name
 job_launcher/submit    quant-cvc5-stats.conf
-job_launcher/status                                 # the window closes when it finishes
+job_launcher/status                             # finished windows remain open; close with submit -k NAME
 
 # 2. copy the raw stats file back (read-only on the host).  An earlier stats
 #    job can be fetched by name without launching anything.
-job_launcher/fetch -d scratch/stats quant-<MMDDYY>-u-ssc-stats
+job_launcher/fetch -d scratch/stats 'quant-<MMDDYY>-u-ssc-stats'
 
 # 3. profile it and write the PDFs.
 python3 stats_profiler/profile.py \
-  scratch/stats/stats-cvc5-quant-<MMDDYY>-u-ssc-stats.txt \
+  'scratch/stats/stats-cvc5-quant-<MMDDYY>-u-ssc-stats.txt' \
   --config stats_profiler/quant-07-25.json \
   --output scratch/profile-quant-07-25 --pdf
 ```
 
-Step 3 prints every file it wrote and the aggregate summary. `--pdf` is the only
-addition to the usual run; drop it for the HTML report alone. To replot without
+Replace `<MMDDYY>` with the name printed by the dry run. Step 3 prints the
+HTML and PDF paths and the aggregate summary. CSV and JSON are also written.
+Drop `--pdf` for HTML, CSV and JSON alone. To replot without
 reparsing 30 MB of stats — a different axis, say — run the plotter on its own:
 
 ```bash
 python3 stats_profiler/plots.py scratch/profile-quant-07-25/summary.json --max-share 60
 ```
 
-The run behind the current output is `quant-091526-u-ss-stats`
+The recorded example uses `quant-091526-u-ss-stats`
 ([log](../job_launcher/log.txt),
-[ledger](../tools/heuresis/ledger/2026-09-15-attribution-stats.md)), which
-predates the explicit CaDiCaL option now in the config; a fresh submit measures
-`u-ssc` instead and the two are not interchangeable.
+[ledger](../tools/heuresis/ledger/2026-09-15-attribution-stats.md)), without
+explicit CaDiCaL. The tracked config selects CaDiCaL and a fresh submit measures
+`u-ssc`; the two runs are not interchangeable.
 
 ## The plots
 
@@ -94,15 +95,16 @@ base-14 fonts and no embedded resources:
 | file | what it shows |
 | --- | --- |
 | `cdf-<n>-<timer>.pdf` | one timer's distribution over benchmarks |
-| `cdf-all.pdf` | all eight on one axis |
+| `cdf-all.pdf` | all selected categories on one axis |
 | `pie-total.pdf` | cumulative seconds per timer, plus misc, with the table beside it |
 | `plots.pdf` | every page above, in order |
 
 A CDF page is an **empirical survival curve**, not a cumulative one: a point
 `(x, y)` reads *for y% of the benchmarks this timer was at least x% of
-`global::totalTime`*. The x-axis is the same 0-100% on every page so the eight
-are directly comparable, `--max-share` narrows it, and shares past the axis are
-clipped by the plot box and counted in the footer. Median and p90 are marked on
+the selected total timer*. The default is `global::totalTime`; labels follow
+the configuration. The x-axis is the same 0-100% on every page,
+`--max-share` narrows it to a value in `(0, 100]`, and shares outside the axis,
+including negative values, are clipped and counted in the footer. Median and p90 are marked on
 the curve. The thin vertical rule is that timer's **cumulative** share — its
 slice of the pie — which is a different quantity: the pie weights a benchmark by
 its seconds, the curve weights every benchmark equally. A timer can be a small
@@ -110,19 +112,21 @@ slice and still dominate most runs, or the reverse; that divergence is the point
 of having both.
 
 The pie is part-to-whole over included runs only, and its misc slice is the
-signed residual `global::totalTime - sum(timers)` in aggregate. If the timers
+signed residual `total - sum(timers)` in aggregate. If the timers
 over-count the total there is no misc slice, the chart says so, and the negative
 share stays visible in the table rather than being clipped away.
+If a category's aggregate is negative, no pie is drawn: the signed table
+remains, since negative slices cannot represent parts of a whole.
 
-Each category keeps one colour across every page, in the fixed order of a
-palette validated for colour-vision deficiency; misc is grey because it is a
+Each category keeps one colour across every PDF page, in the fixed order of a
+palette; misc is grey because it is a
 residual and not a category. That ordering is why the plotter refuses more than
 eight categories instead of inventing a ninth colour — combine categories, or
 plot a subset.
 
 ## Choosing a partition
 
-[`default.json`](default.json) is a starting hypothesis: process assertions,
+[`default.json`](../stats_profiler/default.json) is a starting hypothesis: process assertions,
 theory checks, and theory combination. It is **not a certified disjoint or
 complete partition**. The report makes its uncovered portion explicit. Timer
 names and scopes vary with the solver revision. Use `--list-timers` to inspect
@@ -214,10 +218,24 @@ them before sharing. Default output is ignored at `stats_profiler/output/`.
 ## Checks
 
 ```bash
-python3 -m unittest discover -s stats_profiler/tests -v
-job_launcher/checks
+python3 scripts/check.py
 ```
 
 The PDF writer is checked structurally — object offsets, the cross-reference
 table, stream lengths, escaping, and the refusals — but no test can tell you a
 chart is legible. Render a page and look at it before citing one.
+
+## Generated artifacts
+
+`profile.py` writes `index.html` from the maintained
+[`report.html`](../stats_profiler/report.html) template, plus `summary.json`
+and `benchmarks.csv`. `plots.py` writes the PDFs listed above. All are rewritten
+whole: edit the configuration and regenerate, not the generated files. An output
+directory can still contain older PDFs if a later run omits `--pdf` or changes
+category names; use a fresh directory for each report you intend to share.
+
+The committed [example PDF](../stats_profiler/example-plots-quant-07-25.pdf) is
+a generated measurement artifact of the recorded example run, not a regenerated
+CI baseline. Its raw input is not committed; fetch the named stats job to
+recompute it. CI checks synthetic cases and PDF structure, not agreement with
+that measurement or the visual accessibility of the palette.

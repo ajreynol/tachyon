@@ -6,7 +6,7 @@
 
 The first LABEL=RESULTS is the reference (z3); every other run is compared
 against it.  RESULTS is a run-dev results file as the drivers write it: for
-each benchmark a path line ending in .smt2, then the wrapper's result token
+each benchmark a path line ending in .smt2 or .smt2.gz, then the wrapper's result token
 (sat, unsat, unknown, error, ...; absent when `timeout` killed the wrapper),
 then "<user-seconds> <max-rss-kB>" from /usr/bin/time.  Anything else
 (`rm:` noise, "Command exited with non-zero status") is ignored and counted.
@@ -19,9 +19,12 @@ Definitions, so the numbers mean one thing:
               both solved and time(run) >= factor * time(ref) with
               time(run) >= floor (a floor so 0.5 s vs 0.02 s is not a "gap")
   ratio       PAR2(run) / PAR2(ref)
-No dependencies beyond Python 3.
+Incomplete blocks, duplicate benchmark paths and empty comparisons are refused:
+silently dropping evidence would change the measured cohort. --gapset rewrites
+only the requested output (benchmark, reference seconds, run seconds/status).
+No input or ledger document is modified. No dependencies beyond Python 3.
 """
-import argparse, re, sys
+import argparse, math, re, sys
 from collections import Counter
 
 RE_TIME = re.compile(r'^([0-9]+(?:\.[0-9]+)?)(?: ([0-9]+))?$')
@@ -34,7 +37,11 @@ def read(path):
     with open(path) as f:
         for line in f:
             s = line.strip()
-            if s.endswith('.smt2'):
+            if s.endswith(('.smt2', '.smt2.gz')):
+                if cur is not None:
+                    raise ValueError(f'{path}: incomplete benchmark block: {cur[0]}')
+                if s in out:
+                    raise ValueError(f'{path}: repeated benchmark path: {s}')
                 cur = [s, None, None, None]
                 continue
             if cur is None:
@@ -43,6 +50,8 @@ def read(path):
             m = RE_TIME.match(s)
             if m:
                 cur[2] = float(m.group(1))
+                if not math.isfinite(cur[2]):
+                    raise ValueError(f'{path}: non-finite time for {cur[0]}')
                 cur[3] = int(m.group(2)) if m.group(2) else None
                 out[cur[0]] = (cur[1] if cur[1] else 'timeout', cur[2], cur[3])
                 cur = None
@@ -52,6 +61,10 @@ def read(path):
                 cur[1] = 'timeout'
             else:
                 ignored += 1
+    if cur is not None:
+        raise ValueError(f'{path}: incomplete benchmark block: {cur[0]}')
+    if not out:
+        raise ValueError(f'{path}: no benchmark results')
     return out, ignored
 
 
@@ -61,16 +74,25 @@ def main():
     ap.add_argument('--factor', type=float, default=10.0)
     ap.add_argument('--timeout', type=float, default=30.0)
     ap.add_argument('--floor', type=float, default=1.0)
-    ap.add_argument('--gapset', help='write the gap set of the LAST non-reference run here, one benchmark per line')
+    ap.add_argument('--gapset', help='write the LAST non-reference gap: benchmark, reference seconds, run seconds/status')
     ap.add_argument('--md', action='store_true', help='markdown tables (for a ledger entry)')
     a = ap.parse_args()
+    for name in ('factor', 'timeout', 'floor'):
+        value = getattr(a, name)
+        if not math.isfinite(value) or value < 0 or (name != 'floor' and value == 0):
+            ap.error(f'--{name} must be finite and ' + ('nonnegative' if name == 'floor' else 'positive'))
+    if a.gapset and len(a.runs) < 2:
+        ap.error('--gapset requires a reference and a comparison run')
 
     runs = []
     for spec in a.runs:
         label, _, path = spec.partition('=')
-        if not path:
+        if not label or not path:
             sys.exit(f'gap: expected LABEL=RESULTS, got {spec!r}')
-        res, ign = read(path)
+        try:
+            res, ign = read(path)
+        except (OSError, ValueError) as error:
+            ap.error(str(error))
         for b, (r, t, m) in res.items():
             if r in SOLVED and t >= a.timeout:
                 res[b] = ('timeout', t, m)
@@ -84,6 +106,8 @@ def main():
     for _, _, res, _ in runs[1:]:
         common &= set(res)
     n = len(common)
+    if not n:
+        ap.error('the supplied runs have no benchmarks in common')
     print(f'benchmarks: {n} in common' + ''.join(f'; {l}: {len(r)}' for l, _, r, _ in runs))
     for l, p, r, ign in runs:
         if ign:
@@ -114,6 +138,7 @@ def main():
                 both += 1
                 if rr != xr:
                     disagree += 1
+                    continue
                 if xt >= a.floor and xt >= a.factor * max(rt, 1e-3):
                     gap.append((b, rt, xt)); slower.append(xt / max(rt, 1e-3))
             elif rr in SOLVED:
@@ -131,7 +156,7 @@ def main():
             worst = sorted(gap, key=lambda g: (g[2] is not None, -(g[2] or 0)))[:10]
             print(f'  ten of the gap set (benchmark, {ref_label} s, {l} s):')
             for b, rt, xt in worst:
-                print(f'    {b}  {rt:.2f}  {"timeout" if xt is None else f"{xt:.2f}"}')
+                print(f'    {b}  {rt:.2f}  {res[b][0] if xt is None else f"{xt:.2f}"}')
         gapset = gap
         if disagree:
             print(f'  WARNING: {disagree} sat/unsat disagreement(s) between {ref_label} and {l}: a bug, not a gap; report it')
@@ -139,7 +164,7 @@ def main():
     if a.gapset and runs[1:]:
         with open(a.gapset, 'w') as f:
             for b, rt, xt in gapset:
-                f.write(f'{b} {rt:.2f} {"timeout" if xt is None else f"{xt:.2f}"}\n')
+                f.write(f'{b} {rt:.2f} {runs[-1][2][b][0] if xt is None else f"{xt:.2f}"}\n')
         print(f'\ngap set of {runs[-1][0]} written to {a.gapset}')
 
 

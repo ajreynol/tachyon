@@ -7,8 +7,9 @@ not tracked here; this file is what the project cites.
 
 *What a row is and is not.* A row is a hypothesis about where cvc5 loses time
 on the set. The `state` column is the state of the *code* as the notes
-describe it — nothing here has been checked against a cvc5 checkout by this
-project — and it says nothing about the *effect* on the set. Exactly one row
+describe it as of 2026-09-14, not a fresh source audit. The project's later
+source checks and measurements are in [directions.md](docs/directions.md).
+This inherited state says nothing about the *effect* on the set. Exactly one row
 carries a measured effect (`h-25`), and it is marked. Every other row is a
 candidate until the attribution ([`README.md`](README.md), goal 2) assigns it a
 share of the gap and a ledger entry backs the assignment.

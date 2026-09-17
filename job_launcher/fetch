@@ -2,17 +2,17 @@
 # fetch -- copy results files for job NAMEs from the host into a local directory.
 #   job_launcher/fetch [-H HOST] [-d DIR] NAME...
 #   Copies HOST:~/analysis/data/results-*-NAME.txt (and ~/analysis/stats/*NAME*
-#   for stats jobs) into DIR (default: results/ under the current directory).
+#   for stats jobs) into DIR (default: scratch/results/ under the current directory).
 #   Read-only on the host.  HOST defaults to DEFAULT_HOST from the site file.
 set -euo pipefail
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-# shellcheck source=common.sh
-source "$HERE/common.sh"
-HOST=$DEFAULT_HOST; DEST=results
+HOST=""; DEST=scratch/results
 while [ $# -gt 0 ]; do
   case "$1" in
-    -H|--host) HOST=$2; shift ;;
-    -d|--dir) DEST=$2; shift ;;
+    -H|--host|-d|--dir)
+      [ $# -ge 2 ] && [ -n "$2" ] || { echo "fetch: $1 requires a value" >&2; exit 2; }
+      case "$1" in -H|--host) HOST=$2 ;; *) DEST=$2 ;; esac
+      shift ;;
     -h|--help) sed -n '2,7p' "$0"; exit 0 ;;
     -*) echo "fetch: unknown flag $1" >&2; exit 2 ;;
     *) break ;;
@@ -20,13 +20,26 @@ while [ $# -gt 0 ]; do
   shift
 done
 [ $# -gt 0 ] || { echo "usage: job_launcher/fetch [-H HOST] [-d DIR] NAME..." >&2; exit 2; }
-mkdir -p "$DEST"
 for N in "$@"; do
   [[ "$N" =~ ^[A-Za-z0-9._-]+$ ]] || { echo "fetch: '$N' is not a job name" >&2; exit 2; }
+done
+FETCH_HOST=$HOST
+# shellcheck source=common.sh
+source "$HERE/common.sh"
+HOST=${FETCH_HOST:-$DEFAULT_HOST}
+mkdir -p "$DEST"
+for N in "$@"; do
   # bash -c on the remote: the login shell may be zsh, which complains about a glob with no match
-  FILES=$(ssh -q "$HOST" bash -c "'ls analysis/data/results-*-$N.txt 2>/dev/null; ls -d analysis/stats/*$N* 2>/dev/null'" </dev/null || true)
+  FILES=$(ssh -q "$HOST" bash -c "'for f in analysis/data/results-*-$N.txt analysis/stats/*$N*; do [ ! -e \"\$f\" ] || printf \"%s\\n\" \"\$f\"; done; exit 0'" </dev/null) \
+    || { echo "fetch: could not list results for $N on $HOST" >&2; exit 1; }
   [ -n "$FILES" ] || { echo "fetch: no results for $N on $HOST" >&2; exit 1; }
-  for F in $FILES; do
-    scp -q -r "$HOST:$F" "$DEST/" && echo "fetched $DEST/$(basename "$F") ($(wc -l < "$DEST/$(basename "$F")" | tr -d ' ') lines)"
-  done
+  while IFS= read -r F; do
+    scp -q -r "$HOST:$F" "$DEST/"
+    LOCAL_FILE=$DEST/$(basename "$F")
+    if [ -f "$LOCAL_FILE" ]; then
+      echo "fetched $LOCAL_FILE ($(wc -l < "$LOCAL_FILE" | tr -d ' ') lines)"
+    else
+      echo "fetched $LOCAL_FILE (directory)"
+    fi
+  done <<< "$FILES"
 done

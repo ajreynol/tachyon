@@ -2,100 +2,75 @@
 
 *Find the diamond in the rough.*
 
-Tachyon exists to uncover cvc5 shortcomings worth a human's attention: a
-concrete performance problem or a research topic grounded in an observed
-limitation. Its work is to investigate candidates and make the promising ones
-clear, with reproducible evidence and an account of what remains unknown.
-A human may be inspired by that analysis to tackle a finding independently,
-at their discretion. That follow-up is outside this repository's discovery
-work; finding a diamond is a useful result whether or not anyone pursues it.
+Tachyon investigates cvc5 shortcomings worth a human's attention: concrete
+performance problems and research questions grounded in observed limitations.
+Its research projects keep their own questions, hypotheses, priorities and
+evidence. A human may independently pursue a finding; that follow-up is outside
+this repository's discovery work.
 
-The shared [`job_launcher/`](job_launcher/) runs reproducible experiments through
-a pinned checkout of [run-dev](https://github.com/ajreynol/run-dev). Each research
-project keeps its own question, hypotheses, priorities, and evidence. The
-launcher supplies measurements; the research explains what they reveal.
+Two shared tools support the investigations. [`job_launcher/`](job_launcher/)
+launches remote experiments through a separately installed
+[run-dev](https://github.com/ajreynol/run-dev) checkout and records launches.
+[`stats_profiler/`](stats_profiler/) reads local cvc5 statistics and produces
+offline HTML, CSV, JSON and optional vector PDF reports. Research lives under
+[`tools/`](tools/), with a charter and evidence in each project's directory.
 
-## On the name
+## Run it
 
-ταχύς — *swift*. A tachyon is the hypothetical particle that travels faster
-than light, and nothing has ever observed one. That is the right amount of
-ambition for a repository about speed, and the right amount of humility: the
-goal is stated as something that may not exist, and every claim made here has
-to be measured before it is believed.
-
-## `job_launcher/` — experiments, independent of any one machine
-
-[run-dev](https://github.com/ajreynol/run-dev) is a launcher for remote
-benchmark jobs: it validates a config, opens a tmux window on a benchmark host,
-runs one driver there, and logs the launch with the solver's branch and commit.
-Its tracked half is site-independent already — everything about a person's
-machines lives in two git-ignored files, `site.conf` on the control side and
-`run-dev.conf` on the host, and its own `checks` refuses personal data in
-anything tracked.
-
-What run-dev deliberately does **not** track is the other half: the job configs
-and the log, because there they carry one person's hosts and history. Here they
-are the experimental record, so here they are tracked. `job_launcher/` is that half for
-this repository:
-
-- [`job_launcher/configs/`](job_launcher/configs/) — the jobs, one file each, written against
-  names (`$QUANT_DIR`, `$CVC5_BIN`, `$Z3_BIN`) that `job_launcher/site.conf` resolves,
-  never against a path;
-- [`job_launcher/site.conf.example`](job_launcher/site.conf.example) — the one file with anything
-  personal in it, copied to `job_launcher/site.conf` (git-ignored) and edited once;
-- [`job_launcher/log.txt`](job_launcher/log.txt) — every launch, appended by `job_launcher/submit`;
-- [`job_launcher/submit`](job_launcher/submit), [`job_launcher/status`](job_launcher/status) — run-dev's commands,
-  pointed at this site file and these configs;
-- [`job_launcher/run-dev.lock`](job_launcher/run-dev.lock) — the run-dev commit this was written
-  against; the wrappers warn when the checkout differs;
-- [`job_launcher/checks`](job_launcher/checks) — the lint: scripts parse, configs resolve, and no
-  personal data is in anything that could be committed.
+The timing profiler requires Python 3.9+ and no third-party packages:
 
 ```bash
-cp job_launcher/site.conf.example job_launcher/site.conf      # once: host, paths, binaries
-job_launcher/checks                                  # nothing personal, everything parses
-job_launcher/submit -n quant-cvc5.conf               # dry run against the host
-job_launcher/submit    quant-cvc5.conf quant-z3.conf # launch, queued, logged
+python3 stats_profiler/profile.py /path/to/raw-stats.txt --output scratch/profile
+```
+
+Open `scratch/profile/index.html` in a browser. Use raw benchmark blocks from a
+stats job, not a `-processed` proof summary. The
+[profiler guide](docs/stats-profiler.md) covers timer selection, accounting,
+missing data, exports and a worked experiment.
+
+Remote jobs require Bash, SSH and run-dev, plus a configured execution host:
+
+```bash
+cp job_launcher/site.conf.example job_launcher/site.conf
+# Edit site.conf: run-dev checkout, host, benchmark paths and solver binaries.
+job_launcher/checks
+job_launcher/submit -n quant-cvc5.conf quant-z3.conf
+job_launcher/submit    quant-cvc5.conf quant-z3.conf
 job_launcher/status
 ```
 
-The details — where run-dev is found, what the wrappers add and do not add,
-how a config stays portable — are in [`job_launcher/README.md`](job_launcher/README.md).
+The [launcher guide](docs/job-launcher.md) explains installation, configuration,
+result retrieval and the advisory run-dev commit pin. Configs and the
+[launch log](job_launcher/log.txt) are tracked; personal settings and fetched
+raw results stay local.
 
-## `stats_profiler/` — timing coverage of a stats job
+## What the evidence supports
 
-[`stats_profiler/`](stats_profiler/) turns raw cvc5 `--stats-internal` job output
-into an interactive offline report: configurable timing categories, benchmark
-distributions, totals, and uncovered or over-counted time. It also exports CSV
-and JSON for further analysis, and vector PDF plots — a distribution per timer
-and a cumulative-time pie — for citing in a ledger entry. Requires only
-Python 3.9+.
+A measurement describes the recorded solver revisions, options, corpus and
+timeout. It is not a general cvc5 performance claim or an independent replication.
+Research ledgers distinguish observations from hypotheses and name the artifacts
+needed to recompute their numbers. Raw results and benchmark inputs may need to
+be retrieved from the execution host; this checkout alone cannot reproduce every
+measurement.
 
-```bash
-python3 stats_profiler/profile.py /path/to/stats-job.txt --output scratch/profile
-```
+Timer coverage is accounting against a selected total, not proof that timers
+form a disjoint or complete partition. Missing output cannot be reconstructed.
+The [regression tests](tests/) and [profiler tests](stats_profiler/tests/)
+exercise the local tools with synthetic inputs; they establish neither solver
+correctness nor the research conclusions.
 
-Its [worked example](stats_profiler/README.md#the-worked-example) runs the
-launcher's [`quant-cvc5-stats.conf`](job_launcher/configs/quant-cvc5-stats.conf)
-over `$QUANT_DIR` (`quant-07-25`) and profiles the result against the eight
-timers in [`quant-07-25.json`](stats_profiler/quant-07-25.json).
+## On the name
 
-## Conventions
+ταχύς — *swift*. A tachyon is a hypothetical particle that travels faster
+than light. The name fits a search for speed whose promising claims still need
+measurement.
 
-Borrowed from [dokimasia](https://github.com/ajreynol/dokimasia), which this
-repository is modelled on:
+## Common questions
 
-- **Nothing personal in tracked files.** Hosts, home directories, usernames,
-  binary names: all of it lives in `job_launcher/site.conf`, and `job_launcher/checks` refuses a
-  commit that contains any of it.
-- **Only measured claims.** A number in a document comes from a row in a ledger
-  with a config and a log entry beside it. A claim that cannot be measured yet
-  is a hypothesis, and is filed as one.
-- **A research project is an island.** It reads the launcher and its own
-  files. Deleting `tools/<name>/` leaves everything else as functional as it
-  was, which is what lets the launcher be reused for the next question.
-- **Written for a reader who was not here.** Every document says what was
-  checked and what was reasoned, and which is which.
+- **Where are the documents?** The [documentation index](docs/README.md) is the route to the guides and maintenance workflow.
+- **How do I maintain this tree or run CI locally?** Start at [maintenance](docs/maintenance.md).
+- **Where does a solver finding go?** Record its evidence in the research ledger; [maintenance](docs/maintenance.md#findings-and-discussion) describes human review and the reporting route.
+- **Who defines the shared repository rules?** Kanon keeps the [policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md); anoieu publishes its checker.
 
 ## How this repository is maintained
 
@@ -103,20 +78,8 @@ This repository is part of the **Eunoia ecosystem** and follows its shared
 repository policy, kept by [kanon](https://github.com/ajreynol/kanon) in
 [`docs/policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md).
 
-**Written by AI agents, under a human maintainer who owns the questions.** A
-person starts each research project, sets its scope, and owns any priorities
-recorded in their name. The agents write
-the documents, the register of directions, the job configs and the ledger
-entries, and keep a ranking of their own beside the maintainer's rather than
-mirroring it. Their analysis is intended to inspire independent human work on
-the shortcomings it uncovers. Choosing and pursuing that work is the person's
-discretion; discovery here does not wait for a finding to be taken up.
-
-**What that supervision leaves out.** Nobody reads every line before it is
-committed. Every number here comes from a single run on one benchmark host,
-recorded in the ledger with its config and its launch line so that a reader can
-recompute it from this checkout — which is reproducibility from the results, and
-not an independent measurement by a second party. The reasoning around a number,
-and the ranking of what to do next, are an agent's argument until the maintainer
-has said otherwise. Nothing leaves this repository by machine: a finding is
-carried to cvc5, or anywhere else, only by a person deciding to carry it.
+**Written by AI agents, under light human supervision.** A human directs the
+work, reads what is published and decides what is filed; nobody vets the
+internal design, and nothing reaches another project's issue tracker without
+review. The [maintenance guide](docs/maintenance.md) describes that supervision
+and its limits.

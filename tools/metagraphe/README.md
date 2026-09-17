@@ -1,7 +1,5 @@
 # metagraphe
 
-**Eunoia listing:** advertised
-
 *Which useful rewrites is cvc5 missing, especially for strings and bit-vectors?*
 
 A child research project for finding concrete gaps in cvc5's rewriting and
@@ -58,7 +56,7 @@ along the way are recorded separately for a human to consider reporting.
 Publishing findings, filing issues, and opening upstream pull requests are
 outside this project's discovery workflow.
 
-**Publishing stance.** No paper is planned at launch. Findings may motivate
+**Publishing stance.** No paper is planned. Findings may motivate
 independent human research; the project does not commit to developing it.
 
 ## What counts as a finding
@@ -95,7 +93,7 @@ its observed behavior. This project's analysis remains a research account.
 also traces it to an older sense of changing a text
 ([Dictionary of Standard Modern Greek](https://www.greek-language.gr/greekLang/modern_greek/tools/lexica/triantafyllides/search.html?dq=&lq=%CE%BC%CE%B5%CF%84%CE%B1%CE%B3%CF%81%CE%B1%CF%86%CE%AE)).
 Here the desired change is in an expression's form while preserving its
-meaning. **Metagraphe** is the working name chosen at launch.
+meaning. **Metagraphe** is the working name.
 
 ## Working here
 
@@ -105,15 +103,15 @@ experiments. Keep project code, cases, and results inside this directory as
 they become necessary. Nothing outside it imports or depends on it.
 
 The project inherits tachyon's [discovery purpose](../../README.md) and the
-measurement conventions of its shared [launcher](../../job_launcher/README.md).
+measurement conventions of its shared [launcher](../../docs/job-launcher.md).
 It inherits no rewrite findings or benchmark results. Remote benchmark jobs
 can use the shared launcher once a corpus and experiment are defined; local
 rewrite probes record their exact commands directly in the ledger.
 
 ## Status
 
-**Started 2026-09-16**, by explicit human instruction, with strings and
-bit-vectors as the main focus and an advertised Eunoia listing. The charter,
+**Authorized by the human maintainer**, with strings and
+bit-vectors as the main focus. The charter,
 search areas, initial queue, and evidence format are in place. No cvc5 baseline
 has been pinned for this project, no experiments have run, and no missing
 rewrite has been established. The first task is the baseline and a small probe

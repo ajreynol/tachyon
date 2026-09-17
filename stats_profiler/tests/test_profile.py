@@ -1,4 +1,6 @@
 import importlib.util
+import contextlib
+import io
 import json
 from pathlib import Path
 import tempfile
@@ -10,6 +12,20 @@ SPEC.loader.exec_module(profile)
 
 
 class ProfilerTests(unittest.TestCase):
+    def test_pdf_cli_rejects_bad_axis_before_writing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "stats.txt"
+            path.write_text("a.smt2\nglobal::totalTime = 1s\n")
+            output = Path(directory) / "report"
+            for limit in ["0", "-1", "101", "nan", "inf"]:
+                stderr = io.StringIO()
+                with self.subTest(limit=limit), contextlib.redirect_stderr(stderr):
+                    with self.assertRaises(SystemExit) as error:
+                        profile.main([str(path), "--pdf", "--max-share", limit, "--output", str(output)])
+                    self.assertEqual(error.exception.code, 2)
+                    self.assertIn("--max-share must be", stderr.getvalue())
+            self.assertFalse(output.exists())
+
     def parse(self, text):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "stats.txt"

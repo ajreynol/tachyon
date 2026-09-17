@@ -23,16 +23,25 @@ if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
   sed -n '2,16p' "$0"; echo; echo "---- run-dev's submit -h:"; exec "$RUN_DEV/submit" -h
 fi
 
-# Resolve bare config names.  The argument after -b/--build is a branch and is
-# never a config; anything else that names a file in job_launcher/configs/ is one.
-ARGS=(); PREV=""
+# Resolve missing bare config names only. Option values and window names are
+# passed through, even when they happen to name one of our bundled configs.
+ARGS=(); VALUE=0; WINDOWS=0
 for A in "$@"; do
-  if [ -f "$HERE/configs/$A" ] && [ "$PREV" != "-b" ] && [ "$PREV" != "--build" ]; then
+  if [ "$VALUE" = 1 ]; then
+    ARGS+=("$A"); VALUE=0
+  elif [ "$WINDOWS" = 1 ]; then
+    ARGS+=("$A")
+  elif [[ "$A" = -* ]]; then
+    ARGS+=("$A")
+    case "$A" in
+      -b|--build|-H|--host|-s|--session) VALUE=1 ;;
+      -k) WINDOWS=1 ;;
+    esac
+  elif [[ "$A" != */* ]] && [ ! -f "$A" ] && [ -f "$HERE/configs/$A" ]; then
     ARGS+=("$HERE/configs/$A")
   else
     ARGS+=("$A")
   fi
-  PREV=$A
 done
 
 RDLOG=$RUN_DEV/log.txt

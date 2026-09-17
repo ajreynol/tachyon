@@ -24,9 +24,9 @@ Entries:
 Full results and statistics files remain on the execution host and may be
 copied into [`data/`](data/) with `job_launcher/fetch` for local analysis, but
 they are ignored by Git. Each entry records the exact raw artifact name,
-command, solver revision, and aggregate result. Generated benchmark lists,
-including gap sets written by `gap --gapset`, also remain local; only small
-processed summaries are tracked. See the [data-retention
+command, solver revision, and aggregate result. The gap lists already tracked
+alongside these entries are retained evidence; newly generated lists are
+ignored by default. Small processed summaries are also tracked. See the [data-retention
 policy](data/README.md).
 
 ## An entry

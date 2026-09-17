@@ -1,7 +1,5 @@
 # heuresis
 
-**Eunoia listing:** advertised
-
 *Find the cvc5 shortcomings worth pursuing in the quantified benchmarks where
 z3 is much faster.*
 
@@ -28,9 +26,10 @@ lives in this directory.
 
 **What it has delivered, and who decides what comes next.** The set is named and
 fixed, the gap is measured ([2026-09-14](ledger/2026-09-14-baseline.md)), and the
-register of directions has been written from source. Nothing has been attributed
-yet; the next work is to establish which candidates expose a concrete cvc5
-shortcoming or a research question worth pursuing. The human maintainer steers
+register of directions is backed by whole-set statistics and option experiments.
+The [bounded eager-instantiation experiment](ledger/2026-09-16-bounded-eager-instantiation.md)
+identifies 29 otherwise-unsolved gap cases as a candidate finding; a complete
+per-benchmark attribution table is still absent. The human maintainer steers
 this search. Any independent work inspired by a finding is their choice, and
 discovery here can continue regardless.
 
@@ -44,12 +43,6 @@ project is at, and the discipline it most needs. The notes it starts from hold
 some thirty candidate causes for the gap, several with a branch already
 written, and the temptation is to start building. *Heuresis* is the work of
 finding out which of them are the cause, and it comes first.
-
-*The tempting alternative was* **τάχος**, *speed. It is the wrong word twice
-over: the repository already carries that hope in its own name, and a project
-named after its outcome has to explain on its first page why it has not
-produced one. The name should say what the work is, and the work is finding
-out.*
 
 ## The charter
 
@@ -96,7 +89,7 @@ knows, because the gap has never been decomposed.
 **The goals, in order.**
 
 0. **Fix the set and the two baselines.** Name the benchmarks; the cvc5
-   configuration under study (today, from the notes: `--user-pat=strict
+   configuration under study (from the 2026-09-14 notes: `--user-pat=strict
    --no-cbqi --sat-solver=cadical`); the z3 version; the timeout. Numbered
    zero because it produces nothing on its own and everything else is
    meaningless without it. A gap between two solvers on an unnamed set is an
@@ -181,13 +174,15 @@ Fixed with it, for goal 0:
 | | |
 | --- | --- |
 | timeout | 30 s per benchmark per solver, user time, on the host |
-| cvc5 configurations | default (`-q`), the quantifier control (`-q --no-cbqi --user-pat=strict`), and the best measured configuration on current `main@d7d03b082c`: that control plus explicit `--sat-solver=cadical --ee-mode=central --ieval=off` |
-| z3 | z3 4.15.4, **with all nine options current Verus passes it**: `auto_config=false smt.mbqi=false smt.case_split=3 smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.solver=2 smt.arith.nl=false pi.enabled=false rewriter.sort_disjunctions=false`. The benchmarks carry no options of their own |
+| cvc5 configurations | default (`-q`), the quantifier control (`-q --no-cbqi --user-pat=strict`), and the best measured configuration on `main@d7d03b082c` as of 2026-09-16: that control plus explicit `--sat-solver=cadical --ee-mode=central --ieval=off` |
+| z3 | z3 4.15.4, **with the nine Verus options checked on 2026-09-15**: `auto_config=false smt.mbqi=false smt.case_split=3 smt.qi.eager_threshold=100.0 smt.delay_units=true smt.arith.solver=2 smt.arith.nl=false pi.enabled=false rewriter.sort_disjunctions=false`. The benchmarks carry no options of their own |
 | gap set | unsolved by cvc5 and solved by z3, or both solved and cvc5 at least 10× slower with cvc5 taking at least 1 s |
 | aggregate | PAR2 ratio, cvc5 over z3, over the benchmarks both runs report |
 
-These are the defaults of [`gap`](gap), the one script that reads results in
-this project; a ledger entry that uses different ones says so.
+The gap factor, time floor and timeout are the defaults of [`gap`](gap), the
+script that reads results in this project. It compares the intersection of all
+supplied runs; solver options and versions come from the inputs, not the script.
+A ledger entry that uses different thresholds says so.
 
 ## How we would know it is working
 
@@ -234,7 +229,7 @@ records the finding as soon as the evidence supports it.
 | the register of hypotheses, with each one's branch or pull request | [`notes.md`](notes.md), a summary of performance notes dated 2026-09-14 |
 | the research directions, with risk/gain estimates, flags, branches, z3's mechanisms and papers | [`docs/directions.md`](docs/directions.md), written 2026-09-15 from cvc5 and z3 source, the fork's 847 remote branch refs, and the literature |
 | the configuration under study | [`notes.md`](notes.md#the-configuration-under-study) |
-| the one measured number, and the only one | [`h-25`](notes.md#f--preprocessing): 1.75× average, lazy `distinct`, 60 s |
+| the measured number inherited from the notes | [`h-25`](notes.md#f--preprocessing): 1.75× average, lazy `distinct`, 60 s |
 | what the notes say z3 has that cvc5 does not | [`notes.md`](notes.md#what-z3-has-according-to-the-notes) |
 | the shape — charter, goals in order, wishue, ledger, three endings | dokimasia's [`tools/`](https://github.com/ajreynol/dokimasia/tree/main/tools) |
 
@@ -242,6 +237,7 @@ records the finding as soon as the evidence supports it.
 
 [`docs/todo.md`](docs/todo.md) is the active top-ten queue;
 [`docs/directions.md`](docs/directions.md) is the registry it refers to.
+The [documentation index](docs/README.md) covers the notes, guides and evidence.
 
 ```bash
 cp job_launcher/site.conf.example job_launcher/site.conf       # once; QUANT_DIR is the set
@@ -254,23 +250,31 @@ job_launcher/status
 Results land on the host; a ledger entry ([`ledger/README.md`](ledger/README.md))
 records what was read from them and what it settled.
 
+For local comparisons, run `tools/heuresis/gap z3=REFERENCE cvc5=RESULTS` on
+complete result files. The parser accepts `.smt2` and `.smt2.gz` benchmark
+headers and refuses incomplete blocks, duplicate paths, and an empty shared
+cohort. It reports the intersection of all supplied runs. Positive factor and
+timeout values and a nonnegative floor must be finite; reference times below
+1 ms use 1 ms for the slowdown comparison. `--gapset FILE` rewrites that file
+with benchmark, reference seconds, and comparison seconds or unsolved status.
+Wrong-answer disagreements are flagged separately and excluded from the gap
+list. [Local tests](tests/) cover these boundaries without running a solver.
+
 ## Status
 
-**Started 2026-09-14**, by an explicit human instruction, which is the only way
-one of these begins. The set and original baseline are in the
-[2026-09-14 ledger](ledger/2026-09-14-baseline.md). Two caveats found the next
-day were both rerun: the complete current Verus z3 option list
-([ledger](ledger/2026-09-15-z3-full-verus-options.md)) and explicit CaDiCaL
-([ledger](ledger/2026-09-15-sat-and-instance-order.md)). The current two
-numbers are:
+**Authorized by the human maintainer.** The fixed set is recorded in the
+[baseline ledger](ledger/2026-09-14-baseline.md). Comparisons use the
+[nine-option Verus z3 baseline](ledger/2026-09-15-z3-full-verus-options.md)
+and [explicit CaDiCaL](ledger/2026-09-15-sat-and-instance-order.md).
+The latest recorded measurements are dated 2026-09-16:
 
 > **the gap** — PAR2 ratio **1.52** (cvc5 `--no-cbqi
 > --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off` over
-> z3 4.15.4 with all nine current Verus options, 30 s); gap set **796** of
+> z3 4.15.4 with the nine recorded Verus options, 30 s); gap set **796** of
 > 6124, comprising 461 cvc5-unsolved cases where z3 solves and 335 cases both
 > solve but cvc5 is at least 10× slower. This best measured configuration was
-> reproduced on current `main@d7d03b082c` and lowers PAR2 13.6% versus the
-> current-main fixed control ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)).
+> reproduced on `main@d7d03b082c` and lowers PAR2 13.6% versus the
+> same-revision fixed control ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)).
 > The z3 baseline itself has 310 unknowns, so the ratio is not all cvc5
 > progress.
 >

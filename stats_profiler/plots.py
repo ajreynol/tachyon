@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
-"""Vector PDF plots for a profile run; Python standard library only."""
+"""Vector PDF plots for a profile run; Python standard library only.
+
+Writes cdf-*.pdf, pie-total.pdf and plots.pdf under --output, rewritten whole.
+Never modifies the input summary, Markdown guides or recorded measurements.
+"""
 import argparse
+from bisect import bisect_left
 import json
 import math
 import re
@@ -8,9 +13,8 @@ import sys
 from pathlib import Path
 
 
-# Slots 1-8 of a categorical palette validated for colour-vision deficiency in
-# this fixed order.  A category keeps its slot in every plot, so colour follows
-# the timer and not its rank, and a ninth slot is never invented.  Uncovered
+# Slots 1-8 of a fixed categorical palette. A category keeps its slot in every
+# plot, so colour follows the timer and not its rank. Uncovered
 # time is not a category and wears muted ink rather than a series colour.
 SERIES = ("#2a78d6", "#eb6834", "#1baf7a", "#eda100",
           "#e87ba4", "#008300", "#4a3aa7", "#e34948")
@@ -141,9 +145,13 @@ def percentile(ordered, fraction):
 
 def survival(shares, samples=400):
     """Points (threshold, share of benchmarks at or above it), both in percent."""
-    ordered = sorted(shares, reverse=True)
+    ordered = sorted(shares)
     count = len(ordered)
-    points = [(0.0, 100.0)] + [(ordered[k] * 100, (k + 1) * 100 / count) for k in reversed(range(count))]
+    if not count:
+        return []
+    points = [(min(0.0, ordered[0] * 100), 100.0)]
+    points += [(value * 100, (count - k) * 100 / count)
+               for k, value in enumerate(ordered) if k == 0 or value != ordered[k - 1]]
     if len(points) <= samples:
         return points
     stride = math.ceil(len(points) / samples)
@@ -183,36 +191,45 @@ def place(box, x_max, x, y):
     return x0 + (x1 - x0) * x / x_max, y0 + (y1 - y0) * y / 100
 
 
-def cdf_page(name, color, shares, x_max, aggregate, note, marks=True):
+def cdf_page(name, color, shares, x_max, aggregate, note, marks=True, total_name="global::totalTime"):
     """One timer's survival curve: the share of runs at or above a share of total time."""
     ordered = sorted(shares)
-    canvas = frame(name, "Share of global::totalTime per benchmark. A point (x, y) reads: "
+    canvas = frame(name, f"Share of {total_name} per benchmark. A point (x, y) reads: "
                    f"for y% of the {len(shares):,} benchmarks, this timer was at least x% of total time.", note)
-    box = axes(canvas, WIDE - RIGHT, x_max, "This timer as a share of global::totalTime (%)",
+    box = axes(canvas, WIDE - RIGHT, x_max, f"This timer as a share of {total_name} (%)",
                "Benchmarks at or above (%)")
-    if aggregate is not None and aggregate * 100 <= x_max:
+    if aggregate is not None and 0 <= aggregate * 100 <= x_max:
         x, _ = place(box, x_max, aggregate * 100, 0)
         canvas.line([(x, box[2]), (x, box[3])], AXIS)
-        canvas.text(x + 4, box[3] - 9, f"cumulative {aggregate * 100:.1f}%", 7.5, MUTED)
+        label = f"cumulative {aggregate * 100:.1f}%"
+        left = x - measure(label, 7.5) - 4 >= box[0]
+        canvas.text(x - 4 if left else x + 4, box[3] - 12, label, 7.5, MUTED,
+                    anchor="end" if left else "start")
     canvas.clip(box[0], box[2], box[1] - box[0], box[3] - box[2])
     canvas.line([place(box, x_max, x, y) for x, y in survival(shares)], color, 2)
     canvas.restore()
+    markers = {}
     for fraction, label in ((0.5, "median"), (0.9, "p90")) if marks else ():
-        value = percentile(ordered, fraction) * 100
-        if value > x_max:
+        quantile = percentile(ordered, fraction)
+        markers.setdefault(quantile, []).append(label)
+    for quantile, labels in markers.items():
+        value = quantile * 100
+        if not 0 <= value <= x_max:
             continue
-        x, y = place(box, x_max, value, 100 - fraction * 100)
+        at_or_above = (len(ordered) - bisect_left(ordered, quantile)) * 100 / len(ordered)
+        x, y = place(box, x_max, value, at_or_above)
         canvas.dot(x, y, 4, color)
-        canvas.text(min(x + 11, box[1] - 74), y - 3, f"{label} {value:.2f}%", 8, SECOND)
+        label = f"{' / '.join(labels)} {value:.2f}%"
+        canvas.text(min(x + 11, box[1] - measure(label, 8)), min(y - 3, box[3] - 12), label, 8, SECOND)
     return canvas
 
 
-def overlay_page(names, shares, x_max, note):
+def overlay_page(names, shares, x_max, note, total_name="global::totalTime"):
     """Every timer on one axis, so the distributions can be compared directly."""
     legend = WIDE - RIGHT - max(measure(name, 8) for name in names) - 16
-    canvas = frame("All timers", "Share of global::totalTime per benchmark. A point (x, y) reads: "
+    canvas = frame("All timers", f"Share of {total_name} per benchmark. A point (x, y) reads: "
                    f"for y% of the {len(shares[0]):,} benchmarks, that timer was at least x% of total time.", note)
-    box = axes(canvas, legend - 20, x_max, "The timer as a share of global::totalTime (%)",
+    box = axes(canvas, legend - 20, x_max, f"The timer as a share of {total_name} (%)",
                "Benchmarks at or above (%)")
     canvas.clip(box[0], box[2], box[1] - box[0], box[3] - box[2])
     for index, column in enumerate(shares):
@@ -226,21 +243,23 @@ def overlay_page(names, shares, x_max, note):
     return canvas
 
 
-def pie_page(names, seconds, misc, total, note):
+def pie_page(names, seconds, misc, total, note, total_name="global::totalTime"):
     """Cumulative time over every included run, with uncovered time as its own slice."""
     slices = [(name, value, SERIES[index]) for index, (name, value) in enumerate(zip(names, seconds))]
-    slices.append(("misc (global::totalTime not in a timer above)", misc, MISC))
+    slices.append((f"misc ({total_name} not in a timer above)", misc, MISC))
     over = misc < 0
+    negative = any(value < 0 for value in seconds)
     whole = sum(value for _, value, _ in slices) if not over else sum(seconds)
     canvas = frame("Cumulative time by timer",
-                   f"Total global::totalTime over all included runs, {total:,.0f} s. "
-                   + ("Timers over-count the total, so there is no misc slice; the excess is noted below."
+                   f"Total {total_name} over all included runs, {total:,.0f} s. "
+                   + ("Negative category totals: no pie is drawn; signed values remain in the table." if negative else
+                      "Timers over-count the total, so there is no misc slice; the excess is noted below."
                       if over else f"Misc is the {misc / total * 100:.1f}% of total time no timer above accounts for."),
                    note)
     x, y, radius = 190, 200, 128
     angle = math.pi / 2
     for name, value, color in slices:
-        if value <= 0 or whole <= 0:
+        if negative or value <= 0 or whole <= 0:
             continue
         end = angle - 2 * math.pi * value / whole
         canvas.wedge(x, y, radius, angle, end, color)
@@ -263,7 +282,7 @@ def pie_page(names, seconds, misc, total, note):
         canvas.text(WIDE - RIGHT, y, f"{value / total * 100:.1f}%", 8.5, SECOND, anchor="end")
     y = TALL - TOP - 28 - len(slices) * 19
     canvas.line([(table, y + 13), (WIDE - RIGHT, y + 13)], AXIS)
-    canvas.text(table + 14, y, "global::totalTime", 8.5, INK, bold=True)
+    canvas.text(table + 14, y, total_name, 8.5, INK, bold=True)
     canvas.text(WIDE - RIGHT - 62, y, f"{total:,.1f}", 8.5, INK, anchor="end")
     canvas.text(WIDE - RIGHT, y, "100.0%", 8.5, INK, anchor="end")
     return canvas
@@ -271,32 +290,40 @@ def pie_page(names, seconds, misc, total, note):
 
 def write_plots(output, rows, summary, config, source, x_max=100.0):
     """One CDF page per category, a combined CDF, the pie, and all of them in one file."""
+    if not 0 < x_max <= 100:
+        raise ValueError("--max-share must be in (0, 100].")
     names = [category["name"] for category in config["categories"]]
+    total_name = config["total"]
+    if not names:
+        raise ValueError("No categories to plot.")
     if len(names) > len(SERIES):
         raise ValueError(f"plots support at most {len(SERIES)} categories, the palette's slots; "
                          "combine categories rather than repeating a colour.")
     included = [row for row in rows if not row["excluded"]]
     if not included:
-        raise ValueError("No included runs to plot; every run had a missing or zero total.")
+        raise ValueError("No included runs to plot; check totals and the missing-category policy.")
     total = summary["total_seconds"]
     shares = [[row["values"][index] / row["total"] for row in included] for index in range(len(names))]
     seconds = [sum(row["values"][index] for row in included) for index in range(len(names))]
     beyond = sum(value * 100 > x_max for column in shares for value in column)
+    below = sum(value < 0 for column in shares for value in column)
     note = (f"{source} | {summary['included']:,} of {summary['runs']:,} runs included; "
-            f"{summary['excluded']:,} excluded for a missing or zero total"
+            f"{summary['excluded']:,} excluded by totals or missing-category policy"
             + (f" | {beyond:,} per-benchmark shares exceed the {x_max:g}% axis and are clipped" if beyond else "")
+            + (f" | {below:,} negative per-benchmark shares are clipped" if below else "")
             + (f" | {len(config['warnings']):,} warnings" if config.get("warnings") else ""))
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     pages, written = [], []
     for index, name in enumerate(names):
-        page = cdf_page(name, SERIES[index], shares[index], x_max, seconds[index] / total if total else None, note)
+        page = cdf_page(name, SERIES[index], shares[index], x_max, seconds[index] / total if total else None, note,
+                        total_name=total_name)
         slug = re.sub(r"[^A-Za-z0-9]+", "-", name).strip("-")
         written.append(write_pdf(output / f"cdf-{index + 1}-{slug}.pdf", [page]))
         pages.append(page)
-    pages.append(overlay_page(names, shares, x_max, note))
+    pages.append(overlay_page(names, shares, x_max, note, total_name))
     written.append(write_pdf(output / "cdf-all.pdf", [pages[-1]]))
-    pages.append(pie_page(names, seconds, total - sum(seconds), total, note))
+    pages.append(pie_page(names, seconds, total - sum(seconds), total, note, total_name))
     written.append(write_pdf(output / "pie-total.pdf", [pages[-1]]))
     written.append(write_pdf(output / "plots.pdf", pages))
     return written

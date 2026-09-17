@@ -29,7 +29,7 @@ PUBLIC_NONRECORD=$(echo "$PUBLIC" | grep -vE "$RECORDS")
 
 # ---- 1. every script parses -------------------------------------------------
 BAD=0
-for f in job_launcher/submit job_launcher/status job_launcher/checks job_launcher/common.sh job_launcher/site.conf.example job_launcher/configs/*.conf; do
+for f in job_launcher/submit job_launcher/status job_launcher/fetch job_launcher/checks job_launcher/common.sh job_launcher/site.conf.example job_launcher/configs/*.conf; do
   bash -n "$f" 2>/dev/null || { err "bash -n fails: $f"; BAD=1; }
 done
 [ $BAD = 0 ] && note "all scripts and configs parse"
@@ -46,12 +46,17 @@ addpat "$(git config user.email 2>/dev/null | cut -d@ -f1)"
 # cites its author's papers by name.  Usernames, home directories and the
 # email's local part are machine identity and stay patterns.
 if [ -f job_launcher/site.conf ]; then
+  # The shipped placeholders (including cvc5) are public defaults, not identity.
+  TEMPLATE_PATTERNS=$( source job_launcher/site.conf.example
+                       printf '%s\n' "$DEFAULT_HOST" "$REPO_BINARY" "${REPO##*/}" )
   DEFAULT_HOST=""; REPO=""; REPO_BINARY=""; CVC5_BIN=""; Z3_BIN=""
   # shellcheck disable=SC1091
   source job_launcher/site.conf 2>/dev/null || true
   # Host, repo and binary names are personal; the benchmark set's name is not
   # (the research project has to be able to say which set it is about).
-  addpat "$DEFAULT_HOST"; addpat "$REPO_BINARY"; addpat "$(basename "${REPO:-}")"
+  for P in "$DEFAULT_HOST" "$REPO_BINARY" "${REPO##*/}"; do
+    if ! grep -Fx -- "$P" <<< "$TEMPLATE_PATTERNS" >/dev/null; then addpat "$P"; fi
+  done
   # CVC5_BIN / Z3_BIN are versions or build names, not personal; not patterns.
 fi
 BAD=0
@@ -59,7 +64,8 @@ for P in $PATS; do
   HITS=""
   while IFS= read -r f; do
     [ -f "$f" ] || continue
-    sed -E 's#https?://[^ )>]+##g' "$f" | grep -qiw -- "$P" && HITS="$HITS $f"
+    # Read the whole stream: grep -q can SIGPIPE sed under pipefail, hiding a hit.
+    sed -E 's#https?://[^ )>]+##g' "$f" | grep -iwF -- "$P" >/dev/null && HITS="$HITS $f"
   done <<< "$PUBLIC_NONRECORD"
   [ -z "$HITS" ] || { err "personal pattern '$P' appears in:$HITS"; BAD=1; }
 done
