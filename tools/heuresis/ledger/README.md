@@ -20,6 +20,9 @@ Entries:
 - [`2026-09-16-conflict-instantiation.md`](2026-09-16-conflict-instantiation.md)
 - [`2026-09-16-rebased-equality-and-evaluator-branches.md`](2026-09-16-rebased-equality-and-evaluator-branches.md)
 - [`2026-09-16-bounded-eager-instantiation.md`](2026-09-16-bounded-eager-instantiation.md)
+- [`2026-09-16-eager-counters-and-timeout-sensitivity.md`](2026-09-16-eager-counters-and-timeout-sensitivity.md)
+- [`2026-09-17-central-ieval-segfault.md`](2026-09-17-central-ieval-segfault.md)
+- [`2026-09-17-self-contained-launcher-and-current-main.md`](2026-09-17-self-contained-launcher-and-current-main.md)
 
 Full results and statistics files remain on the execution host and may be
 copied into [`data/`](data/) with `job_launcher/fetch` for local analysis, but
@@ -31,7 +34,7 @@ policy](data/README.md).
 
 ## An entry
 
-`ledger/YYYY-MM-DD-<name>.md`, where `<name>` is the run-dev job NAME (or
+`ledger/YYYY-MM-DD-<name>.md`, where `<name>` is the launcher job NAME (or
 the two NAMEs of an A/B, joined by `-vs-`). Each entry carries, in this order:
 
 1. **What was asked.** The goal or the row of `notes.md` this run serves.

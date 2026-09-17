@@ -19,10 +19,14 @@ claim about cvc5 that a row in the ledger does not back: a hypothesis is a
 hypothesis until it has been run against the set, however good the branch
 looks.
 
-**An independent child project.** Heuresis keeps its own notes and ledger and
-uses the shared [`job_launcher/`](../../job_launcher/) for experiments. Nothing
-else here depends on it. It is advertised in Eunoia listings, and the work
-lives in this directory.
+**An independent child project, with one named exception.** Heuresis keeps its
+own notes and ledger and uses the shared [`job_launcher/`](../../job_launcher/)
+for experiments. No code outside this directory imports it, nothing outside runs
+it, and deleting `tools/heuresis/` would leave the launcher and the profiler
+exactly as they are. In one respect it is **not an island**: tachyon's front page
+names and advertises it, which is a link inward that a reader meets before this
+page. That is the parent's choice — it is advertised in Eunoia listings — and it
+is written down here so that it is a named exception rather than drift.
 
 **What it has delivered, and who decides what comes next.** The set is named and
 fixed, the gap is measured ([2026-09-14](ledger/2026-09-14-baseline.md)), and the
@@ -225,7 +229,7 @@ records the finding as soon as the evidence supports it.
 
 | inherited | where it was established |
 | --- | --- |
-| the launcher: configs, site file, results format, host conventions | [`job_launcher/`](../../job_launcher/), and [run-dev](https://github.com/ajreynol/run-dev) |
+| the launcher: configs, site file, results format, host conventions | [`job_launcher/`](../../job_launcher/) |
 | the register of hypotheses, with each one's branch or pull request | [`notes.md`](notes.md), a summary of performance notes dated 2026-09-14 |
 | the research directions, with risk/gain estimates, flags, branches, z3's mechanisms and papers | [`docs/directions.md`](docs/directions.md), written 2026-09-15 from cvc5 and z3 source, the fork's 847 remote branch refs, and the literature |
 | the configuration under study | [`notes.md`](notes.md#the-configuration-under-study) |
@@ -235,7 +239,12 @@ records the finding as soon as the evidence supports it.
 
 ## Using it
 
-[`docs/todo.md`](docs/todo.md) is the active top-ten queue;
+[`docs/progress.md`](docs/progress.md) is the measuring stick: a history of
+cvc5 `main` revisions on this set, the z3 targets they are measured against,
+and the record of what this project has actually landed upstream. Read it
+first — it is what everything else is trying to move, and it doubles as a
+monitor for upstream changes that make these benchmarks worse.
+[`docs/todo.md`](docs/todo.md) is the active short-term queue and top ten;
 [`docs/directions.md`](docs/directions.md) is the registry it refers to.
 The [documentation index](docs/README.md) covers the notes, guides and evidence.
 
@@ -297,7 +306,7 @@ mechanism, papers, and an argued risk/gain estimate. The evidence-sensitive AI
 ranking and the separate human-maintainer ranking are in
 [`docs/todo.md`](docs/todo.md).
 
-There are three endings and a person picks: it graduates into its own
-repository, it is folded into cvc5's own performance work, or it is retired in
-place with a note saying what the attribution found. Going quiet is not one of
-them.
+There are three endings and the human maintainer picks: it graduates into its
+own repository, it is folded into cvc5's own performance work, or it is retired
+in place with a note saying what the attribution found. That decision is open,
+and it is theirs. Going quiet is not one of them.

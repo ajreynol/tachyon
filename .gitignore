@@ -1,5 +1,7 @@
 # machine/user-specific settings: copy job_launcher/site.conf.example -> job_launcher/site.conf
 job_launcher/site.conf
+# derived baseline and build/run configurations
+job_launcher/configs/.gen/
 # source documents summarised into tools/*/notes.md are not tracked
 *.docx
 .DS_Store

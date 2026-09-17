@@ -1,0 +1,48 @@
+#!/bin/bash
+# deploy -- install this repository's host scripts on the benchmark host.
+#   job_launcher/deploy [-n] [-H HOST]
+#   Copies job_launcher/host/* to HOST:~/bin/heuresis/ and makes them
+#   executable.  heuresis.conf is created from heuresis.conf.example on the
+#   first deploy and is NEVER overwritten afterwards: it is host-local, like
+#   site.conf is machine-local.  Nothing outside ~/bin/heuresis is touched.
+set -euo pipefail
+HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=common.sh
+source "$HERE/common.sh"
+
+DRY=0; H=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--dry-run) DRY=1 ;;
+    -H|--host) H=$2; shift ;;
+    -h|--help) sed -n '2,8p' "$0"; exit 0 ;;
+    *) echo "deploy: unknown argument $1" >&2; exit 2 ;;
+  esac
+  shift
+done
+HOST=${H:-$DEFAULT_HOST}
+[ -n "$HOST" ] || { echo "deploy: no host (set DEFAULT_HOST in $SITE or pass -H)" >&2; exit 2; }
+DEST='~/bin/heuresis'
+
+FILES=(benchmark_binary solve_dir_rec_par_cvc5 solve_dir_rec_par_z3 \
+       stats_dir_rec_par_cvc5 cvc5_solve.sh z3_solve.sh)
+for f in "${FILES[@]}"; do
+  [ -f "$HERE/host/$f" ] || { echo "deploy: missing job_launcher/host/$f" >&2; exit 2; }
+done
+
+echo "deploy: $HOST:$DEST"
+for f in "${FILES[@]}"; do echo "  $f"; done
+echo "  heuresis.conf (from heuresis.conf.example, only if absent)"
+if [ $DRY = 1 ]; then echo "dry run: nothing copied"; exit 0; fi
+
+ssh -q "$HOST" "mkdir -p $DEST"
+scp -q "${FILES[@]/#/$HERE/host/}" "$HOST:$DEST/"
+scp -q "$HERE/host/heuresis.conf.example" "$HOST:$DEST/"
+ssh -q "$HOST" "chmod +x $DEST/benchmark_binary $DEST/solve_dir_rec_par_* $DEST/stats_dir_rec_par_* $DEST/*.sh
+  if [ ! -f $DEST/heuresis.conf ]; then
+    cp $DEST/heuresis.conf.example $DEST/heuresis.conf
+    echo 'deploy: created $DEST/heuresis.conf from the template -- EDIT IT (JOBS at least)'
+  else
+    echo 'deploy: kept the existing $DEST/heuresis.conf'
+  fi"
+echo "deploy: done"

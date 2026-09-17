@@ -1,0 +1,6 @@
+#!/bin/bash
+
+timeout=$1
+shift
+
+/usr/bin/time -f "%U %M" timeout $timeout $@ 2>&1

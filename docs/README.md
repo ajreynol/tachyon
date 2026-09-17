@@ -6,7 +6,7 @@ shared tools and how to maintain them. Each research project under
 
 | document | purpose |
 | --- | --- |
-| [job-launcher.md](job-launcher.md) | Configure experiments, launch jobs, retrieve results and check the run-dev pin. |
+| [job-launcher.md](job-launcher.md) | Configure experiments, deploy host scripts, launch jobs and retrieve results. |
 | [stats-profiler.md](stats-profiler.md) | Interpret statistics, configure timers and export offline reports and PDFs. |
 | [maintenance.md](maintenance.md) | Maintain this tree, run CI checks and review findings and correspondence. |
 | [discussion.md](discussion.md) | Live correspondence drafted here for a person to carry. |

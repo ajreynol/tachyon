@@ -6,6 +6,10 @@ Google Doc of cvc5 performance notes, its structured
 [`notes.md`](../notes.md) summary, and the subsequent source audit in
 [`directions.md`](directions.md).
 
+**The measuring stick is [`progress.md`](progress.md).** Every goal and rank
+below is justified by whether it eventually moves a number there. A direction
+that cannot be traced to that table is not a priority, however interesting.
+
 **Purpose of the queue.** Find cvc5 shortcomings and research questions worth
 a human's attention. The next steps gather enough evidence to expose a useful
 finding. Once one emerges, record it with its research direction and ledger
@@ -22,21 +26,24 @@ of concrete things in flight or next, each with the condition that closes it.
 A goal here is closed by a ledger entry or a pushed counter, not by a judgement.
 It is the AI agent's own queue; it does not override either ranking.
 
-**Updated.** 2026-09-16, after S1 closed. Bounded eager instantiation is a
-net loss on this set but rescues 29 gap cases nothing else reaches
-([evidence](../ledger/2026-09-16-bounded-eager-instantiation.md)); S2 and the
-new S6/S7 follow from that split result, and S5 is promoted because the run
-turned R9's premise into measurement.
+**Updated.** 2026-09-16, after S2, S6 and S7 closed
+([evidence](../ledger/2026-09-16-eager-counters-and-timeout-sensitivity.md)).
+S7 cut the rescue count from 29 to 12 — most of the original number was the
+30 s cutoff — and S2 found the mechanism: a 0.77% match rate, with 12% of
+active benchmarks carrying 95% of the eager time. S6 has a candidate
+predicate. S8 is new and is the first design proposal this queue has carried.
 
 | # | short-term goal | blocked on | closed when |
 | ---: | --- | --- | --- |
-| ✅ S1 | Read out the three eager-instantiation arms against the combined control | — | **Closed 2026-09-16.** [`2026-09-16-bounded-eager-instantiation.md`](../ledger/2026-09-16-bounded-eager-instantiation.md): module-off is main to within 2 solves and 0 benchmarks ≥2× either way; `--eager-inst` costs 19.46% PAR2, `--eager-inst-rlv` 10.88%; together they rescue 29 of the 461 control-unsolved gap cases, only 5 shared. |
-| S2 | Capture the eager module's counters (`d_statPairs`, `d_statMatches`, `d_statInst`, `d_statRematch`, `d_procTime`, `d_addInstTime`) on **both** eager arms, not just a winner | nothing — the branch is built and the arms are known | the counters are read for the 29 rescues and for the 125 benchmarks `--eager-inst` makes ≥2× slower, so the loss and the rescues have a mechanism rather than a total |
-| S5 | Count persistent instance clauses and how often one is used in a conflict | nothing; a counter patch | both counters are measured on the gap set. **Promoted:** S1 measured the drowning — 13.7% less time on solved, 109 more timeouts — so R9's premise is now evidence, not folklore |
-| S6 | Find whether a cheap static predicate separates the 29 rescued benchmarks from the 125 that `--eager-inst` makes ≥2× slower | S2 | either a predicate is identified and stated, or it is recorded that the obvious syntactic ones do not separate the two sets |
-| S7 | Confirm the 29 rescues are not boundary artefacts | nothing | the two eager arms are rerun at a longer timeout and the rescued set is reported as reproduced, shrunk or gone |
-| S3 | Make the mainline new-versus-rediscovered instantiation count a registered statistic | the updated [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) being pushed; the public ref is still `9f3e4ae6a1`, 398 behind / 29 ahead | `--stats` reports unique versus total instantiations on current main, so R2's question can be asked outside the eager module |
-| S4 | Count the shared-equality propagations that central mode and `ai-eecNoShare` skip, and the callback time they cost | nothing; a fresh counter patch, no branch to rebase | the skipped-propagation count and callback time are measured on the gap set, so R15's 10.3% PAR2 signal has a mechanism attached to it |
+| ✅ S1 | Read out the three eager-instantiation arms against the combined control | — | **Closed 2026-09-16.** [`bounded-eager-instantiation`](../ledger/2026-09-16-bounded-eager-instantiation.md): module-off is main to within 2 solves; `--eager-inst` costs 19.46% PAR2, `--eager-inst-rlv` 10.88%. Its 29-rescue figure was later corrected to 12 by S7. |
+| ✅ S2 | Capture the eager module's counters on both arms | — | **Closed 2026-09-16.** 5.7 billion (term, trigger) pairs for 4.0 million instantiations — a **0.77% match rate**; relevancy deferral cuts pairs 30% and lifts the rate to 1.03%. `numTermsRematched` is structurally zero under `--eager-inst-merge=false`, so **R2 gained nothing**. |
+| ✅ S6 | Find whether a cheap predicate separates the rescues from the slowdowns | — | **Closed 2026-09-16.** Cumulative pairs processed separates them: no hard rescue exceeds 376,456 pairs, 52% of slowdowns do, and 590 of 4803 active benchmarks carry 95% of eager time. In-sample only — see S8. |
+| ✅ S7 | Confirm the rescues are not boundary artefacts | — | **Closed 2026-09-16.** They largely were: 17 of 29 are solved by the control at 120 s (median 37.0 s). **12 survive**, all solved by `--eager-inst` against a 4× control; on 7 the control returns `unknown`, not `timeout`. |
+| **S8** | Add a cumulative eager pair budget, after which the module stands down and lazy instantiation proceeds, and test it | nothing — a bounded patch to `eager_inst.cpp` on a branch that is 0 behind main | the option exists and is run on the set, so the in-sample 500,000 cap becomes a measured result or is refuted. This is the first design proposal the queue has carried, and it is untested |
+| S5 | Count persistent instance clauses and how often one is used in a conflict | nothing; a counter patch | both counters are measured on the gap set. S1 measured the drowning, so R9's premise is evidence |
+| S9 | Characterise the 12 surviving rescues beyond their source family | S8 | it is known whether the 7 `unknown` answers share a structural cause, and whether the 12 are one phenomenon or several |
+| S3 | Make the mainline new-versus-rediscovered instantiation count a registered statistic | the updated [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) being pushed; the public ref is still `9f3e4ae6a1` | `--stats` reports unique versus total instantiations on current main. **Now the only path to R2**, since S2 could not supply it |
+| S4 | Count the shared-equality propagations that central mode and `ai-eecNoShare` skip, and the callback time they cost | nothing; a fresh counter patch | the skipped-propagation count and callback time are measured on the gap set |
 
 ## AI-agent priorities
 
@@ -106,7 +113,8 @@ maintainer supplies it.
 **Concrete request to the maintainer:** please push the updated
 [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats).
 The public ref is still `9f3e4ae6a1`, unchanged from the previous audit, so
-the update is not yet visible to dev1 and short-term goal S3 stays blocked.
+the update is not yet visible to the execution host, and short-term goal S3
+stays blocked.
 The previous request is closed: the rebased
 [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
 tip was pushed, and it has since built and passed `make regress`. The fork's

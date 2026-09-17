@@ -1,12 +1,11 @@
 # site.conf.example -- copy to job_launcher/site.conf and edit.  Everything machine- and
 # user-specific for this repository's experiments lives in that one file,
-# which is git-ignored.  It is sourced by run-dev's submit (as SUBMIT_SITE)
-# and by job_launcher/common.sh, so it has the same shape as run-dev's site.conf plus
+# which is git-ignored.  It is sourced by the launcher's submit (as SUBMIT_SITE)
+# and by job_launcher/common.sh.  It holds
 # the names the tracked configs in job_launcher/configs/ resolve against.
-
-# ---- where run-dev is (the environment variable RUN_DEV overrides this;
-#      default when unset: ../run-dev next to this repository)
-RUN_DEV=~/run-dev
+#
+# There is no launcher checkout to point at: submit, status, deploy and the
+# host scripts are all part of this repository.
 
 # ---- how to reach the benchmark host (a config may override HOST / SESSION)
 DEFAULT_HOST=myhost           # ssh alias of the benchmark machine

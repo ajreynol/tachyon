@@ -18,18 +18,11 @@ class LauncherTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.launcher = self.root / "job_launcher"
         shutil.copytree(ROOT / "job_launcher", self.launcher, ignore=shutil.ignore_patterns("site.conf"))
-        self.run_dev = self.root / "run-dev"
-        self.run_dev.mkdir()
-        self.env = dict(os.environ, RUN_DEV=str(self.run_dev),
-                        TACHYON_SITE=str(self.launcher / "site.conf"),
-                        CAPTURE=str(self.root / "args.json"))
-        (self.launcher / "site.conf").write_text("DEFAULT_HOST=example-host\n")
-        self.script(self.run_dev / "submit", """#!/usr/bin/env python3
-import json, os, sys
-from pathlib import Path
-Path(os.environ['CAPTURE']).write_text(json.dumps(sys.argv[1:]))
-""")
-        self.script(self.run_dev / "status", "#!/bin/bash\nexit 0\n")
+        self.env = dict(os.environ, TACHYON_SITE=str(self.launcher / "site.conf"),
+                        CAPTURE=str(self.root / "ssh.jsonl"), TMPDIR=str(self.root))
+        self.env.pop("SUBMIT_SITE", None)
+        (self.launcher / "site.conf").write_text(
+            (self.launcher / "site.conf.example").read_text() + "\nDEFAULT_HOST=example-host\n")
         self.bin = self.root / "bin"
         self.bin.mkdir()
         self.env["PATH"] = str(self.bin) + os.pathsep + os.environ["PATH"]
@@ -44,28 +37,84 @@ Path(os.environ['CAPTURE']).write_text(json.dumps(sys.argv[1:]))
         return subprocess.run([str(self.launcher / command), *args], cwd=self.root,
                               env=self.env, capture_output=True, text=True)
 
-    def submit(self, *args):
-        result = self.command("submit", *args)
-        self.assertEqual(result.returncode, 0, result.stderr)
-        return json.loads((self.root / "args.json").read_text())
+    def mock_submit_host(self):
+        self.script(self.bin / "ssh", """#!/usr/bin/env python3
+import json, os, sys
+from pathlib import Path
+with Path(os.environ['CAPTURE']).open('a') as stream:
+    stream.write(json.dumps(sys.argv[1:]) + '\\n')
+if 'WCMD=' in sys.argv[-1]:
+    print('SCM: git abcdef on branch test')
+    sys.exit(0)
+print(os.environ.get('SSH_OUTPUT', ''))
+sys.exit(int(os.environ.get('SSH_EXIT', '0')))
+""")
+
+    def ssh_calls(self):
+        return [json.loads(line) for line in (self.root / "ssh.jsonl").read_text().splitlines()]
 
     def test_config_resolution_preserves_local_files_and_option_values(self):
+        self.mock_submit_host()
         name = "quant-cvc5.conf"
-        bundled = str(self.launcher / "configs" / name)
-        self.assertEqual(self.submit("-n", name), ["-n", bundled])
-        for flag in ["-b", "--build", "-H", "--host", "-s", "--session", "-k"]:
-            self.assertEqual(self.submit(flag, name), [flag, name])
-        self.assertEqual(self.submit("-k", name, "quant-z3.conf"), ["-k", name, "quant-z3.conf"])
-        (self.root / name).write_text("# caller's config\n")
-        self.assertEqual(self.submit(name), [name])
+        result = self.command("submit", "-n", name)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("solve_dir_rec_par_cvc5", result.stdout)
+        for flag in ["-b", "--build"]:
+            result = self.command("submit", "-n", flag, name)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn(f"cmd: [blocking] build {name}", result.stdout)
+        result = self.command("submit", "-k", name, "quant-z3.conf")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.ssh_calls()[-1][-2:], [name, "quant-z3.conf"])
+        (self.root / name).write_text("COMMENT='local config'\nNAME=local-job\nDIR=$QUANT_DIR\nCMD='printf local-marker'\n")
+        result = self.command("submit", "-n", name)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("cmd: printf local-marker", result.stdout)
+        self.assertNotIn("cmd: solve_dir_rec_par_cvc5", result.stdout)
 
-    def test_submit_keeps_log_and_failure_after_partial_launch(self):
-        self.script(self.run_dev / "submit", "#!/bin/bash\nprintf 'launched\n' >> \"${RUN_DEV}/log.txt\"\nexit 7\n")
-        (self.run_dev / "log.txt").write_text("prior launch\n")
+    def test_submit_logs_successful_launch_and_not_failed_launch(self):
+        self.mock_submit_host()
         before = (self.launcher / "log.txt").read_text()
+        result = self.command("submit", "-n", "quant-cvc5.conf")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.launcher / "log.txt").read_text(), before)
+        self.env["SSH_EXIT"] = "7"
         result = self.command("submit", "quant-cvc5.conf")
         self.assertEqual(result.returncode, 7)
-        self.assertEqual((self.launcher / "log.txt").read_text(), before + "launched\n")
+        self.assertEqual((self.launcher / "log.txt").read_text(), before)
+        self.env["SSH_EXIT"] = "0"
+        result = self.command("submit", "quant-cvc5.conf")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        log = (self.launcher / "log.txt").read_text()
+        self.assertTrue(log.startswith(before))
+        self.assertIn("SCM", self.ssh_calls()[0][-1])
+        self.assertIn("# cvc5: git abcdef on branch test", log[len(before):])
+        self.assertIn("(quant-cvc5.conf)", log[len(before):])
+
+    def test_blocking_failure_records_the_remote_exit_status(self):
+        self.mock_submit_host()
+        self.env.update(SSH_EXIT="7", SSH_OUTPUT="[submit] build failed")
+        before = (self.launcher / "log.txt").read_text()
+        result = self.command("submit", "-b", "test-branch")
+        self.assertEqual(result.returncode, 1, result.stderr)
+        log = (self.launcher / "log.txt").read_text()
+        self.assertTrue(log.startswith(before))
+        self.assertIn("# result: FAILED (exit 7,", log[len(before):])
+
+    def test_custom_site_is_shared_by_submit_status_deploy_and_fetch(self):
+        self.mock_submit_host()
+        custom = self.root / "custom-site.conf"
+        (self.launcher / "site.conf").rename(custom)
+        self.env["TACHYON_SITE"] = str(custom)
+        self.assertEqual(self.command("submit", "-n", "quant-cvc5.conf").returncode, 0)
+        self.assertEqual(self.command("status", "-H", "alternate-host", "-s", "2").returncode, 0)
+        self.assertEqual(self.ssh_calls()[-1], ["-q", "alternate-host", "bash", "-s", "2"])
+        result = self.command("deploy", "-n")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("example-host:", result.stdout)
+        result = self.command("fetch", "job")
+        self.assertIn("no results", result.stderr)
+        self.assertEqual(self.ssh_calls()[-1][1], "example-host")
 
     def test_fetch_usage_does_not_need_site_or_checkout(self):
         (self.launcher / "site.conf").unlink()

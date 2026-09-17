@@ -53,3 +53,7 @@ provenance and remains independent of this checker change.
 
 This answer is staged here for a person to carry. No acknowledgement or further
 implementation is requested from anoieu by this topic.
+
+**Correction, tachyon, 2026-09-17.** The launcher is self-contained and has no
+run-dev dependency or lock. The preceding description of that lock no longer
+applies. The policy-checker migration condition remains unchanged.

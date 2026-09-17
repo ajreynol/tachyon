@@ -1,7 +1,7 @@
-# job_launcher/log.txt -- every launch made through job_launcher/submit, in run-dev's own format:
+# job_launcher/log.txt -- every launch made through job_launcher/submit, in the launcher's format:
 # one entry per job (date, host, working directory, name, the command, the
 # binary's branch@commit, and for blocking builds/regressions the verdict).
-# Appended by job_launcher/submit, which copies what run-dev's submit wrote to its own
+# Appended by job_launcher/submit, which copies what the launcher's submit wrote to its own
 # log during the call.  Tracked on purpose: it is the experimental record that
 # tools/heuresis/ledger/ cites.  Do not edit entries by hand.
 # 2026-09-14 16:45 [dev1:~/benchmarks/quant-07-25] (quant-z3.conf)
@@ -213,4 +213,51 @@ solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-ins
 # heuresis R1/R28: claude-eagerInst eager instantiation with relevancy deferral
 solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-rlv -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
 # built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 16:38 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-stats.conf)
+# heuresis R1/R28 (S2): eager-instantiation counters at branch defaults
+stats_dir_rec_par_cvc5 -t 30 ajr-cvc5 quant-091626-u-ssc-eager-inst-stats -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 16:46 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-rlv-stats.conf)
+# heuresis R1/R28 (S2): eager-instantiation counters with relevancy deferral
+stats_dir_rec_par_cvc5 -t 30 ajr-cvc5 quant-091626-u-ssc-eager-inst-rlv-stats -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 16:53 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-off-t120.conf)
+# heuresis R1/R28 (S7): eager arm 'off' at a 120 s timeout
+solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-off-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 17:11 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-t120.conf)
+# heuresis R1/R28 (S7): eager arm 'inst' at a 120 s timeout
+solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 17:33 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-rlv-t120.conf)
+# heuresis R1/R28 (S7): eager arm 'inst-rlv' at a 120 s timeout
+solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-rlv-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-17 10:01 [dev1:~/cvc5-ajr] (build master)
+# build master
+[blocking] build master
+# built from master@95050cf815
+# result: success (1m08s)
+
+# 2026-09-17 10:59 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current.conf)
+# heuresis: current-main fixed quantifier/CaDiCaL control
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-current -q --no-cbqi --user-pat=strict --sat-solver=cadical
+# ajr-cvc5: git 67954d09dc on branch master
+
+# 2026-09-17 11:07 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current-ee-central-ieval-off.conf)
+# heuresis R7/R15: current-main central equality and evaluator-off comparator
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-current-ee-central-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# ajr-cvc5: git 67954d09dc on branch master
+
+# 2026-09-17 11:14 [dev1:~/cvc5-ajr] (build master)
+# build master
+[blocking] build master
+# built from master@95050cf815
+# result: success (2s)
 

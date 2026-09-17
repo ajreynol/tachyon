@@ -10,6 +10,8 @@ versions behave identically.
 | [notes.md](../notes.md) | The source notes' hypothesis register, with inherited claims distinguished from measurements here. |
 | [directions.md](directions.md) | Research directions, source audits and the evidence supporting each candidate. |
 | [todo.md](todo.md) | Active experiments and separate agent and human priority rankings. |
+| [progress.md](progress.md) | Current investigation progress and outstanding work. |
+| [discussion.md](discussion.md) | The project's recorded questions and discussion boundaries. |
 | [ledger/README.md](../ledger/README.md) | Evidence conventions and the experiment list. |
 | [data/README.md](../ledger/data/README.md) | Retained evidence, local raw data and how to recover artifacts. |
 | [2026-09-14-baseline.md](../ledger/2026-09-14-baseline.md) | Fixed corpus and initial solver comparison. |
@@ -24,3 +26,6 @@ versions behave identically.
 | [2026-09-16-conflict-instantiation.md](../ledger/2026-09-16-conflict-instantiation.md) | Conflict-instantiation cost and measured effects. |
 | [2026-09-16-rebased-equality-and-evaluator-branches.md](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) | Repeated controls and two experimental branches. |
 | [2026-09-16-bounded-eager-instantiation.md](../ledger/2026-09-16-bounded-eager-instantiation.md) | Eager-instantiation losses and rescued gap cases. |
+| [2026-09-16-eager-counters-and-timeout-sensitivity.md](../ledger/2026-09-16-eager-counters-and-timeout-sensitivity.md) | Eager-module counters and longer-timeout comparisons. |
+| [2026-09-17-central-ieval-segfault.md](../ledger/2026-09-17-central-ieval-segfault.md) | Recorded central-equality and evaluator crash evidence. |
+| [2026-09-17-self-contained-launcher-and-current-main.md](../ledger/2026-09-17-self-contained-launcher-and-current-main.md) | Host deployment and current-main experiment provenance. |

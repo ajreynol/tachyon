@@ -1,0 +1,56 @@
+#!/bin/bash
+# Host layout comes from ~/bin/heuresis/heuresis.conf (template:
+# heuresis.conf.example, deployed by job_launcher/deploy); no fallbacks for JOBS.
+CONF=$HOME/bin/heuresis/heuresis.conf
+[ -f "$CONF" ] || { echo "$(basename "$0"): missing $CONF (run job_launcher/deploy)" >&2; exit 2; }
+. "$CONF"
+need() { for v in "$@"; do [ -n "${!v:-}" ] || { echo "$(basename "$0"): $v not set in $CONF" >&2; exit 2; }; done; }
+need JOBS
+# usage [-t N]? [-s]? [binary] [benchmark variant] [test name] [solver options]*
+
+TIMEOUT=24
+if [ X$1 = X'-t' ]; then
+  TIMEOUT=$2
+  shift
+  shift
+fi
+BINARY=$1
+shift
+SCRIPT=$1
+shift
+TEST=$1
+shift
+
+echo "==============================================="
+echo "Run with binary $BINARY, options $@, timeout $TIMEOUT, save ~/analysis/data/results-$SCRIPT-$TEST.txt"
+# debug scm
+$BINARY --show-config | grep scm
+echo "==============================================="
+
+
+command -v "$SCRIPT" >/dev/null || { echo "$(basename "$0"): no wrapper $SCRIPT on PATH" >&2; exit 2; }
+echo "Save binary ~/bin/$BINARY as ~/analysis/binaries/$BINARY-$TEST"
+strip ~/bin/$BINARY
+cp ~/bin/$BINARY ~/analysis/binaries/$BINARY-$TEST
+# The wrapper gets everything as arguments, so a run is fully described by its
+# command line.  The proof arguments are passed only when the conf sets them;
+# the shipped wrappers ignore them either way.
+WRAP="$SCRIPT -b $HOME/analysis/binaries/$BINARY-$TEST"
+[ -n "${CVC5_SRC:-}" ] && WRAP="$WRAP -s $CVC5_SRC/proofs/eo/cpc/Cpc.eo"
+[ -n "${ETHOS:-}" ]    && WRAP="$WRAP -e $ETHOS"
+[ -n "${LOGOS:-}" ]    && WRAP="$WRAP -l $LOGOS"
+echo "Per-benchmark command: $WRAP BENCH $@"
+
+
+find -name "*.smt2" > tmp.txt
+
+echo -n "Num benchmarks: "
+cat tmp.txt | wc -l
+
+parallel \
+  --bar \
+  -a tmp.txt \
+  -j$JOBS \
+  "echo {}; benchmark_binary $TIMEOUT $WRAP {} $@" > ~/analysis/data/results-$SCRIPT-$TEST.txt
+
+rm tmp.txt

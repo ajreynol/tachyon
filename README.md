@@ -1,6 +1,7 @@
 # tachyon
 
-*Find the diamond in the rough.*
+**Find the opportunities to improve cvc5's performance, and back each one with
+evidence a reader can recompute.**
 
 Tachyon investigates cvc5 shortcomings worth a human's attention: concrete
 performance problems and research questions grounded in observed limitations.
@@ -9,11 +10,22 @@ evidence. A human may independently pursue a finding; that follow-up is outside
 this repository's discovery work.
 
 Two shared tools support the investigations. [`job_launcher/`](job_launcher/)
-launches remote experiments through a separately installed
-[run-dev](https://github.com/ajreynol/run-dev) checkout and records launches.
+validates and launches remote experiments using the host scripts in this
+repository, and records launches.
 [`stats_profiler/`](stats_profiler/) reads local cvc5 statistics and produces
 offline HTML, CSV, JSON and optional vector PDF reports. Research lives under
 [`tools/`](tools/), with a charter and evidence in each project's directory.
+
+## Research projects
+
+| project | question |
+| --- | --- |
+| [heuresis](tools/heuresis/README.md) | What do quantified benchmarks where z3 is much faster reveal about cvc5? |
+| [metagraphe](tools/metagraphe/README.md) | Which useful string and bit-vector rewrites is cvc5 missing? |
+
+Each project owns its charter, priorities and evidence. Its README records the
+current findings and links to its investigation; the shared tools supply the
+measurements.
 
 ## Run it
 
@@ -28,11 +40,14 @@ stats job, not a `-processed` proof summary. The
 [profiler guide](docs/stats-profiler.md) covers timer selection, accounting,
 missing data, exports and a worked experiment.
 
-Remote jobs require Bash, SSH and run-dev, plus a configured execution host:
+Remote jobs require Bash, SSH and a configured execution host; the launcher
+and host scripts are included here:
 
 ```bash
 cp job_launcher/site.conf.example job_launcher/site.conf
-# Edit site.conf: run-dev checkout, host, benchmark paths and solver binaries.
+# Edit site.conf: host, benchmark paths and solver binaries.
+job_launcher/deploy
+# Configure ~/bin/heuresis/heuresis.conf on the host (JOBS at least).
 job_launcher/checks
 job_launcher/submit -n quant-cvc5.conf quant-z3.conf
 job_launcher/submit    quant-cvc5.conf quant-z3.conf
@@ -40,7 +55,7 @@ job_launcher/status
 ```
 
 The [launcher guide](docs/job-launcher.md) explains installation, configuration,
-result retrieval and the advisory run-dev commit pin. Configs and the
+host deployment and result retrieval. Configs and the
 [launch log](job_launcher/log.txt) are tracked; personal settings and fetched
 raw results stay local.
 

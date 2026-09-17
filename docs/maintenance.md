@@ -6,8 +6,8 @@ Start with the [front page](../README.md), kanon's
 charter and active queue of the research project you are working on. The
 [documentation index](README.md) leads to the shared tool guides.
 
-Tachyon owns its launcher wrappers, timing profiler, and research records.
-Solver implementations and run-dev are maintained elsewhere. Keep experiments
+Tachyon owns its launcher, host scripts, timing profiler, and research records.
+Solver implementations are maintained elsewhere. Keep experiments
 inside their research directory, personal settings in ignored `site.conf`,
 and transient output under ignored `scratch/`. A person sets research scope
 and owns the priorities recorded in their name; an agent's ranking is separate.
@@ -25,7 +25,8 @@ python3 scripts/check.py
 This is the local definition of the `checks / tooling` CI job:
 
 1. Run `job_launcher/checks` to parse launcher scripts and configs, resolve
-   configs against the template, and scan public files for local identity.
+   configs against the template, check host-script syntax and executability,
+   and scan public files for local identity.
    The launch log and research ledgers are exempt from that identity scan.
 2. Run unittest discovery in `tests/` and `stats_profiler/tests/`, and in each
    existing `tools/*/tests/` directory. Launcher tests use local stand-ins;

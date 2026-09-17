@@ -100,7 +100,17 @@ meaning. **Metagraphe** is the working name.
 The [documentation index](docs/README.md) leads to the search register and
 initial work queue. The [ledger](ledger/README.md) records source audits and
 experiments. Keep project code, cases, and results inside this directory as
-they become necessary. Nothing outside it imports or depends on it.
+they become necessary. Nothing outside it imports or runs it, and deleting
+`tools/metagraphe/` would leave the rest of the repository as functional as it
+was.
+
+**One named exception.** In one respect this project is **not an island**:
+tachyon's front page names and advertises it, which is a link inward that a
+reader meets before this page. That is the parent's choice, recorded here so it
+is a named exception rather than drift. What has been delivered so far is the
+charter, the search areas, and the evidence format — no baseline and no
+findings. The promotion decision is therefore open, and it is the human
+maintainer's.
 
 The project inherits tachyon's [discovery purpose](../../README.md) and the
 measurement conventions of its shared [launcher](../../docs/job-launcher.md).
@@ -117,5 +127,6 @@ has been pinned for this project, no experiments have run, and no missing
 rewrite has been established. The first task is the baseline and a small probe
 from each primary theory.
 
-The human maintainer decides whether the project eventually graduates, folds
-into the parent's work, or retires in place with an account of what was learned.
+The human maintainer decides whether the project eventually graduates into its
+own repository, folds into the parent's work, or retires in place with an
+account of what was learned. That decision is open, and it is theirs.
