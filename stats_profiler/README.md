@@ -120,6 +120,42 @@ residual and not a category. That ordering is why the plotter refuses more than
 eight categories instead of inventing a ninth colour — combine categories, or
 plot a subset.
 
+## Which benchmarks to look at
+
+[`top.py`](top.py) turns the same `summary.json` into `top-benchmarks.md`: for
+each timer, the ten benchmarks most worth opening.
+
+```bash
+python3 stats_profiler/top.py scratch/profile-quant-07-25/summary.json \
+  --results  scratch/results/results-cvc5_solve.sh-quant-<MMDDYY>-u-ss.txt \
+  --baseline scratch/results/results-z3_solve.sh-quant-<MMDDYY>-z3-4.15.4.txt
+```
+
+The rank key is `share_t(b) x totalTime(b)` — the fraction of a run's
+`global::totalTime` spent in timer `t`, times how long that run took. That
+product **is** the timer's own seconds, which is the point: a large share of a
+trivial benchmark and a long run that barely touches the timer both rank low,
+and only a benchmark that is *both* long and dominated by the timer ranks high.
+
+Being slower than z3 enters as a **filter, not a third factor**. A benchmark is
+listed only if it is in the loss set — unsolved where z3 solved, or at least
+`--factor` (10) times slower having spent at least `--floor` (1) seconds, which
+is [`gap`](../tools/heuresis/gap)'s gap-set rule, not a new threshold. Weighting
+by the ratio instead would swamp the other two: z3 at 0.01 s against a cvc5
+timeout is 3000x, so the list would fill with benchmarks that are quick for cvc5
+and quicker still for z3. Each row still prints its ratio, so the degree of the
+loss stays visible even though it does not order the list.
+
+Both results files are required together, and the run's is needed as well as the
+baseline's because the share and the ratio are **different measurements**: the
+share comes from cvc5's internal `global::totalTime` in the statistics run, the
+ratio from the wrapper's user seconds in the solve runs. They are never mixed
+inside one ratio. The statistics run and the solve runs are also separate
+executions of the same configuration, so loss-set membership is measured on a
+different execution than the timer values it filters; the log says so. Without
+the two files the log still ranks by `share x total` and states that the
+comparison was not applied.
+
 ## Choosing a partition
 
 [`default.json`](default.json) is a starting hypothesis: process assertions,
