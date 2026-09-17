@@ -21,10 +21,14 @@ claim about cvc5 that a row in the ledger does not back: a hypothesis is a
 hypothesis until it has been run against the set, however good the branch
 looks.
 
-**An independent child project.** Heuresis keeps its own notes and ledger and
-uses the shared [`job_launcher/`](../../job_launcher/) for experiments. Nothing
-else here depends on it. It is advertised in Eunoia listings, and the work
-lives in this directory.
+**An independent child project, with one named exception.** Heuresis keeps its
+own notes and ledger and uses the shared [`job_launcher/`](../../job_launcher/)
+for experiments. No code outside this directory imports it, nothing outside runs
+it, and deleting `tools/heuresis/` would leave the launcher and the profiler
+exactly as they are. In one respect it is **not an island**: tachyon's front page
+names and advertises it, which is a link inward that a reader meets before this
+page. That is the parent's choice — it is advertised in Eunoia listings — and it
+is written down here so that it is a named exception rather than drift.
 
 **What it has delivered, and who decides what comes next.** The set is named and
 fixed, the gap is measured ([2026-09-14](ledger/2026-09-14-baseline.md)), and the
@@ -298,7 +302,7 @@ mechanism, papers, and an argued risk/gain estimate. The evidence-sensitive AI
 ranking and the separate human-maintainer ranking are in
 [`docs/todo.md`](docs/todo.md).
 
-There are three endings and a person picks: it graduates into its own
-repository, it is folded into cvc5's own performance work, or it is retired in
-place with a note saying what the attribution found. Going quiet is not one of
-them.
+There are three endings and the human maintainer picks: it graduates into its
+own repository, it is folded into cvc5's own performance work, or it is retired
+in place with a note saying what the attribution found. That decision is open,
+and it is theirs. Going quiet is not one of them.
