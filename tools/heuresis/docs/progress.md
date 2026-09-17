@@ -96,23 +96,28 @@ One row per cvc5 `main` revision, per configuration. Newest last.
 | 2026-09-16 | `d7d03b082c` | verus | 5546 | 573 | 41207.7 | 1.76 | — | +0.37% | [rebased-branches](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) |
 | 2026-09-16 | `d7d03b082c` | **best** | 5623 | 474 | **35600.5** | **1.52** | 796 | −0.05% | [rebased-branches](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) |
 | 2026-09-16 | `95050cf8155d` | **best** | 5624 | 473 | **35557.3** | **1.52** | 789 | −0.12% | [bounded-eager](../ledger/2026-09-16-bounded-eager-instantiation.md) † |
+| 2026-09-17 | `67954d09dc` | verus | 5548 | 571 | 41142.2 | 1.76 | 1073 | −0.16% | [self-contained](../ledger/2026-09-17-self-contained-launcher-and-current-main.md) |
+| 2026-09-17 | `67954d09dc` | **best** | 5626 | 471 | **35532.7** | **1.52** | **784** | −0.07% | [self-contained](../ledger/2026-09-17-self-contained-launcher-and-current-main.md) |
 
 † measured on `claude-eagerInst@995b23bcfa` with its module off, which is 0
 behind `95050cf8155d`. Compared against the `best` row at `d7d03b082c` it
 differs by 2 solves, 0.12% PAR2, and **zero** benchmarks ≥2× faster or slower
 in either direction — so the branch's non-module changes and the one commit
-main advanced are, together, inside the noise band. It stands in for a main
-build; the next row should use main directly rather than a proxy.
+main advanced are, together, inside the noise band. It stood in for a main
+build, and the direct `67954d09dc` measurement below has since confirmed it:
+35532.7 against the proxy's 35557.3, a 0.07% difference. No further proxy rows
+should be needed.
 
 Δ PAR2 is against the previous row for that configuration; lower is better.
 
 ### What the history says so far
 
-**cvc5 main has not moved this number.** Between `5cc03f4b9` and
-`95050cf8155d` — 79 commits of upstream development — `verus` went from
-41056.3 to 41207.7 and `best` from 35619.5 to 35557.3. Both are inside the
-noise band below. Nothing upstream in that window helped these benchmarks, and
-nothing hurt them either.
+**cvc5 main has not moved this number.** Across four revisions from
+`5cc03f4b9` to `67954d09dc`, four `verus` measurements span 0.37%
+(41056.3–41207.7) and four `best` measurements span 0.24%
+(35532.7–35619.5). Every one is inside the noise band below. Nothing upstream
+in that window helped these benchmarks, and nothing hurt them either — which is
+the monitor doing its job, reporting no change rather than nothing.
 
 **Every gain so far is configuration, not code.** default → verus is −23%,
 verus → best is −13%, and both come from passing options that already exist.
@@ -131,8 +136,13 @@ So, as a working rule: **a PAR2 change under about 0.5% is noise.** A change
 that matters here is a percent or more. Two solves either way is noise; the
 gap-set count drifts ±7 between identical configurations.
 
-This rule is calibrated on two pairs. It should be re-derived when there are
-more, and it does not license reading a 0.6% change as real without a repeat.
+The four-measurement spreads above — 0.37% for `verus`, 0.24% for `best`,
+across revisions *and* across a rewrite of the launcher — are consistent with
+this and do not widen it.
+
+The rule is calibrated on repeats of unchanged configurations, not on a
+controlled noise study, and it does not license reading a 0.6% change as real
+without a repeat.
 
 ## Adding a row
 

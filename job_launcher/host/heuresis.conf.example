@@ -1,0 +1,17 @@
+# heuresis.conf -- host-local layout for the ~/bin/heuresis scripts.
+# Deployed to ~/bin/heuresis/heuresis.conf by job_launcher/deploy, which
+# creates it from this template on first deploy and never overwrites it after.
+# Sourced by the drivers; there are no fallbacks for JOBS.
+
+# How many benchmarks to run in parallel.  The drivers pass this to `parallel -j`.
+JOBS=56
+
+# The upstream remote name in the cvc5 checkout (e.g. cvcm for github.com/cvc5/cvc5), used when fast-forwarding the
+# baseline branch.  Only needed if you submit with BRANCH= or -b.
+UPSTREAM=cvcm
+
+# Optional: only used to pass proof-checking arguments to the cvc5 wrapper,
+# which currently ignores them.  Leave unset unless a wrapper starts using them.
+#CVC5_SRC=~/cvc5-src
+#ETHOS=$CVC5_SRC/deps/bin/ethos
+#LOGOS=$CVC5_SRC/deps/bin/logos

@@ -1,0 +1,47 @@
+#!/bin/bash
+# Host layout comes from ~/bin/heuresis/heuresis.conf (template:
+# heuresis.conf.example, deployed by job_launcher/deploy); no fallbacks for JOBS.
+CONF=$HOME/bin/heuresis/heuresis.conf
+[ -f "$CONF" ] || { echo "$(basename "$0"): missing $CONF (run job_launcher/deploy)" >&2; exit 2; }
+. "$CONF"
+need() { for v in "$@"; do [ -n "${!v:-}" ] || { echo "$(basename "$0"): $v not set in $CONF" >&2; exit 2; }; done; }
+need JOBS
+# usage [-t N]? [binary] [test] [options]
+
+TIMEOUT=24
+
+echo "==============================================="
+echo "STATS"
+echo "==============================================="
+if [ X$1 = X'-t' ]; then
+  TIMEOUT=$2
+  shift
+  shift
+fi
+BINARY=$1
+shift
+TEST=$1
+shift
+echo "Get statistics with binary $BINARY options $@, timeout $TIMEOUT, save ~/analysis/stats/stats-$BINARY-$TEST.txt"
+# debug scm
+$BINARY --show-config | grep scm
+echo "==============================================="
+
+find -name "*.smt2" > tmp.txt
+
+echo -n "Num benchmarks: "
+cat tmp.txt | wc -l
+
+parallel \
+  --bar \
+  -a tmp.txt \
+  -j$JOBS \
+  "echo {}; benchmark_binary $TIMEOUT $BINARY {} $@ --stats-internal" > ~/analysis/stats/stats-$BINARY-$TEST.txt
+
+# Optional post-processing.  getproofstats is a proof-oriented summariser that
+# is not part of this repository; when it is absent the raw statistics file is
+# the whole output, which is what the ledger reads.
+if command -v getproofstats >/dev/null; then
+  getproofstats ~/analysis/stats/stats-$BINARY-$TEST.txt >& ~/analysis/stats/stats-$BINARY-$TEST-processed.txt
+  cat ~/analysis/stats/stats-$BINARY-$TEST-processed.txt
+fi

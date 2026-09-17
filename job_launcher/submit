@@ -1,48 +1,474 @@
 #!/bin/bash
-# submit -- this repository's front end to the launcher's submit.
-#   job_launcher/submit [launcher flags] CONFIG...       CONFIG resolves against job_launcher/configs/
-#   job_launcher/submit -n CONFIG...                     dry run (the launcher's -n)
-#   job_launcher/submit -b BRANCH [-r | -x CONFIG]       build / regress (the launcher's, unchanged)
-#   job_launcher/submit -k NAME...                       close a finished tmux window
+# submit -- launch this repository's benchmark jobs on the remote host.
 #
-#   Everything is the launcher's submit -- flags, config variables, checks, refusals,
-#   see `job_launcher/submit -h` -- with exactly four things added:
-#     * the site file is job_launcher/site.conf (passed as SUBMIT_SITE), never the launcher's;
-#     * a bare CONFIG name is looked up in job_launcher/configs/ first;
-#     * the log entries the launcher appends to its own log.txt during this call are
-#       copied to job_launcher/log.txt, which is the tracked record;
-#     * a warning if the checkout is not at the commit in launcher.lock.
-#   Anything the launcher writes for itself (configs/.gen/ for --baseline and -x,
-#   its own log.txt) it still writes there.
+# This script is part of job_launcher/ and depends on nothing outside this
+# repository.  The host side it drives is job_launcher/host/, installed to
+# ~/bin/heuresis by job_launcher/deploy.
+#
+# submit [-n] [-f] [-v] [--baseline] CONFIG...
+# submit [-n] [-f] [-v] -b BRANCH [-r | -x CONFIG]
+# submit [-n] [-f] [-v] -r
+# submit [-f] -k NAME...
+#   Launch the jobs described by the CONFIGs (shell-variable files, see
+#   job_launcher/configs/) on the remote host, and record each in log.txt.
+#   With several CONFIGs the jobs are QUEUED: all are validated and checked
+#   first (if anything fails, nothing launches), then they run back-to-back
+#   in ONE tmux window, in the order given.  All queued jobs must target the
+#   same HOST and SESSION and have distinct NAMEs.
+#   -b and -r take no config and are BLOCKING: they run over ssh in the
+#   foreground (no tmux), print progress markers, and end with an explicit
+#   success/FAILED verdict (also recorded in log.txt; full output in a local
+#   log file whose path is printed).
+#     -b BRANCH  check out, fast-forward, build and verify BRANCH of REPO on
+#                the remote (via BUILDDIR/run_install.sh; see BRANCH below)
+#     -x CONFIG  combine a build with an execution: build BRANCH (-b), then run
+#                CONFIG as a normal tmux job on it.  The config MUST come via -x
+#                (a positional config with -b is refused); the derived file is
+#                written to configs/.gen/ like --baseline.
+#     -r         run `make regress` in BUILDDIR, with the same -j core count
+#                that run_install.sh uses; with -b, runs after the build
+#     --baseline  derive a baseline run: append BRANCH=<BASELINE_BRANCH, default
+#                 master>, BINARY=REPO_BINARY and TAG=...-baseline to each CONFIG
+#                 (written out as configs/.gen/<name>-baseline.conf so the exact
+#                 configuration is inspectable), then submit that file normally.
+#                 With -n the generated file is printed.
+#
+# Up-to-date checks (detection only; submit never merges or pushes):
+#   * a BASELINE_BRANCH build first fast-forwards it from UPSTREAM/main
+#     (git pull --ff-only; UPSTREAM from the host's heuresis.conf), so a
+#     baseline run is always against current upstream main;
+#   * any other BRANCH must already contain BASELINE_BRANCH -- otherwise the
+#     checks report BEHIND and refuse (-f overrides).
+#     -k NAME...  close the named tmux window(s) on the host -- the cleanup for
+#                 a STALE refusal.  Finished job windows stay open on purpose
+#                 (they end in a shell for post-mortem); -k is how they go away.
+#                 Refuses to close a window actively running something (-f overrides).
+#     -n   dry run: show what would be done (and run remote sanity checks), do nothing
+#     -v   verbose: full log-style output (timestamps, comments, every check line);
+#          the default is a compact summary.  All commands report durations.
+#     -f   proceed even if the output file already exists on the remote, or
+#          another job is already running there
+#
+# Config variables:
+#   COMMENT  why this run exists (required; goes into the log)
+#   TAG      short free-form tag for this run, e.g. frf, u-ssc, 2 (optional)
+#   NAME     explicit test name; normally DERIVED (via the tables in site.conf) as
+#              <set prefix>[-<bench tag>]-<MMDDYY>[-<TAG>][-<script tag>]
+#            e.g. smtlib-pflnb-082826-p-ethos, quant-082826-u-ssc
+#   HOST     ssh host (default: DEFAULT_HOST from site.conf)
+#   DIR      remote working directory -- the drivers benchmark the cwd (required)
+#   DRIVER   one of: solve_dir_rec_par_cvc5_logic solve_dir_rec_par_cvc5
+#            solve_dir_rec_par_z3 stats_dir_rec_par_cvc5
+#   TIMEOUT  per-benchmark timeout in seconds
+#   BENCH    mkbench_* script            (solve_dir_rec_par_cvc5_logic only)
+#   BINARY   solver binary in remote ~/bin
+#   SCRIPT   wrapper script (cvc5_solve.sh, cvc5_ethos.sh, ...)
+#   OPTS     solver options
+#   SESSION  remote tmux session to open the window in (default: DEFAULT_SESSION from site.conf)
+#   BRANCH   optional: before running, check out this branch of REPO on the
+#            remote, fast-forward it from origin, rebuild via
+#            BUILDDIR/run_install.sh, and verify that `REPO_BINARY --show-config`
+#            reports exactly that branch and commit (REPO, BUILDDIR, REPO_BINARY
+#            come from site.conf).  Requires BINARY=REPO_BINARY and a clean tree.
+#   CMD      escape hatch: full command to run in DIR, overriding the above
+#
+# Deliberately NOT supported: adding a job while one is already running
+# (the BUSY check refuses; queueing behind a live job is more state than this
+# script should own).
 set -euo pipefail
-HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-# shellcheck source=common.sh
-source "$HERE/common.sh"
 
-if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
-  sed -n '2,16p' "$0"; echo; echo "---- the launcher's submit -h:"; exec "$LAUNCHER_DIR/submit" -h
+
+HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+LOG=$HERE/log.txt
+
+# Site-specific settings (hosts, repo/build paths, naming tables) live in ONE
+# place: site.conf next to this script (or $SUBMIT_SITE).  See site.conf.example.
+SITE=${SUBMIT_SITE:-$HERE/site.conf}
+[ -f "$SITE" ] || { echo "submit: no site file $SITE (copy job_launcher/site.conf.example to job_launcher/site.conf and edit)" >&2; exit 2; }
+DEFAULT_HOST=""; DEFAULT_SESSION=""; REPO=""; BUILDDIR=""; REPO_BINARY=""; BASELINE_BRANCH=""
+# shellcheck disable=SC1090
+source "$SITE"
+for v in DEFAULT_HOST DEFAULT_SESSION; do [ -n "${!v}" ] || { echo "submit: $v not set in $SITE" >&2; exit 2; }; done
+for f in set_prefix bench_tag script_tag; do type "$f" >/dev/null 2>&1 || { echo "submit: function $f not defined in $SITE" >&2; exit 2; }; done
+BB=${BASELINE_BRANCH:-master}
+DRY=0; FORCE=0; V=0; BUILDONLY=""; REGRESS=0; KILL=0; BASELINE=0; EXECCONF=""; CONFS=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--dry-run) DRY=1 ;;
+    -v|-verbose|--verbose) V=1 ;;
+    -f|--force) FORCE=1 ;;
+    -b|--build) BUILDONLY=$2; shift ;;
+    -r|--regress) REGRESS=1 ;;
+    -k|--kill) KILL=1 ;;
+    --baseline) BASELINE=1 ;;
+    -x|--exec) EXECCONF=$2; shift ;;
+    -h|--help) sed -n '2,77p' "$0"; exit 0 ;;
+    -*) echo "submit: unknown flag $1" >&2; exit 2 ;;
+    *) CONFS+=("$1") ;;
+  esac
+  shift
+done
+if [ $KILL = 1 ]; then
+  [ -z "$BUILDONLY" ] && [ $REGRESS = 0 ] || { echo "submit: -k cannot be combined with -b/-r" >&2; exit 2; }
+  [ ${#CONFS[@]} -gt 0 ] || { echo "usage: submit [-f] -k NAME..." >&2; exit 2; }
+  for W in "${CONFS[@]}"; do
+    [[ "$W" =~ ^[A-Za-z0-9._-]+$ ]] || { echo "submit: '$W' is not a window name" >&2; exit 2; }
+  done
+  ssh -q "$DEFAULT_HOST" bash -s "$FORCE" "${CONFS[@]}" </dev/null <<'KEOF'
+FORCE=$1; shift
+export TERM=xterm
+RC=0
+for W in "$@"; do
+  FOUND=0
+  while read -r TGT NAME CMD; do
+    [ "$NAME" = "$W" ] || continue
+    FOUND=1
+    CBASE=${CMD##*/}; CBASE=${CBASE#-}
+    case "$CBASE" in
+      zsh|bash|sh|ksh)
+        tmux kill-window -t "$TGT" && echo "# killed idle window $TGT '$W'" ;;
+      *)
+        if [ "$FORCE" = 1 ]; then
+          tmux kill-window -t "$TGT" && echo "# killed ACTIVE window $TGT '$W' (was running $CMD)"
+        else
+          echo "# refusing: window $TGT '$W' is actively running $CMD (use -f to kill anyway)"; RC=1
+        fi ;;
+    esac
+  done <<EOT
+$(tmux list-windows -a -F '#S:#I #W #{pane_current_command}' 2>/dev/null)
+EOT
+  [ $FOUND = 1 ] || { echo "# no tmux window named '$W'"; RC=1; }
+done
+exit $RC
+KEOF
+  exit $?
 fi
 
-# Resolve bare config names.  The argument after -b/--build is a branch and is
-# never a config; anything else that names a file in job_launcher/configs/ is one.
-ARGS=(); PREV=""
-for A in "$@"; do
-  if [ -f "$HERE/configs/$A" ] && [ "$PREV" != "-b" ] && [ "$PREV" != "--build" ]; then
-    ARGS+=("$HERE/configs/$A")
+die() { echo "submit: $*" >&2; exit 1; }
+
+if [ -n "$EXECCONF" ]; then
+  [ -n "$BUILDONLY" ] || die "-x requires -b BRANCH (build first, then execute the config)"
+  [ $REGRESS = 0 ] && [ $BASELINE = 0 ] || die "-x cannot be combined with -r/--baseline"
+  [ ${#CONFS[@]} -eq 0 ] || die "with -b -x, the config comes from -x only"
+  SRC=$EXECCONF; [ -f "$SRC" ] || SRC=$HERE/configs/$EXECCONF
+  [ -f "$SRC" ] || die "no such config: $EXECCONF"
+  [ -n "$REPO_BINARY" ] || die "-x needs REPO_BINARY in $SITE"
+  mkdir -p "$HERE/configs/.gen"
+  GEN="$HERE/configs/.gen/$(basename "${SRC%.conf}")-$(echo "$BUILDONLY" | tr '/' '-').conf"
+  {
+    cat "$SRC"
+    printf '\n# --- appended by submit -b %s -x on %s\n' "$BUILDONLY" "$(date '+%Y-%m-%d %H:%M')"
+    echo "BRANCH=$BUILDONLY"
+    echo "BINARY=$REPO_BINARY"
+    echo "COMMENT=\"\$COMMENT [build @ $BUILDONLY]\""
+  } > "$GEN"
+  [ $DRY = 1 ] && { echo "generated $(basename "$GEN"):"; sed 's/^/  | /' "$GEN"; }
+  CONFS=("$GEN")
+  BUILDONLY=""   # consumed: proceed as a normal tmux job whose config carries BRANCH=
+fi
+
+BLOCKING=0
+if [ -n "$BUILDONLY" ] || [ $REGRESS = 1 ]; then
+  [ ${#CONFS[@]} -eq 0 ] || { echo "submit: -b/-r take no positional config (combine a build with a run: -b BRANCH -x CONFIG)" >&2; exit 2; }
+  CONFS=("-b")   # placeholder: one pseudo-job, recognised in the loop below
+  BLOCKING=1
+fi
+[ ${#CONFS[@]} -gt 0 ] || { echo "usage: submit [-n] [-f] CONFIG... | submit [-n] [-f] -b BRANCH [-r] | submit [-n] [-f] -r" >&2; exit 2; }
+NJOBS=${#CONFS[@]}
+
+if [ $BASELINE = 1 ]; then
+  [ $BLOCKING = 0 ] && [ $KILL = 0 ] || die "--baseline needs a CONFIG; it cannot be combined with -b/-r/-k"
+  [ -n "$REPO_BINARY" ] || die "--baseline needs REPO_BINARY in $SITE"
+  mkdir -p "$HERE/configs/.gen"
+  GCONFS=()
+  for C in "${CONFS[@]}"; do
+    SRC=$C; [ -f "$SRC" ] || SRC=$HERE/configs/$C
+    [ -f "$SRC" ] || die "no such config: $C"
+    GEN="$HERE/configs/.gen/$(basename "${SRC%.conf}")-baseline.conf"
+    {
+      cat "$SRC"
+      printf '\n# --- appended by submit --baseline on %s\n' "$(date '+%Y-%m-%d %H:%M')"
+      echo "BRANCH=$BB"
+      echo "BINARY=$REPO_BINARY"
+      echo 'TAG="${TAG:+${TAG}-}baseline"'
+      echo "COMMENT=\"\$COMMENT [baseline @ $BB]\""
+    } > "$GEN"
+    GCONFS+=("$GEN")
+    if [ $DRY = 1 ]; then
+      echo "generated $(basename "$GEN"):"
+      sed 's/^/  | /' "$GEN"
+    fi
+  done
+  CONFS=("${GCONFS[@]}")
+fi
+SUBMIT_T0=$(date +%s)
+fmt_dur() {
+  local S=$1
+  if [ "$S" -ge 3600 ]; then printf '%dh%02dm' $((S/3600)) $((S%3600/60))
+  elif [ "$S" -ge 60 ]; then printf '%dm%02ds' $((S/60)) $((S%60))
+  else printf '%ds' "$S"; fi
+}
+
+# Per-job results, filled by the validation loop below.  Nothing is launched
+# until EVERY job has passed validation and the remote checks (all-or-nothing).
+QNAME=(); QENTRY=(); QSEG=(); QHOST=""; QSESSION=""
+
+I=0
+for CONF in "${CONFS[@]}"; do
+  I=$((I+1))
+  [ $V = 1 ] && [ $NJOBS -gt 1 ] && echo "### job $I/$NJOBS"
+  # Reset all job variables so nothing leaks between configs or from the environment.
+  COMMENT=""; NAME=""; TAG=""; HOST=$DEFAULT_HOST; DIR=""; DRIVER=""; TIMEOUT=""; BENCH=""; BINARY=""; SCRIPT=""; OPTS=""; CMD=""; SESSION=$DEFAULT_SESSION; BRANCH=""
+  if [ "$CONF" = "-b" ]; then
+    [ -n "$REPO" ] && [ -n "$BUILDDIR" ] || die "-b/-r need REPO and BUILDDIR in $SITE"
+    if [ -n "$BUILDONLY" ]; then
+      BRANCH=$BUILDONLY; BINARY=$REPO_BINARY; DIR=$REPO
+      CONF="build $BUILDONLY"; COMMENT="build $BRANCH"
+      NAME="build-$(echo "$BRANCH" | tr '/' '-')-$(date +%m%d%y)"
+      CMD="[blocking] build $BRANCH"
+    else
+      DIR=$BUILDDIR
+      CONF="regress"; COMMENT="make regress in $BUILDDIR"
+      NAME="regress-$(date +%m%d%y)"
+      CMD="[blocking] make regress"
+    fi
+    if [ $REGRESS = 1 ]; then
+      COMMENT="$COMMENT${BUILDONLY:+ + make regress}"
+      CMD="$CMD${BUILDONLY:+ + make regress}"
+    fi
   else
-    ARGS+=("$A")
+    [ -f "$CONF" ] || [ -f "$HERE/configs/$CONF" ] && { [ -f "$CONF" ] || CONF=$HERE/configs/$CONF; } || die "no such config: $CONF"
+    # shellcheck disable=SC1090
+    source "$CONF"
   fi
-  PREV=$A
+  DIR=${DIR/#$HOME/\~}   # a leading ~ in DIR expanded to the *local* home; restore it for the remote
+
+  [ -n "$COMMENT" ] || die "COMMENT is empty in $CONF -- say why you are running this"
+  [ -n "$DIR" ]     || die "DIR is empty in $CONF"
+  if [ -z "$NAME" ]; then
+    PFX=$(set_prefix "$DIR")   || die "no prefix known for DIR=$DIR (add it to set_prefix in $SITE, or set NAME)"
+    BT=$(bench_tag "$BENCH")   || die "no tag known for BENCH=$BENCH (add it to bench_tag in $SITE, or set NAME)"
+    ST=$(script_tag "$DRIVER" "$SCRIPT")
+    NAME=$PFX${BT:+-$BT}-$(date +%m%d%y)${TAG:+-$TAG}${ST:+-$ST}
+  fi
+  [[ "$NAME" =~ ^[A-Za-z0-9._-]+$ ]] || die "NAME '$NAME' should be a plain token (letters, digits, . _ -)"
+  if [ -n "$BRANCH" ]; then
+    [ -n "$REPO" ] && [ -n "$BUILDDIR" ] && [ -n "$REPO_BINARY" ] || die "BRANCH needs REPO, BUILDDIR and REPO_BINARY in $SITE"
+    [[ "$BRANCH" =~ ^[A-Za-z0-9._/-]+$ ]] || die "BRANCH '$BRANCH' does not look like a branch name"
+    [ "$BINARY" = "$REPO_BINARY" ] || die "BRANCH is set, so BINARY must be $REPO_BINARY (the build of $REPO), not '$BINARY'"
+  fi
+  # Queue consistency: one window, one host, one session, distinct names.
+  [ -z "$QHOST" ] && QHOST=$HOST && QSESSION=$SESSION
+  [ "$HOST" = "$QHOST" ] && [ "$SESSION" = "$QSESSION" ] || die "queued jobs must share HOST and SESSION ($CONF wants $HOST/$SESSION, queue is $QHOST/$QSESSION)"
+  for N in ${QNAME[@]+"${QNAME[@]}"}; do [ "$N" != "$NAME" ] || die "duplicate NAME '$NAME' in queue (set TAG or NAME to distinguish)"; done
+
+  # Build the command and predict the output file, exactly as the drivers in scripts/ do.
+  if [ -n "$CMD" ]; then
+    OUT=""
+  else
+    [ -n "$DRIVER" ] || die "DRIVER is empty in $CONF"
+    [ -n "$BINARY" ] || die "BINARY is empty in $CONF"
+    T=${TIMEOUT:+-t $TIMEOUT}
+    case "$DRIVER" in
+      solve_dir_rec_par_cvc5_logic)
+        [ -n "$BENCH" ] && [ -n "$SCRIPT" ] || die "$DRIVER needs BENCH and SCRIPT"
+        CMD="$DRIVER $T $BENCH $BINARY $SCRIPT $NAME $OPTS"
+        OUT="analysis/data/results-$SCRIPT-$NAME.txt" ;;
+      solve_dir_rec_par_cvc5|solve_dir_rec_par_z3)
+        [ -n "$SCRIPT" ] || die "$DRIVER needs SCRIPT"
+        CMD="$DRIVER $T $BINARY $SCRIPT $NAME $OPTS"
+        OUT="analysis/data/results-$SCRIPT-$NAME.txt" ;;
+      stats_dir_rec_par_cvc5)
+        CMD="$DRIVER $T $BINARY $NAME $OPTS"
+        OUT="analysis/stats/stats-$BINARY-$NAME.txt" ;;
+      *) die "unknown DRIVER '$DRIVER' (set CMD to run something custom)" ;;
+    esac
+    CMD=$(echo "$CMD" | tr -s ' ' | sed 's/ *$//')
+  fi
+
+  STAMP=$(date '+%Y-%m-%d %H:%M')
+  ENTRY="# $STAMP [$HOST:$DIR] ($(basename "$CONF"))"
+  [ $NJOBS -gt 1 ] && ENTRY="$ENTRY
+# queued $I/$NJOBS in window ${QNAME[0]:-$NAME}"
+  ENTRY="$ENTRY
+# $COMMENT
+$CMD"
+
+  if [ $V = 1 ]; then
+    echo "$ENTRY"
+    [ -n "$OUT" ] && echo "# -> $HOST:~/$OUT"
+    [ -n "$BRANCH" ] && echo "# build: $REPO @ $BRANCH -> $BUILDDIR/run_install.sh -> ~/bin/$REPO_BINARY (verified via --show-config)"
+  else
+    PFX=""; [ $NJOBS -gt 1 ] && PFX="[$I/$NJOBS] "
+    echo "$PFX$NAME   $HOST:$DIR   ($(basename "$CONF"))"
+    echo "  cmd: $CMD"
+    [ -n "$OUT" ] && echo "  out: ~/$OUT"
+    [ -n "$BRANCH" ] && echo "  build: $REPO @ $BRANCH (verified after install)"
+  fi
+
+  # Remote sanity checks (read-only).
+  CHECK=$(ssh -q "$HOST" "
+    export PATH=\$HOME/bin/heuresis:\$HOME/bin:\$PATH   # resolve exactly as the job shell will
+    [ -d $DIR ] || echo 'ERR: no such directory $DIR'
+    [ -z '$DRIVER' ] || [ -f \$HOME/bin/heuresis/heuresis.conf ] || echo 'ERR: no ~/bin/heuresis/heuresis.conf on $HOST (run job_launcher/deploy)'
+    [ -z '$DRIVER' ] || command -v $DRIVER >/dev/null || echo 'ERR: no driver $DRIVER in ~/bin/heuresis or ~/bin'
+    [ -z '$BINARY' ] || [ -x \$HOME/bin/$BINARY ] || echo 'ERR: no binary ~/bin/$BINARY'
+    [ -z '$SCRIPT' ] || command -v $SCRIPT >/dev/null || echo 'ERR: no script $SCRIPT in ~/bin/heuresis or ~/bin'
+    [ -z '$BENCH' ]  || command -v $BENCH >/dev/null  || echo 'ERR: no bench script $BENCH in ~/bin/heuresis or ~/bin'
+    [ -z '$BINARY' ] || [ -n '$BRANCH' ] || echo \"SCM: \$(\$HOME/bin/$BINARY --show-config 2>/dev/null | grep '^scm' | sed 's/^scm *: *//')\"
+    [ '$REGRESS' = 0 ] || [ -x $BUILDDIR/run_install.sh ] || echo 'ERR: no $BUILDDIR/run_install.sh (run configure_cvc5 prod first)'
+    [ '$REGRESS' = 0 ] || [ -n '$BRANCH' ] || echo \"CHECKOUT: \$(git -C $REPO branch --show-current)@\$(git -C $REPO rev-parse --short=10 HEAD)\"
+    [ -z '$OUT' ] || [ ! -s \$HOME/$OUT ] || echo 'EXISTS: ~/$OUT already exists ('\$(wc -l < \$HOME/$OUT)' lines)'
+    WCMD=\$(TERM=xterm tmux list-windows -a -F '#W #{pane_current_command}' 2>/dev/null | awk -v n='$NAME' '\$1==n{print \$2; exit}')
+    if [ -n \"\$WCMD\" ]; then
+      WBASE=\${WCMD##*/}; WBASE=\${WBASE#-}
+      case \"\$WBASE\" in
+        zsh|bash|sh|ksh) echo 'STALE: an idle tmux window named $NAME is left over from a finished job (close it: job_launcher/submit -k $NAME)';;
+        *) echo \"RUNNING: tmux window $NAME is actively running \$WCMD -- wait for it\";;
+      esac
+    fi
+    if [ -n '$BRANCH' ]; then
+      if cd $REPO 2>/dev/null; then
+        [ -z \"\$(git status --porcelain)\" ] || echo 'ERR: $REPO has uncommitted changes; commit or stash them first'
+        H=\$(git ls-remote --heads origin '$BRANCH' 2>/dev/null | cut -c1-10)
+        [ -n \"\$H\" ] || echo 'ERR: no branch $BRANCH on origin of $REPO'
+        echo \"HEAD: \$H\"
+        echo \"BRANCH: $BRANCH@\$H on origin; checkout is \$(git branch --show-current)@\$(git rev-parse --short=10 HEAD); installed \$(\$HOME/bin/$REPO_BINARY --show-config | grep scm | sed 's/ *: */: /')\"
+        git fetch -q origin 2>/dev/null || true
+        UPX=\$( . \$HOME/bin/heuresis/heuresis.conf 2>/dev/null; echo \${UPSTREAM:-origin} )
+        if [ '$BRANCH' = '$BB' ]; then
+          UH=\$(git ls-remote --heads \$UPX main 2>/dev/null | cut -c1-10)
+          [ -z \"\$UH\" ] || [ \"\$UH\" = \"\$H\" ] || echo \"NOTE: origin/$BRANCH (\$H) is behind \$UPX/main (\$UH); the build will fast-forward from \$UPX/main\"
+        else
+          git merge-base --is-ancestor 'origin/$BB' 'origin/$BRANCH' 2>/dev/null || echo 'BEHIND: branch $BRANCH is not up-to-date with $BB of $REPO (merge or rebase $BB first; only detection here, nothing is changed)'
+        fi
+        [ -x $BUILDDIR/run_install.sh ] || echo 'ERR: no $BUILDDIR/run_install.sh (run configure_cvc5 prod first)'
+      else
+        echo 'ERR: no repo $REPO'
+      fi
+    fi
+    BUSY=\$(pgrep -fa '^(bash )?[^ ]*(solve|stats)_dir_rec_[a-z0-9_]*( |\$)' | grep -v pgrep | head -3)
+    [ -z \"\$BUSY\" ] || echo \"BUSY: a job is already running on $HOST:\" \"\$BUSY\"
+  ") || true
+  if [ -n "$CHECK" ]; then
+    HEADHASH=$(echo "$CHECK" | sed -n 's/^HEAD: //p')
+    SCM=$(echo "$CHECK" | sed -n 's/^SCM: //p')
+    CKOUT=$(echo "$CHECK" | sed -n 's/^CHECKOUT: //p')
+    CHECK=$(echo "$CHECK" | grep -v '^HEAD: \|^SCM: \|^CHECKOUT: ' || true)
+    [ -n "$HEADHASH" ] && ENTRY="$ENTRY
+# built from $BRANCH@$HEADHASH"
+    [ -n "$SCM" ] && ENTRY="$ENTRY
+# $BINARY: $SCM"
+    [ -n "$CKOUT" ] && ENTRY="$ENTRY
+# checkout: $CKOUT"
+    if [ $V = 1 ]; then
+      [ -n "$SCM" ] && echo "# $BINARY: $SCM"
+      [ -n "$CKOUT" ] && echo "# checkout: $CKOUT"
+      [ -n "$CHECK" ] && echo "$CHECK" | sed 's/^/# /'
+    else
+      [ -n "$SCM" ] && echo "  bin: $BINARY @ $SCM"
+      [ -n "$CKOUT" ] && echo "  checkout: $CKOUT"
+      [ -n "$CHECK" ] && { echo "$CHECK" | grep -E '^(ERR|EXISTS|RUNNING|STALE|BUSY|BEHIND|NOTE)' | sed 's/^/  ! /' || true; }
+    fi
+    if echo "$CHECK" | grep -q '^ERR'; then die "remote checks failed (nothing launched)"; fi
+    if [ $FORCE = 0 ] && echo "$CHECK" | grep -q '^\(EXISTS\|RUNNING\|STALE\|BUSY\|BEHIND\)'; then
+      [ $DRY = 1 ] || die "refusing to launch (use -f to override; nothing launched)"
+    fi
+  fi
+
+  # The job's segment of the tmux window: optional build prefix, then the run.
+  BUILD=""
+  if [ -n "$BRANCH" ]; then
+    SYNC=""
+    if [ "$BRANCH" = "$BB" ]; then
+      # baseline branch: also fast-forward from the upstream main (pull only; no merge, no push)
+      SYNC="UPX=\$( . \$HOME/bin/heuresis/heuresis.conf 2>/dev/null; echo \${UPSTREAM:-origin} ) && \
+echo \"[submit] fast-forwarding $BRANCH from \$UPX/main\" && git fetch \$UPX && git pull --ff-only \$UPX main && "
+    fi
+    # Runs first inside the tmux window; any failure stops THIS job before its driver starts.
+    BUILD="echo '[submit] building $BRANCH'; \
+cd $REPO && git fetch origin && git checkout '$BRANCH' && git pull --ff-only origin '$BRANCH' && \
+${SYNC}\
+cd $BUILDDIR && ./run_install.sh && \
+SCM=\$(\$HOME/bin/$REPO_BINARY --show-config | grep '^scm') && echo \"[submit] \$SCM\" && \
+SCMHASH=\$(echo \"\$SCM\" | sed -n 's/.*git \\([0-9a-f]*\\) on branch .*/\\1/p') && \
+SCMBR=\$(echo \"\$SCM\" | sed -n 's/.*on branch \\(.*\\)\$/\\1/p') && \
+FULL=\$(git -C $REPO rev-parse HEAD) && \
+{ [ \"\$SCMBR\" = '$BRANCH' ] || { echo \"[submit] ERROR: binary is on branch \$SCMBR, expected $BRANCH\"; false; }; } && \
+{ case \$FULL in \$SCMHASH*) true;; *) echo \"[submit] ERROR: binary is at \$SCMHASH, checkout is \$FULL\"; false;; esac; } && \
+echo '[submit] build verified' && "
+  fi
+  BLK_BUILD=$BUILD
+  QSEG+=("echo '[submit] job $I/$NJOBS: $NAME'; T0=\$(date +%s); { ${BUILD}cd $DIR && $CMD; } || echo '[submit] job $NAME FAILED'; echo; echo \"[submit] $NAME finished in \$(( \$(date +%s) - T0 ))s\";")
+  QNAME+=("$NAME")
+  QENTRY+=("$ENTRY")
 done
 
-RDLOG=$LAUNCHER_DIR/log.txt
-lines() { [ -f "$1" ] && echo $(( $(wc -l < "$1") )) || echo 0; }
-BEFORE=$(lines "$RDLOG")
-RC=0
-SUBMIT_SITE=$SITE "$LAUNCHER_DIR/submit" "${ARGS[@]}" || RC=$?
-AFTER=$(lines "$RDLOG")
-if [ "$AFTER" -gt "$BEFORE" ]; then
-  tail -n +"$((BEFORE + 1))" "$RDLOG" >> "$HERE/log.txt"
-  echo "job_launcher: $((AFTER - BEFORE)) log line(s) copied to job_launcher/log.txt"
+if [ $DRY = 1 ]; then
+  [ $V = 1 ] && echo "# dry run: nothing launched, nothing logged" || echo "dry run: checks passed in $(fmt_dur $(( $(date +%s) - SUBMIT_T0 ))); nothing launched, nothing logged"
+  exit 0
 fi
-exit $RC
+
+if [ $BLOCKING = 1 ]; then
+  # -b/-r run in the foreground: stream the [submit] progress markers, keep the
+  # full output in a local log, end with an explicit verdict.
+  BODY="true"
+  if [ $REGRESS = 1 ]; then
+    BODY="BR=\$(git -C $REPO branch --show-current) && BH=\$(git -C $REPO rev-parse --short=10 HEAD) && \
+echo \"[submit] ==============================================\" && \
+echo \"[submit] ===  REGRESS ON BRANCH: \$BR @ \$BH\" && \
+echo \"[submit] ==============================================\" && \
+cd $BUILDDIR && RJ=\$(grep -oE '\-j[0-9]+' ./run_install.sh | head -1) && \
+echo \"[submit] make regress \$RJ in $BUILDDIR\" && make regress \$RJ && echo \"[submit] regress passed on \$BR @ \$BH\""
+  elif [ -n "$BUILDONLY" ]; then
+    BODY="echo '[submit] $BUILDONLY built and installed as ~/bin/$REPO_BINARY'"
+  fi
+  RS="export PATH=\$HOME/bin/heuresis:\$HOME/bin:\$PATH; ${BLK_BUILD}${BODY}"
+  BLOG=$(mktemp -t "submit-${QNAME[0]}")
+  [ $V = 1 ] && echo "# running (blocking); full output -> $BLOG"
+  T0=$(date +%s)
+  set +e
+  if [ $V = 1 ]; then
+    ssh -q "$QHOST" "bash -c $(printf %q "$RS")" </dev/null 2>&1 | tee "$BLOG" | grep --line-buffered '^\[submit\]'
+    RC=${PIPESTATUS[0]}
+  else
+    ssh -q "$QHOST" "bash -c $(printf %q "$RS")" </dev/null 2>&1 | tee "$BLOG" | while IFS= read -r L; do
+      case "$L" in "[submit] "*) printf '  %s\n' "${L#\[submit\] }" ;; esac
+    done
+    RC=${PIPESTATUS[0]}
+  fi
+  set -e
+  DUR=$(fmt_dur $(( $(date +%s) - T0 )))
+  if [ "$RC" = 0 ]; then
+    VERDICT="success ($DUR)"
+    [ $V = 1 ] && echo "# ${QNAME[0]}: SUCCESS in $DUR" || echo "success in $DUR   (full log: $BLOG)"
+  else
+    VERDICT="FAILED (exit $RC, $DUR)"
+    echo "# ---- last 30 lines of output:"
+    tail -30 "$BLOG" | sed 's/^/# /'
+    echo "${QNAME[0]}: FAILED in $DUR (exit $RC) -- full output in $BLOG"
+  fi
+  printf '%s\n# result: %s\n\n' "${QENTRY[0]}" "$VERDICT" >> "$LOG"
+  [ $V = 1 ] && echo "# logged to $LOG" || echo "logged to log.txt"
+  [ "$RC" = 0 ] && exit 0 || exit 1
+fi
+
+# Launch: ONE tmux window (named after the first job) running the queued
+# segments back-to-back.  A job that fails is reported and the queue moves on;
+# a BRANCH build failure skips only its own job's run.
+# (tmux 1.8: no -c, so cd inside.)
+INNER="export PATH=\$HOME/bin/heuresis:\$HOME/bin:\$PATH; ${QSEG[*]} echo '[submit] queue done ($NJOBS job(s))'; exec \${SHELL:-zsh}"
+WNAME=${QNAME[0]}
+ssh -q "$QHOST" "export TERM=xterm; tmux has-session -t $QSESSION 2>/dev/null || tmux new-session -d -s $QSESSION; tmux new-window -t $QSESSION -n $(printf %q "$WNAME") $(printf %q "$INNER")"
+
+for E in "${QENTRY[@]}"; do printf '%s\n\n' "$E" >> "$LOG"; done
+TOTDUR=$(fmt_dur $(( $(date +%s) - SUBMIT_T0 )))
+if [ $V = 1 ]; then
+  echo "# launched: $NJOBS job(s) in tmux window '$WNAME' in session $QSESSION on $QHOST in $TOTDUR  (ssh -t $QHOST tmux attach -t $QSESSION)"
+  echo "# logged to $LOG"
+else
+  echo "launched: window '$WNAME' ($NJOBS job(s)) on $QHOST session $QSESSION   [$TOTDUR]"
+  echo "  watch:  ./status"
+  echo "  attach: ssh -t $QHOST tmux attach -t $QSESSION"
+  echo "  logged: log.txt"
+fi

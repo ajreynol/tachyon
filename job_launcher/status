@@ -1,8 +1,65 @@
 #!/bin/bash
-# status -- the launcher's status, against this repository's site file.  Read-only.
-#   job_launcher/status [-H HOST] [-s SESSION]
+# status [-H HOST] [-s SESSION]
+#   Read-only: show what is running on the benchmark host and how far along.
+#   For every window in the tmux session it reports NAME, done/total with a
+#   percentage (counted from the results file the driver is writing), and the
+#   window's last output line (parallel's progress bar).  Also lists driver
+#   processes, load, and the newest results files.  Changes nothing anywhere.
+#
+#   Part of job_launcher/; depends on nothing outside this repository.
 set -euo pipefail
+
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-# shellcheck source=common.sh
-source "$HERE/common.sh"
-SUBMIT_SITE=$SITE exec "$LAUNCHER_DIR/status" "$@"
+SITE=${SUBMIT_SITE:-$HERE/site.conf}
+[ -f "$SITE" ] || { echo "status: no site file $SITE (copy job_launcher/site.conf.example to job_launcher/site.conf and edit)" >&2; exit 2; }
+DEFAULT_HOST=""; DEFAULT_SESSION=""
+# shellcheck disable=SC1090
+source "$SITE"
+HOST=$DEFAULT_HOST; SESSION=$DEFAULT_SESSION
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -H|--host) HOST=$2; shift ;;
+    -s|--session) SESSION=$2; shift ;;
+    -h|--help) sed -n '2,8p' "$0"; exit 0 ;;
+    *) echo "status: unknown argument $1" >&2; exit 2 ;;
+  esac
+  shift
+done
+
+ssh -q "$HOST" bash -s "$SESSION" <<'REMOTE'
+SESSION=$1
+export TERM=xterm
+echo "== $(hostname -s): $(uptime | sed 's/.*load average/load average/')"
+if tmux has-session -t "$SESSION" 2>/dev/null; then
+  tmux list-windows -t "$SESSION" -F '#I #W' | while read -r IDX NAME; do
+    # Scrollback of the window: the driver header gives the output file and
+    # the benchmark count; the last line is parallel's progress bar.
+    CAP=$(tmux capture-pane -p -S -32768 -t "$SESSION:$IDX" 2>/dev/null || true)
+    TOT=$(echo "$CAP" | sed -n 's/^Num benchmarks: *//p' | tail -1)
+    OUTF=$(echo "$CAP" | sed -n 's/.*, save \([^ ]*\.txt\).*/\1/p' | tail -1)
+    LINE="window $IDX '$NAME'"
+    if [ -n "$OUTF" ]; then
+      F=${OUTF/#\~/$HOME}
+      if [ -n "$TOT" ] && [ "$TOT" -gt 0 ] 2>/dev/null && [ -f "$F" ]; then
+        DONE=$(grep -c '^\./' "$F" || true)   # the driver echoes each benchmark path
+        AGE=$(( $(date +%s) - $(date -r "$F" +%s) ))
+        NOTE=""; [ "$AGE" -gt 600 ] && NOTE=" (idle $(( AGE / 60 ))min -- finished or stale)"
+        LINE="$LINE: $DONE/$TOT ($(( 100 * DONE / TOT ))%) -> $OUTF$NOTE"
+      else
+        LINE="$LINE: -> $OUTF (no results yet)"
+      fi
+    fi
+    echo "$LINE"
+    BAR=$(echo "$CAP" | grep -v '^ *$' | tail -1)
+    [ -n "$BAR" ] && echo "    $BAR"
+  done
+else
+  echo "(no tmux session $SESSION)"
+fi
+echo "== driver processes"
+pgrep -fa '(solve|stats)_dir_rec' 2>/dev/null | grep -v pgrep || echo "(none)"
+echo "== newest results"
+ls -t ~/analysis/data 2>/dev/null | head -3 | while read -r f; do
+  echo "  $f  ($(grep -c '^\./' ~/analysis/data/"$f") benchmarks, $(date -r ~/analysis/data/"$f" '+%m-%d %H:%M'))"
+done
+REMOTE

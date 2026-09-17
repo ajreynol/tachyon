@@ -245,3 +245,19 @@ solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-in
 # built from master@95050cf815
 # result: success (1m08s)
 
+# 2026-09-17 10:59 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current.conf)
+# heuresis: current-main fixed quantifier/CaDiCaL control
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-current -q --no-cbqi --user-pat=strict --sat-solver=cadical
+# ajr-cvc5: git 67954d09dc on branch master
+
+# 2026-09-17 11:07 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-current-ee-central-ieval-off.conf)
+# heuresis R7/R15: current-main central equality and evaluator-off comparator
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-current-ee-central-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# ajr-cvc5: git 67954d09dc on branch master
+
+# 2026-09-17 11:14 [dev1:~/cvc5-ajr] (build master)
+# build master
+[blocking] build master
+# built from master@95050cf815
+# result: success (2s)
+
