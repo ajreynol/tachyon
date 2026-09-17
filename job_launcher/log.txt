@@ -214,3 +214,28 @@ solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-ins
 solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-rlv -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
 # built from claude-eagerInst@995b23bcfa
 
+# 2026-09-16 16:38 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-stats.conf)
+# heuresis R1/R28 (S2): eager-instantiation counters at branch defaults
+stats_dir_rec_par_cvc5 -t 30 ajr-cvc5 quant-091626-u-ssc-eager-inst-stats -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 16:46 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-rlv-stats.conf)
+# heuresis R1/R28 (S2): eager-instantiation counters with relevancy deferral
+stats_dir_rec_par_cvc5 -t 30 ajr-cvc5 quant-091626-u-ssc-eager-inst-rlv-stats -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 16:53 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-off-t120.conf)
+# heuresis R1/R28 (S7): eager arm 'off' at a 120 s timeout
+solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-off-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 17:11 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-t120.conf)
+# heuresis R1/R28 (S7): eager arm 'inst' at a 120 s timeout
+solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst
+# built from claude-eagerInst@995b23bcfa
+
+# 2026-09-16 17:33 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-eager-inst-rlv-t120.conf)
+# heuresis R1/R28 (S7): eager arm 'inst-rlv' at a 120 s timeout
+solve_dir_rec_par_cvc5 -t 120 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-eager-inst-rlv-t120 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off --eager-inst --eager-inst-rlv
+# built from claude-eagerInst@995b23bcfa
+
