@@ -43,6 +43,10 @@ jobs:
     steps:
       - name: configure GitHub Pages
         uses: actions/configure-pages@v5
+        with:
+          # Creates the Pages site on the first deployment; without this the
+          # action only reads an existing one and fails when there is none.
+          enablement: true
       - name: deploy the site
         id: deployment
         uses: actions/deploy-pages@v4
