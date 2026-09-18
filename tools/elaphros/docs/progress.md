@@ -8,7 +8,7 @@
 | Was the scan limited to proof-like names? | No. All heads were screened by their merge-base source paths; 203 touch proof/rewrite paths under the recorded heuristic. |
 | How much was investigated further? | 49 selected branches have source-delta/history summaries; the survey explains the most relevant mechanisms. This is not a correctness review of all 49. |
 | What is the comparison source? | `cvc5/cvc5` main at `3dcc1ef5421ab62cc1ee9af52d70042ce6861af0`. |
-| What ideas did the maintainer highlight? | `unrewrite` and `pfrConvert`, plus a request to look beyond names for substantial postprocessor changes. No numerical ranking supplied. |
+| What ideas did the maintainer highlight? | `ajreynol:unrewrite` and `ajreynol:pfrConvert`, plus a request to look beyond names for substantial postprocessor changes. No numerical ranking supplied. |
 | What are the research candidates? | Twelve directions with source evidence and prospective discriminating observations. |
 | Which corpus, format, checker and success threshold are fixed? | None. CPC is proposed as an initial format in the queue, not adopted as a benchmark contract. |
 | How much overhead is measured? | Unknown; no ordinary/proof baseline pairs. |

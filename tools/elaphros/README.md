@@ -4,7 +4,7 @@
 screens all 809 public heads of `ajreynol/cvc5` and characterizes 49 selected
 branches against pinned upstream source. It supports twelve
 [research directions](docs/directions.md) and a provisional
-[priority queue](docs/todo.md), with `unrewrite` and `pfrConvert` explicitly
+[priority queue](docs/todo.md), with `ajreynol:unrewrite` and `ajreynol:pfrConvert` explicitly
 highlighted by the maintainer. These are source observations and hypotheses;
 no experiments, performance results or validated optimizations are delivered.
 Start at the [documentation index](docs/README.md) for the register and evidence.

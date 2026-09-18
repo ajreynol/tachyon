@@ -10,7 +10,7 @@ The [progress record](progress.md) names what is still unknown.
 - Investigate proof-production performance in a style similar to Heuresis.
 - Use the public development branches at
   [ajreynol/cvc5](https://github.com/ajreynol/cvc5).
-- Give `unrewrite` and `pfrConvert` explicit attention as major ideas.
+- Give `ajreynol:unrewrite` and `ajreynol:pfrConvert` explicit attention as major ideas.
 - Look beyond names for substantial proof-postprocessor changes.
 - Set the table for priorities; do not run experiments yet.
 
@@ -26,12 +26,12 @@ design is a prerequisite across the table and is not ranked as an optimization.
 
 | rank | direction | why it is here | next planning step |
 | ---: | --- | --- | --- |
-| 1 | [E2: smaller macro obligations](directions.md#e2-smaller-macro-obligations) | A contained way to probe whether full-formula elaboration creates avoidable work; present branch has concrete decompositions. | Extract the logical cases in `reduceTransform` and distinguish them from the larger CPC bundle. |
+| 1 | [E2: smaller macro obligations](directions.md#e2-smaller-macro-obligations) | A contained way to probe whether full-formula elaboration creates avoidable work; present branch has concrete decompositions. | Extract the logical cases in `ajreynol:reduceTransform` and distinguish them from the larger CPC bundle. |
 | 2 | [E1: unrewriting](directions.md#e1-unrewriting) | Major opportunity to remove entire rewrite justifications; maintainer-highlighted, but current transformation runs late. | State admissible atom substitutions and distinguish postprocessing compression from early avoidance. |
 | 3 | [E3: compact conversion](directions.md#e3-compact-term-conversion) | Major representation question across term conversions; maintainer-highlighted. | Compare both rule contracts, construction paths and external checker requirements. |
 | 4 | [E4: rewrite dependencies](directions.md#e4-rewrite-dependencies) | Directly targets proofs of irrelevant child rewrites; closely complements E1/E2. | Specify probe/translation costs and candidate shapes where dependency minimization can help. |
 | 5 | [E5: DAG simplification/sharing](directions.md#e5-proof-dag-simplification-and-sharing) | Can discard work before expansion and exposes meaningful deltas inside misleadingly named bundles. | Separate existing mainline behavior from additional TRANS/CONG simplification. |
-| 6 | [E6: rewrite provenance](directions.md#e6-recorded-rewrite-provenance) | High potential to replace reconstruction search, but broad changes to rewriting complicate attribution. | Split the `rdbExec` design into execution, recording and reconstruction effects. |
+| 6 | [E6: rewrite provenance](directions.md#e6-recorded-rewrite-provenance) | High potential to replace reconstruction search, but broad changes to rewriting complicate attribution. | Split the `ajreynol:rdbExec` design into execution, recording and reconstruction effects. |
 | 7 | [E7: reconstruction cache/policy](directions.md#e7-reconstruction-cache-and-search-policy) | Narrow comparison candidates, including the surviving cache-clear delta. | Audit cache validity/lifetime and remove inherited ablation changes from the conceptual comparison. |
 | 8 | [E8: internal resolution checking](directions.md#e8-resolution-construction-and-internal-checking) | Recent one-file candidate; relevance depends on checker calls in the actual production path. | Map construction/checking call sites before predicting an end-to-end benefit. |
 | 9 | [E9: definitions/output](directions.md#e9-definitions-and-proof-output) | Potentially important on large generated inputs, but can improve size without reducing production time. | Compare definition handling and agree on output/validation semantics. |
@@ -48,7 +48,7 @@ to build the branches in that order.
 | item | status / completion condition |
 | --- | --- |
 | Snapshot and screen the public fork | Complete: 809 refs, all source-path deltas screened, 49 selected branch summaries retained. |
-| Identify the nontrivial postprocessor families | Initial pass complete: E1–E7, including `reduceTransform`, `rewriteDep` and additional simplifications in CPC/trust bundles. |
+| Identify the nontrivial postprocessor families | Initial pass complete: E1–E7, including `ajreynol:reduceTransform`, `ajreynol:rewriteDep` and additional simplifications in CPC/trust bundles. |
 | Distinguish mainline, sketch and alternative designs | Initial pass complete in the survey; correctness/build readiness remains untested. |
 | Deepen the top four designs | Next: short design comparisons specifying preserved proof obligations, fallback paths, phase placement and interactions. No solver execution needed. |
 | Select the benchmark subject | Open: choose a fixed corpus and intended use with the maintainer. Candidate strata are rewriting/preprocessing-heavy UNSAT, theory reconstruction, definition-heavy inputs and genuine incremental sessions. Heuresis's corpus is an option, not the default subject. |

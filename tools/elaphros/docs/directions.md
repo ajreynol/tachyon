@@ -3,16 +3,30 @@
 **Source assessment, 2026-09-18.** These twelve directions start from the
 [hypothesis register](../notes.md) and the
 [public-branch survey](../ledger/2026-09-18-branch-survey.md). No performance
-effect is measured. Risk estimates concern implementation, validation and
-regression exposure; potential value is conditional on the mechanism being
-important on the eventual corpus. The [queue](todo.md) separates these priors
-from maintainer guidance.
+effect is measured. The [queue](todo.md) separates the agent's priorities from
+maintainer guidance.
 
-Source comparisons use upstream [main at `3dcc1ef542`][main]. Branch names below
-link to living branches for navigation; their **audited tips, merge bases and
-source deltas are pinned in the survey**. A feature found on main is not
+Source comparisons use upstream [main at `3dcc1ef542`][main]. Fork branches use
+`ajreynol:NAME` and link to living branches for navigation; their **audited tips,
+merge bases and source deltas are pinned in the survey**. A feature found on main is not
 evidence that the old fork tip was merged verbatim. Buildability and proof
 validity have not been tested.
+
+**Effort levels.** As in Heuresis, each direction has two color-coded axes:
+*Risk* runs 🟢 Low → 🟡 Medium → 🔴 High and combines implementation size,
+architectural reach, correctness exposure and regression risk. *Gain* runs
+🔴 Low → 🟡 Medium → 🟢 High and estimates project value if the hypothesis is
+right: time or memory saved, or an important uncertainty resolved. The
+argument after each rating matters more than the badge. These are qualitative
+priors, not measured gains or estimates of their probability; the corpus and
+attribution can change them.
+
+**Managing the risk.** Each direction names a bounded first investigation and
+the evidence that would justify expanding it or reducing its priority. Keep
+changes with distinct mechanisms separate, retain the same proof contract and
+count the proposed optimization's own cost. High potential gain does not
+justify a broad rebase before the relevant cost is established. All proposed
+measurements below remain future work; the current phase is planning only.
 
 ## The map
 
@@ -32,14 +46,18 @@ cannot tell us which mechanism matters.
 
 ## E1 Unrewriting
 
+**Effort.** 🔴 High Risk / 🟢 High Gain — eliminating entire rewrite
+justifications could save substantial work, but atom collisions,
+theory-sensitive rules and scopes put correctness at risk.
+
 **Question.** Can a refutation keep an atom in its original form and omit its
 rewrite proof when the Boolean reasoning does not depend on the rewritten
 form? This is a maintainer-highlighted research direction.
 
-**Code.** [`unrewrite`][unrewrite] adds `--proof-unrewrite`, connects preprocessing
+**Code.** [`ajreynol:unrewrite`][unrewrite] adds `--proof-unrewrite`, connects preprocessing
 proofs, and classifies atoms occurring in input-derived versus theory lemmas.
 Its converter callback has an empty body; the tip is a sketch, not an
-established implementation. [`unrewrite2`][unrewrite2] descends from it and adds
+established implementation. [`ajreynol:unrewrite2`][unrewrite2] descends from it and adds
 candidate preimages, exclusive removable-node accounting, replay of renamed
 proof steps, fallback when replay fails, and an input-only variant
 (`--proof-unrewrite-input-only`). It checks that a replacement introduces no
@@ -60,16 +78,22 @@ conversion, and a separately justified early-conversion design. Record replay
 failures, analysis/replay time, exclusive nodes avoided, emission and checking.
 The existing trace summary is an instrumentation lead, not a result.
 
-**Risk / value.** High / high potential. The proposal removes a class of
-justifications, but atom collisions, theory-sensitive rules, scopes and
-repeated replay can erase the benefit or invalidate the proof.
+**Manage the risk.** Begin with a precisely specified input-only transformation
+and a fallback to the original proof. Expand to theory atoms or earlier
+placement only after their proof obligations are understood. Later compare
+exclusive work saved with analysis/replay cost; if only output or checker cost
+falls, retain that narrower result and lower the production-time expectation.
 
 ## E2 Smaller macro obligations
+
+**Effort.** 🟡 Medium Risk / 🟢 High Gain — local decomposition could avoid
+full-formula elaboration without redesigning the pipeline. Recursive
+obligations, speculative checks and lost DAG sharing can still cause regressions.
 
 **Question.** Must a macro that transforms one large formula into another
 reconstruct rewriting throughout both formulas, when only a few parts change?
 
-**Code.** [`reduceTransform`][reduceTransform] intercepts
+**Code.** [`ajreynol:reduceTransform`][reduceTransform] intercepts
 `MACRO_SR_PRED_INTRO` and `MACRO_SR_PRED_TRANSFORM`. It decomposes conjunctions,
 uses conversion conditions to isolate changed subterms, reuses matching
 premises, and uses transitivity when two equalities share a side. A conceptual
@@ -77,7 +101,7 @@ case is transforming `(and G H1)` into `(and G H2)` by retaining `G` and proving
 the local change. This is an explanation of the mechanism, not a run result.
 The implementation is confined to two postprocessor source files, but adds
 recursive obligations and internal rule checks. Related code in
-[`cpcDevChainMRes`][cpcDevChainMRes] also tries polynomial-normalization rules.
+[`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] also tries polynomial-normalization rules.
 The specific reduction helpers are absent from pinned main.
 
 **Controls and next evidence.** There is no dedicated mainline switch for this
@@ -88,25 +112,30 @@ branch, and identify the current equivalent insertion points. Later count
 macro sizes, changed versus unchanged subterms, successful reductions, failed
 checks, and expansion work saved under identical output requirements.
 
-**Risk / value.** Medium / high potential. A relatively contained way to test
-whether oversized obligations, rather than primitive checker operations, are
-the main cost. Repeated speculative checking and lost DAG sharing are risks.
+**Manage the risk.** Separate conjunction, equality and congruence reductions
+and preserve the ordinary expansion fallback for each. Promote the cases whose
+avoided expansion outweighs failed decomposition and extra checking; reduce
+priority if large macros mostly change throughout or already share their work.
 
 ## E3 Compact term conversion
+
+**Effort.** 🔴 High Risk / 🟢 High Gain — compact conversion could reduce
+proof scaffolding across many theories. Rule semantics, context handling and
+external checker compatibility make this broader than a postprocessor patch.
 
 **Question.** Can a checked conversion step replace long congruence and
 transitivity derivations? This is the other maintainer-highlighted direction.
 
-**Code.** [`pfrConvert`][pfrConvert] adds `--proof-use-convert`, a `CONVERT` rule,
+**Code.** [`ajreynol:pfrConvert`][pfrConvert] adds `--proof-use-convert`, a `CONVERT` rule,
 and context-sensitive changes inside `TConvProofGenerator`.
-[`pfrConvert2`][pfrConvert2] is a distinct design, **not a descendant of the
+[`ajreynol:pfrConvert2`][pfrConvert2] is a distinct design, **not a descendant of the
 first audited tip**: it adds `--proof-use-rule-convert`, `CONVERT` and
 `CONVERT_FIXED_POINT`, and a checker that applies pre/post rewrite maps while
 recording used premises. These switches and the proposed conversion rules are
 absent from pinned main. The old ALF printer changes do not establish current
 CPC/checker support.
 
-**Critical timing distinction.** In `pfrConvert2`, the ordinary internal
+**Critical timing distinction.** In `ajreynol:pfrConvert2`, the ordinary internal
 conversion path runs first to obtain a reference result; the compact attempt
 then recomputes conversion and falls back if needed. A compact final proof can
 therefore still pay for much of the original construction. Separate the
@@ -120,16 +149,22 @@ Later measure congruence/transitivity nodes, term visits, conversion attempts,
 fallbacks and total production plus external checking. A missing checker rule
 is unsupported output, not a speedup.
 
-**Risk / value.** High / high potential. The representation could affect many
-theories, but correctness and checker compatibility are broader than a small
-postprocessor patch.
+**Manage the risk.** Specify the rule and validation path before choosing a
+branch design. Keep compact representation and direct compact construction as
+separate proposals, with an expanded-proof fallback. Lower the production-time
+expectation if the ordinary conversion still dominates; record any size or
+checking benefit separately.
 
 ## E4 Rewrite dependencies
+
+**Effort.** 🔴 High Risk / 🟢 High Gain — avoiding irrelevant child proofs
+could remove substantial reconstruction, but discovering dependencies adds
+rewriting and translating proofs must preserve binding and assumptions.
 
 **Question.** Can a parent rewrite be proved without reproducing rewrites of
 children that do not affect its result?
 
-**Code.** [`rewriteDep`][rewriteDep] adds `convertMinimizedRewrite` before the
+**Code.** [`ajreynol:rewriteDep`][rewriteDep] adds `convertMinimizedRewrite` before the
 ordinary proof-producing rewrite path. It probes replacing a child by a
 purification symbol, retains the replacement if the final rewrite result is
 unchanged, builds the smaller proof, and substitutes the original terms back
@@ -144,10 +179,16 @@ probes, invariant-child successes, original/minimized term sizes and
 reconstruction calls avoided. Input-level unrewriting (E1) is not a substitute
 for this experiment: E4 acts inside individual rewrite obligations.
 
-**Risk / value.** Medium to high / high potential. It attacks wasted work
-directly, but discovering irrelevance may itself be expensive.
+**Manage the risk.** Start with one rewrite shape and bound its probing work,
+falling back when minimization is inconclusive. Expand only if avoided
+reconstruction exceeds probing and translation costs; few removable
+dependencies or expensive unsuccessful probes would lower this priority.
 
 ## E5 Proof DAG simplification and sharing
+
+**Effort.** 🔴 High Risk / 🟢 High Gain — simplifying before expansion can
+avoid work throughout the proof DAG. Shared mutable nodes, open assumptions
+and cycles make even small transformations sensitive.
 
 **Question.** What should be simplified or merged before expanding a proof
 node, and how much does recognizing that opportunity cost?
@@ -156,14 +197,14 @@ node, and how much does recognizing that opportunity cost?
 `--proof-pre-simp-lookahead=N` (2), result caching and scope-aware handling.
 Its presimplifier handles `AND_ELIM` over `AND_INTRO`, double symmetry and a
 bounded search for a descendant with the same conclusion.
-[`pfTrustId`][pfTrustId] contains that history **and extra TRANS simplification**;
-[`cpcDevChainMRes`][cpcDevChainMRes] also removes round trips in transitivity
+[`ajreynol:pfTrustId`][pfTrustId] contains that history **and extra TRANS simplification**;
+[`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] also removes round trips in transitivity
 chains and combines consecutive congruence steps. The latter TRANS case is
 absent from pinned main's presimplifier. Thus neither bundle is accurately
 classified as wholly new or wholly landed.
 
-[`freeAsumpMerge`][freeAsumpMerge] is relevant scope/assumption-cache history;
-main already has related machinery. [`pfpUpdate-0417`][pfpUpdate] has its main
+[`ajreynol:freeAsumpMerge`][freeAsumpMerge] is relevant scope/assumption-cache history;
+main already has related machinery. [`ajreynol:pfpUpdate-0417`][pfpUpdate] has its main
 changes present upstream: the macro-expansion histogram, `addExpandStep`, and
 the final trusted-step scan. Its helper explicitly still calls expansion
 recursively; the comment about a more aggressively merged alternative is not
@@ -174,17 +215,24 @@ especially the additional TRANS/CONG simplification. Later compare lookahead
 and merge policies with scope-safe simplification held constant; count visits,
 cache hits, discarded expansions, duplicate results, and exclusive live nodes.
 Final DAG size alone misses temporary allocations and traversals. Do not
-attribute all of the large `pfTrustId` history to this optimization.
+attribute all of the large `ajreynol:pfTrustId` history to this optimization.
 
-**Risk / value.** Medium to high / high potential. Shared mutable proof nodes,
-open assumptions and cycles make a superficially local change sensitive.
+**Manage the risk.** Isolate a single additional TRANS/CONG transformation
+from the mixed branches and document the scopes in which sharing is valid.
+Broaden only when exclusive expansions avoided exceed traversal/allocation
+costs. A smaller final DAG with unchanged temporary work weakens the expected
+production gain.
 
 ## E6 Recorded rewrite provenance
+
+**Effort.** 🔴 High Risk / 🟢 High Gain — recorded rule identities could
+replace expensive reconstruction search, but generated rewriting, retained
+provenance and subtype-pass ordering change several parts of the pipeline.
 
 **Question.** How much reconstruction search can be replaced by remembering
 the rule that the solver already applied?
 
-**Code.** [`rdbExec`][rdbExec] compiles selected `:exec` RARE rules into rewrite
+**Code.** [`ajreynol:rdbExec`][rdbExec] compiles selected `:exec` RARE rules into rewrite
 code and records a rule ID. Its DSL postprocessor attempts that rule directly,
 reconstructs its conditions and otherwise falls back to search. It moves DSL
 reconstruction before subtype elimination so recorded terms still match.
@@ -198,23 +246,29 @@ reconstruction, fallback and subtype handling. Later isolate recording cost,
 direct reconstruction success, search avoided and changes in ordinary solving.
 Remaining trusted conditions must still be discharged under the same contract.
 
-**Risk / value.** High / high potential. This could avoid rediscovering
-reasoning, but the branch is an architecture prototype spanning 29 source
-files. Reusing selected existing rules for proof attribution is within this
-project; discovering new rewrite rules remains Metagraphe's question.
+**Manage the risk.** Restrict the initial design to a small set of existing
+rules and separate execution, recording and reconstruction changes in the
+29-file prototype. Expand only when direct reconstruction saves more than
+recording costs and leaves no new proof holes. Frequent fallback or benefits
+explained by ordinary solver changes reduce this direction's priority.
+Discovering new rewrite rules remains Metagraphe's question.
 
 ## E7 Reconstruction cache and search policy
+
+**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — cache reuse and better attempt
+ordering offer contained candidates, but their benefit depends on repetition
+and failed search. Memory retention and reconstruction coverage are the risks.
 
 **Question.** Are repeated evaluation and unsuccessful reconstruction attempts
 more expensive than the proof steps eventually emitted?
 
-**Code.** [`rareOptEval`][rareOptEval] has a one-file effective delta: it stops
+**Code.** [`ajreynol:rareOptEval`][rareOptEval] has a one-file effective delta: it stops
 clearing `d_evalCache` at each `RewriteDbProofCons::prove` call. Main still
-clears it. [`rpcAlwaysPre`][rpcAlwaysPre] promotes `POST_DSL` theory rewrites
-to `PRE_DSL`, but **inherits `proofDisable`'s diagnostic switches**.
-[`smtPpBasicRewriteOnly`][smtPpBasicRewriteOnly] limits one trusted-step recovery
+clears it. [`ajreynol:rpcAlwaysPre`][rpcAlwaysPre] promotes `POST_DSL` theory rewrites
+to `PRE_DSL`, but **inherits `ajreynol:proofDisable`'s diagnostic switches**.
+[`ajreynol:smtPpBasicRewriteOnly`][smtPpBasicRewriteOnly] limits one trusted-step recovery
 attempt to ordinary rewriting instead of extended rewriting.
-[`rareNoEvalPremise`][rareNoEvalPremise] changes the reconstruction of evaluation
+[`ajreynol:rareNoEvalPremise`][rareNoEvalPremise] changes the reconstruction of evaluation
 premises and several theory rewrites; it is not merely a cache option.
 
 **Controls and next evidence.** Main declares
@@ -226,20 +280,26 @@ audit the cache's keys, lifetime and memory bound. Later record evaluations,
 reuse, cache size, attempts, successes, resource-limit failures and residual
 trust. Reject a faster result obtained by failing to reconstruct required work.
 
-**Risk / value.** Cache change: medium / uncertain but cheaply testable later.
-Ordering changes: medium / potentially broad. One removed cache clear can
-retain substantial memory, so source size is not a risk estimate.
+**Manage the risk.** Treat cache lifetime and search ordering independently;
+specify a memory bound and exclude inherited diagnostic ablations. Raise the
+gain estimate if repeated evaluation or failed attempts dominate. Low reuse,
+memory growth or additional unresolved proof obligations would lower it,
+regardless of the patch's small size.
 
 ## E8 Resolution construction and internal checking
+
+**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — a recent one-file change could
+reduce repeated clause scans, but only exercised checker calls can save
+production time. Pivot and literal-representation corner cases need care.
 
 **Question.** Does checking a resolution chain repeatedly rebuild or scan an
 intermediate clause that could be processed more directly?
 
-**Code.** [`chainMResOpt`][chainMResOpt] replaces repeated intermediate-vector
+**Code.** [`ajreynol:chainMResOpt`][chainMResOpt] replaces repeated intermediate-vector
 elimination with pending-pivot counts and a surviving-literal set in
 `CHAIN_M_RESOLUTION` checking. Main still contains the older vector loop.
-This is distinct from [`cpcDevChainMRes`][cpcDevChainMRes]'s broader
-postprocessing work. [`pfrDev`][pfrDev] is another mixed rule-implementation
+This is distinct from [`ajreynol:cpcDevChainMRes`][cpcDevChainMRes]'s broader
+postprocessing work. [`ajreynol:pfrDev`][pfrDev] is another mixed rule-implementation
 prototype, useful background rather than an isolated experiment.
 
 **Controls and next evidence.** Main declares `--proof-chain-m-res=true`,
@@ -251,18 +311,25 @@ configuration. Later separate ordinary construction from optional eager/lazy
 validation, record chain lengths and literal visits, and validate repeated
 pivots, singleton/OR ambiguity and duplicate-literal cases.
 
-**Risk / value.** Medium / uncertain. A small, recent patch makes a good narrow
-candidate, but only exercised checker calls can save production time. External
-checker optimization is outside Elaphros's scope.
+**Manage the risk.** Establish the production call path before prioritizing
+the algorithm change, and separate internal construction from optional
+validation costs. Long, frequently checked chains would raise the gain
+estimate; short or rarely exercised chains would lower it. External checker
+optimization remains outside Elaphros's scope.
 
 ## E9 Definitions and proof output
+
+**Effort.** 🔴 High Risk / 🟡 Medium Gain — preserving definitions could
+reduce conversion and output costs on generated inputs. Assumption connections,
+definition scope and checker interpretation raise the risk; gain depends on
+the corpus's use of definitions.
 
 **Question.** Can definitions and term sharing survive through the proof
 pipeline without expensive expansion and re-encoding?
 
-**Code.** [`pf-defineFun`][defineFun] adds `--proof-define-fun-macros`, tracks
+**Code.** [`ajreynol:pf-defineFun`][defineFun] adds `--proof-define-fun-macros`, tracks
 original assertions and handles definitions in output and assumption
-connections. [`pf-defineFun-printerOnly`][defineFunPrinter] descends from it but
+connections. [`ajreynol:pf-defineFun-printerOnly`][defineFunPrinter] descends from it but
 moves the effective approach toward a `MacroDefConverter` in proof output.
 These are alternatives, not two independent effects. The option is absent
 from pinned main. Main already provides `--proof-dag-global` (true),
@@ -275,15 +342,21 @@ Later separate proof construction, term conversion/letification, output bytes,
 I/O and checker time. Pin the output destination and its handling. Smaller
 files do not establish faster production or identical proof obligations.
 
-**Risk / value.** Medium to high / workload dependent. Public tips are recent,
-but scope, defined functions and external checker interpretation matter.
+**Manage the risk.** Compare the assertion-tracking and printer variants as
+alternatives under one input/definition contract. Promote the direction if
+definition expansion or serialization dominates. If the benefit is only fewer
+bytes, report it as such and avoid predicting lower construction time.
 
 ## E10 Lazy bookkeeping and theory reconstruction
+
+**Effort.** 🔴 High Risk / 🟡 Medium Gain — retention and repeated theory
+reconstruction may cost substantial memory or time, but relevance is not yet
+attributed. Old interfaces and backtracking-sensitive ownership increase risk.
 
 **Question.** Which proof objects must survive search, and which explanations
 can be built once, only when needed?
 
-**Code.** [`theoryEngineLazyProofs`][theoryEngineLazyProofs] replaces several uses
+**Code.** [`ajreynol:theoryEngineLazyProofs`][theoryEngineLazyProofs] replaces several uses
 of a common lazy proof with separately allocated `LazyCDProof` objects in a
 `CDProofSet`. It is from 2021; it does not introduce laziness to a solver that
 lacks it. Main already has lazy proof generators and fresh proofs in some
@@ -291,10 +364,12 @@ explanation paths. The meaningful comparison concerns ownership, retention and
 reconstruction, not an eager-versus-lazy slogan.
 
 The theory-specific leads include
-[`stratifiedStrIpc`][stratifiedStrIpc]'s two-stage substitution construction,
-[`stringsIpcRefactor`][stringsIpcRefactor]'s contextual substitutions and
-`stringsIpcAgg`/`stringsIpcAgg2` reconstruction alternatives. These require a
-strings stratum; they cannot be inferred from Heuresis's quantified corpus.
+[`ajreynol:stratifiedStrIpc`][stratifiedStrIpc]'s two-stage substitution construction,
+[`ajreynol:stringsIpcRefactor`][stringsIpcRefactor]'s contextual substitutions and
+[`ajreynol:stringsIpcAgg`][stringsIpcAgg] and
+[`ajreynol:stringsIpcAgg2`][stringsIpcAgg2] reconstruction alternatives. These
+require a strings stratum; they cannot be inferred from Heuresis's quantified
+corpus.
 
 **Controls and next evidence.** First map generator ownership and context
 lifetimes, then identify which strings variants are still distinct from main.
@@ -302,20 +377,27 @@ Later measure generator calls, retained proof nodes, allocation/peak memory,
 substitution passes and reconstruction coverage. Per-conflict objects may
 increase allocation cost even if they simplify dependencies.
 
-**Risk / value.** High / unknown until attribution. Old interfaces and
-backtracking-sensitive ownership make a broad rebase an unattractive first
-step; preserve the idea and isolate the needed mechanism.
+**Manage the risk.** Map ownership and lifetimes first, then isolate one
+generator path or theory-specific reconstruction case. Promote only where
+retention or repeated construction is material; deprioritize a broad rebase if
+main already provides the needed behavior or fresh objects merely increase
+allocations. Strings variants need an actual strings workload.
 
 ## E11 Incremental output and reuse
+
+**Effort.** 🔴 High Risk / 🟢 High Gain — real incremental clients could
+avoid repeated setup and output across many queries. Correct scoping, state
+lifetime and checker support make this a substantial change; the high gain
+estimate is conditional on selecting such sessions.
 
 **Question.** Can related queries share proof declarations and state without
 paying repeated setup/printing costs or retaining dead scopes?
 
-**Code.** [`ai-pfIncremental`][aiPfIncremental] extends the CPC logger and printer
+**Code.** [`ajreynol:ai-pfIncremental`][aiPfIncremental] extends the CPC logger and printer
 with scoped incremental output, push/pop notifications, and handling of
 incremental `dump-proofs`. Main has proof logging, including the older
-`pfLogInferface` lineage, but its defaults still reject `proof-log` combined
-with incremental solving. This restriction is about that logging mode; it is
+[`ajreynol:pfLogInferface`][pfLogInferface] lineage, but its defaults still reject
+`proof-log` combined with incremental solving. This restriction is about that logging mode; it is
 not a claim that all incremental proof retrieval is unsupported.
 
 **Controls and next evidence.** This rises in priority only if real query
@@ -325,10 +407,18 @@ queries. Later compare whole sessions, peak retained state, repeated
 declarations and every required refutation. Splitting sessions into independent
 files removes precisely the reuse being studied.
 
-**Risk / value.** High / potentially high for incremental clients, unmotivated
-for a corpus of unrelated single queries.
+**Manage the risk.** Define one complete session contract before extending
+reuse across queries, including push/pop, resets and every required refutation.
+Promote if shared declarations and repeated setup dominate session cost.
+Keep this deferred for unrelated single-query workloads, and count retained
+state against any time saved.
 
 ## E12 Proof-induced search changes
+
+**Effort.** 🟢 Low Risk / 🟢 High Gain — a source/configuration comparison
+can prevent misattributing changed solving behavior to proof construction.
+The gain is information needed by every other direction, not a promised
+solver speedup.
 
 **Question.** How much of the overhead comes from changes in solving rather
 than from constructing the proof of the same search?
@@ -339,7 +429,7 @@ and reject some combinations such as lemma inprocessing and deep restarts.
 Strict proof mode adds further restrictions. An unspecified granularity is
 promoted to `dsl-rewrite` when full proofs are requested, despite the option
 declaration's `macro` default. Effective configuration is part of the baseline.
-[`ai-macroPf`][aiMacroPf] is an adjacent proof-support proposal; availability
+[`ajreynol:ai-macroPf`][aiMacroPf] is an adjacent proof-support proposal; availability
 of a proof-capable feature is not evidence that using it improves this corpus.
 
 **Comparison design, for later.** Specify ordinary solving, an ordinary run
@@ -351,9 +441,10 @@ possible. It does not guarantee identical search or a disjoint decomposition
 by subtraction. Compare effective SAT/BV backends instead of assuming proof
 mode always forces a particular SAT solver.
 
-**Risk / value.** Low source-audit risk / high information value. This is a
-baseline prerequisite, not a proposed optimization or a return to general
-solver tuning.
+**Manage the risk.** Record requested and effective settings separately and
+state where matching is impossible. Close this prerequisite with an explicit
+comparison design, then revisit it when revisions or proof settings change.
+It does not expand into general solver tuning.
 
 ## Attribution before an experiment queue
 
@@ -366,8 +457,8 @@ An attempt count does not measure time, and final nodes do not count all
 temporary proof construction. Dedicated, non-overlapping timings for every
 phase above have not been established by this audit.
 
-[`proofDisable`][proofDisable] replaces selected parts with trusted/opaque
-steps; `rpcAlwaysPre` inherits those switches. Such ablations may inform later
+[`ajreynol:proofDisable`][proofDisable] replaces selected parts with trusted/opaque
+steps; `ajreynol:rpcAlwaysPre` inherits those switches. Such ablations may inform later
 attribution but do not produce equivalent validated outputs. They do not
 necessarily remove the production cost either: the SAT replacement happens
 after fetching the SAT proof. Record exactly which work is bypassed, rather
@@ -416,6 +507,9 @@ than interpreting the switch name as a timer boundary.
 [theoryEngineLazyProofs]: https://github.com/ajreynol/cvc5/tree/theoryEngineLazyProofs
 [stratifiedStrIpc]: https://github.com/ajreynol/cvc5/tree/stratifiedStrIpc
 [stringsIpcRefactor]: https://github.com/ajreynol/cvc5/tree/stringsIpcRefactor
+[stringsIpcAgg]: https://github.com/ajreynol/cvc5/tree/stringsIpcAgg
+[stringsIpcAgg2]: https://github.com/ajreynol/cvc5/tree/stringsIpcAgg2
+[pfLogInferface]: https://github.com/ajreynol/cvc5/tree/pfLogInferface
 [aiPfIncremental]: https://github.com/ajreynol/cvc5/tree/ai-pfIncremental
 [aiMacroPf]: https://github.com/ajreynol/cvc5/tree/ai-macroPf
 [proofDisable]: https://github.com/ajreynol/cvc5/tree/proofDisable
