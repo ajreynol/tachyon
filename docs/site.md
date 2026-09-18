@@ -69,9 +69,19 @@ beside it is the same rows the page draws.
 [`.github/workflows/reports.yml`](../.github/workflows/reports.yml) builds the
 site on every push and pull request and deploys it from `main`. The build job
 runs the two builder test suites first, so a broken builder fails before
-anything is published. `actions/configure-pages` runs with `enablement: true`, so
-the first deployment from `main` creates the Pages site with Actions as its
-source; no branch holds the built site.
+anything is published. No branch holds the built site.
+
+Pages itself was enabled once, by a person, with Actions as its source:
+
+```bash
+gh api -X POST repos/ajreynol/tachyon/pages -f build_type=workflow
+```
+
+The workflow does ask `actions/configure-pages` to create the site
+(`enablement: true`), but its token is not allowed to — `Resource not accessible
+by integration` — so the first deployments failed until that setting was made on
+2026-09-18. A fork wanting its own copy of the site needs the same one-time
+setting, from that command or from the repository's Pages settings.
 
 A pull request builds the site and stops there — the artifact it uploads is not
 deployed. To see a change before it lands, build locally and open `site/`.
