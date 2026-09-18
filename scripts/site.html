@@ -1,0 +1,77 @@
+<!doctype html>
+<!-- Maintained site template; scripts/build_site.py writes generated copies whole. -->
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<meta name="description" content="__DESCRIPTION__">
+<link rel="canonical" href="__CANONICAL__">
+<style>
+:root{color-scheme:light dark;--bg:#f7f8fa;--card:#fff;--text:#131a23;--muted:#586979;--line:#dce3eb;--link:#1461a8;--ink:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1319;--card:#171d26;--text:#eef2f8;--muted:#a9b6c6;--line:#2c3746;--link:#8dbdff;--ink:#0f1319}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,sans-serif}
+main{max-width:1000px;margin:auto;padding:44px 24px 72px}
+a{color:var(--link);text-underline-offset:3px}
+h1{font-size:clamp(2rem,5vw,3rem);line-height:1.14;margin:.15em 0 .3em;max-width:18ch}
+h2{font-size:1.4rem;line-height:1.3;margin:0 0 .4em}
+h3{font-size:1.15rem;margin:0 0 .2em}
+p{max-width:74ch}
+nav{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:36px;font-size:.9rem;color:var(--muted)}
+.eyebrow{color:var(--muted);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;margin:0}
+.lead{font-size:1.1rem}
+.muted{color:var(--muted);font-size:.92rem}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;margin:26px 0}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
+.tile{border:1px solid var(--line);border-radius:10px;padding:13px}
+.tile strong{display:block;font-size:1.6rem;line-height:1.2;margin:.1em 0;font-variant-numeric:tabular-nums}
+.tile span{color:var(--muted);font-size:.84rem}
+.button{display:inline-block;margin-top:6px;padding:10px 18px;border-radius:7px;background:var(--link);color:var(--ink);text-decoration:none;font-weight:600}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em;overflow-wrap:anywhere}
+footer{border-top:1px solid var(--line);margin-top:36px;padding-top:18px;font-size:.9rem;color:var(--muted)}
+footer a{margin-right:16px}
+@media(max-width:720px){main{padding:26px 16px 56px}}
+</style>
+<main>
+<nav aria-label="Site"><strong>Tachyon / Reports</strong>
+<a href="__REPO_URL__">Repository</a>
+<a href="__DOCS_URL__">Documentation</a></nav>
+
+<p class="eyebrow">Tachyon · cvc5 performance research</p>
+<h1>Find where cvc5 loses time, and back it with evidence</h1>
+<p class="lead">Tachyon investigates concrete cvc5 performance problems and the research questions
+they raise. Its research projects keep their own charters, hypotheses and ledgers; these pages
+publish the measurements those ledgers recorded, so a reader can see the evidence rather than
+the summary of it.</p>
+
+__REPORT_CARDS__
+
+<section>
+<h2>Research projects</h2>
+<p class="muted">The projects advertised on the front page of the repository. A project publishes a
+report here once it has recorded measurements; the others are charters and search registers so far.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Project</th><th>Question</th><th>Published here</th></tr></thead>
+<tbody>__PROJECT_ROWS__</tbody>
+</table></div>
+</section>
+
+<section>
+<h2>What the evidence supports</h2>
+<p>A measurement describes the recorded solver revisions, options, corpus and timeout on one
+execution host. It is not a general claim about either solver and not an independent replication.
+Every published figure is either read from a recorded ledger entry or recomputed from the evidence
+that entry retained; a list with no recorded experiment behind it is not published.</p>
+<p>Raw results and benchmark inputs stay on the execution host, so this repository alone cannot
+recompute every measurement. Each report names the artifacts and commands that would.</p>
+<p class="muted">Written by AI agents under light human supervision: a person directs the work, reads
+what is published and decides what is filed. Nobody vets the internal design, and nothing reaches
+another project's issue tracker without review.</p>
+</section>
+
+<footer>__FOOTER__</footer>
+</main>

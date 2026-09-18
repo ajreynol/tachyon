@@ -16,6 +16,10 @@ repository, and records launches.
 offline HTML, CSV, JSON and optional vector PDF reports. Research lives under
 [`tools/`](tools/), with a charter and evidence in each project's directory.
 
+What those projects have measured is published at
+**<https://ajreynol.github.io/tachyon/>**, built from the recorded evidence in
+this repository; the [site guide](docs/site.md) describes what may go there.
+
 ## Research projects
 
 | project | question |
@@ -83,6 +87,7 @@ measurement.
 ## Common questions
 
 - **Where are the documents?** The [documentation index](docs/README.md) is the route to the guides and maintenance workflow.
+- **Where can I see the measurements?** The [report site](https://ajreynol.github.io/tachyon/) publishes each project's recorded evidence; [site.md](docs/site.md) covers building and deploying it.
 - **How do I maintain this tree or run CI locally?** Start at [maintenance](docs/maintenance.md).
 - **Where does a solver finding go?** Record its evidence in the research ledger; [maintenance](docs/maintenance.md#findings-and-discussion) describes human review and the reporting route.
 - **Who defines the shared repository rules?** Kanon keeps the [policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md); anoieu publishes its checker.

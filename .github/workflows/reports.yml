@@ -1,0 +1,48 @@
+name: reports
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: check the site builders
+        run: |
+          python3 -m unittest discover -s tests -p 'test_site.py'
+          python3 -m unittest discover -s tools/heuresis/tests -p 'test_report.py'
+      - name: build the site from the recorded evidence
+        run: python3 scripts/build_site.py
+      - name: upload the site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  deploy:
+    # Only main publishes; a pull request builds the site and stops there.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: deploy the site
+        id: deployment
+        uses: actions/deploy-pages@v4

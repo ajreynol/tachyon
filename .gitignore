@@ -6,6 +6,8 @@ job_launcher/configs/.gen/
 *.docx
 .DS_Store
 __pycache__/
+# the published site, built by scripts/build_site.py from tracked evidence
+/site/
 # working space, never committed
 scratch/
 *.local.md

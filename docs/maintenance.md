@@ -38,6 +38,18 @@ Green means these local regressions and lint pass. It does not validate the
 remote installation, solver behavior, research conclusions or chart legibility.
 Inspect rendered plots before citing them.
 
+The [`reports / build`](../.github/workflows/reports.yml) job runs the two
+site-builder suites and builds the published site from the recorded evidence on
+every push and pull request; pushes to `main` also deploy it. Reproduce it with:
+
+```bash
+python3 scripts/build_site.py
+```
+
+It writes the ignored `site/` and contacts nothing. [site.md](site.md) describes
+what may be published and what the builders refuse; a pull request builds the
+site without deploying it.
+
 The separate [`anoieu / policy`](../.github/workflows/anoieu.yml) job runs the
 checker at the `ANOIEU_REV` in that workflow. To reproduce it with a checkout
 at that revision, set `ANOIEU_CHECKOUT` to its path and run:
