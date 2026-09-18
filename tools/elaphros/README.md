@@ -1,5 +1,14 @@
 # elaphros
 
+**Planning status, 2026-09-18.** The [branch survey](ledger/2026-09-18-branch-survey.md)
+screens all 809 public heads of `ajreynol/cvc5` and characterizes 49 selected
+branches against pinned upstream source. It supports twelve
+[research directions](docs/directions.md) and a provisional
+[priority queue](docs/todo.md), with `unrewrite` and `pfrConvert` explicitly
+highlighted by the maintainer. These are source observations and hypotheses;
+no experiments, performance results or validated optimizations are delivered.
+Start at the [documentation index](docs/README.md) for the register and evidence.
+
 ## The charter
 
 **The question.** How can cvc5's performance in proof production mode be
@@ -145,8 +154,10 @@ directory imports or runs it, and removing the directory leaves tachyon's
 behavior and CI unchanged.
 
 **Status.** The human maintainer authorizes the proof-production performance
-question. This README is the charter; no corpus, numerical overhead target or
-baseline is fixed, and no experiments or optimizations are delivered.
+question and a source survey to set priorities. The current instruction is
+planning only: do not run experiments. No corpus, numerical overhead target or
+baseline is fixed. The [progress record](docs/progress.md) distinguishes the
+completed source survey from the measurements still absent.
 The human maintainer owns changes to scope and priorities and decides the
 ending: graduation into its own repository, folding into the parent, or
 retirement in place with the lesson recorded. That decision remains open.

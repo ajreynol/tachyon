@@ -1,0 +1,810 @@
+branch	sha	commit_date	subject
+1.0.x	d90993f0ed1a8d83113924dd2b0019a5e47582dc	2013-03-15	fix up build system for swig (d242c30 introduced a subtle error)
+1.1.x	8f9362dcd60e31bbb9300c0f20662afb3dc0c185	2013-08-26	bug 374 fix: assert litVal=desiredVal only for leaf nodes
+1.2.x	3bc4d22bce9e3d882473cfe96f241f76a100aa9a	2013-08-26	bug 374 fix: assert litVal=desiredVal only for leaf nodes
+1.3.x	cca221de7d29e86fd770af3aca0efc0d877dff26	2014-02-19	Stopping non-linear terms from entering the dio solver. Fixes bug 547.
+abdNoOrtho	dab9dd0a0e7f555bd40a5629054a52e76a966cfa	2025-01-06	Merge branch 'main' of https://github.com/cvc5/cvc5 into abdNoOrtho
+abstractTypes	2bcc87ca7abb76ec14dcdad571b3655ad347dfc6	2022-06-07	Fromat
+ackermannPf	41f665ddcaa7e5afa89a1e60a1a5022734b38ade	2025-02-19	Proofs for some ackermann
+addConstAllNt	cc6b8f21f7babd1e623975a23302e8b170a4737e	2024-04-26	Add
+aeq-12942	7648c90e4230bea69ac5d458a2217be4d54ccdd2	2026-09-15	Possible fix for 12942
+ai-annotatePf	c0cf32c04461dfa893a884caef2f285e4959df9f	2026-05-20	Fix spurious merging
+ai-arithMultNoDistinct	0bc361c1ad6b6cf8cb26adba5ab049562b497b2c	2026-04-29	Disallow distinct for ARITH_MULT_ rules
+ai-arrayConstElim	5d5bcff692d706fd087764c460240594f08cf717	2026-03-24	Elim recursion
+ai-cbqi-0423	abdfc559d0cc24bc96d52e69353c6c0b60dc41b5	2026-04-24	Format
+ai-cpcDoc	114d40a2abc354145cb3f9829ff6369faa3fd3c7	2026-03-23	More
+ai-deepInc	761d235b0ca5f49388dae21806b6d0e2efa0ae5e	2026-06-15	Deep flattening for re inclusion testing
+ai-dioLc	b6715aeab1d2b6a0a74a555f1d8f8eb8cfc0ae84	2026-06-16	Format
+ai-eagerInst1	3fc0d4782d8a2ce11546a1c4a31af15548544540	2026-04-14	Proper set up of regressions
+ai-eagerInst2	2de4c8ffa795e9b48fdd1a29352e092c1aaf7ba9	2026-04-15	Try
+ai-eecFixes-0430	b05a1deac0c9077d471ae14fc77f406dd0919410	2026-04-30	Possible eec fixes
+ai-eecNoShare	c2f448675e2bac7a82c49d77c0578eb1a194a289	2026-09-16	Merge branch 'main' of https://github.com/cvc5/cvc5 into ai-eecNoShare
+ai-emFilter	e13ad3382cc5bb75d6d8bd68697b75e637ab0978	2026-04-27	Try
+ai-eoIntBlast	8b656e8b7c12f190219e55862c4418b9e3a2c534	2026-03-12	RegressioN
+ai-extEagerInst3-1	022bd29874936871947d70d84cc3587b3ac575c9	2026-04-16	Try
+ai-factCurrent	844214ed1f483893a57e9799574edb90f91af0e9	2026-04-29	Possible fix for ee mode central, sat solver cadical
+ai-fix12051	a58aa8320e81b430e9f228b7011f24cea536ea67	2026-04-16	Merge branch 'main' of https://github.com/cvc5/cvc5 into ai-fix12051
+ai-fix12529-ho	16054b37faa6faaa57c972d42d9b0b9cd8cc7bde	2026-03-24	Fix ho model
+ai-fix12547	76e7bc4346eaaaaeed4fd11008f2f0d04daf8832	2026-03-30	Fix issue in parser with byte misinterpreted as EOF
+ai-fix12548	da26feb13d1d46d5737f779fee4ad67366504d24	2026-03-26	News
+ai-fix12566	36418e77cdcb7747ab76f35628953251778fc5e7	2026-05-06	Possible fix for 12566
+ai-fix12574	18e4e3db7f60aa72f5c24145221a0108547f3442	2026-04-09	Minor
+ai-fix12663	f694d7ad15770199cfa1127d15d60461178a5c90	2026-05-12	Tryg
+ai-fix12670	d625af519d4422c5b0f4254c8a3e1dbec15b10a5	2026-05-12	Fix possible cyclic proof in datatypes
+ai-fix12754	5cd791361fe5347b642bad5666a722332cc32bad	2026-06-19	Disable
+ai-fix777-2	fc83fac6e6929d8d4b829a9a1bb297b9bf4c2768	2026-03-12	AI fix regression
+ai-fix777-2-v2	b53ed6f461d210eb16734cabed9c7231a2e2df41	2026-03-13	Fix 777 part 2
+ai-fix777-both	3d673b24a6b4d64464379e813d206d0610e7651b	2026-03-12	Regressions
+ai-fix785	9b5e04a267c0f08fecec123dc47f8c9bc5303722	2026-03-26	Proof
+ai-fixAlphaEq	d6d3b772e0696511e345da6aa6b1f0cc170f560b	2026-04-20	ANother
+ai-fixAlphaEq-2	ae915f8f4f016811f4ac549fa22a4f4ee19103b8	2026-04-20	Extended branch
+ai-fixP787	86c9ed2f81da1046e2358a13de13ccc4da14e84f	2026-04-22	Fix
+ai-fixProj784-2	fed2b6b6d69a41384f2db0051aa4853186911b6c	2026-03-23	Comment
+ai-imgBvConcat	9e43e4e27b7cc24c2455b74567ab4c11d3d6a19b	2026-03-15	Regression
+ai-imgDirect	8f0d8ccf1f787aa70d09dcd23e21d630f5d8d773	2026-03-16	Regression
+ai-instDefer	168aeb8d4b5a9744a70b668fc4fddbbb88c643c2	2026-06-15	Format
+ai-jhConflictFirst	115ae974b4d0dbf7cdda4efa5bc27e5224634e42	2026-04-29	Fix
+ai-jhRlvInst	5825f205593af13c41812dd32f6f0defacc48384	2026-06-18	Tryg
+ai-macroPf	b374e333743541e1e5fbf780c9ede76fcc13994f	2026-04-23	Format
+ai-parserOpt	1efd9923fa3e3ac3daf2e7a26a5dfadf4f305182	2026-03-12	More
+ai-pfIncremental	3528e45cba629156c2964d92f680f956597e2515	2026-03-28	Fixes from merge
+ai-prepared13	a29eda4f4a94b73063113cbe8c808c58590878ee	2026-06-10	With claude
+ai-quantOpt-1	3dcde09f8b28553be0927041dc4c6da134094597	2026-03-12	Quantifiers optimization
+ai-toRunRegress2	5affe6f30946cf2421a8594098586ac5b9db8190	2026-05-13	Address
+aletheTest	534a0156b49435ed8e0afce669797ef87cbf113c	2024-09-24	Check alethe
+alf	eb58b7f16f614e3bfac3b9f028c82e94adfa71a1	2024-09-27	Merge branch 'main' of https://github.com/cvc5/cvc5 into alf
+alf2	9ccf18b917eb3dfa30309e7638bd22b6fde9f33a	2024-02-07	Missing
+alf3r	97aede6d014f0a9fe2636dd369c87c49a1e82c10	2024-03-01	Minor
+alfAciNorm2	8af6ae6086de88bf50242534e51f6b24d97e2b5d	2024-04-16	Merge branch 'main' into alfAciNorm2
+alfCadical	38dc4c8a7a734d7774c919b067be1243624c8a23	2024-02-21	ALF with cadical
+alfDependentTypeConvert	d47d585978fcc9d568886517b53ed74a45bcf3e9	2024-04-13	Merge branch 'main' into alfDependentTypeConvert
+alfDev	e0209e2362b6c3de364d0e78191ffc6850c8bba8	2024-04-04	Fix
+alfDoc	fbc5c9c0e6c3122d57b290242d05c5a9c33562fd	2023-11-02	Merge branch 'main' into alfDoc
+alfMoreEval	71ee23f9a679dd3f5555a46a1001f8236e69c5d4	2024-04-18	Merge branch 'main' into alfMoreEval
+alfNodeIc	46dc21789337ac1ec59a365503364cf2be25746b	2024-12-06	Fix
+alfProp	393eb9d4f03e5e198b9cc9bbf065e3384ca7c05a	2024-02-20	Merge branch 'main' of https://github.com/cvc5/cvc5 into alfProp
+alfProp2	68fad7c01e3b025475249631cb453d0050f77f0a	2024-06-13	Merge branch 'main' of https://github.com/cvc5/cvc5 into alfProp2
+alfTheoryRewrite	987bf0bc3902dda205ccb1a5467aaa89435d63e0	2024-05-15	Merge branch 'main' into alfTheoryRewrite
+alphaEqVarShadow	9ccbfa8a38a48921029af99306dfb1a280182a4b	2024-09-30	Format
+alphaEqVariant	a5a1dcc71d93baefdf90d37b67097a3129d7b87d	2022-03-04	FIx
+anoieu-0918	b6f5cc878f5f443ec4567db5c2872b64882fd111	2026-09-18	Bump logos to stricter version
+anonStr	f5a1cbbcda9777ed4a935ff1f44228b182771633	2019-08-09	Format
+apUnsoundInc	76890d5ff7fe63de842fd677d9782f942cac94f2	2024-09-12	Update
+apiProofArgString	d41c0cc05d9b1d0d5536121babc3d2201645741b	2026-06-02	Add Proof::getArgumentString to the API
+apiRewrite	3f54ecceaa2191fd5819c46fdf02e6ed0160b10f	2023-11-30	Fix
+applyEmbedding	391b68c90b3c475e6aab90c7d2bd8cef91cac469	2024-03-08	Merge branch 'main' of https://github.com/cvc5/cvc5 into applyEmbedding
+applyIndexSymApi	5ee97bd7d0331d218a69525afdc601fc93d3c89b	2026-06-02	Format
+arithCmiFix	0dd4c334709c2c703d75f133faea6dfbf4fd6c2e	2024-12-20	Try
+arithConvToBv	f388a6c273b884bbe6f73eb62282b4920d2c66a5	2023-02-20	Format
+arithFlattenCollect	55ce51932fbe73b83540206d07a1f5c3599f181c	2025-03-29	Fixes
+arithFlattenCollect2	3ba3a7741407969bf22284fbe7f10d60d751ab78	2025-04-04	Format
+arithPolyRel-fixes	b4e53e2b9802c6575867ebc365901d4db039f7bc	2024-07-17	Working version of ARITH_POLY_NORM_REL
+arithPurifySplit	be26f4d1aaff11b4b20bbabe0efa68cddbe9053d	2023-02-24	Format
+arithRare-1021	cf0035733214b93961c56568cf8b3084aacf392e	2024-10-21	Arith
+arithRareMore	be4fc1455d59a38929841710a933e8027f742d14	2024-05-28	Merge branch 'main' into arithRareMore
+arithRealPreserve	d58aedc5fd3c339d86c663c9ddd4e313073fd43d	2025-05-19	Fix
+arithReductionNoSt	2f585d4fce1ad95edb9ec0183c03368e2c0e478e	2025-10-06	Avoid mixed arithmetic in ARITH_REDUCTION
+arraysStdCg	bf2d6d596371798e59c306f975718e4721e5b024	2022-03-10	Format
+assigner	8e11c9bbcc138a5eb5b43c398b0753bcd233a919	2024-02-24	Trying
+autoInferSubs	6512da10695094d7c9aa6db9be42a591bb0a5605	2023-06-29	Improve
+autoRewSubs	919f5664adf56ad2fe343f18a016f76e75652588	2023-07-13	Merge branch 'main' of https://github.com/cvc5/cvc5 into autoRewSubs
+bagStrategy	1c4cebf1f2acd79b6d4a88eac665b156efbc0291	2023-09-06	Format
+bagsLastCall	feb139d7fc35186f07cdc190e9b3e3e7ec0efd40	2023-10-04	Merge branch 'main' of https://github.com/cvc5/cvc5 into bagsLastCall
+bagsStrategy	907b576fe7dce719589c204fe305be241290c25b	2023-04-17	Revising bags strategy
+bangLex	cefdea48a7de94a65ce19786977ba39d0c20baa8	2024-11-08	Merge branch 'main' into bangLex
+bbEoFinal	a8d9746583fcb5f7e96c5cd86553ac593f687d37	2025-04-03	Fix
+bbEoIteMisc	3c542a1286e74cadf382b1ace0b87af689266594	2025-04-02	Add Eunoia bitblast signature for bvite, refactor constant
+bbEoMul	dba72559900e7ef1bcc65054678bb2fca44cf9b9	2025-03-31	Add Eunoia side conditions for bitblasting multiplication
+bbOpt	4dd59fde1b826202becae941cdf11d56bc372c9b	2025-03-12	More
+betaRedLifted	1967f722c8299a4e6916e77e6b6492a375ff851d	2024-07-31	More
+bitblastLc	c83e2dec841fec07f45560e29a9bc71f166f787d	2025-06-12	Last call bitblasting
+bvAbstract-pf	bc3fbdc495b6cb4de25748ebeeef56836fc75cf4	2026-08-27	Format
+bvBbExtf	af12fe5fa5952703d53ef7fcf3e0056323f449b2	2017-02-16	Try rewrites for bv terms. Add options to bitblast proxy var equalities.
+bvConvDev	89d1f81a71beb7e4af45be544b7c5938c23b9270	2022-12-22	BV conversions dev branch
+bvConvSmtLib	738c4a927771bd0c11e9d940d26d56098e6f3317	2025-04-09	More
+bvConvSmtLib2	4c85878722c0b19e1c1a1f1a8ab5a2c6a1cf580b	2025-04-10	Fix
+bvEager	5cb1c408fd7ccc9d9268a68c875bf648ffc62240	2024-11-06	Add support for BV_EAGER_ATOM in Eunoia
+bvEagerCpc	8a4547bc301f3f3c2eb9430f95fb045deca97c22	2024-11-20	Format
+bvEval	4e0a146cd9623f792e0ca940dfdd3380c1f240cd	2024-05-24	Merge branch 'main' into bvEval
+bvInvAdd	f63382626aefb48faad3a937ea945657dba07819	2025-04-24	Merge branch 'main' of https://github.com/cvc5/cvc5 into bvInvAdd
+bvLimitRec	4ee683f28498260a5a46457f42df63120ccf5d2a	2026-05-19	Another try
+bvMuloEo	0587f7d42642cf7b8f6c408df260a2b301b20b78	2025-03-28	Merge branch 'main' of https://github.com/cvc5/cvc5 into bvMuloEo
+bvRewAssoc	9cca9e69e831d53c0444fc0416b8f56115ecd9ee	2025-08-15	Better
+bvRewDead	55fcd3d75313322417afeb645283dcbc0531d8e4	2025-04-25	More
+bvRewFix-0719	343288630cc9490c303120b56c51d67077c79f93	2026-07-19	Fixes for bv rewrites
+bvToIntQuant-031126	163e60360bf07bd1fcb34459914aff4e65b48b63	2026-03-11	Patch
+bvVElim	f8d3efa6a2e06a00e2cf805b2cf824d2f211c55a	2025-06-12	Minor
+bvaDivConquer	19a61bcd276ded99769804c68f1e132cd27b2182	2023-02-16	Take branch and bound
+bvmId	d9e258e9b80b068fbbd17bf424d5c461ed3ba254	2025-03-01	Revert
+bvmId-debug	f6d1a1935e6f901d1261373724be21cb9c6ea193	2025-03-01	Debugging bound var manager
+bvmRefactor	fcebe296d502c8ccd22a6ed4ae42a00e87eb67e2	2024-05-10	Refactor bound variables
+bvmSubtypeElim	ae9146d3421b141e3b53bea2d01322beff63b495	2025-04-03	Regression
+cacheEntCheck	99fc7d6b4814e11dd1f440e356937b9d0fccb2b1	2021-10-15	Format
+cacheSubs	5d5e7fc3bc92100344696f70e52a48b3e5597991	2018-08-02	Enable
+cadicalPortfolio	3fbe3893c82c8dfa0fc01eacea13b2e75c4f7848	2026-06-03	Missing
+canonVar	5457827fce703119bc323bd84e2cad4915011556	2023-08-14	Merge branch 'main' of https://github.com/cvc5/cvc5 into canonVar
+carryInst	a0e231289048583ea17c31ab20844fe005ebc1ce	2021-07-29	More
+casc2024	f57410742e238449aa44da4b2dd69cce5525136b	2024-06-05	Fix
+casc28	fe22e0aa1fb2af623c4e13c68f06ecf4d4c25c2d	2021-06-21	Minor
+casc28post	10658b721e1a692320793d955ac3fec3b78935b9	2021-08-26	More
+casc29	5b2f7630d29e63c17db05e1158ed0b645b066f0f	2023-06-12	CASC29 branch
+cascJ10	db26022ca8d808d3b2da4860bacede49db47139c	2021-04-28	System version
+cascJ11	aeaa3e0595dea1482d6403cf6d30e49fb306f872	2022-07-06	Fixes
+cbqiDev	ed01c92ec4ec1cf4fa0e722c89b8e8411e9833d8	2018-01-05	Merge branch 'master' of https://github.com/CVC4/CVC4 into cbqiDev
+cbqiImp-v2	de4644030dc583775578509015d91cab73cfde72	2018-01-14	Merge branch 'master' of https://github.com/CVC4/CVC4 into cbqiImp-v2
+cbqiTest	8424af3b71f1612ccd47277670b5ecf4cef94eba	2026-04-23	Test regression
+ccfvNew	38c3048a378b009322c41055d8108f6d59398b53	2022-04-21	Fixes
+cconjGen	096c53f31a4fcd5415fe3caec549a131d1992b31	2025-05-21	More
+cdRlvTerms	8ef676c57939a8b6854245994637310c5b326cb1	2024-09-11	More
+cdno	46ed2b25b607c203c8d890ab74992efebdcd8483	2025-09-10	Merge branch 'main' of https://github.com/cvc5/cvc5 into cdno
+cdtNormalize	c8af3b185b62093faac0be5e1ebd5dea243dbecd	2019-12-13	Format
+cegqiBvIneqIgn	6641bb261738b718c619628cd61678c95042c766	2023-01-10	Ignore policy for bv ineq
+cegqiCheckSat	e8c42c9e52ba983beb1675eaf0b1c2d37a5dcf6a	2023-10-26	Fix
+centralEe	0b3d9df6666c513bcbb49b602a6a983cb8eb3429	2021-03-09	Fixes
+centralEeDev	c2b34f6a5cda0de367d07a7cd419cae89d0b045b	2021-09-03	Merge branch 'master' of https://github.com/CVC4/CVC4 into centralEeDev
+certoraDev	6c01631a47c7d016feceebd1b6967dd33c5ab01e	2021-08-02	Merge branch 'master' of https://github.com/CVC4/CVC4 into certoraDev
+chainMResOpt	cdebf282fc3ac22cddee66db548887fffbffe16f	2026-07-07	Minor
+changeOrderBvEq	6e914623ed77e35a35b140088cbdb6f33fa80e26	2024-04-24	Merge branch 'main' into changeOrderBvEq
+checkAbdEnabled	0fa5258a16957abb363ca10c9f9cebb4711a9a57	2021-10-20	Merge branch 'master' into checkAbdEnabled
+claude-eagerInst	995b23bcfa6542c8e696d5b0742cf2b7d3d070c2	2026-09-16	Merge branch 'main' of https://github.com/cvc5/cvc5 into claude-eagerInst
+claudeDev-dts-idef	2acf62a2602eb632c8d10a3963eda6039ebd8914	2026-06-15	Taking both ideas
+cleanRd	0983bbbf9c77008f4d0882c7959292cb514456f4	2021-09-14	Format
+cleanupDt	7ccdc8b86cf40501415543029853bbf84f721214	2022-05-17	Merge branch 'main' into cleanupDt
+closedSkolemIndices	07d807e13b516c8afe3794f2fe8f94d681110cd6	2024-07-17	Ensure skolem indices are closed
+closureConsRrFix	c6678b718191242e84fc9d4a4a948d3ed1f402e1	2024-04-15	Format
+cmiUnit	c42237b6bd4f4375a28c725126b7992043fc6c82	2022-07-06	Minor
+commonTimer	372929420ebe9ceedba974c47507577ffc57bf39	2026-09-18	Promote timer stats to common options
+compressedSel	975b3c9915da00cfa8411960997d20fc3e2334e0	2017-12-20	Merge branch 'master' of https://github.com/CVC4/CVC4 into compressedSel
+convReduce	1ab3870e076483c0f4a6f61f90d6002b135fc112	2024-02-27	Simplify
+coreConUnsatCores	f7b799eb8cfa5e323276731b8a48615a49dd312b	2022-01-11	Merge branch 'master' into coreConUnsatCores
+cpcDevCR	496b8f5b0dbec7b8a5a0d3bc8b5726b3320d92cf	2025-06-15	Minor
+cpcDevChainMRes	6e08c402be9d7aa78721ec43d64d0f73a412af57	2025-08-20	Minor
+cpcFormatted	5400a450c5cc3e99fb56fa035e60014cfa090c4f	2026-05-06	Formatted eunoia
+cpcFormatted-2	9d7fba84016244856cd05d6aedde40294a877541	2026-05-06	Another attempt at formatting
+cpcLogos	47ced2f0b7c3eb4a7efaa2dcde5f399f520041b3	2026-08-28	Refactor
+cpcLogos-dtDecl	fd4d1c7631a09088e1207c218575344045b03b00	2026-07-23	Productive order
+cpcMinor-0824	43d76c93f021abacacda67f063b92b98c656498a	2026-08-24	Minor fixes to CPC
+cpcMinor-0830	4be85a94a2a05e8e98a60c47f101406078a90f69	2026-08-30	Minor fixes to Cpc
+cpcNaming2	a49720d2ce4fdd825204b21e497eea2e118da226	2025-08-01	Revert
+cpcSimpEval	6bbcd1dd63e241f09696f224a3b6f39e51f9c34a	2025-10-01	More
+cpcTypeFix2	218541ebbcf6037ba66c665e6b21f2035262b58f	2025-05-27	Minor, update to quote
+cpcTypeFix2-B	cdf73094d89f5736e906280108404393e38e2e89	2025-05-16	Fix
+cpcWellType	532a63673529c36a8f42653839d14a1c448f220b	2025-05-27	Merge branch 'main' of https://github.com/cvc5/cvc5 into cpcWellType
+ctypeNwf	d2f936ed6ae330e9bf21e195eff358186bac105f	2025-06-18	Format
+cycleBestContent	bb6c84fc858251c063e414266b723fec91f9c2d7	2026-04-20	Fix
+cyclicProof-1025	e44f7552d9bc81026800f35a6564707d528f2566	2021-10-25	Minor
+debugDumpLemmas	6bb00532447782c4e0303894d8da3a1fe16695ac	2025-09-04	Merge branch 'main' of https://github.com/cvc5/cvc5 into debugDumpLemmas
+decEngineReqPhase	4f4dd260ccae5a4d481a42f3ba376f632a5812d8	2023-07-17	Have decision engine take into account require phase
+deepCheckModel	2d6e57ae4cb36184376b07e5560dc7733270c04b	2021-07-13	Merge branch 'master' of https://github.com/cvc5/cvc5 into deepCheckModel
+defaultsSyQi	4188598e19f4b17d0a57a338dba65ba92124cf96	2021-09-02	More fix
+deferBlock	e2ede75b5e38ab037e1c16062f81ef489f309a31	2025-08-26	Merge branch 'main' of https://github.com/cvc5/cvc5 into deferBlock
+delayFuncAssign1	c8786d8745dd107692c146751d30906a403d5449	2025-11-25	More
+dfcPp	fa3a260bbd8db47d8ee56f2903717213e04f024e	2021-09-08	Merge branch 'master' into dfcPp
+disableCnfPfDump	838ec6224215fbbb3b3bbf4350d340f06957455d	2024-08-21	Fix
+disableCodePointElim	427fb6d5742e1dc7442d06890f05b51dba2ed47d	2022-07-20	Regressions
+disableFlattenAssoc	e3446209d7b7fa4193f2606ed62177f4a3675204	2025-08-12	Minor
+disableLfsc-0903	f298cfef9ccfb2f08b83c0d07957b3b2cc87e429	2026-09-03	Fix nightlies
+disableReg-0118	a165592d6c47ec45ed7cbe5d5f694939cb032aeb	2025-01-18	Disable cpc on regression
+disableReg-0720	0ad70b310e9ce603222df857bd527ce868f0eac5	2024-07-20	Disable regression
+disableReg-0828	a78a04bfb61a1a4ddd535986d0baaa7133fdb791	2026-08-28	Disable regressions that timeout on nightlies
+disableReg-1203	778559f8197534938292f86bb3eda19d4457dc1c	2024-12-03	Disable cpc on regression
+disambMinus	229cd81d8db5d4e22861f450ac79dc880c9cf8c2	2024-07-09	Merge branch 'main' of https://github.com/cvc5/cvc5 into disambMinus
+distinctExt	2039789b2f881e39a3d6d29bcad67336601813c1	2025-11-04	Update src/theory/uf/distinct_extension.h
+divNoMixedType	72b0852744397564714aa4f5ead982973e770e67	2025-06-17	Merge branch 'main' of https://github.com/cvc5/cvc5 into divNoMixedType
+doki-1	1130c56e4af3e5b603ef990e36ce08d82f4574be	2026-09-17	Unstage RARE
+dreg0909	e7a0e16841903dbad0d9ab454bd93521f6b8b0e1	2025-09-09	Disable timeout regression
+dslByDefault	42b3d14d80af0527ca566a2971f0afc8c0510fc7	2025-05-06	Format
+dtEecNotDone	33178c85040b86bae778be1e816eaf9f07ef3ca6	2026-04-29	More
+dtEecNotDone2	a4fd7f79900d6c90499da008ae139f81878ac06d	2026-05-12	Merge branch 'main' of https://github.com/cvc5/cvc5 into dtEecNotDone2
+dtElim	a5eec432e58f1c4daa0440486456fe0d264de224	2025-10-29	Switch to 1-cons
+dtInstMode	184fcca9f49ee563058de262a1b3cfef610256f9	2020-10-11	Format
+dtIpcFixes	fc66318a613ffa3f02994b9f0f26f2352c47f8c1	2025-01-17	More
+dtIpcNoRew	d1dc7312aa74636ebfe237080dd9b4aedd2ce2e5	2024-12-20	Fix
+dtLazyInst	7e3e794f67088bf2cb3b4d1cfe815ddf80ce4520	2020-09-20	Format
+dtLazyInst2	7eb551e330b4ba51d2c6e3b4081643ae6fcec3ad	2020-09-21	Decomposed congruence
+dtLazyInst3	be14889d8f234d949779ff0e8544b471f0e44134	2022-05-16	Merge branch 'main' of https://github.com/cvc5/cvc5 into dtLazyInst3
+dtMatchExp	7d7e812815d27aa2ece49e1e50668cc71e55ee08	2024-12-12	Minor
+dtMergeConflict	7a8d2dd457ca55b34cade092b83e4d100c457afe	2022-01-20	Format
+dtMergeNotify	f0a8c9feabdf5103b5c402e2330eb5e5adae18ca	2026-05-14	Fix
+dtMergeNotify-v2	197d640445e9a4e84deccc25e06c2e2779dd54d4	2026-05-20	Another refinement
+dtMergeNotify-v3	b128f29f0f0c3b2d756ecc811b7d5a3bbb550dc2	2026-05-22	Trying to fix
+dtNoAssertTester	d143beb936c9b30d0bc3aa5c74eb8bc3dde8ae5f	2021-06-22	Format
+dtOptMinor	a9ad4274070b06175d2c4b377c400e03420d259f	2025-10-29	Fix
+dtPendingMerge	47ea7dab8cea66d7cfa846341dc2994ad7af9eb5	2021-06-06	Pending merge datatypes
+dtRlvSplit	a7484f8a6212c077ad2194ec753397a09da78c48	2025-11-05	Merge branch 'main' of https://github.com/cvc5/cvc5 into dtRlvSplit
+dtShareSub	63bc935907a7ed5cf052708918a7dfad5994f275	2022-01-12	Merge branch 'master' into dtShareSub
+dtSharedSel	dcc7123f5aad6c90d478a37d4fceab3a92a6f5fa	2017-06-21	Do not use portfolio with check-synth (for travis).
+dtSizeTraversal	fc52782aa822d79b7d654fdbf182fe73fab8abff	2018-10-10	Commutative size order.
+dtSplitRelevant	654a92e13593ed8cf053b8335d65fa3305a84c22	2026-06-10	Diff
+dtTheoryRew2	95bbb8eec5773722604bf71bc159bb9e91535133	2024-05-15	Merge branch 'main' into dtTheoryRew2
+dtTheoryRewrite	d74ea8cdc9af4e47c648654c00cb6b6eb79e8427	2024-04-26	Merge branch 'main' into dtTheoryRewrite
+dumpProofEagerPre	9e6c6e60e4e3d13baca7e6b2ea1c97f07034a08e	2024-09-26	Merge branch 'main' of https://github.com/cvc5/cvc5 into dumpProofEagerPre
+eagerCbqi	c0ea36447ec0cde3041a03c196bde8cd1e9d557f	2024-10-09	Some
+eagerElimDefs	b0e09dbd4e0383ec7d8975700ba069614e65ea4d	2024-10-07	Update
+eagerInst3	4b3a88163343a6f25424254297c3c76ecca2043e	2026-04-16	Challenge problems
+eagerQM	4c3c5343eef64e162f299c420734e4b7284e4bee	2025-08-28	More
+eecFineGrained	69d0b800d18c41c20d1200931b4badc2ad4011df	2020-02-24	Format
+eecOptNoStatic	ade44d2e75382fea1942c33cef52f17733835591	2022-05-27	Merge branch 'main' into eecOptNoStatic
+elimArith	5a49e71471843acfe3c3e8f8e80c31c0d71aa42d	2024-08-14	Merge branch 'main' of https://github.com/cvc5/cvc5 into elimArith
+elimArithU	646d8dfdd40ce37b126fe2f41d337127dc2f0919	2024-08-27	Minor
+elimCallExtRew	48d2ff283124f0945939eeec0e56b6441d623236	2021-12-21	Merge branch 'master' into elimCallExtRew
+elimDtOpts	de3b0bf8307f3a1985257be0f44750f515ea8667	2022-03-10	Merge branch 'master' into elimDtOpts
+elimEoDefine	3d13e1053686f50bcd7e2ddad34eaa21ebc7290b	2025-10-15	Simplify
+elimTrustSubs	4049af6a521f5e4a5ac24108161e9432a469bbcb	2022-05-05	Minor
+elimTypes	4a2501ad87d1139cca617147aaf058516166cd7c	2021-05-19	Simplify
+emExp	6f2a1aec1e06635ec1f54194304b7b469b66823f	2025-11-13	Trying heuristic
+emFailMasks	ae3a045b657db3172c4a7c27264d3af358dabe59	2022-04-21	More
+emStratify	f142551a2030b9fb78ac0074b09e56183683fab8	2023-11-03	Fix effort levels
+emptyWordAttr	a5152cb78f8e4e04e207c67bdcec1185c4f1d3eb	2021-12-03	Merge branch 'master' of https://github.com/cvc5/cvc5 into emptyWordAttr
+entPolTermContext	d5c1bed48b6dde2abd78248bdb3543556ddb3a33	2020-12-15	Merge branch 'master' of https://github.com/CVC4/CVC4 into entPolTermContext
+enumInstOpts	3a058fe4d21e960155d4e590576678e04fdc1698	2022-01-14	Merge branch 'master' into enumInstOpts
+eoArithFixes	d0b5ad0fcd47a8364b186ba3899d1c133eb8997d	2025-05-22	Fix
+eoDistinct	783bd0d27a10dc2c1c0e03eae29523ac0cc00181	2025-09-16	More
+eoFixMinor	34695996b044d3ccd5db395fe693291a296e5b36	2025-01-09	Update
+eoNoCons	f0fa73c77fa562ba5e1f556886fa308c2cd16575	2026-03-03	No eo::cons
+eoSimp3	4eaba62f4ee2b846bd053338f89b32567b2ea619	2025-12-10	Merge branch 'main' of https://github.com/cvc5/cvc5 into eoSimp3
+eoSmtlib	dfe4ab485ad21e223e267ba953979b8c1e3f6650	2025-06-14	More
+eoTrust	8e706c24c8502911434343cd044119e07e0d2a9b	2026-02-02	Merge branch 'main' of https://github.com/cvc5/cvc5 into eoTrust
+eoTupleTypeof	3c5d9df1999f154b5eaee2573a09807043ca990c	2026-05-18	Change typeof for tuple constructor
+eoTypeofTerminate-2	2a9bad74a7c449494d86e4c08e381d2fd0c90218	2026-04-10	Variable lists
+eoUnhandledStat	8920a8e4406fdab79c80b5877908f98207f7c824	2024-11-11	Add Eunoia unhandled stat
+eqAssertions	11a5c6a1fbc9483bab44d2dbe79a7a62a413406d	2026-08-21	Format
+eqAssertions2	f93f611fab1901332f7d9d482d02aad8c12802dc	2026-08-21	Attempt at Boolean equality
+eqstatusLinear	7c7185d08881c05aa2d564b06410a1cf990f8611	2024-03-08	Format
+errStdOut	ae61d368b795ce7a93e4f0777680e13567013356	2025-05-28	Merge branch 'main' of https://github.com/cvc5/cvc5 into errStdOut
+esSemRare	b92b6bbff0429b5f26cad88ba5a31f35bb026519	2024-06-10	Revert
+ethosRef	69fce35327111760e7b6b5c26310dde2b153f97b	2024-08-07	Update NEWS.md
+ethosRefChecking	fc68ecadd4fa9e16a96d2694aad20bd1dea4455d	2026-08-28	Only in safe
+expNoMix	928b513421637218e49c32c5b8d258215dfe1a2c	2025-09-02	Apply suggestions from code review
+extConst	ea93e2b2abfba990f50cf07f404f2608179fc241	2021-07-28	Make extended rewriter methods const
+extPredIntro	4513945f55beec5a2f6e9368b8378c1dc7b8fb55	2024-05-13	Extended pred intro
+extRewBv	d85b75bdf255bbbb2fd93a3ca98849f01943ebb5	2020-04-28	Merge branch 'master' of https://github.com/CVC4/CVC4 into extRewBv
+extRewBvConfig	919e24d1a88ef44ae3194d8688cc487ce980fc3c	2018-10-31	Fix, enable by default.
+extRewBvUtil	fbafaecbf84eb99c71cb480ce6dcf66e21867d58	2018-10-08	Fix
+extRewQm	ead7b81272716afe2a9cb71786d1de3f50521590	2018-09-04	Merge branch 'master' of https://github.com/CVC4/CVC4 into extRewQm
+extRewRecPush	7ce124aba34688f48862a5f5ead533a2bde48dc6	2018-11-14	Minor
+extTheoryArg	18750d52f643875b1d0e4b065970f04322abcd0e	2025-10-09	Extended theory arguments tweak
+extTheoryBV	db4d8178abe3e7fa6b28fa6b97168cfcb8929855	2016-09-30	Minor fix
+externalSygusOp	70360fb586fa674393dda4f8571acbdecb3916b2	2021-08-26	More
+extfMinExp	6e93ba7e737f63020583f499cf84f86b2bcbee10	2021-11-24	Fix
+extrAgg	f4dd90f03e172153a2db131dd540a2a32b112c97	2023-02-09	Merge branch 'main' of https://github.com/cvc5/cvc5 into extrAgg
+fatalOptException	169cb3d0daa7fa2dde6b6870f27de5d816df6ded	2025-02-10	Address
+fix10148	e407c8d9f4faae43248888429846817df4265264	2023-11-08	Merge branch 'main' into fix10148
+fix10192	4ebcefe7860d9202a8052dd103b5b4bc180565c2	2023-12-04	Fix
+fix10286	9a63cae17597c1194a6e73007964e62df9ad1819	2024-01-18	Possible towards fix for 10286
+fix11066	5f647879e26bf40df04c5e5cf3c596901e22187f	2024-07-18	Add
+fix11809	62e192d6fb165d462321d405bcc36a9e2d6270a7	2026-03-13	Fix 11809
+fix12027	5222447c0b0980bc88d3b40caab13100b4c86518	2025-07-28	More
+fix12076	4cc48dd021b630b3776c782da973185e7a1bdfc5	2025-08-14	Fix
+fix12320	ae095f7fac6b5ffc4fe4008c2abcc52178b954d8	2026-02-03	Merge branch 'main' into fix12320
+fix12607	c1bb4592febf98e9e84f5d38ad284146fd74090e	2026-04-17	Formatting again
+fix12630	f21afebd6192d89a02e28340b041a20f4fc1188d	2026-04-27	Fix 12630
+fix12703	46425320a399ed8da4a2f272539f9c60372cf648	2026-05-27	Handle lambda properly in eliminate shadow converter
+fix12709	8a1333608df1e404594beb8c85de4f00c7f6e375	2026-06-09	Merge branch 'main' of https://github.com/cvc5/cvc5 into fix12709
+fix12761	257f2986b3162f702d441df54fd24b6f8f6f644d	2026-08-25	Another
+fix12775	f5cdfe4e4b3ef0f1e4d76acf1d43f9458f5dc010	2026-07-02	More
+fix12779	202ed09147c1541f621f013ff9ba0dd42cdc8c93	2026-07-07	Fix 12779
+fix12797-candidate	230c54a37b888d9b8d9a242c894676a5ea81eea6	2026-08-25	Merge branch 'main' of https://github.com/cvc5/cvc5 into fix12797-candidate
+fix12805-1	ea2df90ea3237c4241a5eab098b5182f8036ac59	2026-08-11	Working on fixes to 12805
+fix12805-2	246fff84d03720a201862abf89bb38fbeb99befc	2026-08-11	Different fix
+fix12805-3-rewriter	5067952c0b0ce2b54aeb3f4cadb1575e4c30bb31	2026-08-12	Another alternative fix, changing arith rewriter
+fix12805-5	583febc0cdfbf784f729d333c5d6eee2c35d0930	2026-08-19	Reverting
+fix12852	b63d8d8ba475850848163a48a290236264f15c34	2026-08-19	Format
+fix12884	4d4f82f41525f8bc753044c32b912a3e96e40e2f	2026-09-16	Possible fix for 12884, with cadical
+fix2076	eabaaa15a2731e77241d99931df1c6b891bdfca9	2019-05-17	Update QF_NIA strategy
+fix2153	66ad19e3f1dfa24607685a2b4ff3eaa3913649db	2019-03-22	Check error
+fix3065	ce3288080e08f0b905aea79c2297bc86834a538c	2023-10-10	Fix
+fix526	f845b935b91a8b64b21fdb722dd4a8b1de883639	2023-03-29	Regress
+fix5288	89f88763faaa86d3c417389cd738d70ac9146793	2020-10-18	Possible fix for 5288
+fix617	f7cf53e189949d0458f1bba31e893da7a1d091e6	2023-03-29	Format
+fix674To	a20cf444f34b40cea3093f2bb852a4725102bc0c	2024-08-07	Fix timeout on regression
+fix9269	835a385a889487c53b260ef833fe716faa12308d	2022-11-15	Merge branch 'main' into fix9269
+fix9442	bb482bd27e7b46e96f80c6e3f83317c3ca901044	2023-01-24	Merge branch 'main' into fix9442
+fix9989	b13a4fc50ab8c6a2577936dc06a28a438aae29c0	2023-08-30	Sygus inst non well founded
+fix9992	c7fa75a965f8a7428d23ebf1475e3c6afd0aa46d	2023-12-06	Merge branch 'main' into fix9992
+fixArithPosNeg	bd514b6cebfa9e3694bb041b46168725270d022f	2026-02-02	Merge branch 'main' into fixArithPosNeg
+fixAsanParser	447b6882be5f9cefa076240c744fb0b3492a083c	2022-09-21	Another
+fixBadCodePoint	8b1aac0176a5a446381a1b35fdafc5e11bdd4ff2	2025-07-08	Add check to mkString(const std::u32string& s)
+fixBbEager	4ab186423bf5dd5196b4a63cc8113ab0d57dbef6	2022-04-25	Merge branch 'main' into fixBbEager
+fixCocoaInit	531c35f858fd91fe442513a0402d3d4c25581a04	2026-06-02	Fix initialization of cocoa in theory arith
+fixCsplitEo	1860f05ebf146bbd96ecc7ef3175c5c418304f0a	2026-02-23	Fix Eunoia definition of concat_csplit
+fixCyclicPppg	88189238e244e92603f9ab9cbe5687e9d08bafc4	2026-01-30	More accurate
+fixDslFixedPoint	b3336cff9fbd2d051a47a21f8a1c281c32eb73af	2024-04-22	Clarify
+fixDupBrc	1cfa1443bd9878399f64c5c0cb411acee0842328	2025-12-01	Fix
+fixEm	591d76e6a41614d0a48710c8551abf123a61e0cd	2025-10-31	Merge branch 'main' of https://github.com/cvc5/cvc5 into fixEm
+fixEqOrder	ea000af8f7df81e5be65ce92e514e0c58cea2737	2021-05-21	Fixes related to ordering of equality
+fixExpDef	21d68330ec259b505cb9804084fffaf61e3cc1fd	2025-01-21	Merge branch 'main' into fixExpDef
+fixExtf659	54493d01d5a1cfa5a8651704c115b8a579a95448	2023-12-01	Merge branch 'main' into fixExtf659
+fixFastEnum	e814867f2bc3cc74959e4703ffe421cda06f88ec	2020-02-03	Add regress
+fixFindSynthTestPy	978dadd5889ade7f5f501a7627900d1a9e448e47	2023-08-14	Merge branch 'main' into fixFindSynthTestPy
+fixFiniteCard	414f833f9c29680d46a64af78eccdf2443c39fa4	2022-03-02	Merge branch 'master' into fixFiniteCard
+fixFreeAssump	032829c3b2d637432d40ad6f869872e10e76fe3a	2024-05-02	Merge branch 'main' into fixFreeAssump
+fixGetValue	1f9491156ef40a823b9a75ddd1b20536334c5ab3	2025-07-29	Fix
+fixLfsc-0124	62a635ffc1319aa7697f8fc1a368659b06b73429	2025-01-24	ANother fix for LFSC
+fixLfsc-0225	53844746f9543b36336e9e808c9c3c8d599887bc	2025-02-25	Disable LFSC on regression
+fixLfsc-0227	c516094dbb96dd41f195c6cce0c201704873d9a6	2025-02-27	Fies
+fixLfsc-0317	793f3cbd30843aae43e01932fbfff4adcbd63a00	2026-04-17	Fix lfsc
+fixLfsc-0603	5d44766c5ba8f5ddbac66e8784216158716d6904	2026-06-03	Fix LFSC
+fixLfscReg	77372f23633352c70a9044c06075ca8a8061f220	2024-06-11	Merge branch 'main' into fixLfscReg
+fixLfscReg-0925	90a51d29b6603e73cd64d86fb0205adb61267e04	2024-09-25	Fix LFSC signature
+fixLfscRepeat	3bba2ef5efa437ecea0236356cc42827c3c21e6b	2025-08-25	Fix
+fixModelBlocker	5d858f71ad5a89647e2f5ec7e8142b054712df14	2025-04-30	Regr
+fixNl	a773b44076b262cd3970fa30c680bc0cf6a490e1	2026-02-24	Format
+fixNnf	f6912113c2b0a24aee6a1a7141d9bc9e33ca8598	2025-12-03	Address
+fixNtStr	cf8a508243c43323a83b153b12cf5f963dec04fa	2022-03-02	Merge branch 'master' into fixNtStr
+fixNta	809fe9aeb7c750262a9d358273cd1a13eb65e2ad	2023-11-01	Merge branch 'main' into fixNta
+fixOpenPf-0819	5f55bb35b3e7d628ab869259778d4045b6e18958	2026-08-19	Minimize regression
+fixOverwrite	7f66228fbf3477eb6e37848b236509a16ae274db	2025-05-06	Regression
+fixPfInstContext	e450e1ed47e12f1311022467758197cdddc58c0a	2021-07-15	Merge branch 'master' into fixPfInstContext
+fixProj691	7e6aefe9e36382fcce7b06f64b9ffa5b27d43a2a	2023-12-21	Fix 691
+fixProj750	60c629e95c03a08f7476de8597db16997ae1268a	2025-01-14	Fix project 750
+fixPropAssert0302	1dcd64d16904348d449dba91cd6354dd4ec5957f	2022-03-02	Merge branch 'master' into fixPropAssert0302
+fixRcons	3c1368278e0af9bf382e578725624ca1a4e2918a	2023-06-13	Merge branch 'main' into fixRcons
+fixReg-0702	24e9605a4cba1045586a743d87415bc8a491a4bc	2026-07-02	Deterministic
+fixReg-0706-2	b1434a43bb470c9df6e3487f107d9b214f28baf4	2026-07-06	Fix nondeterministic regression
+fixReg-0820	034c5ccdbc57df3c2597164bf68a7c4d72ede620	2026-08-20	Disable competition on regression
+fixRegress-0905	5175bfece66db3f3a6d50904b5ba4d8bfc2efd0e	2023-09-05	Fix
+fixRel	34617deadb1519602d235be58e6aa5fc7f2b6138	2021-10-27	Merge branch 'master' into fixRel
+fixReplChar	5a7f389223cb613491be0109a4df6de97db4de82	2025-08-01	Gen
+fixSepMergePto	78b8b2d138abf6af52b06d32420d9a04f072ff67	2022-04-27	Format
+fixSeqModel	40ca1fda954dbfa5b8e7aebb4a1b2b3d18bdcf6a	2021-07-14	Merge branch 'master' into fixSeqModel
+fixStringEagerLenRe	0d1341137513ae5f5c66fa5cb13e9bb8e38e6b22	2025-12-22	More
+fixSubtypeArithRed	a56ad3a6f06dd9fb641ead21a7fd8fdc52e636fc	2026-02-28	Revert
+fixSygusFairDirect	f62265b5375528d3f16ce82d2f292d1418ee26ca	2023-04-19	Merge branch 'main' into fixSygusFairDirect
+fixTrAbsModel	8711af157884b18c29098ce29069b7e003c3e38f	2022-02-28	Minor
+fixTrPi	8b0f824552472d9292f12db959685926cab01250	2022-03-02	Merge branch 'master' into fixTrPi
+fixTrivExp	125b41892bec93dac607b11de3537cd4f0c77568	2022-01-20	More
+fixesSygus	f7cd19bfb38763c472c2d0b476bd2b582b7c0681	2023-02-09	Merge branch 'main' of https://github.com/cvc5/cvc5 into fixesSygus
+flattenBrc	ee485d2c5100bb922d92bbbd6fee32f44415335d	2024-10-30	Fix
+flipSygusPol	5e0ad11d5a4eb0f6404fa111f0c24a1829e06864	2019-09-19	Sketch of flipping sygus polarity.
+fmfCollectModelValue	19412450be2f60d530be4801dfba1b3f99921fe6	2025-03-07	Regression
+fmfIeval	61156a62b2cedd59459b824c78cb4a0c898d9621	2022-08-28	Merge branch 'main' into fmfIeval
+formatEo	8a8a1f9667bfc3652d3c8e524c2008584a3d22ad	2026-08-20	Add format eunoia script
+fpIcPass	0f85f9f358dbb113deb428d894c83816d3c66d2c	2019-05-01	Merge branch 'master' of https://github.com/CVC4/CVC4 into fpIcPass
+fpUfAbstraction	10034c9c4b6c40d0f845aea9cd55853912634482	2023-06-23	UF abstraction skolems
+freeAsumpMerge	7decef4c91793f38722c4f235902008d74c81668	2022-09-22	Merge branch 'main' of https://github.com/CVC4/CVC4 into freeAsumpMerge
+freshBinderConfig	5830e5c41b9bf396b72ddb18a64e6fb53f6c745b	2024-09-25	Format
+freshBinderWarn	37ed3c4a4bdabb5f879cbca5fde405c849e6a1fe	2024-10-03	More
+genIcHacks	f96d50ca9da7227aef11af4d910decaa8bdcce0d	2019-04-30	Hacking gen ic branch
+genIcPbe	f1c3890ea98c310f9d4f77a4967da76e8d0a15ef	2019-11-26	Update
+genUltRewrite	7d36a64e6709e2b1f1a9eac24573608d9d25650e	2024-12-13	Eo
+getAbductReference	9fb9b4c56ca19d8185644ca8d5a0333e76b2b386	2020-01-20	With current solution
+getModelApiPrint	f39e3b2a4a33f381849eda91c42a3f5c6e52befa	2021-08-23	Format
+getModelTrail	d87931d2f6fd742e83481e2e5da9013fb259d602	2024-08-14	Better
+getModelValueSelectors	8de5300b4e18701f48055695b1c1060e0b307224	2022-09-15	Debugging
+getOrMkConst	cff4797880b8de4a4c7e1416555fdb9d7626e418	2023-08-24	Merge branch 'main' into getOrMkConst
+getValueOpt	934ac96ee372d235bc9894a583cef058b4791baa	2023-12-12	Merge branch 'main' of https://github.com/cvc5/cvc5 into getValueOpt
+getValueOpt-0826	f306a798321fbb47e204d103dd5d97c8ac51247a	2026-08-27	Another
+gradtBv	a423ae3a3d3b7e8a89c978144325c4031f000192	2023-12-21	Merge branch 'main' of https://github.com/cvc5/cvc5 into gradtBv
+graphs	5f2c9c2698e6e10255a40488d2d33dbcd9d15acf	2020-03-06	Merge branch 'master' of https://github.com/CVC4/CVC4 into graphs
+gttOpt	66072c1b21d0fd924cc65e5dc41dcc8dc12fb589	2021-01-27	Option for ground terms in triggers
+guardSafe-0724	016909ed2a5818cbe01aec12b5543084bcf6e2b6	2025-08-13	More
+haniel-anyConst	251e2242ec5cbb96262faa90f8fbc1ed14f6daf8	2021-01-19	Apply diff
+hoError0302	3cce7eadd96786cfc32c0d7854195fc4b45c882f	2022-03-02	Merge branch 'master' into hoError0302
+iand	e56383812e471e76eaea325982b70f4894c14401	2020-07-10	Merge branch 'master' of https://github.com/CVC4/CVC4 into iand
+iand0	f8b98f984007b661b67208905cd547e370b190c9	2026-01-08	Fix iand for width 0
+ievalTravTrie	78e6fd08899aca10f720cd0594c9a0451bf25b4b	2026-09-16	Merge branch 'main' of https://github.com/cvc5/cvc5 into ievalTravTrie
+imBench	37a84f951faee3dc870323b5bfd1b67d1d4e8e0a	2022-02-17	Format
+imSimpleInc	e666a3d9ab2e5ebd49c20f91391446d182b6db08	2025-10-30	Fix
+imSimpleInc2	72c05c965cd9549d8101aa971f42f43a6207c325	2025-10-30	More
+imTrivial	baffe2c5f154918d738057bd867a6ea68cb4a49a	2025-10-30	Minor
+impCtnRed	e8a5833b323280c097181ddebd0000657b75cc84	2018-10-15	Format
+improveSkolemDoc	1296236231b0621bce21dd7992757393afcf243b	2024-04-10	Merge branch 'main' of https://github.com/cvc5/cvc5 into improveSkolemDoc
+ineqConvertModEq	e7553f75b8845efbc7bb6f6e653505619dc0200a	2024-04-26	Add case for equality in BV ineq elim conversion
+instEval	df0d7aaea9e5489af2d2619899772998a01cac19	2022-10-12	Merge branch 'main' into instEval
+instFullPreempt	9233ec5d14bad2e97a687d54e8d18894c58188fa	2024-08-12	Preempt inst full
+instLastCallDelay	21cd8798db9c5f1352126b4ad73cd3edec436789	2026-03-30	Always delay last call if need check
+instVolatile	a7bc1082093838530b62ab629c57c966f8585848	2025-09-10	Minor
+interactiveStdinFull	5be32d94a448c079bbe3249d9b510cd6564e3718	2022-09-27	Copy branch, full delete
+internalProxySets	275a73719ef8423c843784c656dec4eceba66942	2018-12-14	Internal proxy variables for sets
+isActiveLemma	acb96d5e480e13fb3e47af95df187165d2c73eb4	2023-08-18	Merge branch 'main' of https://github.com/cvc5/cvc5 into isActiveLemma
+iteApply	ab702c8f785c72e8382121fde7157b2e61f03c1d	2022-12-13	More
+jh-new	f5f74adb862ff0d30ff5e6cf4ad3164210db6430	2021-05-27	Fix
+jhDebugging	140ee24f91a78412c7403ac002f5559cdeea029f	2025-06-11	Debugging justification heuristic
+jhRandom	2112564258af5a3a24d123ba3990af35f50d1737	2026-07-01	Format
+lamLift	ddd0e11d69f5ce13c62c67efddaf10aa3c7e447c	2021-11-08	Merge branch 'master' into lamLift
+lambdaElimExpert	80184f22842e5be74f81d5c20f1e6be2c3c506a4	2026-03-23	Format
+lazyDistinct	816df10fb5f0f43b2c55562876ac2e031aeda571	2025-09-11	Revert rewriter
+lazyDistinctSlv-pf	9f5f6aa211f022b3bd81fd6a1872230305b57304	2025-11-25	Address
+lazyLambdaLift	b10705934d27d00d4d96314da2efb3769ab335bb	2021-11-09	Fix
+lazySygusSample	a404ff0af998e156dbffe4d1d57aaa6572ab50e4	2018-10-22	Sample feedback.
+learnBranchIte	24796f80ea5f5e255ed3416a9e657db46098b495	2023-02-09	Merge branch 'main' of https://github.com/cvc5/cvc5 into learnBranchIte
+lfscApplySel	ed963f23a86a8bde2b1d2c5d06b0f5b198eb3fb9	2022-02-08	Merge branch 'master' into lfscApplySel
+lfscTupleFix	1f2d9c923d4a0d0fb467d24bbfdfbb7fd13c7760	2022-05-03	Merge branch 'main' into lfscTupleFix
+liaSplitDelay	5d77e7523ba8620726151204714fc6e4f21a8dfa	2023-05-09	Format
+limitArith	a9cc2b596ec0f6e52867e17c520c023eac09eeeb	2024-08-01	Improve
+linearSolver	57d71f932689d72f798f72a699d7327027923ffe	2023-11-19	Minor
+linearSolverSub	1a3755491c234b326932b7d354f208acc62e4559	2024-08-26	Merge branch 'main' of https://github.com/cvc5/cvc5 into linearSolverSub
+localOptsAbd	bed44b75c612ae1574ffc102fc182d2950516f3f	2021-10-22	Set options more locally for abduction
+localPasses	c1805d59d6d3bdb139f0721740baea617a8fa498	2018-04-16	Minor
+logosDev-v3	1321fcb7add8a19f8d45adc0a22d81214228b83a	2026-05-12	Take new ops
+logosDev-v4	c775190b24493e5d9104dbc2ff347650b31962e3	2026-09-18	Merge branch 'main' of https://github.com/cvc5/cvc5 into logosDev-v4
+logosDev-v4-quantRefactor	40a649702e164b869e35f4fbcb446a8b31297d98	2026-06-21	Quantifiers refactor
+logosDev-v4-re	bd90cb008f18ad22204173fff1c4ce106e4d9924	2026-06-18	More
+logosDev-v4-re-2	cdeac7aee758729f73707f52aa9aa54b0b59ea91	2026-06-19	Minor
+logosDev-v4-reRev	d182e01ba7af0781528632cc270de2219c874eb0	2026-06-30	Simplify
+logosDev-v4-stringSimp	54b14dacef438a929d20eaeed3cb1ccb4b6a93be	2026-06-21	Minor
+logosDev-v4-tupleIs	8d4d9386c099bb2fb42850cfefd1fc957c93fb27	2026-08-27	More
+logosDev-v5	b45b891e420f3e47525d501ab581d0d2d06bd745	2026-05-27	Add back lambda for CI check
+lowLevelOptMore	ebd82ce202e70f6e2d3c564fa958ed079236d0be	2019-12-16	Merge branch 'master' of https://github.com/CVC4/CVC4 into lowLevelOptMore
+macroEagerInstMt	60709829cc027cf9850552b4e272bd3acbda50ac	2024-09-24	Minor
+macroLambdaValueNorm	791b59be7e6fe739eae2e9cf75e20858ed5c80c4	2025-03-01	Add MACRO_LAMBDA_VALUE_NORM
+macroNnfNorm	65ec344f1cf936423c866616e6cff5a5e2e033ab	2024-05-23	Merge branch 'main' into macroNnfNorm
+macroQuantOnce	80d09b24b36745b10da7b46aa434a405ea91c805	2025-12-22	Regressions
+macrosEagerInst	31a6f9bf120c4e6e6bd12898fb943d9c30732ac1	2024-09-16	Format
+macrosHo	bcf3a54ad09a0a669e2484a33b40aba305fefe97	2025-09-16	Missing
+master	3dcc1ef5421ab62cc1ee9af52d70042ce6861af0	2026-09-18	Refactor sets theory to use a strategy  (#12772)
+mbqiEcSygusG	99969d95ced36455c10f13c9a10222e218c67665	2025-09-05	Merge branch 'main' into mbqiEcSygusG
+mbqiEnumChoice	20325f2586c760790b03140bce9da50f63dd3cb6	2025-03-03	More setup
+mbqiEnumChoice2	949f3fd95bdffc85e4229e5a8ad47e70395d2177	2025-12-12	Merge branch 'main' of https://github.com/cvc5/cvc5 into mbqiEnumChoice2
+mbqiEnumChoice2-fixPoint	b2582725bb41727f0d3bf8e12e7f22075204b700	2025-09-08	Fixes
+mbqiHoDev	39b7b2e8af1ad64c08326c98bd748a8f8686c591	2024-10-02	Take change
+mbtc2	6c79345a6da62925aa9b674cb2e0afd0e3ecefbf	2019-09-16	Format
+mbtc25	f10ab30a1672b966b69fa2e70dd92470209ae065	2026-01-13	Merge branch 'main' into mbtc25
+minorOpt-0516	341f7b6b5a77644322f3d6a7afe82caca3fa143d	2025-05-16	Format
+minorReg-0603	b79819abf2057475e42037d1cad4f852c4bcaa65	2025-06-03	Modify regression
+miscStats	d475b8549c487789fc646e2efa80923f93e0e8c0	2023-10-30	Add new statistics
+modRSplitOverflow	1ac48cd06ffd94a5ef658f32d762619e086fa1b7	2020-09-24	Modify
+modelUPrintDt	8b8c9a49fe5a013eedf93f73e7a0acf1a1f05da2	2024-08-13	More
+modelVerify	480e64e4694498646a0ce8e6535ea615498faefb	2026-08-12	Change name, enable by default
+moreQg	ee55d23f22fdbe4d1eed9fc3d360cc804463635b	2022-01-25	More fixes and improvements for query generator
+moreSygusUtils	978a8add14026fbf65fa12be447798b998406a5c	2021-10-25	More
+multiTriggerSingleBase	47c079bfd94e4f32736fed11b08ea8995c762a61	2024-09-10	Towards using single trigger as a base for multi triggers
+mvReg3	a65cc17c6f691450955cb4d502049edf42cf129a	2024-06-04	Merge branch 'main' into mvReg3
+mvSymMan	0e1462a7c2cfb5b537863867a9b9ae61949d47fc	2022-05-10	Fix includes
+ncSimpMore	9491dc299a78f6bcdd55180ce5fd24f82192114a	2023-11-21	Add more cases for constant propagation in preprocessing
+ncSimplifyInc	13e9691aac88792351f3fd845298407d6e41e880	2019-12-09	Format
+nestedTriggers	b74b5620d5e11d2c81dd6547d62aab1e005cb419	2023-11-13	More
+nestedTriggers2	6abc8f4851c770b0ce191da6c8a82b533f3796a5	2022-08-02	More
+networkExamples	34ca33e6fc27d8eefc7173a6135c8cb89ba65b7a	2018-12-14	Debugging.
+newRare-1010	e3566785bd09487658c43332e3df4bb9971ae663	2024-10-10	Take
+news	ca14d204c806e339e8515a29b911049922ed0a38	2024-08-05	Apply suggestions from code review
+nextAbduct	4a0e540de6496c596faf8c47430f202d4a5e4efb	2019-09-20	Minor
+nlAlwaysCheck	3f4480d2caa34f03b912b3c994590efc59da5d2b	2022-09-20	Another fix
+nlCCom	16ca07dfaebb584afa9955b10d552bf5976b488c	2020-08-04	Sketching
+nlEnums	e8944df809c6d6167995ce9750eb21d46c82fe43	2026-04-22	Apply suggestions from code review
+nlExtSampleTestCheckModel	2d198ac5fbde17cfb063a1a8379608b958eb3a7d	2018-05-24	Merge branch 'master' of https://github.com/CVC4/CVC4 into nlExtSampleTestCheckModel
+nlExtTplaneLimit	91ef666640f02749d4190b3ef52ed4615ff86f3f	2018-09-19	Make safer, revert to default behavior.
+nlExtTplanesDef	3758a7764511f9e74a6c54f9aac34e8643a7dc2f	2018-12-06	Enable tangent planes by default.
+nlLinCheckModel	992427bac7e346f0053bdbf2feb3a122cace8fe5	2019-12-11	Fix
+nlPower	0f8d5ae41ca66350f50fae4f734ee4a5d341393c	2018-09-19	Merge branch 'master' of https://github.com/CVC4/CVC4 into nlPower
+nlReg	6871380d1e9905ae59106d17da00dc0cec2936a7	2021-07-07	Add non-linear regressions
+nlSolveInst	0e075f7feb8241499b6a7d6b43ac4010c2861285	2020-02-14	Fix
+nlTauts	7aab19bb7a8005fcf3d8266ff5fe944c2ce79032	2020-02-26	Merge branch 'master' into nlTauts
+nlt-030122	38ea12f3197bca519afebc84c098bf57b859e5d8	2022-03-01	Try
+nmAlwaysKind	3cd09ef235d4fda9a124d3649947f452ce5ad69e	2024-04-03	More
+nmCleanup	50aeae002d47048a96dad634e7fa3ea1bff07dc3	2024-04-06	More
+noAppSymbolic	279c0ccae6c115a9b4a5d8c1d3e68ef528cd19b8	2026-08-26	Fix
+noArith	1060bf40afa91b34dab6d2a75eb37843d86d6fa1	2024-08-01	Format
+noArithSubtype2	4e50cfa14c5b7677bf69893292c0c667d9b8bfe6	2022-05-03	Try
+noAutoRealFromInteger	a5edca02c8d6708007ec677138d69d573f01b495	2024-03-27	Minor
+noCapSubs	ca6212f7eb0a06c942ad85d56210b3c85894b3c6	2022-03-07	Fix
+noCheckDecl	9da0c9a653d2adb0a5ac3ee3579a9aee16f93d86	2025-10-27	Add regression
+noConjoinLit	9d2576e8d50f910f4462a194b4e73624dbf04457	2023-07-22	Don't conjoin lits
+noDtSygusEvalModel	6f20207250fd39b9a34c00244a87ab2ec1ca8333	2026-01-23	Fix
+noEeLinear	6a366dd7ad8d63556a7be67371c1209047d8ce32	2023-06-07	Separating equality engine from linear solver
+noElimSuffix	86d34947d4b7a575a2e81c9f4c4142b7da5f4105	2022-11-02	Format
+noGtPurifyBool	f803894dd38725b72fd611d52bfb51e3db732a59	2025-02-18	Fix
+noHoApplyCg	e60ab8e7649f389e579eef9d50fb70c6cc0236c7	2025-08-26	Document
+noInputVarSk	122a02e14bec6e0fb449d651ed6813a3c2a91215	2024-03-28	Merge branch 'main' into noInputVarSk
+noPropDeq	ee668004ec8ab3fef4107fc4e556cb0e43ef4b2c	2023-06-27	More
+noPushAssuming	a2705d34d7c3855fd186dbcf9a81645f9ec8f5aa	2022-11-07	No push for check-sat assuming
+noRegisterTermLem	8a0676d505ac40f364f926834c9cf18eb5c8f72d	2023-02-08	More
+noSimpleLearnedLitPp	0fbc2a25868e88f37f30338dc3c94664b40d8870	2023-06-23	Merge branch 'main' of https://github.com/cvc5/cvc5 into noSimpleLearnedLitPp
+noStaticVSpt	4b79c5da5c121a473b1587c1c2f6bb165127871a	2022-07-07	Format
+noSubtypes	1c861414b7dd84f03bf629658bf3a529b267eb44	2021-11-12	Define
+noSubtypes2	e688bb6362b7fd28a1cdf256f6821f5a73a34be4	2021-12-22	Format
+noSygusEvalModel	ee56088c89ee15cbc2abd8a5144b709182610312	2022-03-01	Merge branch 'master' into noSygusEvalModel
+nodeConvertUntyped	27ee0b2a93772bcad0df2cd003fb466bc1c2de68	2022-11-29	More
+nonStaticBvInvert	fa13c74702ac7ea7ef8c8e51385461c92c3e66b7	2022-05-27	Merge branch 'main' into nonStaticBvInvert
+nonStrictEqSmtLib	403d035a27bb3b0581ce9fecead0f806c34587f9	2022-06-07	More
+notifySatClause	8bb741f5bdf2351b9badb1e88e495b2fbc57a744	2025-01-21	Format
+nratExp	9a1c2785d542e411da40ef8058c49a1fef83017e	2024-03-29	Experimental nrat
+nratInterleave	005c1eb12a7f9811593e607a98946b0073bd03e6	2023-08-24	Minor
+oclTimestamp	5ccfb76d917c772b0e79686149a73cf4141f2460	2024-08-28	Fix casts
+omtApi	72eb9a727892ae06441419924d832ea7c281cfd9	2023-01-12	more
+oneConsInst	4241c3ea39fbf017a6f2d800bf5460e6e093fc5d	2025-11-05	More
+oneConsSkipTester	bdb3267bf84c13355b34bb6d364b2dd7a03858f1	2023-03-27	Format
+optArithRw	efdc0767a9089466640cfe4ba03245efd1374d95	2023-10-31	Fixes
+optGetType	844f7b08457a1dd1f78e00771178b26e0878e689	2022-08-01	Use vector for getType traversal
+optProofChecker	93d09f4f31101d5632d3ff7536cdc2e3acf79be0	2021-04-22	Merge branch 'master' of https://github.com/CVC4/CVC4 into optProofChecker
+optSygusEnum	d2667784f4e0b76fabdf177e27bbf5ae5dee4b20	2020-02-15	Format
+optSygusEnum-defaultCache	a25e4b02a5e60c790df9d5d985be3a8da9817210	2020-01-31	Default cache
+optSygusEnum-revTrie	86ab54f6501a57bbff625452fbaf3f515a6776aa	2020-01-31	Reverse trie
+optSynth	2b0cb9509e98e859f1d5bca5172f91d12408bce5	2021-03-04	More
+optTdbTNode	999a2aa8e0cf8430de8eb93f268fd6f91eca5a79	2019-03-29	Optimize term database for TNode
+optTheoryOf	d262276230b62f2504a2f6ca0b06a654763abe0c	2021-02-06	Minor
+oracleCsv	1155b1dade5d40dc55178464acdb5c14239bb398	2024-05-14	Sketching improvement
+oracles	25c9b75ba138c3f534cd660b8d4ff22f1c50c39b	2024-02-27	Merge branch 'main' of https://github.com/cvc5/cvc5 into oracles
+p654	dfe224c90bfd7e01400427c16721ed992b8c87cc	2023-08-28	Merge branch 'main' into p654
+p655	cb91fabec4660f9eb3d9542a5da175d56f61daef	2023-09-14	Merge branch 'main' into p655
+p657	678b7b4f017ef9e6f09de41dbc58a7098d55faca	2023-08-23	Merge branch 'main' into p657
+paramCheckArity	a4800377621263499765399ae197d3a9cf3e1197	2022-01-10	Merge branch 'master' into paramCheckArity
+parseComplianceMode	62de8ea9f9174cef8ba25a29338911b716ac6ffe	2019-10-28	Attempt
+parserDtReserved	b7918675f6b5b81c6f83da583fbbd36ca61e551c	2026-08-20	Guard against datatypes with reserved names
+parserSimpMinor	4b81fbdac8db74a38bb631e6cebbb7bdb8e20206	2022-12-02	More
+patchSygusUnsatCores	c34d4d53666c656a8ad6c36712e3557cb2acf32b	2022-07-22	Merge branch 'main' into patchSygusUnsatCores
+pbFixesMinor	9608a1f541a1a850fc070e633983102c17c9ede9	2024-10-04	Update src/smt/print_benchmark.h
+pbeCacheMinimal	6ae6940f499e957670f342284453278f7a352b1c	2018-12-06	Format
+pbeStrDev	e0b1854313d96ae71b849d87b13800baddfa86a4	2018-12-11	Fixes
+pedProofCheckRefactor	40110d4560d5587013a8ac5b1e932b89fb2b5edd	2022-09-16	Refactor pedantic proof checking
+perfDataStructures	cf9ef2828af78e68b5fece56903d55e3dc2f654f	2018-08-16	More
+pf-defineFun	5edf06a936816ecd74b96162ae327fd46be591c8	2026-08-19	Alethe
+pf-defineFun-printerOnly	255eca8f34b93b7b106c2a074d3aaf55fb4be3f5	2026-08-19	Printer only
+pfLogInferface	8fbcbd1b0b3a3d913d0445d30bcefb32c30f4269	2024-11-26	Update src/smt/proof_logger.h
+pfRewrite	c00363b15b769c0abc48b1d76ba9c376296ba2f7	2023-06-29	More
+pfTrustId	9eab5fece6851b70d968c847fdbf22365e4202cd	2025-06-18	Fix
+pfTrustId-no-enc	afcab70bc8dd48279326c40faa1ad402e487452c	2025-03-06	No encode version
+pfTrustIdRegressions	55743aaa62ae38a9b385b236591748abb1d1f8a0	2025-01-02	More
+pfnConvert	5126679920569833954eee91024b4b1284d46906	2024-02-20	Merge branch 'main' into pfnConvert
+pfnd-tconvSubsequence	7269b1cd4be525f608e3d599fb2704795a9c5c4e	2020-10-18	Term conversion generator
+pfpUpdate-0417	ea02fee56165b5f13487244f3a351988dbeffe09	2025-05-06	Fix
+pfrConvert	0ab530cb4592248f7fcd7504d2809d7f0f600e15	2023-10-30	Merge branch 'pfrConvert' of https://github.com/ajreynol/CVC4 into pfrConvert
+pfrConvert2	6c74757436a92f22156d5d139cd9e9b6c4422cad	2026-01-30	Merge branch 'main' of https://github.com/cvc5/cvc5 into pfrConvert2
+pfrDev	714a3a1ce57d76552bbaeb44fc5766a231aa4889	2024-07-05	MOre
+pfrNames	53fdac0a30c453069d793dc74cc814075174ab78	2023-11-14	Merge branch 'main' into pfrNames
+pgCppFix	5175f5ae3de0a647bf9cd9ff235f1d0ea042a2e3	2025-04-29	Format
+pldi2019-main	e789e4699f0b6b2cd1ddb0ddb7a8441145a29580	2018-11-15	Last point
+plugin	7251246c410b5458dcee0769e3c0b957e2bddd1b	2024-05-14	Merge branch 'main' of https://github.com/cvc5/cvc5 into plugin
+polyNormTyped	6b8ac8000a14e8d831a177b76ab3e0d3cbc4c747	2025-05-16	Add types for poly norm
+poolTrust	f8603ca95807e418b59a2be1ddfc9dafee78d87d	2023-09-22	More
+postAssert	3d87e6b473de478d8ab21c58b64f44da49b12308	2022-01-25	Merge branch 'master' into postAssert
+ppOnly	04c82755c560241aaba6c0cf326c278fc0fa6e52	2022-01-11	Merge branch 'master' into ppOnly
+ppOnlyFix	18faba3d0ef5c9fe6582ce33e280ddd29c88824b	2025-04-17	Merge branch 'main' into ppOnlyFix
+ppRewriteLogicCheck	9ba471a849222effb0bcded761be0040d58d7444	2022-09-19	Merge branch 'main' into ppRewriteLogicCheck
+preComputeType	a9b43a806f55f28d6f44bc7d49f1984c6b65f0e7	2023-04-28	Merge branch 'main' of https://github.com/cvc5/cvc5 into preComputeType
+prenexLift	6a7332aadb0d910378cf845113f6be0c456dbb2c	2017-12-22	Minor
+preregRlv	e3edac1145bf84bee580b4d807f911b43e3a8c84	2026-04-23	Format
+printerMinor	9369244fda93cd6afede7a38c3f259aaaeb7ddcc	2024-12-10	Minor fixes for printers
+projIssue487	b95bdd2745f03ae21c97b1f1d869d910bfbd050c	2022-04-06	Fix
+projIssues	0d25b2ca805277fdc4765fced0e3ab0eb11c1250	2025-03-01	Rm
+proofDb	2c609773600d71aa1373c58b4d964100cc5977a4	2019-08-09	Merge branch 'master' of https://github.com/CVC4/CVC4 into proofDb
+proofDisable	cd61fa165f7b85dcbfb2e9d3e8b93222511ba9ae	2025-08-25	Merge branch 'main' of https://github.com/cvc5/cvc5 into proofDisable
+proofGranSetDefault	0ce8e141d18f628849b9b3e0c67b92fe632a40d5	2024-08-09	Do not override proof granularity if set by user
+proofParen	8f0e80924c050dc3c1978f4f1f6f3bc8d802024f	2025-05-15	Merge branch 'main' into proofParen
+proofTerm	2147621c33b13357e542f128605dfd1523c71458	2023-04-27	More
+propEnv	f0556cc77a54b0c80c93617611ba86d232e722a8	2021-10-04	Format
+propOrderInput	0b668802a9dc7696eb2adb764ed990d4126e28d0	2022-07-01	More
+qcfClean	64448a9c6083ea4c10eb873a3fa6caf91080a0be	2021-03-25	Format
+qdebugStats	49387be7324db97b908cadeab53779e2ca57fca2	2026-09-16	Merge branch 'main' of https://github.com/cvc5/cvc5 into qdebugStats
+qgFixes	af0d26a215542767b699b894c4cd10ed3fc51256	2022-01-25	Merge branch 'master' into qgFixes
+qmacroPf	a3d304a15be3751265bd455a3b3b8d9f42735de6	2024-11-22	Format
+quantCgInc	6ae59c3d35caf0b7784301b433d2e6f799dacf82	2025-10-31	Stat
+quantMacrosPf	5accfbba97ca5889476ce43296d734ad6244aa86	2025-03-01	Add MACRO_QUANT_SOLVE_FUN_DEF
+quantRew-1006	e7f94c5da23a6f5ee5705927de394ba3acaf0ab9	2021-10-06	Format
+quantTheoryRewrites	e302911ac4cb7ffaf19c147fe2d9435ac03a883e	2024-05-24	Merge branch 'main' into quantTheoryRewrites
+quantVirtualModel	5be1dd1249262f67b1b9de8654bb4e4cb5dae302	2019-04-16	More
+quoteIndexed	72f2519823f5fb548812363f5b311384001668e7	2025-03-13	Fix
+qwitnessPf	ff7980327db48fdd5510fb28292b730dfda47458	2024-11-13	Missing
+rareEncodeSubcall	a625bd5a2365218b377a986eed7c74622fefaefd	2025-05-21	Merge branch 'main' of https://github.com/cvc5/cvc5 into rareEncodeSubcall
+rareMatchVar	5076c33467700f223b699e7f3b1aebd77b8aaa45	2025-05-01	More
+rareNoEvalPremise	6fada05f334ede74ea0a956e0e27ab54bdc34382	2025-10-16	Format
+rareNoMix	2d8e3cdf2f24a2fb45d5eb1ee37f059c54eba1a0	2026-03-03	Merge branch 'main' into rareNoMix
+rareNse-0417	1e1b1c7598b2a25ccb8e002554cffff07772f687	2025-04-21	Merge branch 'main' of https://github.com/cvc5/cvc5 into rareNse-0417
+rareOptEval	07579cea12d2bac9f7734bfb3a1d349cb19b9165	2025-08-27	Merge branch 'main' of https://github.com/cvc5/cvc5 into rareOptEval
+rareSElimAvoid	d600194307f5f09633601edae74b52474787103a	2025-05-02	More
+rareSafer-0101	47036b580cf7cfec90532c4add96da787e6f777d	2025-01-01	Catch cases where list terms are used with illegal kinds
+rdbAlphaEquiv	ec33311d506ea8d1645640b093a2eacd0ea3b01d	2024-11-26	Format
+rdbExec	458596700493247219a02c06b5f79f4b25c32803	2026-08-14	Try some improvements
+rdbMore	8f56d355ad014b54e4987c19d3d187919c4fe96c	2024-11-26	Merge branch 'main' of https://github.com/cvc5/cvc5 into rdbMore
+rdbNullConclusion	450383e3f412a9d63f165e68e102e4feb84802cf	2024-05-16	Merge branch 'main' into rdbNullConclusion
+reAndOrConv	590ffe5169f041355b1cb4aa929f946b9e41913a	2023-06-09	Fix
+reConsumeUpdate	ddb99d4ba9389e5628caf1cdb0be0083496fe65a	2024-05-23	Merge branch 'main' into reConsumeUpdate
+reDeriveConf	6f33b9167e647ab55c36ad145f4e008931cc90e9	2025-01-09	Minor
+reEvalCache	9ae0e0e9c0de26ad893fd6d77fce7bd97a215d19	2023-01-06	Format
+reEvalEvaluator	a3cea4b558f15c033ff24cf72463a6cb3a2182c6	2023-07-14	Add regular expression membership to the evaluator
+reInterRefactor	bc52ee502112758aa4b05d659de43273483e38ba	2022-08-25	More
+reInterRew	9a57b6b3494a26f3b3f48dccb621c255368033af	2021-11-12	Merge branch 'reInterRew' of https://github.com/ajreynol/CVC4 into reInterRew
+reLoopImprove	f1fde0d583038f213c8534da4ae828fb8e9bc34a	2026-05-07	Merge branch 'main' of https://github.com/cvc5/cvc5 into reLoopImprove
+reMemberEval	b67b8749107902b0687d549a754667d7163d2022	2024-03-05	Membership evaluation
+reRewrite	577de06e75a8808d7faedebe880b820b92092f6d	2019-06-11	Add a rewrite for regular expression membership
+reStarFixedLen	b75c722cdf64cf8031f311134bf8e453e84bdfa8	2024-10-07	Fix
+recFunEvalRefactor	9f3ef485651009412d68a0a5d4a2b912496e9bec	2022-07-21	Fix
+reduceTransform	6af2d9093f462039ebd42ba24ca76e3d187d5c0e	2025-06-23	Rm
+redundantSatProp	bc2caac940d8fae8102f2f512f65162ecb8af449	2021-08-03	Format
+refactorDiffUnsatCore	87d657bc3f1a1d304596be933d3c0ce53a44f92c	2022-01-14	Refactor difficulty and unsat core option relationship
+refactorQcf	107c5394c9c0c9693b1efc4551b768ffdfda943c	2022-01-26	Merge branch 'master' into refactorQcf
+refactorStrInferNf	4f48b334e4ccd7b46bb53041c6c838ef21df3745	2019-07-21	Format
+refineFun	29f8756e37171ac8c53fcf65d79979b8ace84255	2025-09-25	Merge branch 'main' of https://github.com/cvc5/cvc5 into refineFun
+reg-0115	0d11145477e576903cf761de2330ae2096e8ac86	2025-01-22	Merge branch 'main' of https://github.com/cvc5/cvc5 into reg-0115
+reg-0313	b1cd64a180ee790a97d244d4b7a25d943b659f5e	2025-03-13	Rm
+regMore-0110	08b9f6b3b4b3232e8a44e5008b4b0162e9014b8f	2025-01-11	Rm
+regress-033022	3bed8dfb68a1cc83faee7e44c29cbd6a5ee12110	2022-03-30	more
+regressionsNlCov	7003bb9afd8b7f282628f2b519a6c3747a464b91	2025-01-02	More
+relManWeakerAssert	d3bbeea9d11d768ba9d626417775c7d03f4384c7	2022-01-14	Merge branch 'master' into relManWeakerAssert
+renProxy	c9a40edb1e4864335f6dbe3a05e13d0c4ce4983d	2023-02-16	Rename proxy
+renSkolemId	1e146c13dd598cdcf624a0205f33eb2a3076d4dd	2024-03-28	Fix
+reqInstParaDt	93fbeb031c798a1f64bcd4df4caab7654a4b0567	2022-05-26	Revert
+rewriteDbImpl	734f26d20e8df8bdd91d41c73730aea0ead03bed	2023-02-08	Implementation of rewrite database
+rewriteDep	307640b2c80de8cff289a67b34000bf187c0e46d	2025-04-15	Fix
+rlvTermSimplify	da405221f8a5556df96fc2872f98e92e3a90d044	2024-09-11	More
+rmAssert-0603	5dab0dbcd1194c94400837be72b1f3e768e495b8	2025-06-03	MOre
+rmBoolSimp	26744ea8fec440c41827308289989a0fb58d0333	2021-11-19	Remove Boolean simplification utility
+rmEnvBuiltinPc	9ab417dbf891f2a10883bfc536043dabe03ad579	2024-03-22	more
+rmExpandOnly	dfd81e10338b89370f6c4e4a49475ce5a7b4441d	2019-04-17	Format
+rmGetModelValue	d8e4b9362360cbe615afa8f675554bfd96f838b0	2020-08-11	Sketching remove of getModelValue
+rmLfsc	663398d5bb2b53ab19052215c32f3167e346bb31	2026-08-12	News
+rmOmt	06e089c379576cf909e944f7bfcbf715608949ef	2023-11-10	Merge branch 'main' into rmOmt
+rmTypeConst	fb389cbf8dc87304baf198b4209c671b56684292	2023-06-19	Remove spurious method in mkmetakind
+rpcAlwaysPre	adab37c00d6ec5a0f70d383276311b6c3b4ac19c	2025-08-27	Always pre
+rrCtxCond	8dff42d14ed81d625a0b7728cb28a243ef77388d	2024-04-23	Merge branch 'main' into rrCtxCond
+rrMinor-0419	7aa9e1ff678b5d860ce6709ff9c577539f7b1fc0	2022-04-19	Revert
+rrOverflow	69e5bbb524a6f54cdc1dc1001791031dbae557aa	2025-05-22	More
+rsolverRefactor	8dc9528eb1c3788404dd939f57a667ca6410d6dd	2023-01-26	Fix
+safeCiMore	2e73d4671439a1ff09d42e6f8f16b1035a3fe997	2026-08-26	Check safe mode is complete
+safeModeNoProof	72ee2a6fc056f58afc9490f338614e44a4d1d646	2025-04-23	Merge branch 'main' of https://github.com/cvc5/cvc5 into safeModeNoProof
+safeOptWarn	71a961d3076f6efff3690c8a2707c895c0e8d75e	2024-04-18	Merge branch 'main' into safeOptWarn
+safeOptions	edaf8a6a13b46e5513e070e79259593eb5559ea8	2023-08-22	Format
+safeOptionsFix-0130	d371f6e931bdf88910a237139cedea838c22b925	2026-01-30	Two minor fixes to options
+safeOpts-0130	67058140fefdc46a7d97a79da6fbcd7415e1082e	2025-01-30	Minor
+safeOpts-0305	2df3e16b5bb09fa9473f266594de308b38146374	2026-03-05	Promote conflict-based instantiation to common option
+safeOptsFinalize	05036380df9e3ee0721ad893f2d7157883b0fb4c	2025-04-22	Fix
+safeRewMore	2f533f6bac62a2b69db0e6c63195a1866337e408	2025-01-22	Merge branch 'safeRewMore' of https://github.com/ajreynol/CVC4 into safeRewMore
+satNotify	c3f1e896b40570608e02866313a6799d41cc1bec	2023-08-30	Format
+satRlv	61edbc2f4cbb6f58d03939da1d72e1c03159b74f	2022-11-04	Fixes
+satRlvTppSolver	11854cd92cc40c5e2a96e9009f4afd451825ba5e	2021-01-27	Copy SAT relevancy branch before reverting TPP solver.
+sbLemNoDup	5798888c107ea9e22e3c689a67d3277510737159	2023-05-30	Format
+sdm-assertTerms	c590c2d3ceea27c8cdf024744cf7a424bf19e4b0	2022-05-10	Minor
+semgus	4fb22f67f650a4f9daacda5d6d5d922b56cbf517	2022-07-21	Testing
+sepFix-12103	b26d4d96f64e80ffbd0dde31a4c6307cee7b4b18	2026-05-04	Fix for wand
+sepImproveLem	6c5a5f3e7cb9c7f163685a53f662424d27695a67	2022-10-20	More
+sepInc	de088acdc80fe0a15907f20a0426272593928558	2022-01-04	Merge branch 'master' of https://github.com/cvc5/cvc5 into sepInc
+seqRewrites-1021	4781b7a4e4697810f8ba13d90b43e73b41535df8	2024-10-23	Fix
+setCardNoRewrite	37f4b6bc05edd3e6c1ae83dfd54012632f01685e	2022-09-16	Do not invoke rewriter on terms in set cardinality graph
+setChooseSupport	f33e8fd5f2e0d2e98ca3ed2caf8b2ea9e2c391e9	2025-07-28	More
+setCompRed	e0e1cfef52d79e95d1755a1d3fdbe5600d0d5ff3	2022-05-04	Merge branch 'main' into setCompRed
+setDefaults-0219	2a1a4a688e08e03ebd118808a5dd923188f12c09	2025-02-21	More
+setUnionPrerewrite	cb955fddbb84b502d9647384a19899c4dcd179dc	2025-08-15	More
+setUniv	10bad0a1e6f1f9dfab15a01ffe1a4223a69b288f	2024-10-30	Fix
+setsAlfDoc	7a1a815d12f96a627b070f17ca9d5dfba4ad79ae	2024-06-09	Merge branch 'main' into setsAlfDoc
+setsInternalRelevant	d344c7edcfd129753ba927e7050cf4287e364cad	2024-04-17	More
+setsPf	d41266aa39c2cc6385f68b41b6d483ef750b5d01	2024-06-05	Update src/theory/sets/infer_proof_cons.cpp
+setsUpwards	d66dfd2dd1e301093f9faaf9fdbadfe0e62c8fcd	2024-10-31	Minor
+sharedSolverCentral	f0f049902eec58fcae6e23e8a2686bde4de1865f	2021-07-02	Minor
+sigmaStarFix	04a673ba6795d79c78f21f25b08d14aac11703f5	2026-03-14	Add missing check in Eunoia rule str-in-re-sigma-star
+simpleNonzeroFactor	1a7256634e6ada6fbe2098591a30ee2a7a6453ec	2023-02-14	Merge branch 'main' into simpleNonzeroFactor
+simpleTriggerMore	eeeb2106f79295ac90aaadd02e05e95d8bf65659	2023-11-04	Format
+simplifyRecFun	1dcb4d1024a2bf8fdab0cdff9df5afa80bdc0e50	2026-02-23	Merge branch 'main' of https://github.com/cvc5/cvc5 into simplifyRecFun
+simplifySyms	68b84133609177a378d9a6a8b7f929d56aa93969	2024-06-10	Merge branch 'main' into simplifySyms
+skPurifyUfApp	c8c3392290156bbd0718cad56e4e2ec23c966069	2020-10-11	Delay expand def use
+skolemApi	6bb0b2b699e9df51e6b82af84255913e73b2d9c9	2024-01-26	Merge branch 'main' of https://github.com/cvc5/cvc5 into skolemApi
+skolemLemma	1988180fcc6715b58188f0f31fd5292f7294d1f8	2022-05-10	More
+smartExpDef	72e7ec9671307bcc4a549f9dfaaae580de2ef2cf	2021-07-21	Merge branch 'master' of https://github.com/CVC4/CVC4 into smartExpDef
+smtComp2024-2	e03049bfe9bfe4d90f0304ca1f9909a155abf811	2024-05-17	Merge branch 'main' into smtComp2024-2
+smtComp2024Strategy	e3eeb8d4710ad92760a5d46fb83f94d07f48466e	2024-05-16	Logic
+smtLazyAssert	7fd68eb95980b3b5c21ade19b10e8f6c946467b3	2022-08-03	Minor
+smtPpBasicRewriteOnly	cfddc7a96c20f85c52ba9d04c09257017abdedb9	2024-11-26	Only try to use basic rewriter to automatically reconstruct trust steps
+smtSolverDriver	b5a6aa3872534dddf0ae22880057aa52c09d0dfc	2023-02-23	Add
+sortTermOverload	474620fa7324829787c9f88920c97f8ffddd6191	2025-01-17	fix
+starexec	d075081b3296df58bdfb4b81a6cf76a4fc2206d5	2022-05-13	Merge branch 'main' of https://github.com/cvc5/cvc5 into starexec
+staticRewritePf	97841eeb0bba3bf8b60c38a217fb308dc9777fb7	2024-04-22	Merge branch 'main' into staticRewritePf
+stdEqualityRewrite	83cb3e32d1139a26ffdbba9f0f59754dbc7eddab	2023-11-15	Merge branch 'main' of https://github.com/cvc5/cvc5 into stdEqualityRewrite
+stdEthos	77226c11346a7442c8e58b0fc83bbc65754ee197	2025-04-09	More
+strCacheLemma	b47b758e40a1f6c3bd7c1a7c7628ceae39099505	2020-09-04	FIx
+strContainsBeforeIdof	8be0ced6f49dfe8a06da66bd8e2bf3a1ed22aa7a	2024-11-14	Fix
+strCoverage	1e3a95f0a78a26c7e36651f4b4c03b1d85cc9b0b	2023-06-05	Format
+strDecompose	88161b4fbbbfb107aff92900b08c3a8e2562333d	2025-08-01	Fix
+strDelayRegister	ffdb9cf4441dce742aebe0af60fc6b983cc7d3ac	2023-05-24	Take code point improvemnets
+strDev	230c3d6f7fc7496301c84bcf0ff2209f3657a1f5	2023-05-10	Merge branch 'main' of https://github.com/cvc5/cvc5 into strDev
+strEagerSlv	3b2616c19351bd296f6e7dc7e59a5268b57207d5	2021-01-19	Format
+strEntailDev	5cc49ebf28d355560ecd4a67fd742c1dd10510d7	2024-05-02	ANother
+strEvalAdd	fc080d61a3eebff73822de42067150243550af20	2022-11-04	Minor
+strEvalCases	5ac32ecd1d42825ceca8c196d6e397ac599670ce	2024-05-16	Merge branch 'main' into strEvalCases
+strLenInternal	b6c726220ff83c6f0f4bf8ab3ef0c4b4e4295cd3	2023-05-23	Format
+strMinorOpt	0fbd3e006b0c75bab4af278d75a82b447d40f8b6	2023-05-19	Format
+strNthPrep	05b96a82dbd59c266eee8b015a9634b92975b838	2022-06-02	Fix
+strRare-0402	25e1f8e15b2a3ff12ac37bd6e574552f2da42fd3	2025-04-02	Another fix
+strRewriterNoRec	8f375772db960125ff38e8b3a3b25e3e45490b7c	2025-01-13	Merge branch 'main' of https://github.com/cvc5/cvc5 into strRewriterNoRec
+strUnifyGen2	b2f1ef9fe281c832ca1aaa16bc6f752a87e2f234	2025-08-12	Merge branch 'main' of https://github.com/cvc5/cvc5 into strUnifyGen2
+strUnifyGenRev	f0e520971c69c3f86cdb7fe93e4a63db05bcd956	2025-06-02	Merge branch 'main' of https://github.com/cvc5/cvc5 into strUnifyGenRev
+strUnitInj	c29fa5be913aa7776c71dd0174987951dbc60cab	2022-06-22	Merge branch 'main' into strUnitInj
+stratifiedStrIpc	cb394d2153890ba7a84a4b4be7455e7b592c7320	2025-12-16	Trying stratified substitution for strings infer proof cons
+strictParsingMixedArith	2a1323793072b0983d0e5e45f5ff387e33eb3536	2025-04-17	Regressions, improve
+strictTypeRules	c9d427ddbe8e56568556e6ed71d2a6a77e35e3be	2022-05-04	Tptp
+stringEagerConstInfer	d6e4837dd3279657bdf57d0a2049bb0aab078707	2019-06-10	Merge branch 'master' of https://github.com/CVC4/CVC4 into stringEagerConstInfer
+stringEagerPpPf	f71b253c5daa97c56770d539c8c2e3566491c9d8	2024-11-01	Format
+stringRelevantTerms	9ed8084efbda799cd822d20a332e3aab4e6870d0	2020-02-09	Relevant terms
+stringsExtDeq	80563a73c118acc881dd14951cdaf59de5ab1ccf	2021-06-30	Format
+stringsGuess	563ae7db34a2065bfa8061e5b71b8151a8135d04	2020-04-09	Fix
+stringsIpcAgg	854546f20ae48f798d50128a5dec49973a6e7fb1	2024-04-24	Merge branch 'main' of https://github.com/cvc5/cvc5 into stringsIpcAgg
+stringsIpcAgg2	892d178f2be871e7e59857a11cc8d1a8f4088675	2024-08-12	Doc
+stringsIpcRefactor	9979e263a16a14a53c4f3a6780f8189ff49859d3	2024-12-15	Format
+stringsMnf	7889fcdb1ad16c1844fb54cb7cfc8f2649074a05	2023-12-05	Fixes
+stringsPf	92112f102758f67573d3a9154a4fe104e48dc55b	2020-05-21	(Test) pfee
+stringsPpAssert	b6988eb6fe2cc2a0fc8358c28c2d99574d5e2467	2019-04-23	Merge branch 'master' of https://github.com/CVC4/CVC4 into stringsPpAssert
+stringsPprMiniscopeSubstr	8cfd28ebd80af32a1081ac338eeea97e29adbb32	2024-05-02	Fix
+stringsRecExplain	6fa36d48ce5d87b1becca9b42a2c580ce1e2fe22	2020-05-05	Fix unexplainables
+subConflict	a8cea52c2b4e7ecc67bfd86fdcf0e29b924a82d7	2024-01-29	More
+subMinNConst	778c3768a788aeefaaa91b7275f845d5945478d9	2022-05-31	Address
+subTheoryOriginalOpt	293da2851df895439d4dfa6459787d9f8903e564	2021-06-10	Make subsolvers use original options
+subsElabFixpoint	33b5dbc096f89285771a4a7f4b9003d2ff3a7b19	2024-06-05	Merge branch 'main' into subsElabFixpoint
+subsRefactor	6174c90490a31f1a625b8c75eb9ba6e929934a9f	2022-01-14	Merge branch 'master' into subsRefactor
+subsolverOriginalOpts	de6f2dce2d9ee15609bd87fc542b06ad20fb619a	2022-07-18	Format
+substrNumericMax	5ffa480b716c0955a07c284830305a24eb7f979b	2025-03-07	Format
+subtypeElim	a8eb7bc9fbc2950c6e1755be69d4133f0b8872a4	2022-01-12	Merge branch 'master' into subtypeElim
+subtypeElimPfConvert	f7dd70e7590ee2c6e8d685cc43e772369394e319	2024-02-19	Merge branch 'main' into subtypeElimPfConvert
+subtypeEqPrep	c9f2341b567f7811df4703a2a12d70d43c47e411	2022-05-05	Merge branch 'main' into subtypeEqPrep
+sygusAnyConstStrat	2b694d36350cadcae88caa1a2e4c6e91f3682062	2019-12-13	Doc
+sygusComp2015	085d7bfb0d9851ec9a134ed3d075232a5968d855	2015-07-19	Revert boolean ite conversion.
+sygusComp2018-2	ad5a8f0eb67ebd698285a32a8e4101e971853741	2018-06-27	Rm evaluator unit test.
+sygusEnumBuffer	1fa3e012e6a9425525a75aed0a7d804f83057770	2020-02-16	More
+sygusEnumCbCache	3cc22fab4e916fb9d797b231743687cd653a2eeb	2023-04-26	Refactoring cache for sygus enumerator callback
+sygusEnumFastFair	46eeee7ecb130bc6adf08ad3b1b662ebeeb2d9d1	2024-02-20	Regress
+sygusEnumFix	2b6555b7d86786ac9c20da6470094aa3c0aa5599	2020-02-15	Comment
+sygusEnumRevisit	5eca656331cd4dfb291aca175fbb17b2f43a5312	2020-01-30	Format
+sygusEqExpGen	0c5c256aa77be40c45aab2358aeb790102470ebe	2018-02-07	Format
+sygusExpConst	8e7e4b31a93ffd7014f82237ba506b23e0cead4f	2022-11-10	Possible
+sygusExtensionInc	8943e4450899c766d909abc9b1b43d920fa04ba9	2021-10-25	Format
+sygusExternalOp2	ab3153d228e1495b2284aa3df7812c3513f266b2	2021-08-27	Merge branch 'master' into sygusExternalOp2
+sygusGradual	675023d24c71043886b7328a36d6daf0fff37d29	2024-01-18	Merge branch 'main' of https://github.com/cvc5/cvc5 into sygusGradual
+sygusGrammarNormReimpl	dc187b0f4df37350e0198a188d580f6a7204aab7	2024-12-05	Fix
+sygusGuardedSLem	78f18aace97837cb16add7abcf738f75d2b86e3b	2018-09-20	More fix
+sygusImproveRcons	736c089f0e05795cbb6e16f66aad318301070302	2017-10-12	Minor improvement to sygus reconstruction.
+sygusInferModels	fba24287e6a0f88ab659a98addaf5cb3c6f94084	2021-04-22	Merge branch 'master' into sygusInferModels
+sygusNestedQeProc	1b42d541a26e203ab33a37c88d9ff5d2d54b84dd	2021-08-20	Fix
+sygusNoExpDef	82b448b506b6f27b85677e0dadb3edbf5aa792ca	2022-09-06	Merge branch 'main' of https://github.com/CVC4/CVC4 into sygusNoExpDef
+sygusNoFv	dd7f3b3d308f763ac6bd98268542e1e3c0fad16c	2025-05-09	Do not use free variables
+sygusPerfTest-100918	b900d240adb188d8d0ed2cce52763ebb07bcdfdb	2018-10-10	Minor
+sygusRecFunInfer	23552f16f6eedfbb26efad4171e45c0af5d8fe9e	2025-08-15	Merge branch 'main' of https://github.com/cvc5/cvc5 into sygusRecFunInfer
+sygusRrAccelEnum	2ef8b9f039cba30ac410dcd02bf94f70bb4cc666	2018-11-12	Format
+sygusRrNonConst	6e25282ee28becf33d356765b673015c328d86a8	2020-03-15	Fix
+sygusRrSmt18	a89884a23d6d3007184e5116c5adc2e016485c2b	2018-04-27	Merge branch 'master' of https://github.com/CVC4/CVC4 into sygusRrSmt18
+sygusSimul	89b0b1dc6ff8c8ae56ff20234a325b5bdeb12a48	2018-04-23	Fix check
+sygusSkelExplain	c525aa2250370e4bdbdf64a14ec4fdcaf3c9f6af	2020-03-09	More
+sygusUnsatCores	7c9e2c2a588b3622c509e00c5938b813d3eb7169	2022-07-19	Merge branch 'main' of https://github.com/CVC4/CVC4 into sygusUnsatCores
+symConsFair	41fc3e65e39f1d55beac3469d3533b56efa49923	2019-12-13	Fixes, fundamental issue when using non-vanilla CEGIS: how to block?
+tcStringsOpt	817c5ba19261e4735aaa8ce58baf15f738b06d3b	2022-11-05	Minor
+tdbDev1107	5744fbbf06c8599deccc9897c0fcc998857190e3	2021-11-08	Merge branch 'master' of https://github.com/cvc5/cvc5 into tdbDev1107
+tdbLLOpts	ce49bdce7eadaa381d1ed414b06d17a27edb2199	2024-09-11	Minor
+tdbOldIndex	2ba447dd98cc7b27b1af89dc159cceb9704cb868	2020-01-30	As option
+tdbOpt1108	7ae70219a2129d9522bd5dea70538da77a768df3	2021-11-09	Merge branch 'master' into tdbOpt1108
+tdbRelevant	4cbb09e4c6c924b4986bc1ad0adbd71858be1760	2024-07-31	Update regressions
+termDbExplain	2f2a1d9885928138d89f2ea998caf9c5a5cd3217	2019-08-07	More
+termDbSygusLam	c8c5d6fa9132c20a3694950664ebcbe4a4e17844	2019-11-26	Generalize
+termOrigin	6448c07896e216e26750c402bd8f2209b516e527	2025-04-09	More
+test355	7a9861da379869f6f4f978a289e1de651c84e728	2022-03-07	Format
+testIncomplete	e8b2b841af241b9b60e51bd98b84606eeccb88c7	2025-05-20	Test incomplete proofs
+testerConflict	1326dd414e731c5755aa1ecfe3cc61df7cb066e2	2020-08-26	Tester conflicts
+tfDocMore	2302fa945131084e562b9d958bb552cfe06ba760	2025-02-18	Trying
+theoryEngineLazyProofs	3b36cfc3bf2901ab00e08dd26e7825338f9e0c52	2021-10-22	Format
+theoryLemmaCore	37c33e435eb849f9053c4e4d6675d64727d60f99	2023-03-07	More
+theoryRewriteEqIte	2fe328b22d1944841eaa953eb31fd5d6a821c347	2021-07-12	Doc
+theoryRewriteUpdate	5718b600cbabbecabc36c90c0e03103d7781dcee	2024-05-16	Merge branch 'main' into theoryRewriteUpdate
+theorySample	07818bf79b2ab1a5ce029bb3f78e136f272bc094	2018-09-07	Merge branch 'master' of https://github.com/CVC4/CVC4 into theorySample
+timAlwaysCache	93795973a59f9dedf35cf71c64d50853394363f5	2024-02-07	More
+tlimitPerMutable	b74fe5b62981370c3e650a418c285843bbe61044	2022-07-20	Merge branch 'main' into tlimitPerMutable
+toCoreImprove	452a7642245e47e1d7e082d885088299c3972bc9	2023-12-12	Merge branch 'main' into toCoreImprove
+toCoreMinSimplify	93315072f6d51a38f3458a6aeaa80969091cebd2	2023-09-07	Minor
+toLowerDev	f57d139b24c231a973d3d94b6b10a06029c7da72	2022-05-08	Try
+tptpDumpModels	7799c99d519583a8bd6f889928d9cd6535cbb3a2	2019-11-05	Format
+tptpSubtype	e22930665e54cdfbcc4514992ad4eaa60fd907a6	2022-05-06	Merge branch 'main' into tptpSubtype
+trackInferId	1037e50e714bc4ad2420a35cefe158e185997d03	2024-04-17	Track inference ids
+trackSkip	ff31c901f722c375173cc731a40f1d192a637a4f	2025-08-15	Ensure fairness more
+triggerNoStaticOpts	88eb53689dd2e27f0219d245489513b882e8e236	2022-06-03	Merge branch 'main' into triggerNoStaticOpts
+trustPg	4df6b046b0df2ba9e9453cd0132410c0ef3f57b7	2025-01-01	Fix
+trustSubsRcons	f6b5f7c9976f0073ad77239af71e5a6f1795589a	2022-05-06	Merge branch 'main' into trustSubsRcons
+tutilCleanup	29798d2639496ac01705d052844349cda9cd667d	2025-04-10	More
+ucReg-0402	a1521401e2a5a7bd89efe4209c29e026bcaf116d	2025-04-02	Disable unsat core on regressions
+uclHistogram	a3b1376907a8833553b5663482049d4657e721d0	2024-09-19	More
+ufBv2natRare	3846efd0f303a40ba3d9425e81aad921a4506d40	2024-06-05	Merge branch 'main' into ufBv2natRare
+ufBvConvDev	d4d900d6ca5cde4e89efffd28a8cd8807a7d6efb	2023-01-20	Initial
+ufConvRlv	9c470137d3a25429c295ae67a768c5dcc028fa61	2023-01-23	Fix
+ufEagerDistinct	d8477cc2a800ea66239857e436d02780ac2807da	2026-01-09	Optional eager distinct
+ufLambdaRewFix	317501a5c6aab9a585acd8fd6330a1c99353f9ad	2024-12-19	Format
+ufcClean	4107ddf2129899edacb2eabdd07e762da7336336	2021-02-02	Format
+unifPiNew	9bf37429fa233ab5eb2662ddb8f4f579d263cce2	2019-12-06	More
+uniformPosCtnRed	d42084fcb958295176c5881ea17bd22e42c59adf	2018-10-18	Improve
+unifySkolems	70f7991d10721e574d079aa95cce76311490f231	2023-06-20	Merge branch 'main' into unifySkolems
+unitTestFvAssert	d196684a482e33fcbaf6cfdcb0fec909e90ee0f6	2024-06-04	Add unit test for free variable in assertion
+unrewrite	2023c6c83e2f42981bdc6a5943690d90fdf324cf	2026-08-19	Merge branch 'main' of https://github.com/cvc5/cvc5 into unrewrite
+unrewrite2	69064b385d5d699a890a7dc87b90914c053715c9	2026-08-19	AI initial attempt at improve unrewrite
+updateAlfc-0718	cbefc40c6201ee73d187813581bb16480c3bcbfa	2024-07-22	Merge branch 'main' of https://github.com/cvc5/cvc5 into updateAlfc-0718
+updatePfCheckScripts	33fd0517fecd722f7aa8ba0b0334fd3a257b1850	2025-05-16	Update proof checker scripts
+updateStrUtil	bf77ac5b08089bae3ceb3bdd209fd8867ee9b8a5	2024-05-31	Merge branch 'main' into updateStrUtil
+userTriggerOut2	95136cd5de2b564c35dfdc256db6f049b2454ca5	2024-08-12	Fix
+validWitnessPf	6f5edef398c65a89f81b4910a2c5c495f7857039	2025-06-05	Merge branch 'main' into validWitnessPf
+version2p7	3be7fa408fb0fff067025d477a80622370a5bbce	2025-05-28	Fix
+verusDev	4ef1691c32b65be09930a03bfb684cedfb0e349e	2026-02-04	Fix
+virtualClauseDel	8566abe5ae1905d3376641143ef535072dbacbb3	2021-10-13	Merge branch 'master' of https://github.com/CVC4/CVC4 into virtualClauseDel
+virtualLemma	d92597181dd135751b98190872829d492f13f1ac	2021-10-19	Foramt
+zllFixedPoint	5c515b3fe344d04a548c0b0a93313ae5560bb428	2024-04-16	Regression

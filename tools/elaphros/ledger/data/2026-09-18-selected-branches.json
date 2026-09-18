@@ -1,0 +1,496 @@
+{
+  "upstream_sha": "3dcc1ef5421ab62cc1ee9af52d70042ce6861af0",
+  "scope": "Source inspection only; numstat and log limited to src/. No performance runs.",
+  "branches": [
+    {
+      "branch": "chainMResOpt",
+      "sha": "cdebf282fc3ac22cddee66db548887fffbffe16f",
+      "date": "2026-07-07",
+      "merge_base": "97305152523d476f75c7a6c8cd440f76a8c798a8",
+      "behind": 110,
+      "ahead": 2,
+      "source_numstat": "62\t55\tsrc/theory/booleans/proof_checker.cpp",
+      "source_log": "cdebf282fc 2026-07-07 Minor\n12ff179f1a 2026-07-07 Optimize internal checker for CHAIN_M_RESOLUTION"
+    },
+    {
+      "branch": "rdbExec",
+      "sha": "458596700493247219a02c06b5f79f4b25c32803",
+      "date": "2026-08-14",
+      "merge_base": "5cc03f4b95067fd3071c533567cfb9ddc86a67bc",
+      "behind": 85,
+      "ahead": 18,
+      "source_numstat": "4\t0\tsrc/options/base_options.toml\n10\t0\tsrc/proof/subtype_elim_proof_converter.cpp\n1\t0\tsrc/proof/trust_id.cpp\n8\t0\tsrc/proof/trust_id.h\n4\t0\tsrc/rewriter/CMakeLists.txt\n118\t1\tsrc/rewriter/mkrewrites.py\n346\t0\tsrc/rewriter/rewrite_db_exec.cpp\n178\t0\tsrc/rewriter/rewrite_db_exec.h\n1088\t0\tsrc/rewriter/rewrite_db_exec_printer.cpp\n89\t0\tsrc/rewriter/rewrite_db_exec_printer.h\n161\t0\tsrc/rewriter/rewrite_db_exec_template.cpp\n9\t0\tsrc/rewriter/rewrites.h\n12\t0\tsrc/rewriter/rewrites_template.cpp\n5\t1\tsrc/rewriter/rule.py\n30\t8\tsrc/rewriter/rw_parser.py\n8\t0\tsrc/smt/env.cpp\n23\t9\tsrc/smt/proof_post_processor.cpp\n156\t4\tsrc/smt/proof_post_processor_dsl.cpp\n22\t0\tsrc/smt/proof_post_processor_dsl.h\n35\t0\tsrc/theory/builtin/generic_op.cpp\n10\t0\tsrc/theory/builtin/generic_op.h\n5\t1\tsrc/theory/bv/rewrites\n182\t9\tsrc/theory/rewriter.cpp\n34\t1\tsrc/theory/rewriter.h\n5\t1\tsrc/theory/rewriter_tables_template.h\n14\t5\tsrc/theory/strings/rewrites\n0\t1\tsrc/theory/strings/rewrites.cpp\n0\t1\tsrc/theory/strings/rewrites.h\n4\t7\tsrc/theory/strings/sequences_rewriter.cpp",
+      "source_log": "4585967004 2026-08-14 Try some improvements\nb5a2754147 2026-08-14 More\ne1d56c4a60 2026-08-14 Emitter\n08e79fd264 2026-08-14 Refactor to template, compilation for parallel\nc259623575 2026-08-13 Simplify\ne7808775a4 2026-08-13 Refactor, eliminate interpreted\n5747c0e242 2026-08-13 try\nde084cd285 2026-08-13 Remove ex\n69f8a1e1e8 2026-08-13 Cleanup, add missing\nd12d1be5c0 2026-08-13 More\n67f715f131 2026-08-13 More refactor\ne990db6320 2026-08-13 Reverting to non-stratified\n7ccebe0933 2026-07-28 Sketching stratify\n433a8cb5bb 2026-07-18 Conditional, more\n604f255069 2026-07-18 Switch to theory rewrite, generalize\nf9de35ae99 2026-07-18 Initial attempt"
+    },
+    {
+      "branch": "ai-pfIncremental",
+      "sha": "3528e45cba629156c2964d92f680f956597e2515",
+      "date": "2026-03-28",
+      "merge_base": "5a726417681a3798334d71f71087424764d7a90a",
+      "behind": 273,
+      "ahead": 7,
+      "source_numstat": "5\t1\tsrc/main/command_executor.cpp\n132\t2\tsrc/proof/eo/eo_printer.cpp\n14\t0\tsrc/proof/eo/eo_printer.h\n164\t18\tsrc/smt/proof_logger.cpp\n36\t1\tsrc/smt/proof_logger.h\n5\t1\tsrc/smt/smt_solver.cpp\n9\t0\tsrc/smt/solver_engine.cpp",
+      "source_log": "3528e45cba 2026-03-28 Fixes from merge\n65a77de649 2026-03-25 Fix\n185fea05c3 2026-03-25 More\nb806c7f3fa 2026-03-25 Attempt"
+    },
+    {
+      "branch": "theoryEngineLazyProofs",
+      "sha": "3b36cfc3bf2901ab00e08dd26e7825338f9e0c52",
+      "date": "2021-10-22",
+      "merge_base": "a06b10cf51c22dd86bf266ef1494dded4b53e9f0",
+      "behind": 4369,
+      "ahead": 2,
+      "source_numstat": "20\t22\tsrc/theory/theory_engine.cpp\n2\t1\tsrc/theory/theory_engine.h",
+      "source_log": "3b36cfc3bf 2021-10-22 Format\n8e0ca28b30 2021-10-22 Use fresh lazy proofs in theory engine"
+    },
+    {
+      "branch": "ai-macroPf",
+      "sha": "b374e333743541e1e5fbf780c9ede76fcc13994f",
+      "date": "2026-04-23",
+      "merge_base": "7f138fe3ef01e6e5c0c5459917a71a6489a84cbb",
+      "behind": 223,
+      "ahead": 2,
+      "source_numstat": "2\t0\tsrc/api/cpp/cvc5_proof_rule_template.cpp\n61\t28\tsrc/theory/quantifiers/quantifiers_macros.cpp\n35\t15\tsrc/theory/quantifiers/quantifiers_macros.h\n9\t0\tsrc/theory/quantifiers/quantifiers_rewriter.cpp\n11\t2\tsrc/theory/quantifiers/theory_quantifiers.cpp",
+      "source_log": "b374e33374 2026-04-23 Format\nf953625e3f 2026-04-23 Add proofs for macros-quant"
+    },
+    {
+      "branch": "ai-annotatePf",
+      "sha": "c0cf32c04461dfa893a884caef2f285e4959df9f",
+      "date": "2026-05-20",
+      "merge_base": "209fedf4ef8316a3c9f8e02b8d006b8c023eeec4",
+      "behind": 174,
+      "ahead": 9,
+      "source_numstat": "4\t0\tsrc/CMakeLists.txt\n1\t0\tsrc/api/cpp/cvc5_proof_rule_template.cpp\n8\t0\tsrc/options/proof_options.toml\n52\t0\tsrc/proof/annotation_id.cpp\n57\t0\tsrc/proof/annotation_id.h\n83\t0\tsrc/proof/annotation_proof_generator.cpp\n84\t0\tsrc/proof/annotation_proof_generator.h\n35\t0\tsrc/proof/dot/dot_printer.cpp\n7\t0\tsrc/proof/eo/eo_printer.cpp\n37\t0\tsrc/proof/proof_node_to_sexpr.cpp\n7\t0\tsrc/proof/proof_node_to_sexpr.h\n18\t2\tsrc/proof/proof_node_updater.cpp\n37\t14\tsrc/prop/prop_engine.cpp\n10\t3\tsrc/prop/prop_engine.h\n22\t0\tsrc/theory/builtin/proof_checker.cpp\n1\t1\tsrc/theory/theory_engine.cpp",
+      "source_log": "c0cf32c044 2026-05-20 Fix spurious merging\nc1b738b1c1 2026-05-20 Apply suggestions from code review\ncc245a8959 2026-04-08 Format\n161e1dcff6 2026-04-08 Improve\n9b5dcedd06 2026-04-08 Format try\n51641fc431 2026-04-08 Use theory id\n660449c371 2026-04-08 Annotation proof generator"
+    },
+    {
+      "branch": "pf-defineFun",
+      "sha": "5edf06a936816ecd74b96162ae327fd46be591c8",
+      "date": "2026-08-19",
+      "merge_base": "242ff48eb7c4302b544bf7657b9ff6be741e66dd",
+      "behind": 67,
+      "ahead": 6,
+      "source_numstat": "8\t0\tsrc/options/proof_options.toml\n178\t15\tsrc/proof/eo/eo_printer.cpp\n65\t2\tsrc/proof/eo/eo_printer.h\n19\t0\tsrc/prop/minisat/sat_proof_manager.cpp\n203\t21\tsrc/smt/assertions.cpp\n83\t0\tsrc/smt/assertions.h\n7\t5\tsrc/smt/print_benchmark.cpp\n4\t1\tsrc/smt/print_benchmark.h\n7\t2\tsrc/smt/proof_logger.cpp\n37\t1\tsrc/smt/proof_manager.cpp\n35\t1\tsrc/smt/proof_manager.h\n20\t7\tsrc/smt/solver_engine.cpp\n15\t2\tsrc/smt/unsat_core_manager.cpp\n5\t2\tsrc/theory/trust_substitutions.cpp\n12\t1\tsrc/theory/trust_substitutions.h",
+      "source_log": "88e09cbcc1 2026-08-19 Fix\na30ab5ac98 2026-08-19 More\n10ec264819 2026-08-19 Naming\ncee45c5413 2026-08-19 Improve to track original\n57dcd9506c 2026-08-18 Option to treat define-fun as a macro in proofs"
+    },
+    {
+      "branch": "pf-defineFun-printerOnly",
+      "sha": "255eca8f34b93b7b106c2a074d3aaf55fb4be3f5",
+      "date": "2026-08-19",
+      "merge_base": "242ff48eb7c4302b544bf7657b9ff6be741e66dd",
+      "behind": 67,
+      "ahead": 7,
+      "source_numstat": "2\t0\tsrc/CMakeLists.txt\n8\t0\tsrc/options/proof_options.toml\n178\t15\tsrc/proof/eo/eo_printer.cpp\n65\t2\tsrc/proof/eo/eo_printer.h\n297\t0\tsrc/proof/macro_def_proof_converter.cpp\n159\t0\tsrc/proof/macro_def_proof_converter.h\n19\t0\tsrc/prop/minisat/sat_proof_manager.cpp\n7\t5\tsrc/smt/print_benchmark.cpp\n4\t1\tsrc/smt/print_benchmark.h\n91\t1\tsrc/smt/proof_manager.cpp\n46\t1\tsrc/smt/proof_manager.h",
+      "source_log": "255eca8f34 2026-08-19 Printer only\n88e09cbcc1 2026-08-19 Fix\na30ab5ac98 2026-08-19 More\n10ec264819 2026-08-19 Naming\ncee45c5413 2026-08-19 Improve to track original\n57dcd9506c 2026-08-18 Option to treat define-fun as a macro in proofs"
+    },
+    {
+      "branch": "pfLogInferface",
+      "sha": "8fbcbd1b0b3a3d913d0445d30bcefb32c30f4269",
+      "date": "2024-11-26",
+      "merge_base": "ad7ce61def3478b5c584c0a6c99e41e561ac550a",
+      "behind": 1260,
+      "ahead": 6,
+      "source_numstat": "2\t0\tsrc/CMakeLists.txt\n25\t0\tsrc/smt/proof_logger.cpp\n93\t0\tsrc/smt/proof_logger.h",
+      "source_log": "8fbcbd1b0b 2024-11-26 Update src/smt/proof_logger.h\nee7a5972b7 2024-10-16 Fix style\ndd122c85f3 2024-10-16 Apply suggestions from code review\n0fc7a61ec7 2024-09-30 Add proof logger interface"
+    },
+    {
+      "branch": "proofDisable",
+      "sha": "cd61fa165f7b85dcbfb2e9d3e8b93222511ba9ae",
+      "date": "2025-08-25",
+      "merge_base": "2ae4ede42a9b876e5715620dbeee63fcfe89ce11",
+      "behind": 609,
+      "ahead": 7,
+      "source_numstat": "24\t0\tsrc/options/proof_options.toml\n8\t1\tsrc/prop/prop_engine.cpp\n9\t0\tsrc/prop/prop_proof_manager.cpp\n5\t0\tsrc/smt/proof_post_processor.cpp\n10\t0\tsrc/smt/proof_post_processor_dsl.cpp",
+      "source_log": "9ac86762de 2025-06-18 More\nb48299c24f 2025-06-18 Fix, working\n0e5b927f96 2025-06-18 Trying\n9d55c91915 2025-06-18 More\nfa46c341ec 2025-06-18 Dev branch to test disabling certain parts of proofs"
+    },
+    {
+      "branch": "pfpUpdate-0417",
+      "sha": "ea02fee56165b5f13487244f3a351988dbeffe09",
+      "date": "2025-05-06",
+      "merge_base": "e501c9b8f80b8b99287a17045f39a0f6d78c4710",
+      "behind": 782,
+      "ahead": 5,
+      "source_numstat": "35\t51\tsrc/smt/proof_post_processor.cpp\n20\t20\tsrc/smt/proof_post_processor.h",
+      "source_log": "ea02fee561 2025-05-06 Fix\n6ad2b1076e 2025-04-22 Comment\n47b811f351 2025-04-17 Improvements to the proof post-processor"
+    },
+    {
+      "branch": "pfrConvert2",
+      "sha": "6c74757436a92f22156d5d139cd9e9b6c4422cad",
+      "date": "2026-01-30",
+      "merge_base": "ef5623825a77abd4c500cd39f09c2bb246c93719",
+      "behind": 402,
+      "ahead": 18,
+      "source_numstat": "2\t0\tsrc/api/cpp/cvc5_proof_rule_template.cpp\n8\t0\tsrc/options/proof_options.toml\n3\t1\tsrc/proof/alf/alf_printer.cpp\n78\t15\tsrc/proof/conv_proof_generator.cpp\n4\t4\tsrc/proof/conv_proof_generator.h\n166\t0\tsrc/theory/builtin/proof_checker.cpp\n11\t0\tsrc/theory/builtin/proof_checker.h",
+      "source_log": "8494c5c529 2025-06-19 More\n2ff3bbf6a7 2025-06-19 Corner case\nbd914e6862 2025-06-19 Fixes\na75ea47777 2025-06-19 Format\n3d1988bba4 2025-06-19 More\na99390cab4 2025-06-19 Format\n47a8e8e371 2025-06-19 Working\n1e7501428a 2025-06-19 More\n3e1ef41b56 2025-06-19 Format\n250cae830b 2025-06-19 Draft\nf847dcce2a 2025-06-19 Setting up\n9852ee587d 2025-06-19 Format\ndd3c65772a 2025-06-19 More\n11ccac52a2 2025-06-19 More\ne1f6e0efa2 2025-06-18 More\n4bbe4a4a38 2025-06-18 Sketching"
+    },
+    {
+      "branch": "pfnConvert",
+      "sha": "5126679920569833954eee91024b4b1284d46906",
+      "date": "2024-02-20",
+      "merge_base": "83e72755ea23f5082b6f1ae4125aeedadb13c7ac",
+      "behind": 1994,
+      "ahead": 58,
+      "source_numstat": "8\t0\tsrc/options/proof_options.toml\n6\t5\tsrc/proof/subtype_elim_proof_converter.cpp\n1\t0\tsrc/proof/trust_id.cpp\n2\t0\tsrc/proof/trust_id.h\n10\t0\tsrc/smt/proof_post_processor.cpp",
+      "source_log": "5624693b20 2024-02-20 Format\n1f46c91fd8 2024-02-20 Trust\n2205d9d6d1 2024-02-20 Revert\nc99226f4d7 2024-02-19 Fix\nd18c01f871 2024-02-15 Fix\n917cfc705d 2024-02-15 Format\n1ba602f8fb 2024-02-15 Fix\n4b29db36e2 2024-02-14 more\nc3773b9e0c 2024-02-14 Minor\n1e26e9e387 2024-02-14 More doc\ne7d2a1b0a2 2024-02-14 Format\n3e35dbe746 2024-02-14 More\n032128e0d1 2024-02-14 Fix\nff51440f08 2024-02-14 Format\n6d5c579dc1 2024-02-14 More\n36edd5c0bb 2024-02-14 Format\n26ae27bf40 2024-02-14 More\n29784f79fc 2024-02-14 Trying\n199abf6a56 2024-02-13 Minor\nff80afe527 2024-02-13 Format\n5a3c408a13 2024-02-13 More\nbf7a87a4e2 2024-02-13 Minor\n2eaf962db8 2024-02-13 Fix\n2a18ab78da 2024-02-13 More\n6b3158e9c0 2024-02-13 Fix\ne534011617 2024-02-13 Format\n18fa43483c 2024-02-13 Docs\n3483665cff 2024-02-13 Conversion of skolems\n577ba31409 2024-02-13 Minor\n576b8da4f5 2024-02-13 Format\n7339c4b8aa 2024-02-13 Add missing\nde6408e6b8 2024-02-13 Format\nc4ab8300c6 2024-02-13 Fix\n5198f77caf 2024-02-13 Fix\n379536e2b3 2024-02-13 Format\n7a01109dd7 2024-02-13 More\n655806dbe2 2024-02-13 Format\n47ffcd2f48 2024-02-13 Strict sum ub\n666d8a79f2 2024-02-13 Format\nddb65c7bf3 2024-02-13 CONG\n3c9642093d 2024-02-13 More\n51396b5c81 2024-02-13 Format\nc5ce0cc156 2024-02-13 Update\nf080e7ae1d 2024-02-08 Format\n0833b95c0e 2024-02-08 More\n20dd73990f 2024-02-08 More\naf909fefe4 2024-02-08 Format\nbb442b1a49 2024-02-08 More\n82b1523998 2024-02-08 Format\neb7048e271 2024-02-08 More"
+    },
+    {
+      "branch": "rareOptEval",
+      "sha": "07579cea12d2bac9f7734bfb3a1d349cb19b9165",
+      "date": "2025-08-27",
+      "merge_base": "2ae4ede42a9b876e5715620dbeee63fcfe89ce11",
+      "behind": 609,
+      "ahead": 6,
+      "source_numstat": "1\t2\tsrc/rewriter/rewrite_db_proof_cons.cpp",
+      "source_log": "7e46baf3d6 2025-08-19 Try\n3ff81b3f4c 2025-08-11 Safer\nc65259d5d4 2025-08-11 Try\n02ca3a6136 2025-06-23 Optimization to avoid repeated evaluation in RARE"
+    },
+    {
+      "branch": "rareNoEvalPremise",
+      "sha": "6fada05f334ede74ea0a956e0e27ab54bdc34382",
+      "date": "2025-10-16",
+      "merge_base": "cbcaf6e7836e3c62698caa7ee22d37e9d344485c",
+      "behind": 538,
+      "ahead": 13,
+      "source_numstat": "37\t2\tsrc/rewriter/basic_rewrite_rcons.cpp\n1\t1\tsrc/theory/bv/kinds.toml\n1\t1\tsrc/theory/bv/macro_rewrite_elaborator.cpp\n6\t6\tsrc/theory/strings/rewrites\n9\t3\tsrc/theory/strings/sequences_rewriter.cpp\n8\t2\tsrc/theory/strings/sequences_rewriter.h",
+      "source_log": "6fada05f33 2025-10-16 Format\nfab0a4921e 2025-10-10 Fix\n9d875d65da 2025-10-01 More\nc74d75c0cf 2025-09-30 Try revert\n3e6f73f679 2025-09-30 More\n16c040c7fc 2025-09-29 Revert, try again\na0a3868141 2025-09-29 Refactoring\n9d617e1de8 2025-09-29 More\na0c6949192 2025-09-29 Avoid evaluation in premises"
+    },
+    {
+      "branch": "rareNoMix",
+      "sha": "2d8e3cdf2f24a2fb45d5eb1ee37f059c54eba1a0",
+      "date": "2026-03-03",
+      "merge_base": "50b90699117b29a256ad73b6bcc08c8c6ae27d8d",
+      "behind": 333,
+      "ahead": 3,
+      "source_numstat": "1\t4\tsrc/theory/arith/rewrites",
+      "source_log": "a456f5ed26 2026-03-03 Eliminate mixed arithmetic from RARE rulesg"
+    },
+    {
+      "branch": "cpcDevChainMRes",
+      "sha": "6e08c402be9d7aa78721ec43d64d0f73a412af57",
+      "date": "2025-08-20",
+      "merge_base": "13e624a1f5f97b31f96a50d281df7ff8b1544ae9",
+      "behind": 624,
+      "ahead": 178,
+      "source_numstat": "1\t1\tsrc/options/proof_options.toml\n1\t0\tsrc/proof/alf/alf_printer.cpp\n133\t0\tsrc/proof/proof_node_updater.cpp\n8\t0\tsrc/rewriter/rewrite_db_proof_cons.cpp\n341\t1\tsrc/smt/proof_post_processor.cpp\n48\t1\tsrc/smt/proof_post_processor.h",
+      "source_log": "e5e148220e 2025-06-23 More\naa4373cf1d 2025-06-18 Opt?\n011c28e7e8 2025-06-18 Presimplify\n5028e9251b 2025-06-15 M res\nf7007a48e7 2025-06-15 Chain multiset resolution\n9d4f6c8885 2025-06-13 More"
+    },
+    {
+      "branch": "cpcDevCR",
+      "sha": "496b8f5b0dbec7b8a5a0d3bc8b5726b3320d92cf",
+      "date": "2025-06-15",
+      "merge_base": "a5cee7a4107a695001ae293dba98ffab7f126cee",
+      "behind": 695,
+      "ahead": 162,
+      "source_numstat": "1\t0\tsrc/smt/set_defaults.cpp",
+      "source_log": "9d4f6c8885 2025-06-13 More"
+    },
+    {
+      "branch": "stratifiedStrIpc",
+      "sha": "cb394d2153890ba7a84a4b4be7455e7b592c7320",
+      "date": "2025-12-16",
+      "merge_base": "d8635c8492f375e21d01d066c1e2bea69a2d8e69",
+      "behind": 444,
+      "ahead": 1,
+      "source_numstat": "58\t7\tsrc/theory/strings/infer_proof_cons.cpp",
+      "source_log": "cb394d2153 2025-12-16 Trying stratified substitution for strings infer proof cons"
+    },
+    {
+      "branch": "stringsIpcAgg",
+      "sha": "854546f20ae48f798d50128a5dec49973a6e7fb1",
+      "date": "2024-04-24",
+      "merge_base": "6aee1e17c33d4256800df5ff304b4996dff4e49d",
+      "behind": 1780,
+      "ahead": 3,
+      "source_numstat": "55\t1\tsrc/proof/theory_proof_step_buffer.cpp\n15\t0\tsrc/proof/theory_proof_step_buffer.h\n20\t8\tsrc/theory/strings/infer_proof_cons.cpp",
+      "source_log": "09e1b2b57b 2024-04-24 Doc\ne8b85fd004 2024-04-24 More aggressive techniques for reconstructing proofs of strings inferences"
+    },
+    {
+      "branch": "stringsIpcAgg2",
+      "sha": "892d178f2be871e7e59857a11cc8d1a8f4088675",
+      "date": "2024-08-12",
+      "merge_base": "989b0776bb7935cc62d6b33c5c3dab6083c455a2",
+      "behind": 1366,
+      "ahead": 3,
+      "source_numstat": "17\t0\tsrc/theory/strings/infer_proof_cons.cpp",
+      "source_log": "892d178f2b 2024-08-12 Doc\nf7fa4a1535 2024-08-12 Format\na888c08535 2024-08-12 More aggressive proof reconstruction"
+    },
+    {
+      "branch": "stringsIpcRefactor",
+      "sha": "9979e263a16a14a53c4f3a6780f8189ff49859d3",
+      "date": "2024-12-15",
+      "merge_base": "8cfac8f956c4ef1543f52eb2d862d81367b3d3ed",
+      "behind": 1139,
+      "ahead": 15,
+      "source_numstat": "2\t2\tsrc/proof/conv_proof_generator.cpp\n5\t2\tsrc/smt/proof_post_processor.cpp\n229\t259\tsrc/theory/strings/infer_proof_cons.cpp\n27\t125\tsrc/theory/strings/infer_proof_cons.h",
+      "source_log": "9979e263a1 2024-12-15 Format\n0001a121a4 2024-12-15 Fix\ndd2c564b3e 2024-12-15 Mnior\n5c7892380c 2024-12-14 Revert\n1a62d27ca7 2024-12-14 Along\n3a6c87a4dd 2024-12-14 Fixes\nfb722f5d37 2024-11-26 More\nd8032551d2 2024-11-25 Fixes\n7f8bb25342 2024-11-25 Format\n071a2db02c 2024-11-25 More\n6fbb194197 2024-11-25 Format\n9c85f9891d 2024-11-25 Trying\na9e0a8d25b 2024-11-23 More\ne04a2b3926 2024-11-23 Refactor strings ipc based on contextual substitutions"
+    },
+    {
+      "branch": "stringsRecExplain",
+      "sha": "6fa36d48ce5d87b1becca9b42a2c580ce1e2fe22",
+      "date": "2020-05-05",
+      "merge_base": "8236d7f9bff3aef4f7b37a15d509b8a11551401f",
+      "behind": 6687,
+      "ahead": 3,
+      "source_numstat": "42\t7\tsrc/theory/strings/inference_manager.cpp",
+      "source_log": "6fa36d48ce 2020-05-05 Fix unexplainables\nc0eab4b850 2020-05-05 Improve\n613f80613f 2020-05-05 Recursive explain"
+    },
+    {
+      "branch": "dumpProofEagerPre",
+      "sha": "9e6c6e60e4e3d13baca7e6b2ea1c97f07034a08e",
+      "date": "2024-09-26",
+      "merge_base": "6cf3772511f7526c504ec2dbb2363de1806ba2f8",
+      "behind": 1306,
+      "ahead": 9,
+      "source_numstat": "8\t0\tsrc/options/proof_options.toml\n29\t4\tsrc/proof/alf/alf_printer.cpp\n6\t1\tsrc/proof/alf/alf_printer.h\n8\t3\tsrc/smt/env.cpp\n11\t2\tsrc/smt/env.h\n3\t3\tsrc/smt/proof_manager.cpp\n8\t7\tsrc/smt/proof_manager.h\n30\t0\tsrc/smt/smt_solver.cpp\n6\t4\tsrc/smt/solver_engine.cpp",
+      "source_log": "0eb6c6bb1a 2024-08-19 Fix auto config\n440fd2eb2a 2024-08-14 Better?\nb2c847c056 2024-08-09 Format\n9bfd0dfa7b 2024-08-09 Fix\nee7b1b1923 2024-08-09 More\n95870c7b6c 2024-08-09 Format\n581cc1948c 2024-08-09 Towards dump-proof-eager-pre"
+    },
+    {
+      "branch": "optProofChecker",
+      "sha": "93d09f4f31101d5632d3ff7536cdc2e3acf79be0",
+      "date": "2021-04-22",
+      "merge_base": "bdc7c89b002ca65af851c226ef1956b1f2526c1d",
+      "behind": 5210,
+      "ahead": 28,
+      "source_numstat": "2\t0\tsrc/expr/CMakeLists.txt\n7\t1\tsrc/expr/proof_checker.cpp\n3\t0\tsrc/expr/proof_checker.h\n78\t0\tsrc/expr/proof_checker_cache.cpp\n61\t0\tsrc/expr/proof_checker_cache.h\n7\t0\tsrc/expr/proof_node_algorithm.cpp\n4\t0\tsrc/expr/proof_node_algorithm.h\n21\t0\tsrc/expr/term_conversion_proof_generator.cpp\n4\t0\tsrc/expr/term_conversion_proof_generator.h\n61\t44\tsrc/smt/proof_post_processor.cpp\n86\t60\tsrc/theory/builtin/proof_checker.cpp\n25\t3\tsrc/theory/builtin/proof_checker.h\n6\t2\tsrc/theory/strings/infer_proof_cons.cpp\n8\t4\tsrc/theory/theory_proof_step_buffer.cpp\n4\t0\tsrc/theory/theory_proof_step_buffer.h\n5\t1\tsrc/theory/trust_substitutions.cpp",
+      "source_log": "9504afd680 2021-04-16 Minor\nbc275a7510 2021-04-16 Doc\n68992ed0dd 2021-04-16 Format\n13b9dcaa9d 2021-04-16 Working\nddb7b348aa 2021-04-16 Format\n7ca32e8928 2021-04-16 Proper integration\ncb00d5227c 2021-04-16 Format\n2e7bf2bb4f 2021-04-16 Apply substitution identifier\nc0de075ffa 2021-04-16 Fix\n1edd5b0a44 2021-04-16 Format\n7c1886c061 2021-04-16 Improvements, minor\n1498db5eec 2021-04-16 Format\n65551465cc 2021-04-16 More\ndfe63ec27e 2021-04-15 Minor comment\nf272e49517 2021-04-15 Format\n54944132d4 2021-04-15 Introduce simultaneous subs\n9bed8f590f 2021-04-15 Format\n10f7f4ccae 2021-04-15 Fixes\n366855a635 2021-04-15 Format\nd6539e6aa0 2021-04-15 Proof checker cache\nb1a41a37b2 2021-04-14 Fix\nad52651fbc 2021-04-13 More\n73e6b4c62d 2021-04-12 Optimizing applySubstituion\n5d8cb4d887 2021-04-09 Optimize proof checker"
+    },
+    {
+      "branch": "proofTerm",
+      "sha": "2147621c33b13357e542f128605dfd1523c71458",
+      "date": "2023-04-27",
+      "merge_base": "de3cf10fe9c563956199a9b90094514a7b0cfcbe",
+      "behind": 2537,
+      "ahead": 19,
+      "source_numstat": "6\t0\tsrc/CMakeLists.txt\n2\t0\tsrc/expr/CMakeLists.txt\n15\t2\tsrc/expr/node_manager_template.cpp\n9\t0\tsrc/expr/node_manager_template.h\n13\t0\tsrc/expr/skolem_manager.cpp\n8\t1\tsrc/expr/skolem_manager.h\n9\t2\tsrc/expr/subs.cpp\n2\t0\tsrc/expr/subs.h\n17\t0\tsrc/expr/type_checker_util.h\n6\t0\tsrc/expr/type_node.cpp\n3\t0\tsrc/expr/type_node.h\n8\t0\tsrc/options/proof_options.toml\n16\t4\tsrc/printer/smt2/smt2_printer.cpp\n15\t0\tsrc/proof/proof_rule_checker.cpp\n4\t0\tsrc/proof/proof_rule_checker.h\n119\t0\tsrc/smt/proof_compression_callback.cpp\n88\t0\tsrc/smt/proof_compression_callback.h\n6\t0\tsrc/smt/proof_post_processor.cpp\n1\t0\tsrc/smt/proof_post_processor.h\n20\t0\tsrc/theory/builtin/kinds\n7\t0\tsrc/theory/builtin/theory_builtin.cpp\n63\t0\tsrc/theory/builtin/theory_builtin_rewriter.cpp\n7\t1\tsrc/theory/builtin/theory_builtin_rewriter.h\n8\t0\tsrc/theory/builtin/theory_builtin_type_rules.cpp\n9\t0\tsrc/theory/builtin/theory_builtin_type_rules.h\n134\t0\tsrc/theory/quantifiers/sygus/sygus_proof.cpp\n54\t0\tsrc/theory/quantifiers/sygus/sygus_proof.h\n89\t17\tsrc/theory/uf/proof_checker.cpp\n4\t0\tsrc/theory/uf/proof_checker.h",
+      "source_log": "2147621c33 2023-04-27 More\n7b33fd312d 2023-04-27 Format\n32ca971bf9 2023-04-27 Unification\n8a550cbfa6 2023-04-27 Format\n636e8397cb 2023-04-27 Draft unification\n209237f678 2023-04-27 Simplify\n74037482dd 2023-04-27 Generalizing UF proof checker\n2ae04dc035 2023-04-27 Format\nc8403c9d91 2023-04-27 PROVEN as skolem\nc2b785734a 2023-04-27 Format\n5962d87ac2 2023-04-27 Parameterized\n599eb53b03 2023-04-27 More\n5bc49e7f5f 2023-04-26 Format\nf649a5e0af 2023-04-26 More\nd65988b438 2023-04-26 Format\naa1fbf3c73 2023-04-26 Initial setup\n4e6dc5d129 2023-04-26 Format\n5af4bc1db7 2023-04-26 Fix\nedc5265f25 2023-04-26 Embedding proofs as terms"
+    },
+    {
+      "branch": "alfNodeIc",
+      "sha": "46dc21789337ac1ec59a365503364cf2be25746b",
+      "date": "2024-12-06",
+      "merge_base": "a0f82efb0a4adf79eb20dc3607a83ff42b15e9a8",
+      "behind": 1168,
+      "ahead": 6,
+      "source_numstat": "24\t6\tsrc/proof/alf/alf_node_converter.cpp",
+      "source_log": "14e6efd3d7 2024-12-04 Fix\n109da223ed 2024-12-04 More\n15c58ed6a6 2024-12-04 Handle INST_CONSTANT properly in cpc proofs"
+    },
+    {
+      "branch": "unrewrite",
+      "sha": "2023c6c83e2f42981bdc6a5943690d90fdf324cf",
+      "date": "2026-08-19",
+      "merge_base": "f89d76983555e6adb7d1f1f7bbc5bf138bcc6264",
+      "behind": 63,
+      "ahead": 12,
+      "source_numstat": "2\t0\tsrc/CMakeLists.txt\n26\t0\tsrc/expr/node_algorithm.cpp\n9\t0\tsrc/expr/node_algorithm.h\n8\t0\tsrc/options/proof_options.toml\n57\t0\tsrc/proof/proof_node_algorithm.cpp\n7\t0\tsrc/proof/proof_node_algorithm.h\n57\t0\tsrc/proof/unrewrite_proof_converter.cpp\n69\t0\tsrc/proof/unrewrite_proof_converter.h\n150\t0\tsrc/smt/proof_manager.cpp\n2\t0\tsrc/smt/proof_manager.h",
+      "source_log": "f0ab3edfff 2025-06-21 More\n87ea3d72e0 2025-06-21 Fixes\n504709509e 2025-06-21 More\n6bac22b6da 2025-06-20 Format\n2dced534eb 2025-06-20 More sketching\ndb45c7a8e3 2025-06-20 Format\nadcca2f530 2025-06-20 More\n4e3cabd700 2025-06-20 More\nee8c97553c 2025-06-20 More\n4640d02773 2025-06-20 Unrewrite branch"
+    },
+    {
+      "branch": "unrewrite2",
+      "sha": "69064b385d5d699a890a7dc87b90914c053715c9",
+      "date": "2026-08-19",
+      "merge_base": "f89d76983555e6adb7d1f1f7bbc5bf138bcc6264",
+      "behind": 63,
+      "ahead": 13,
+      "source_numstat": "2\t0\tsrc/CMakeLists.txt\n26\t0\tsrc/expr/node_algorithm.cpp\n9\t0\tsrc/expr/node_algorithm.h\n16\t0\tsrc/options/proof_options.toml\n58\t0\tsrc/proof/proof_node_algorithm.cpp\n7\t0\tsrc/proof/proof_node_algorithm.h\n57\t0\tsrc/proof/unrewrite_proof_converter.cpp\n69\t0\tsrc/proof/unrewrite_proof_converter.h\n788\t0\tsrc/smt/proof_manager.cpp\n50\t0\tsrc/smt/proof_manager.h",
+      "source_log": "69064b385d 2026-08-19 AI initial attempt at improve unrewrite\nf0ab3edfff 2025-06-21 More\n87ea3d72e0 2025-06-21 Fixes\n504709509e 2025-06-21 More\n6bac22b6da 2025-06-20 Format\n2dced534eb 2025-06-20 More sketching\ndb45c7a8e3 2025-06-20 Format\nadcca2f530 2025-06-20 More\n4e3cabd700 2025-06-20 More\nee8c97553c 2025-06-20 More\n4640d02773 2025-06-20 Unrewrite branch"
+    },
+    {
+      "branch": "pfrConvert",
+      "sha": "0ab530cb4592248f7fcd7504d2809d7f0f600e15",
+      "date": "2023-10-30",
+      "merge_base": "f53fc5f26eee6c51e43526825ea15856b80f06a6",
+      "behind": 2203,
+      "ahead": 19,
+      "source_numstat": "1\t0\tsrc/api/cpp/cvc5_proof_rule.cpp\n21\t5\tsrc/expr/term_context_stack.cpp\n4\t0\tsrc/expr/term_context_stack.h\n8\t0\tsrc/options/proof_options.toml\n1\t0\tsrc/proof/alf/alf_printer.cpp\n243\t24\tsrc/proof/conv_proof_generator.cpp\n96\t0\tsrc/theory/uf/proof_checker.cpp",
+      "source_log": "59e31e0cd3 2023-10-30 Minor\ne99d88db6b 2023-10-20 Fix for cache\nc356209d24 2023-10-20 Improve\nc68ac5a07c 2023-10-20 Format\nc53259da62 2023-10-20 Fixes\n5d7c46b0bb 2023-10-20 Fix\n63a70e4ce0 2023-10-19 More\ne1184a973b 2023-10-19 Fixes\n762168fd0c 2023-10-19 More\nbe678590f1 2023-10-19 Alf\n23ea090990 2023-10-19 More\n73e6ed25c2 2023-10-19 Sketch\nbfb4b71663 2023-10-19 Convert proof rule"
+    },
+    {
+      "branch": "pfrDev",
+      "sha": "714a3a1ce57d76552bbaeb44fc5766a231aa4889",
+      "date": "2024-07-05",
+      "merge_base": "ef1f617b3c4e472f9e0f2bb3ec9c41c343e06aa4",
+      "behind": 1526,
+      "ahead": 6,
+      "source_numstat": "16\t0\tsrc/options/proof_options.toml\n16\t2\tsrc/proof/resolution_proofs_util.cpp\n2\t1\tsrc/proof/resolution_proofs_util.h\n20\t5\tsrc/proof/theory_proof_step_buffer.cpp\n1\t2\tsrc/proof/theory_proof_step_buffer.h\n2\t1\tsrc/prop/prop_proof_manager.cpp\n4\t1\tsrc/smt/proof_manager.cpp\n32\t1\tsrc/smt/proof_post_processor.cpp\n16\t14\tsrc/theory/booleans/proof_checker.cpp",
+      "source_log": "c98e9fd6f3 2024-07-03 More fixes\n21f966b15b 2024-07-03 MOre\n038b32178f 2024-07-03 More\na9aeb5dfaf 2024-07-03 Dev branch for different implementations for proof rules"
+    },
+    {
+      "branch": "convReduce",
+      "sha": "1ab3870e076483c0f4a6f61f90d6002b135fc112",
+      "date": "2024-02-27",
+      "merge_base": "bf218d7e2d19a238622622feb24127da019e5ce0",
+      "behind": 1973,
+      "ahead": 3,
+      "source_numstat": "31\t0\tsrc/theory/arith/arith_utilities.cpp\n2\t0\tsrc/theory/arith/arith_utilities.h\n5\t1\tsrc/theory/uf/conversions_solver.cpp",
+      "source_log": "1ab3870e07 2024-02-27 Simplify\nd0d4f06510 2024-02-24 Fix\n56b5dcb253 2024-02-24 Change reduction lemma in conversions"
+    },
+    {
+      "branch": "flattenBrc",
+      "sha": "ee485d2c5100bb922d92bbbd6fee32f44415335d",
+      "date": "2024-10-30",
+      "merge_base": "4e2ddcd89fad37919f87c732e1e05128f75799ea",
+      "behind": 1248,
+      "ahead": 5,
+      "source_numstat": "4\t4\tsrc/theory/strings/rewrites",
+      "source_log": "6874ce288b 2024-10-28 Minor\nfce7a8e633 2024-10-25 Revert and improve RARE\n1fed7ba068 2024-10-23 Improve reconstruction for macro substr strip sym length"
+    },
+    {
+      "branch": "elimTrustSubs",
+      "sha": "4049af6a521f5e4a5ac24108161e9432a469bbcb",
+      "date": "2022-05-05",
+      "merge_base": "ae61d9b6fbd7966d70a00e543b3a8724ed205a41",
+      "behind": 3237,
+      "ahead": 4,
+      "source_numstat": "41\t18\tsrc/smt/proof_post_processor.cpp",
+      "source_log": "4049af6a52 2022-05-05 Minor\n89162b979f 2022-05-05 Format\n4a6692229b 2022-05-05 Normalize both the domain and range of substitutions impacted in sequential substitutions"
+    },
+    {
+      "branch": "dtIpcNoRew",
+      "sha": "d1dc7312aa74636ebfe237080dd9b4aedd2ce2e5",
+      "date": "2024-12-20",
+      "merge_base": "cbbeb5158edb89608f1c4aa066b3333ce16a512c",
+      "behind": 1128,
+      "ahead": 3,
+      "source_numstat": "0\t5\tsrc/theory/datatypes/inference_manager.cpp",
+      "source_log": "77aba2d983 2024-12-20 Do not rewrite inferences prior to proof reconstruction"
+    },
+    {
+      "branch": "dslByDefault",
+      "sha": "42b3d14d80af0527ca566a2971f0afc8c0510fc7",
+      "date": "2025-05-06",
+      "merge_base": "e852a84d311c8073ca115ce4c5578c5f86b770da",
+      "behind": 783,
+      "ahead": 4,
+      "source_numstat": "5\t4\tsrc/smt/set_defaults.cpp",
+      "source_log": "42b3d14d80 2025-05-06 Format\n115c226725 2025-05-06 More\nb02c183082 2025-05-05 Make proof granularity DSL_REWRITE by default, if proofs are enabled"
+    },
+    {
+      "branch": "cpcSimpEval",
+      "sha": "6bbcd1dd63e241f09696f224a3b6f39e51f9c34a",
+      "date": "2025-10-01",
+      "merge_base": "1bcf293081d65dcb7a86bd306a5c12e76ba964fb",
+      "behind": 559,
+      "ahead": 5,
+      "source_numstat": "7\t1\tsrc/theory/bv/theory_bv_rewrite_rules_constant_evaluation.h\n11\t4\tsrc/theory/evaluator.cpp",
+      "source_log": "6bbcd1dd63 2025-10-01 More\n8e24d6b49a 2025-10-01 Format\n2db91c20ee 2025-10-01 Simplifications and improvements to evaluation"
+    },
+    {
+      "branch": "reduceTransform",
+      "sha": "6af2d9093f462039ebd42ba24ca76e3d187d5c0e",
+      "date": "2025-06-23",
+      "merge_base": "557253155e95709d6fd43f3bf993dea350c2a986",
+      "behind": 676,
+      "ahead": 17,
+      "source_numstat": "285\t1\tsrc/smt/proof_post_processor.cpp\n39\t1\tsrc/smt/proof_post_processor.h",
+      "source_log": "6af2d9093f 2025-06-23 Rm\ne585308049 2025-06-21 More\neb100216c2 2025-06-21 Format\n6d680c5424 2025-06-21 More\n3a8b7b596f 2025-06-21 Minor\nb1f2cfac41 2025-06-21 Format\nff26f975d1 2025-06-21 More\na3b2a9b469 2025-06-21 More, based on AND\n0ab7de8dc1 2025-06-21 Doc\nc74535eabc 2025-06-21 Format\n961375850c 2025-06-21 More\n9d8d6bf3b4 2025-06-21 More\n524a2124db 2025-06-21 Fix\n699542684e 2025-06-21 More\nee5e43faab 2025-06-21 Fix\nad27fcda4a 2025-06-21 Towards\nf465cbd818 2025-06-21 Reduce transform"
+    },
+    {
+      "branch": "rewriteDep",
+      "sha": "307640b2c80de8cff289a67b34000bf187c0e46d",
+      "date": "2025-04-15",
+      "merge_base": "59a6c1deecfecabf98e2684db9821124dcc9f8cb",
+      "behind": 816,
+      "ahead": 15,
+      "source_numstat": "7\t2\tsrc/expr/subs.cpp\n1\t0\tsrc/expr/subs.h\n187\t0\tsrc/smt/proof_post_processor.cpp\n2\t1\tsrc/smt/proof_post_processor.h\n21\t23\tsrc/theory/quantifiers/sygus/sygus_explain.cpp\n7\t7\tsrc/theory/quantifiers/sygus/sygus_explain.h",
+      "source_log": "307640b2c8 2025-04-15 Fix\n9434084f00 2023-12-07 Format\n2cbf66baba 2023-12-07 Take\n34d5349a18 2023-12-06 Deps\n11cdb3e1b0 2023-12-06 Fix\nc807bf6cd6 2023-12-06 More\ne355f5efcb 2023-12-06 Fix performance\nd0ba0fbb02 2023-12-06 Fixes\n01bc3ccf17 2023-12-06 Recursive\n7a7c40ceec 2023-12-06 Format\n6c8f5d87a2 2023-12-06 Min rewrite\n0b6d4e96eb 2023-12-06 Rewrite dependencies branch. Improve term rec build util"
+    },
+    {
+      "branch": "pfTrustId",
+      "sha": "9eab5fece6851b70d968c847fdbf22365e4202cd",
+      "date": "2025-06-18",
+      "merge_base": "91201c459edd6f999de22bee6665a1f0b1fccffd",
+      "behind": 690,
+      "ahead": 1217,
+      "source_numstat": "3\t0\tsrc/api/cpp/cvc5_proof_rule_template.cpp\n1\t0\tsrc/expr/bound_var_id.cpp\n5\t0\tsrc/expr/bound_var_id.h\n1\t26\tsrc/expr/elim_witness_converter.cpp\n0\t5\tsrc/expr/elim_witness_converter.h\n2\t1\tsrc/proof/alf/alf_node_converter.cpp\n30\t2\tsrc/proof/alf/alf_printer.cpp\n257\t11\tsrc/proof/proof_node_updater.cpp\n12\t8\tsrc/proof/proof_node_updater.h\n1\t0\tsrc/proof/trust_id.cpp\n5\t0\tsrc/proof/trust_id.h\n36\t0\tsrc/proof/valid_witness_proof_generator.cpp\n1\t5\tsrc/prop/minisat/core/Solver.cc\n11\t1\tsrc/prop/prop_proof_manager.cpp\n20\t0\tsrc/rewriter/basic_rewrite_rcons.cpp\n9\t0\tsrc/smt/proof_post_processor.cpp\n1\t1\tsrc/theory/booleans/theory_bool_rewriter.cpp\n1\t0\tsrc/theory/builtin/proof_checker.cpp\n270\t133\tsrc/theory/quantifiers/bv_inverter.cpp\n50\t19\tsrc/theory/quantifiers/bv_inverter.h\n2\t1\tsrc/theory/quantifiers/bv_inverter_utils.cpp\n6\t34\tsrc/theory/quantifiers/cegqi/ceg_instantiator.cpp\n3\t1\tsrc/theory/quantifiers/proof_checker.cpp\n1\t1\tsrc/theory/quantifiers/term_registry.cpp\n20\t0\tsrc/theory/uf/proof_checker.cpp",
+      "source_log": "9eab5fece6 2025-06-18 Fix\n4787fc5d71 2025-05-30 More\n8becd3bfb9 2025-05-15 Fix\n70f2ee3863 2025-05-06 Fix\n01e11bf276 2025-04-25 More\n98e1b05000 2025-04-25 Fix\ne15a96bb2a 2025-04-25 More\nade52663bb 2025-04-25 Remove dead code, revert RARE, fix bitwise-eq\n66e006d663 2025-04-24 Format\nb96c4f5d2c 2025-04-24 Fix\n812b7f0714 2025-04-22 Improve\n4352b51832 2025-04-22 Another\n1fa3442e09 2025-04-21 Minor\n13179662bc 2025-04-21 Fix\n2911e4a689 2025-04-21 Fix\nc8b8613151 2025-04-18 Fix, independent depth processing\nb4ae4d5319 2025-04-17 Format\n66781afc84 2025-04-17 More\nf00deefcbd 2025-04-17 Transitivity compression\na5db7e0b10 2025-04-17 Stat, looking into trans\n5a58431c02 2025-04-16 Better\n068a333178 2025-04-16 Format\n58368e5eb7 2025-04-16 Cleaning SR_PRED in arith, general merge tactic\nfc3aab2655 2025-04-16 Pre-simplify tactic, more\ne7f0250045 2025-04-16 Minor\n601ff5ca6e 2025-04-16 Fix\n9f026054f7 2025-04-16 Minor\n2b0d2e7cd6 2025-04-15 Remove canMerge hack\n3f3d2ed110 2025-04-15 Format\n9fdbdc0eaa 2025-04-15 More\n280afa6d56 2025-04-15 Fix collection\nd1924a816d 2025-04-15 Fix label\ndf2669d7f2 2025-04-07 Doc\nfbd1e57ba3 2025-04-07 Comments\nbf90680b59 2025-04-07 Minor sync\n983ffc53b6 2025-04-07 Another\n935e0d5224 2025-04-07 Fix, add regression\n5acb1db22f 2025-04-04 Fix\n3b000bf083 2025-04-04 More\n8e4562f8da 2025-04-04 More\nd6787eb934 2025-04-04 More\n67b7370e7d 2025-04-04 More cases, removes\n84cf74e94a 2025-04-04 More\nf368618700 2025-04-03 Fix\na9b43f1324 2025-04-03 More\n7df4ba1f84 2025-04-03 More\n5996532301 2025-04-03 More\n04fc0c27e4 2025-04-03 More\nedb36c8956 2025-04-03 Update\ncfcc6b3ac8 2025-04-02 Another fix\na90cc70df2 2025-04-02 Fix\nc284e19f34 2025-04-02 More\naf75ec1ed0 2025-04-02 Remove\n04b9ae734e 2025-04-02 More\nbe05a36f82 2025-04-01 Fixes, removing\n81592f26ea 2025-04-01 Doc\n1a7ab3c0b2 2025-03-31 Fix\nf6ca855578 2025-03-31 Format\nabb3509ddf 2025-03-25 More improvements\n741a53e9c9 2025-03-13 Minor\n31c57493df 2025-03-12 Fix\nea2dc67438 2025-03-12 Shifts\n81a0e41020 2025-03-11 bvite\nceecfbf3e8 2025-03-11 Sign extend\n40e495814a 2025-03-11 Improve, handle bv inequalities\n22e2cff893 2025-03-11 Negation\n98bd5ceec7 2025-03-11 Mulitplication\na8089a613d 2025-03-11 Comp\n516506bd68 2025-03-11 Inequalities\n66baddac22 2025-03-11 Addition, subtraction, not\nc8172bdb16 2025-03-11 AND, OR, XOR bitblasting\ne968f2be48 2025-03-10 Revert for now\n4110516b46 2025-03-07 Minor\n32df759362 2025-03-06 Minor\nbb5f81868e 2025-03-06 Update RARE strategy to have ENCODE online\n77249dc448 2025-03-04 Fix\n14fa101729 2025-03-04 Format\nb910e23b58 2025-03-04 Split\n842f83f227 2025-03-04 Fix\n7eaf2bdb69 2025-03-04 Fix\nf743145d38 2025-03-03 More RARE, add elab\n5922fee1a3 2025-03-03 Update to ABSORB, more\n62f8f48100 2025-03-01 MInor updates\nfbf690df38 2025-03-01 More unessential\nc62af6756b 2025-03-01 Split unecessary\n397b2a08af 2025-03-01 Fix from merge\n676afbdeb0 2025-03-01 Format\n60282466a0 2025-03-01 More RARE rewrites\n843f68d130 2025-02-28 Implement fix\n5d64ff56ae 2025-02-27 More\ndf9e588d92 2025-02-27 Fixes from merge\nc4accaa44a 2025-02-27 More\n04428bf3f8 2025-02-27 Fix\n11f654a3c5 2025-02-26 Fix\n50c868acb4 2025-02-26 Fix\n642b5b45e5 2025-02-26 Step change\n58197282bc 2025-02-26 More\n1afb5671c3 2025-02-26 Improve heuristic\n74380926e6 2025-02-26 More general\n8cd105a58a 2025-02-25 Fix CONG_EVAL\na3c052e3ec 2025-02-25 Fix\na9c592b2c3 2025-02-25 move\na349997322 2025-02-25 Fixes from merge\n5df41343cd 2025-02-25 Format\n920ae81f87 2025-02-25 More cases\nf161b06a3e 2025-02-24 More\n81525a7b7c 2025-02-24 More updates\ne80fb7e637 2025-02-24 MBQI is regular\nfa74810e63 2025-02-24 Revise\nd0be9b10f7 2025-02-23 Divisible\nacbb4c5b65 2025-02-22 Missing\n6c280c9f4f 2025-02-22 More\n17c7a96b56 2025-02-22 Minor\n9ad138e9df 2025-02-22 Another\n387ae00c90 2025-02-22 More\nfc2adadb48 2025-02-22 Two more minor\nb38a75c679 2025-02-22 Another\n0314e755f1 2025-02-22 Minor\n844a45dc99 2025-02-22 More\n80701f21a1 2025-02-22 Minor\n8cc1293fee 2025-02-22 More\n4af3dd04b4 2025-02-22 Format\n939b2e359e 2025-02-22 Simplify rules\nefb460ad06 2025-02-22 Format\nb4dcd51515 2025-02-22 MInor\n07157d18e1 2025-02-22 Setup\n68fdf3ee0b 2025-02-21 Fixes, working\na55c463718 2025-02-21 Revert\n1047971348 2025-02-21 More\nb39a9691f9 2025-02-21 More\n899ea73a8d 2025-02-21 More\nb2223ffbdb 2025-02-20 Revert\n89362e03ef 2025-02-20 More\nba2624a0e5 2025-02-20 Format\nb22a8308d0 2025-02-20 Fix BV invert, missing IC\nc2a7172459 2025-02-19 Minor sync\n145c50d37b 2025-02-19 Update defaults\n4708f7f0fd 2025-02-19 CEGQI infinity expert\n280cd0da68 2025-02-19 Remove use of concat conflict\n18cea02dc1 2025-02-19 Ackermann is expert\n28234a7342 2025-02-19 Simplify\n8f13ed4529 2025-02-19 Minor\n4fedd243d5 2025-02-19 More\n36e50113d3 2025-02-19 Fix\nc4813696c3 2025-02-19 More\n62cd83611b 2025-02-18 Fixes\n51a066469c 2025-02-18 Fix\nebb4143e66 2025-02-17 Minor\naad13d8e35 2025-02-17 More\n6b8870ec3c 2025-02-17 Fix, another regression\nff3a97eb66 2025-02-17 Some ackermann\nf19d702168 2025-02-17 Minor\n617372bab2 2025-02-17 Change\n51568c2a24 2025-02-17 Fix\n6cd641abb2 2025-02-17 Fix\n3ad8222247 2025-02-17 Fixes\n0590fc67b3 2025-02-17 Improve\n322d9ecae3 2025-02-17 Proofs for bv invert solve\n6ce9376d25 2025-02-16 More\nf9c8da47f8 2025-02-15 Fixes\n2c34f18370 2025-02-15 More\nf0d8d2bd0d 2025-02-15 More\na8010901c0 2025-02-15 Format\n39069cbad6 2025-02-15 Iterative\n42bd15a3b4 2025-02-14 Format\ne5c6a1155c 2025-02-14 Actually track proofs in quantifiers rewriter\ncd7b2e092d 2025-02-14 More\n2b09c5d82b 2025-02-14 Format\ndd110c4c7d 2025-02-14 More\n4250b7612c 2025-02-14 More\n254fa6ed15 2025-02-14 More\ncf91530650 2025-02-14 More\n3fb4380c57 2025-02-14 Another\nf8627e9821 2025-02-14 More\n64481886e4 2025-02-14 Revert\na32a508091 2025-02-14 More\n65453623f4 2025-02-14 More\n28620acfea 2025-02-13 Fixes, sketching\n85ceaf90c3 2025-02-13 Fix\nc72088bf41 2025-02-13 Fixes\nb62b01ca73 2025-02-13 Fix\n82ed82033e 2025-02-13 Take\n998dbf9384 2025-02-13 Refactor xor\n2909073264 2025-02-13 Cardinality conflict\nfff2cbd644 2025-02-13 Doc\nd81006c48e 2025-02-13 Update\n5837040f66 2025-02-12 Support\ne2252d14cd 2025-02-12 Format\nf6a35ed180 2025-02-12 Fix\n28f228baa2 2025-02-12 Fix\n67c6c67064 2025-02-12 Annihilate\nf0b84bb63b 2025-02-12 Fix\n2f1389cdc0 2025-02-12 Format\n76a7751b97 2025-02-12 Final reduction cases\n658776b352 2025-02-12 Split\n45bbb7b737 2025-02-11 Fixes\n21ca807647 2025-02-11 Minor\n1c23fc8565 2025-02-11 Fix\n0315ddeea6 2025-02-11 More\n0cc4eaa5bc 2025-02-11 Fix, sketching updaters\n02d54406b5 2025-02-11 Generalize\n5d53d23756 2025-02-11 Guard again\ne6a232e405 2025-02-10 Revert\nffd98bd77a 2025-02-10 Don't rewrite\n942c0ddde2 2025-02-10 Fix\n7f2cfd2165 2025-02-10 Fix\n2551644701 2025-02-10 Format\n9066179ae1 2025-02-10 Fix\naa95357169 2025-02-10 More, ext component\n206115c92b 2025-02-09 Guard more cases of arrays-exp\n6d2edab3ce 2025-02-09 SEQ_EVAL_OP\nded91477b1 2025-02-09 Multiset working\n4e73ec6839 2025-02-08 Fix\nc19f27c115 2025-02-08 Fixes\nb4d1710859 2025-02-08 Finish sets eval op\n2444e263f5 2025-02-08 Use\na0b6085a55 2025-02-08 Move to utility\n890f35bd54 2025-02-08 New RARE rewrite\nc60dcf636c 2025-02-08 Fix\nf1c298761f 2025-02-08 Simplify\ne462eddc15 2025-02-08 RE_CONCAT to elaborate\nd97d71450d 2025-02-08 Introduce RE_CONCAT\ne8caa9130b 2025-02-07 More\n9bbe49bb1d 2025-02-07 More setup\nef4b81b7e7 2025-02-07 More\ncb83e50559 2025-02-07 Remove\n34f8ca3a81 2025-02-07 Fix\n6528356d3b 2025-02-07 Fix\n529aad9b5d 2025-02-06 Consolidate\nf6135851d5 2025-02-06 Revert\n5bcfb0e0b7 2025-02-06 Try\n176012ca6d 2025-02-06 Fix unify\nb56eab39f1 2025-02-06 Take simplification branch\na5f7548fb8 2025-02-05 Fixes\n8d1df7091b 2025-02-05 Fix\n67389a6866 2025-02-05 Minor\n3b1ef25148 2025-02-05 Minor\ncafeb152bf 2025-02-05 Fix\n2a69fec4fb 2025-02-04 Fix\nf58011a7d7 2025-02-04 Possible simplify\n6be2934758 2025-02-04 Format\n30994c9188 2025-02-04 More setup\n59469224cf 2025-02-04 Simplify\nf25498fc1c 2025-02-04 Formatg\nae0fcb053b 2025-02-04 More cases\n080fa61c76 2025-02-04 More\n0df49697f0 2025-02-04 Another\ne90216c92b 2025-02-04 Minor\n91e54168d9 2025-02-03 Format\nd9dde634d1 2025-02-03 Fix, more\n3729ef3562 2025-02-03 Another\nac1e817493 2025-02-03 Another\n744b10457e 2025-02-03 More\nb29d55d9aa 2025-02-03 Missing, try\nbf8dd955ec 2025-02-01 Sketch str in re inclusion, failing ethos sig\ne4672d3913 2025-02-01 Key steps\n8f12a5c589 2025-02-01 Another\n26c4aa895d 2025-02-01 Handle\n5d72f30990 2025-02-01 Fixes, doc, handled\n7afabcbf55 2025-01-31 Remove\na299643f89 2025-01-31 More\n975e795587 2025-01-30 More\n9dafd1e318 2025-01-30 More\nd347f0eac8 2025-01-30 More\nc5f962f6ec 2025-01-30 Format\nccdc3832c1 2025-01-30 More\n08025333cb 2025-01-30 More\nd93e907162 2025-01-30 More\n3b04c75156 2025-01-30 Positive\n8d6d311be2 2025-01-30 Fix\n41730fef11 2025-01-29 Fix\n63420809f6 2025-01-29 Minor\nafc2aae4ae 2025-01-29 Revert for now\n430782a4c9 2025-01-29 Format\n9464985253 2025-01-29 Fix again\n32470a1459 2025-01-29 Fixes\n952c7dd551 2025-01-28 Demote quant rewrite\n7d0d2d131d 2025-01-28 More\na970e1bddd 2025-01-28 Fixes\ne30635e69e 2025-01-28 Minor\n9cfcec59a7 2025-01-28 Format\n519e273a50 2025-01-28 Fix\ndf24d086fe 2025-01-28 More\nc9351a5293 2025-01-28 More setup\na49e0f7ac9 2025-01-28 Updates\n7ed69747f5 2025-01-28 Refactoring\n0bfb785046 2025-01-28 Update\nec7e134475 2025-01-28 Format\n3305380da1 2025-01-28 Draft rules\n4ada409ff7 2025-01-27  Fix\n1836f299c0 2025-01-27 More\n3660d22ca1 2025-01-27 Format\n9e84670824 2025-01-27 Simplify\nee4153e932 2025-01-27 Towards\n0134d52a86 2025-01-27 More\nd9fa49b9f8 2025-01-27 More\na26b05bec0 2025-01-27 Towards prefix\ne82aa3f48c 2025-01-25 Format\n02ade6694f 2025-01-25 Sequence eval\n4f07cb8f9f 2025-01-25 Other macro\n8915fb8f42 2025-01-25 Use first macro\nd65574d0dc 2025-01-25 Macro, new RARE\n8925bb8cd2 2025-01-25 Fixes, define macro\n5bbea7fdf3 2025-01-25 More infrastructure for macros\nce9da5b226 2025-01-25 Cleanup, simplify union/inter\ne65520a3ca 2025-01-25 Another RARE rewrite, 2 more macros\n706cf35782 2025-01-25 Fix unit\n5ce76d930e 2025-01-25 Minor\n729315e4ea 2025-01-25 Move more to extended\nd78b8722fb 2025-01-25 Moving rewrites to extended\n44e6f4b1b7 2025-01-25 One more RARE rule, possibly complete for SMT-LIB\ned7b9e3719 2025-01-25 More rewrites, simplification\n2e65d61815 2025-01-24 Two more\n1baa6bac62 2025-01-24 Two more, disable homogeneous\n9a329fca96 2025-01-24 Two more RARE rewrites\n56dc1c90bb 2025-01-24 More RARE\n72ed6ec1bd 2025-01-24 Break nested recursion\n9cd505dcbd 2025-01-24 Simplifications\n4c01acc054 2025-01-24 Another\nc98358ca58 2025-01-24 More reclassify\n63e38f3e39 2025-01-22 Revert\n36cc62e02c 2025-01-22 Fix\n2122d2e4b2 2025-01-22 More\n85cd6df8b8 2025-01-22 Another\n267f3ef378 2025-01-22 Fix\nfa60dfb8e0 2025-01-22 Try\n01a4ead8ae 2025-01-22 Fix\n838c5c3442 2025-01-22 Fixesg\n27d6e02fe0 2025-01-22 Minor\nebbfe2e3f8 2025-01-22 More\n8e6e946103 2025-01-22 Minor\n5e0b076879 2025-01-22 more\ndfe8e3bdb8 2025-01-22 Fix\na3c4971689 2025-01-22 More\n7ec818f25f 2025-01-21 Fix\nf898b539c5 2025-01-21 More\n7faf9d8f9f 2025-01-21 ANother\ncfdae1b2e6 2025-01-21 A few more\n86848c81bd 2025-01-21 Improve\n368b20363f 2025-01-21 Format\na9ed294076 2025-01-21 Improving\nfcd7e4aac8 2025-01-21 Back to regular\nad0985dcb0 2025-01-21 More\n9cba90da25 2025-01-21 Test\n9a969cf4be 2025-01-21 Format\nd12e761ec7 2025-01-21 Fix\nf8ffe81763 2025-01-18 Doc, working\n3d52fc1729 2025-01-18 Sketch distinct arrays\n82e514cc3b 2025-01-18 Format\n27c958c6f8 2025-01-18 More\nbd3624080a 2025-01-17 Fix\n3259098fe4 2025-01-17 Fix\n9a581fc8e7 2025-01-17 Fix\ne8ca3d645c 2025-01-17 Draft, use isSimple\n70c4b0d205 2025-01-17 More\nfb223b4b16 2025-01-17 Format\nf737cbf1b0 2025-01-17 More\nc1d3b0948f 2025-01-17 Minor\n93cdb0e20e 2025-01-17 Format\na43af0e53e 2025-01-17 Transitive\n3e69414dc3 2025-01-17 More\n84f270f30c 2025-01-16 Improve\n999581d456 2025-01-16 Closer\nf4b99678c2 2025-01-16 Fix\n26a85efed1 2025-01-16 More\n9340bae723 2025-01-16 Format\n511a394d1b 2025-01-16 More setup\n207ea601ce 2025-01-16 More setup\n4d59d15b9b 2025-01-16 Fix\n28f35b6e00 2025-01-16 Format\nc4a5354a90 2025-01-16 More\n6478f3afbb 2025-01-16 Simplify inequality elimination\n41c3f103b5 2025-01-16 Setup\n83fff5ff2e 2025-01-15 Arrays\n433b649d88 2025-01-15 More general dt ipc\n86e342d7ee 2025-01-15 Simpler\n5f20aa3b57 2025-01-15 Minor\nb35f7747c4 2025-01-15 Format\nb306fc0189 2025-01-15 Rewrite\nede9506c9a 2025-01-14 Fix assert\nee21c2b56e 2025-01-14 More\n44bb9572c7 2025-01-14 Format\nc532fad92f 2025-01-14 More\n2665e3dc53 2025-01-14 Eagerly rewrite bodies of define-fun\n8bfe8c9960 2025-01-14 Fix\n525750e1ce 2025-01-14 Format\nb0049832d5 2025-01-14 More\n06276eb93d 2025-01-14 Format\n4097792e18 2025-01-14 Doc\ncd3dc79aad 2025-01-14 Improved reconstruction for dt\n45c5b1d0d2 2025-01-14 Format\n9203d17955 2025-01-14 Another\n7b7e505fdd 2025-01-14 Fix, three more RARE rewrites\nd66f26bd63 2025-01-14 Another macro rewrite\n37cf712346 2025-01-14 Improve lambda shadow elim\n1795fe9f9f 2025-01-14 Doc\nc3777123cf 2025-01-14 Fixes, improvements, more regressions\nb8a1f7fa8c 2025-01-14 Fixes, improvements, more regressions\ncf46edc521 2025-01-13 Fix, two RARE rules\neb37d5dd31 2025-01-13 Format\ne82e0ed7c5 2025-01-13 more\ndb197202dd 2025-01-13 Minor, regression\nb9910c1388 2025-01-13 Improve rcons\nbd6e2583d3 2025-01-13 Minor\ncc6e8c3007 2025-01-13 Format\nda851e36d4 2025-01-13 Split dt case and new macro expansion\n014aad6492 2025-01-13 More\n8e28f76999 2025-01-12 Fix\n1f393f1bac 2025-01-12 More\nb43ec74364 2025-01-12 Minor change to avoid lambda value norm\n170563629c 2025-01-12 Elaborate array norm op\nacb89fca6c 2025-01-12 More\n22de36928a 2025-01-12 Some fixes\ndbe59845a4 2025-01-12 Fixes\n56a4c6141e 2025-01-12 Draft rcons\na7fb51ce82 2025-01-11 More string eval\ndd4918c4c7 2025-01-11 Another fix\nd30b819ea7 2025-01-11 More\n1558c8f1bb 2025-01-11 Another fix\n0fb3e3ce90 2025-01-11 Another regression\n835a1f3ec3 2025-01-11 More\ncea2b98b13 2025-01-11 More\n8408efb62e 2025-01-10 Fix\n574ddd188d 2025-01-10 Move to extended rewrites\nb059c69da2 2025-01-10 Support exists string length\n9cdff5323d 2025-01-10 Two more replace rules\na6574e5d71 2025-01-10 Fix, update doc\n62f363c9d4 2025-01-10 Elaboration for lambda shadow elim\n4e15d3f9da 2025-01-10 More\nf23bbc0ef5 2025-01-10 Formate\n55c4051dc5 2025-01-10 More\n38d9958495 2025-01-10 More\nf47758e4d5 2025-01-10 Format\n2be945a9d4 2025-01-10 DT, macro setup\n1d1562996e 2025-01-10 More\n2aa0e3c9b0 2025-01-10 eq clash\n95315fb528 2025-01-09 Support dt-cons-eq\nd127970730 2025-01-09 Eliminate elim shadow\n5a832c6711 2025-01-09 Fix\n5267b9febd 2025-01-09 Format\n7cd8ff14ae 2025-01-09 More\ncc6aa3dd03 2025-01-08 Fix assertion\n975d2331be 2025-01-08 Fix\n91a2b4f9f9 2025-01-08 Format\n295db81956 2025-01-08 More\n3228f465f8 2025-01-08 Format\n372b2d8a80 2025-01-08 Fix\n80e5a3be19 2025-01-08 Doc\na79e6928d5 2025-01-08 Fixes\n53a00abeac 2025-01-08 More\na54d4c63f1 2025-01-08 More\n2b720bcd7f 2025-01-07 Format\n509ee434e1 2025-01-07 More\n02314d5725 2025-01-07 Eunoia for ABS_COMPARISON\n0b370d46d5 2025-01-07 Fixed point DIO\n33d39f76de 2025-01-07 More\n96b77b106b 2025-01-07 Implement\ne008a80071 2025-01-07 Draft arith static learner proofs\nadeeacaf48 2025-01-06 Minor\nb4c6404a38 2025-01-06 Format\n41de469664 2025-01-06 Guard\n8884c71997 2025-01-04 More\n250d11a695 2025-01-03 Enable, fix corner cases\naa9b51b5d7 2025-01-03 Fix bug in sygus solver for trivially infeasible conjectures (#11481)\n788ed30d3e 2025-01-02 Fix\n8f075a0749 2025-01-02 Fix quant prenex\ncc5936bb5a 2025-01-02 Fix\n123c02709f 2025-01-01 Mino\ne26cd34d98 2024-12-31 More\n87f4cc912d 2024-12-31 Fixes\nd6ff65a564 2024-12-31 Take fix\n265ed0aa22 2024-12-30 Minor\nfb4a4fdd5b 2024-12-30 Generalize consume\nfe34b85f66 2024-12-30 Minor\n4b915c46eb 2024-12-30 Fix arith fail\n0b1e29959f 2024-12-30 More\n5dc4d56d0a 2024-12-29 Format\n56325e7ff5 2024-12-29 Macro strip endpoints\ne55684bd5c 2024-12-29 More rewrites\n2e06e09df1 2024-12-28 More refactor\n81d11ec455 2024-12-28 More\nc6722b9a4c 2024-12-28 Fix\n035ea5cee7 2024-12-28 Format\n66b94c223a 2024-12-28 Util function\n145c9d8e20 2024-12-28 Refactor, possible solution\nee749f057c 2024-12-28 More\n0ce3af3f0f 2024-12-25 More\n91a63c4e1a 2024-12-24 More\nfdacae8c48 2024-12-24 Fix\n7c6a9df029 2024-12-24 Try\n92c3841d89 2024-12-24 Re eval rewrites\neaece85403 2024-12-23 Length normalize rewrite\n32246d9a9c 2024-12-23 Eager reduction missing case\n13e1695a47 2024-12-23 More\nd23148195a 2024-12-23 More\nba6667d032 2024-12-23 And elim\n8b5f81ee6d 2024-12-23 More\ncf39780152 2024-12-23 Fix\nbeb2544701 2024-12-23 New rules\n677fd24c5a 2024-12-23 Format\n95f340675d 2024-12-23 More\nde34bb00a0 2024-12-23 More\n8f8db79e3e 2024-12-23 Generalize\na8b4cb2c22 2024-12-21 Format\n46b0a26b48 2024-12-21 More\n7bd4b4938e 2024-12-21 Fix\n9210687abe 2024-12-20 Another rule\n4b70d8d377 2024-12-20 Basic CTN decompose\n91993a1fbf 2024-12-20 Change name\nc5129343e1 2024-12-20 Doc\ne32f206894 2024-12-20 Use unpurified\n15020354c9 2024-12-20 Minor\nbe2a827f7f 2024-12-20 Foramt\n7d0c75bf61 2024-12-20 Unused variable tactic\n8c3176f019 2024-12-20 ANother\n1f0c2b9abb 2024-12-20 Refactor\nd30b360430 2024-12-20 More\n2779613874 2024-12-20 Fix\n44aca00429 2024-12-20 More\nc06d33bd3d 2024-12-19 Fixes\na21709022c 2024-12-19 Format\nff8fecf0f5 2024-12-19 Fix\n9914b82989 2024-12-19 Fix\n27653680c6 2024-12-18 Minor\ne61237605f 2024-12-18 More\nba13582639 2024-12-18 Minor\n206046d766 2024-12-18 Simplify\nad23fd4efb 2024-12-18 Format\nd91b5a7aad 2024-12-18 Doc\n029fbc7258 2024-12-18 More\ne3ba044437 2024-12-18 Fix\nd592fb35d3 2024-12-18 Format\n7d36e05485 2024-12-18 Simpler\nc75ceb763b 2024-12-18 Cleaner bvinvert\n04c471ef1d 2024-12-18 Minro\ncbe805c1a0 2024-12-18 More\n2764fdc389 2024-12-18 Fix NL compare proof check\nea14ea1678 2024-12-18 More\n08e924959c 2024-12-18 Datatypes\nd0f3d46af9 2024-12-17 Working\n4b0cdad1f4 2024-12-17 More\ne645db3859 2024-12-17 Setting up annotation\n3226cb05fc 2024-12-17 Format\n2e46dead5f 2024-12-17 Another fix\n499faf1353 2024-12-17 Two fixes\n8ce5451d3b 2024-12-17 Util, fix arrays\n9d80a4f254 2024-12-17 Fix\n47851b4993 2024-12-17 Format\n443553c9a7 2024-12-17 Infrastructure for invertibility conditions\n8a8eca8543 2024-12-17 More\na7c5e916ba 2024-12-16 Doc\nfc471075ec 2024-12-16 Fix\n7702735c9e 2024-12-16 Take\n4f85e253d4 2024-12-16 Foramt\nf068f4e5b4 2024-12-16 Simplify\n95bf223138 2024-12-16 More\n0e87ec4f45 2024-12-16 More\necf1ab8202 2024-12-16 More\n0b00c38417 2024-12-16 Minor\ne146600941 2024-12-16 More\n47d15870e3 2024-12-16 More\nee158ba125 2024-12-16 Format\nd1b17a0f7f 2024-12-16 Refactor\nbf63ff295a 2024-12-16 Format\n1de1d13415 2024-12-16 Setting up DIO lemma reconstruction\nbb9481e9d1 2024-12-15 Fix\n08ae92bba8 2024-12-15 More\n473a8ef45a 2024-12-15 Another fix\n90f6f6fd06 2024-12-15 ANother fix\nc21f5f00be 2024-12-15 Format\nade26ce53b 2024-12-15 Take\n7e8860a568 2024-12-14 Fix\n030e767d54 2024-12-14 Setup\nbbad7c06d2 2024-12-14 More\na42cafae43 2024-12-14 Carry\neaa0538fb1 2024-12-14 Format\nbc791cdb52 2024-12-14 Infrastructure for valid witness\n9a50f01dbd 2024-12-14 Fix\n51f76ed12a 2024-12-13 Format\n841cf818d6 2024-12-13 More pedantic\nbbb1bec523 2024-12-13 Minor arrays\n8d304f7eb1 2024-12-13 More\ne5ca824a7e 2024-12-13 Elaboration\nca2e334cc4 2024-12-13 Format\nac869e3834 2024-12-13 More\nad4d5279b0 2024-12-13 Proof for quant tdb\ne949189581 2024-12-13 Format\n551ea80fd7 2024-12-13 Sets norm rules\na9927e2df9 2024-12-13 Format\n78989d52ad 2024-12-13 Generalize quant prenex elaboration\n405ca98913 2024-12-12 Fix\n081608fea7 2024-12-12 Fix, support\n268f6622a3 2024-12-12 Set up\nfed3e18bff 2024-12-12 Do not support match\n40f2b3a3f2 2024-12-12 More\n9217328731 2024-12-11 Minor\n4ef9b77510 2024-12-11 Fix\nca785be5f7 2024-12-11 Foramt\n5be0d041df 2024-12-11 Update rules\n54a970b478 2024-12-11 More\n07adf01b96 2024-12-11 RARE empty infra\n4e7a8f69b8 2024-12-11 Format\n26637517ff 2024-12-11 Improve\nf15c8d1e6a 2024-12-11 Refactor, complete\n704aab8a81 2024-12-11  Format\n36509a509f 2024-12-11 Minor\nef5617fe67 2024-12-11 More\n0b6c82d526 2024-12-11 Format\ndc2cca2213 2024-12-11 Fix\n15a26269e0 2024-12-11 Refactor\na7af38d20d 2024-12-11 Minor\n5c08aa2b40 2024-12-11 Fix diamonds assertions\n1aceb111db 2024-12-11 Format\n674e05f6fe 2024-12-11 Another stat\n6d519a2ef3 2024-12-10 Use\nc4fda634f9 2024-12-10 More\ne515b60ce4 2024-12-10 Minor\n1d115379d8 2024-12-10 more\n68e30982a3 2024-12-10 More\nf08a5cc55f 2024-12-10 More\n5a2866b08c 2024-12-10 Fix\n0a7b03a389 2024-12-10 More\nbd382ca88f 2024-12-10 More\n59586b51f8 2024-12-10 Format\n2713e4bf5c 2024-12-10 Fixes, rename\n85b63852a9 2024-12-10 Simple\n74cb4bc2a1 2024-12-10 Fixes\n448e62cf01 2024-12-09 Finer theory inference\nabccf5b7e9 2024-12-09 More\n26d248f87c 2024-12-09 Fix\n79666c7625 2024-12-09 Fix\nef293437de 2024-12-08 Fix\n2327e11667 2024-12-07 Minor\n014cec9815 2024-12-07 Implement diamonds proofs\n40e883019e 2024-12-06 Minor\n1283c5bdf2 2024-12-06 Take alpha eq fix\n553a460536 2024-12-06 More\n09ffb0c43b 2024-12-06 Format\nd99b2dbbb7 2024-12-06 More\n2b737a544e 2024-12-05 Setup\n055fc0ce36 2024-12-05 Minor\nec991a31af 2024-12-05 Fixes, new macro\n7e3c88b20d 2024-12-05 Fix\n1e4b8fe22d 2024-12-05 Fix\n55dcee9a3b 2024-12-05 Format\n7ad21cf7b2 2024-12-05 More\n4f9e99e872 2024-12-05 More\n62fdf1bb36 2024-12-05 More\nb0e7bd1a30 2024-12-04 Minor revert\nb72cf3bf50 2024-12-04 More\n91a81312d9 2024-12-04 Fix\ncf3896c40c 2024-12-04 Fix\naeee5dcdcf 2024-12-04 Fix\na73b5f4232 2024-12-04 Format\ned8bb97874 2024-12-04 Move to file\nb0f8197670 2024-12-04 Move\n9f3f5b7826 2024-12-04 Refactor set defaults\n7c20307e75 2024-12-03 Minor\n6df9176c41 2024-12-03 Fix\n6185c193f8 2024-12-03 Format\nbe35fbf11e 2024-12-03 Fix\n71ccda36fe 2024-12-03 Del\nd915ac4c74 2024-11-26 More\n94aa2c2be8 2024-11-26 Format\n452e1f7af7 2024-11-26 Not so eager\nd6a3235b1a 2024-11-26 More setup\n23db21a75e 2024-11-26 Format\na03b3a7b25 2024-11-26 Instrumenting\ne3f075cabb 2024-11-26 More\n44555435f0 2024-11-26 Format\nf410a5179b 2024-11-26 Alpha equiv as tactic\nafcc0380f1 2024-11-26 More\n93d38ecf86 2024-11-26 More\nb8bfa860ec 2024-11-25 More\n1718164b7e 2024-11-23 Disable more for now\n172c8775a1 2024-11-22 Fix\nf632fa98d1 2024-11-22 Format\n627f1b495d 2024-11-22 More\n06c25d37fe 2024-11-22 More\n848b566769 2024-11-22 Fix\na6c632c80f 2024-11-21 More\n31de18d5df 2024-11-20 Format\n34e852b357 2024-11-20 Contains multiset\n9f21f99a2e 2024-11-20 Change\n4bb667db7f 2024-11-19 Take back\n5571189d3e 2024-11-19 Update\n7cf2e76f17 2024-11-19 More\n979ef5eed3 2024-11-19 Doc\n180ec40c11 2024-11-19 More\ncda93ffa6f 2024-11-19 More\ne67784e797 2024-11-19 Format\n7dca906f81 2024-11-19 More\n7ff7726a01 2024-11-18 Key rewrite for SUBS_EQ\nc84bbb83bd 2024-11-18 No rec calls\n85af4be565 2024-11-16 Another\n6b78603b31 2024-11-16 Two more ad-hoc string rewrites\n85c3ea4915 2024-11-16 More\n6d2262c7be 2024-11-16 Dont use ext rewrite\nf29ae68cfd 2024-11-16 More\n964a6ccecf 2024-11-16 Another rule\nedd8d63380 2024-11-14 Another\nb0d1e6378d 2024-11-14 Format\n20cd5a1907 2024-11-14 Fix\nd3e1cc01c8 2024-11-14 Strings ext\ne94030e9f1 2024-11-14 Extensionality for sequences\n20f494b4a0 2024-11-14 Datatypes cycle\nd1250151e6 2024-11-14 More\n06cf50dec5 2024-11-14 Fix\n0ce6479323 2024-11-14 Format\n677520186b 2024-11-14 More\n43ac0dba54 2024-11-13 Take, expert option\nb298051a0d 2024-11-13 Fix\nb1c6984307 2024-11-13 Improve\n5ab1ac40dc 2024-11-08 Minor\n70b587a7ac 2024-11-08 Format\n27d75ddd28 2024-11-08 Elim\n033f2c4073 2024-11-08 Updates\nf9499c0a7b 2024-11-07 Fixes\n8bcdb44b78 2024-11-07 Refactor\n37dc8f3e6d 2024-11-07 Towards bv poly norm\n709f7c1337 2024-11-07 Fix\n08fc0f9643 2024-11-07 Collapse updater\n6d75bce4bf 2024-11-06 Options tweaking, strings ipc\n02c5d24c74 2024-11-06 Fix\n4231097e6d 2024-11-06 Format\n73f28c0014 2024-11-06 Fixes for arithExp\n67588ed5d3 2024-11-06 More\nf4a47e82f6 2024-11-05 Another rew\n4a65d25c05 2024-11-05 ANother\n54e844428e 2024-11-05 Take split\n57d9e55882 2024-11-05 More\n11178b6a27 2024-11-05 More\nda78787733 2024-11-05 More\n572e966639 2024-11-05 More\n5f2ee46d97 2024-11-05 Repeat\nee2403640b 2024-11-05 Fix and add\n91b36145e6 2024-11-05 More rules\ne791c85140 2024-11-04 More rewrites\n6c1517f7e3 2024-11-01 More strings rules\ncedd78b6eb 2024-11-01 Another RARE\n00387d3d4a 2024-11-01 Fixes\ne3da025f76 2024-11-01 More\nd73f441b96 2024-11-01 More\n3e14354a93 2024-10-30 Nl compare\n1aa7fdfa06 2024-10-30 ANother\n9100f8c8d8 2024-10-30 More\nca340090d2 2024-10-29 Improve\n80d4da0462 2024-10-29 More\n60ee88f262 2024-10-25 More rules\nc8c7aa3b0c 2024-10-25 Fix\n90437a40bd 2024-10-25 Fix\n211bba98ac 2024-10-25 Improve\na598f05208 2024-10-24 Take more changes\n9ae30c2839 2024-10-24 More\n852aae5706 2024-10-24 More RARE\nc6bda9bf8b 2024-10-24 More\n6234ac108d 2024-10-23 Another\n5faca4d3a8 2024-10-23 Improvements\n3e16e789db 2024-10-23 More\n9e37133679 2024-10-23 Minor\n131f002cea 2024-10-23 Take\n6fd977d856 2024-10-22 Quant rules\ncd4f982ada 2024-10-22 Unhandled EO\n5715fcaeaa 2024-10-22 Format\n46fdcc7eaf 2024-10-22 More\n73eb3ef806 2024-10-22 Improve label\nfe69a508a1 2024-10-21 More\n98bbc5b7a3 2024-10-21 Fixes for datatypes theory inferences\ne9ef3b8e0c 2024-10-21 Format\nbf419190e2 2024-10-21 More\n4c49cfaebc 2024-10-18 Format\nacb8ecbba2 2024-10-17 Quant split\nfbbeb12e0c 2024-10-16 Format\n0af51267be 2024-10-16 More\n9bb11dba80 2024-10-16 Tweak\n0a215511bb 2024-10-15 More\n26eef98781 2024-10-15 More\n969e1a7562 2024-10-14 Format\nca3474c5f4 2024-10-14 Fixes\nde41a29410 2024-10-14 Format\n5043ad2549 2024-10-14 More\nfb5ced1f19 2024-10-14 More\nfabc8ff49c 2024-10-10 Proofs for extended theory\n009fe15ac5 2024-10-10 Format\n63a7df72c2 2024-10-10 More\n73c0892693 2024-10-10 Fix\n731d9176f1 2024-10-10 Format\n0a889ca93b 2024-10-10 Another\ncff1bc1498 2024-10-10 Fixes\ne591f55425 2024-10-10 More\n4e054967b0 2024-10-10 Format\n3c88575904 2024-10-10 Bags\n921d46cb10 2024-10-10 Format\n2bdc2a68d8 2024-10-10 More\n7553fd02c8 2024-10-10 Fix\nce83b12296 2024-10-10 Refactor\n917b515362 2024-10-10 Fix\n0307c44a62 2024-10-10 More\neafd14cc54 2024-10-10 More\n7c9722b04f 2024-10-09 Lemmas\n9ba0412745 2024-10-09 Fix\n29bac49b74 2024-10-09 Format\n2f0b613db5 2024-10-09 Simplify\n41f9f91a4f 2024-10-09 More\n4b9e883228 2024-10-09 More\n5d53e55090 2024-10-09 More\n4779d58b86 2024-10-09 More\n74ec69626b 2024-10-09 Minor\ncdeb83e74b 2024-10-09 Format\n493d41c679 2024-10-09 More\nad42d9e59f 2024-10-09 More\nb3f316ed96 2024-10-09 More\n6ad54405fe 2024-10-09 More\n8ebcffe696 2024-10-09 Format\nf5a47f0dc8 2024-10-09 More setup\n26edae04cb 2024-10-09 Format\n418d665fa4 2024-10-09 More\n05c3df17bf 2024-10-09 More\nc25f9f671c 2024-10-09 Filling in sources of trust ids"
+    },
+    {
+      "branch": "freeAsumpMerge",
+      "sha": "7decef4c91793f38722c4f235902008d74c81668",
+      "date": "2022-09-22",
+      "merge_base": "b1289f90e0112cea1a164a259e3ac0e19c4b77cb",
+      "behind": 2927,
+      "ahead": 19,
+      "source_numstat": "51\t20\tsrc/proof/proof_node_algorithm.cpp\n15\t4\tsrc/proof/proof_node_algorithm.h\n34\t40\tsrc/proof/proof_node_updater.cpp\n22\t12\tsrc/proof/proof_node_updater.h\n3\t4\tsrc/smt/proof_manager.cpp\n17\t0\tsrc/smt/proof_post_processor.cpp\n4\t0\tsrc/smt/proof_post_processor.h",
+      "source_log": "bc3cedab03 2022-09-15 Update doc\nca89869ac7 2022-09-15 Format\nf5df82ac71 2022-09-15 More\n5e67bee599 2022-09-15 remove\nd4a834f10c 2022-09-13 Use data members\ne40ec03bf9 2022-09-12 Format\ne406903dbd 2022-09-12 More doc\n8c59565369 2022-09-12 Format\n87d54ea9b1 2022-09-12 More\ncafb0eb762 2022-09-09 More\n9e995e4d16 2022-09-09 Regression, fix shadow\n74ae7819bf 2022-09-09 First draft\n555ebc1954 2022-09-06 Towards merging with free assumptions"
+    },
+    {
+      "branch": "rpcAlwaysPre",
+      "sha": "adab37c00d6ec5a0f70d383276311b6c3b4ac19c",
+      "date": "2025-08-27",
+      "merge_base": "2ae4ede42a9b876e5715620dbeee63fcfe89ce11",
+      "behind": 609,
+      "ahead": 8,
+      "source_numstat": "24\t0\tsrc/options/proof_options.toml\n8\t1\tsrc/prop/prop_engine.cpp\n9\t0\tsrc/prop/prop_proof_manager.cpp\n5\t0\tsrc/smt/proof_post_processor.cpp\n10\t0\tsrc/smt/proof_post_processor_dsl.cpp\n4\t0\tsrc/theory/theory_rewriter.cpp",
+      "source_log": "adab37c00d 2025-08-27 Always pre\n9ac86762de 2025-06-18 More\nb48299c24f 2025-06-18 Fix, working\n0e5b927f96 2025-06-18 Trying\n9d55c91915 2025-06-18 More\nfa46c341ec 2025-06-18 Dev branch to test disabling certain parts of proofs"
+    },
+    {
+      "branch": "smtPpBasicRewriteOnly",
+      "sha": "cfddc7a96c20f85c52ba9d04c09257017abdedb9",
+      "date": "2024-11-26",
+      "merge_base": "df7773adb86c81602c24a62d47d4f9c5cc51be7d",
+      "behind": 1184,
+      "ahead": 1,
+      "source_numstat": "3\t12\tsrc/smt/proof_post_processor.cpp",
+      "source_log": "cfddc7a96c 2024-11-26 Only try to use basic rewriter to automatically reconstruct trust steps"
+    },
+    {
+      "branch": "applyEmbedding",
+      "sha": "391b68c90b3c475e6aab90c7d2bd8cef91cac469",
+      "date": "2024-03-08",
+      "merge_base": "58d7c6d55628bab92baa26e4855f5f83824202e9",
+      "behind": 1937,
+      "ahead": 28,
+      "source_numstat": "12\t1\tsrc/CMakeLists.txt\n1\t0\tsrc/api/cpp/cvc5_proof_rule.cpp\n2\t0\tsrc/expr/CMakeLists.txt\n39\t0\tsrc/expr/beta_reduce_converter.cpp\n43\t0\tsrc/expr/beta_reduce_converter.h\n113\t0\tsrc/expr/nary_term_util.cpp\n27\t0\tsrc/expr/nary_term_util.h\n1\t0\tsrc/expr/skolem_manager.cpp\n3\t1\tsrc/expr/skolem_manager.h\n44\t2\tsrc/options/proof_options.toml\n20\t0\tsrc/parser/smt2/smt2_state.cpp\n13\t1\tsrc/proof/alf/alf_print_channel.cpp\n3\t0\tsrc/proof/alf/alf_print_channel.h\n280\t6\tsrc/proof/alf/alf_printer.cpp\n18\t1\tsrc/proof/alf/alf_printer.h\n1\t0\tsrc/proof/conv_proof_generator.cpp\n4\t4\tsrc/proof/lfsc/lfsc_printer.cpp\n46\t7\tsrc/proof/proof_node_updater.cpp\n1\t0\tsrc/proof/proof_node_updater.h\n8\t0\tsrc/rewriter/basic_rewrite_rcons.cpp\n8\t0\tsrc/rewriter/basic_rewrite_rcons.h\n5\t0\tsrc/rewriter/rewrite_db.cpp\n2\t0\tsrc/rewriter/rewrite_db.h\n51\t12\tsrc/rewriter/rewrite_db_proof_cons.cpp\n1\t0\tsrc/rewriter/rewrite_db_proof_cons.h\n39\t0\tsrc/rewriter/rewrite_db_term_process.cpp\n4\t0\tsrc/rewriter/rewrite_db_term_process.h\n9\t5\tsrc/rewriter/rewrite_proof_rule.cpp\n1\t1\tsrc/rewriter/rewrite_proof_rule.h\n1\t0\tsrc/rewriter/rewrites_template.h\n6\t1\tsrc/smt/proof_manager.cpp\n131\t76\tsrc/smt/proof_post_processor.cpp\n8\t6\tsrc/smt/proof_post_processor.h\n253\t0\tsrc/smt/proof_post_processor_dsl.cpp\n81\t0\tsrc/smt/proof_post_processor_dsl.h\n6\t0\tsrc/theory/arith/arith_poly_norm.cpp\n3\t0\tsrc/theory/arith/arith_poly_norm.h\n8\t0\tsrc/theory/arith/arith_rewriter.cpp\n53\t0\tsrc/theory/arith/rewrites\n13\t0\tsrc/theory/arrays/rewrites\n7\t2\tsrc/theory/arrays/theory_arrays_type_rules.cpp\n30\t12\tsrc/theory/booleans/rewrites\n33\t47\tsrc/theory/booleans/theory_bool_rewriter.cpp\n16\t0\tsrc/theory/builtin/proof_checker.cpp\n12\t0\tsrc/theory/builtin/rewrites\n1\t0\tsrc/theory/builtin/theory_builtin_type_rules.cpp\n1\t1\tsrc/theory/bv/kinds\n1086\t0\tsrc/theory/bv/rewrites\n5\t8\tsrc/theory/bv/theory_bv_rewrite_rules.h\n20\t0\tsrc/theory/bv/theory_bv_rewrite_rules_constant_evaluation.h\n1\t1\tsrc/theory/bv/theory_bv_rewrite_rules_core.h\n18\t0\tsrc/theory/bv/theory_bv_rewrite_rules_operator_elimination.h\n5\t0\tsrc/theory/bv/theory_bv_rewrite_rules_simplification.h\n45\t27\tsrc/theory/bv/theory_bv_rewriter.cpp\n2\t3\tsrc/theory/bv/theory_bv_rewriter.h\n247\t123\tsrc/theory/datatypes/theory_datatypes_type_rules.cpp\n22\t3\tsrc/theory/evaluator.cpp\n11\t2\tsrc/theory/fp/theory_fp_rewriter.cpp\n1\t0\tsrc/theory/inference_id.cpp\n2\t0\tsrc/theory/inference_id.h\n1\t1\tsrc/theory/quantifiers/ematching/trigger_term_info.cpp\n5\t1\tsrc/theory/quantifiers/term_database.cpp\n30\t0\tsrc/theory/sets/rewrites\n209\t0\tsrc/theory/strings/rewrites\n1\t1\tsrc/theory/strings/word.cpp\n186\t0\tsrc/theory/uf/embedding_op.cpp\n79\t0\tsrc/theory/uf/embedding_op.h\n11\t0\tsrc/theory/uf/kinds\n17\t0\tsrc/theory/uf/rewrites\n87\t1\tsrc/theory/uf/theory_uf.cpp\n4\t0\tsrc/theory/uf/theory_uf.h\n3\t0\tsrc/theory/uf/theory_uf_rewriter.cpp\n17\t0\tsrc/theory/uf/theory_uf_type_rules.cpp\n10\t0\tsrc/theory/uf/theory_uf_type_rules.h",
+      "source_log": "5d6cc12ada 2024-03-04 More\n67dd86a030 2024-03-04 Update default\nd3ebf11de5 2024-03-03 Format\n2580b8dd84 2024-03-03 Minor\n36ec099862 2024-03-03 Fix\nfbc4930caa 2024-03-03 Norm rule\nd28547dfa7 2024-03-03 Implement\nf370fbffb3 2024-03-03 Minor\na354838bd2 2024-03-03 Limit\n27d0793c70 2024-03-02 FIxes\nf948cf57d0 2024-03-02 MOre\nfe079cf23a 2024-03-02 Improve\n288b711fa6 2024-03-02 Reverts\nfc7e017dd8 2024-03-02 More\n94b9dc13ef 2024-03-02 Format\nccfe3d9316 2024-03-02 More\n1bc9b89b3c 2024-03-02 Format\nff1d9148a8 2024-03-02 More refactor\ne0e9086048 2024-03-02 More\nc0d64b9c15 2024-03-02 Format\n6724da8ef1 2024-03-02 Working\n328ae29476 2024-03-02 Revert set defaults\n0f580d6607 2024-03-02 More\nd85a100f7c 2024-03-02 Another move\nefd1beefc4 2024-03-02 move to uf\naf36725762 2024-03-02 Apply embedding approach"
+    },
+    {
+      "branch": "trustSubsRcons",
+      "sha": "f6b5f7c9976f0073ad77239af71e5a6f1795589a",
+      "date": "2022-05-06",
+      "merge_base": "15812533fce5ae7f2c1d1961c19c8f440c818274",
+      "behind": 3230,
+      "ahead": 7,
+      "source_numstat": "41\t11\tsrc/smt/proof_post_processor.cpp",
+      "source_log": "7df43c3a58 2022-05-05 More\n43ed489730 2022-05-05 Update\n0b9c77e57c 2022-05-05 Fixes\n3fc210cae6 2022-05-05 More\n22809030a4 2022-05-05 Format\ne1a012af27 2022-05-05 Fallback"
+    },
+    {
+      "branch": "pfTrustId-no-enc",
+      "sha": "afcab70bc8dd48279326c40faa1ad402e487452c",
+      "date": "2025-03-06",
+      "merge_base": "263e43431b75358945e7f4242ce69f91b43ba875",
+      "behind": 910,
+      "ahead": 1067,
+      "source_numstat": "2\t0\tsrc/CMakeLists.txt\n7\t12\tsrc/api/cpp/cvc5_proof_rule_template.cpp\n24\t25\tsrc/expr/elim_witness_converter.cpp\n31\t12\tsrc/expr/elim_witness_converter.h\n2\t2\tsrc/options/datatypes_options.toml\n5\t5\tsrc/options/quantifiers_options.toml\n1\t1\tsrc/options/smt_options.toml\n3\t1\tsrc/proof/alf/alf_node_converter.cpp\n34\t2\tsrc/proof/alf/alf_printer.cpp\n212\t3\tsrc/proof/valid_witness_proof_generator.cpp\n36\t1\tsrc/proof/valid_witness_proof_generator.h\n10\t0\tsrc/prop/prop_proof_manager.cpp\n600\t33\tsrc/rewriter/basic_rewrite_rcons.cpp\n27\t0\tsrc/rewriter/basic_rewrite_rcons.h\n1\t0\tsrc/rewriter/node.py\n1\t0\tsrc/rewriter/rewrite_proof_status.cpp\n2\t0\tsrc/rewriter/rewrite_proof_status.h\n1\t1\tsrc/smt/proof_post_processor.cpp\n5\t5\tsrc/smt/set_defaults.cpp\n315\t0\tsrc/theory/arith/arith_proof_rcons.cpp\n91\t0\tsrc/theory/arith/arith_proof_rcons.h\n18\t7\tsrc/theory/arith/arith_subs.cpp\n30\t0\tsrc/theory/arith/arith_subs.h\n32\t6\tsrc/theory/arith/linear/congruence_manager.cpp\n3\t5\tsrc/theory/arith/linear/theory_arith_private.cpp\n9\t9\tsrc/theory/arith/rewrites\n4\t0\tsrc/theory/arith/theory_arith.cpp\n6\t4\tsrc/theory/booleans/rewrites\n1\t1\tsrc/theory/booleans/theory_bool_rewriter.cpp\n1\t1\tsrc/theory/builtin/theory_builtin_rewriter.h\n411\t1\tsrc/theory/bv/macro_rewrite_elaborator.cpp\n63\t0\tsrc/theory/bv/macro_rewrite_elaborator.h\n1\t1\tsrc/theory/bv/proof_checker.cpp\n38\t18\tsrc/theory/bv/rewrites\n6\t0\tsrc/theory/bv/rewrites-elimination\n109\t15\tsrc/theory/bv/rewrites-simplification\n2\t5\tsrc/theory/bv/theory_bv_rewrite_rules_normalization.h\n11\t8\tsrc/theory/bv/theory_bv_rewrite_rules_simplification.h\n5\t15\tsrc/theory/bv/theory_bv_rewriter.cpp\n12\t0\tsrc/theory/bv/theory_bv_utils.cpp\n3\t0\tsrc/theory/bv/theory_bv_utils.h\n48\t0\tsrc/theory/evaluator.cpp\n276\t133\tsrc/theory/quantifiers/bv_inverter.cpp\n50\t19\tsrc/theory/quantifiers/bv_inverter.h\n2\t1\tsrc/theory/quantifiers/bv_inverter_utils.cpp\n8\t2\tsrc/theory/quantifiers/cegqi/ceg_bv_instantiator.cpp\n2\t0\tsrc/theory/quantifiers/cegqi/ceg_bv_instantiator.h\n6\t42\tsrc/theory/quantifiers/cegqi/ceg_instantiator.cpp\n16\t0\tsrc/theory/quantifiers/proof_checker.cpp\n97\t60\tsrc/theory/quantifiers/quantifiers_rewriter.cpp\n24\t9\tsrc/theory/quantifiers/quantifiers_rewriter.h\n12\t7\tsrc/theory/quantifiers/sygus/cegis.cpp\n2\t0\tsrc/theory/quantifiers/sygus/cegis.h\n1\t1\tsrc/theory/quantifiers/term_registry.cpp\n13\t34\tsrc/theory/sets/theory_sets_rewriter.cpp\n21\t10\tsrc/theory/strings/arith_entail.cpp\n2\t0\tsrc/theory/strings/extf_solver.cpp\n25\t38\tsrc/theory/strings/infer_proof_cons.cpp\n1\t5\tsrc/theory/strings/regexp_entail.cpp\n206\t11\tsrc/theory/strings/rewrites\n9\t0\tsrc/theory/strings/rewrites-regexp-membership\n9\t2\tsrc/theory/strings/theory_strings.cpp\n7\t20\tsrc/theory/strings/theory_strings_utils.cpp\n4\t0\tsrc/theory/uf/proof_checker.cpp",
+      "source_log": "afcab70bc8 2025-03-06 No encode version\n32df759362 2025-03-06 Minor\nbb5f81868e 2025-03-06 Update RARE strategy to have ENCODE online\n77249dc448 2025-03-04 Fix\n14fa101729 2025-03-04 Format\nb910e23b58 2025-03-04 Split\n842f83f227 2025-03-04 Fix\n7eaf2bdb69 2025-03-04 Fix\nf743145d38 2025-03-03 More RARE, add elab\n5922fee1a3 2025-03-03 Update to ABSORB, more\n62f8f48100 2025-03-01 MInor updates\nfbf690df38 2025-03-01 More unessential\nc62af6756b 2025-03-01 Split unecessary\n397b2a08af 2025-03-01 Fix from merge\n676afbdeb0 2025-03-01 Format\n60282466a0 2025-03-01 More RARE rewrites\n843f68d130 2025-02-28 Implement fix\n5d64ff56ae 2025-02-27 More\ndf9e588d92 2025-02-27 Fixes from merge\nc4accaa44a 2025-02-27 More\n04428bf3f8 2025-02-27 Fix\n11f654a3c5 2025-02-26 Fix\n50c868acb4 2025-02-26 Fix\n642b5b45e5 2025-02-26 Step change\n58197282bc 2025-02-26 More\n1afb5671c3 2025-02-26 Improve heuristic\n74380926e6 2025-02-26 More general\n8cd105a58a 2025-02-25 Fix CONG_EVAL\na3c052e3ec 2025-02-25 Fix\na9c592b2c3 2025-02-25 move\na349997322 2025-02-25 Fixes from merge\n5df41343cd 2025-02-25 Format\n920ae81f87 2025-02-25 More cases\nf161b06a3e 2025-02-24 More\n81525a7b7c 2025-02-24 More updates\ne80fb7e637 2025-02-24 MBQI is regular\nfa74810e63 2025-02-24 Revise\nd0be9b10f7 2025-02-23 Divisible\nacbb4c5b65 2025-02-22 Missing\n6c280c9f4f 2025-02-22 More\n17c7a96b56 2025-02-22 Minor\n9ad138e9df 2025-02-22 Another\n387ae00c90 2025-02-22 More\nfc2adadb48 2025-02-22 Two more minor\nb38a75c679 2025-02-22 Another\n0314e755f1 2025-02-22 Minor\n844a45dc99 2025-02-22 More\n80701f21a1 2025-02-22 Minor\n8cc1293fee 2025-02-22 More\n4af3dd04b4 2025-02-22 Format\n939b2e359e 2025-02-22 Simplify rules\nefb460ad06 2025-02-22 Format\nb4dcd51515 2025-02-22 MInor\n07157d18e1 2025-02-22 Setup\n68fdf3ee0b 2025-02-21 Fixes, working\na55c463718 2025-02-21 Revert\n1047971348 2025-02-21 More\nb39a9691f9 2025-02-21 More\n899ea73a8d 2025-02-21 More\nb2223ffbdb 2025-02-20 Revert\n89362e03ef 2025-02-20 More\nba2624a0e5 2025-02-20 Format\nb22a8308d0 2025-02-20 Fix BV invert, missing IC\nc2a7172459 2025-02-19 Minor sync\n145c50d37b 2025-02-19 Update defaults\n4708f7f0fd 2025-02-19 CEGQI infinity expert\n280cd0da68 2025-02-19 Remove use of concat conflict\n18cea02dc1 2025-02-19 Ackermann is expert\n28234a7342 2025-02-19 Simplify\n8f13ed4529 2025-02-19 Minor\n4fedd243d5 2025-02-19 More\n36e50113d3 2025-02-19 Fix\nc4813696c3 2025-02-19 More\n62cd83611b 2025-02-18 Fixes\n51a066469c 2025-02-18 Fix\nebb4143e66 2025-02-17 Minor\naad13d8e35 2025-02-17 More\n6b8870ec3c 2025-02-17 Fix, another regression\nff3a97eb66 2025-02-17 Some ackermann\nf19d702168 2025-02-17 Minor\n617372bab2 2025-02-17 Change\n51568c2a24 2025-02-17 Fix\n6cd641abb2 2025-02-17 Fix\n3ad8222247 2025-02-17 Fixes\n0590fc67b3 2025-02-17 Improve\n322d9ecae3 2025-02-17 Proofs for bv invert solve\n6ce9376d25 2025-02-16 More\nf9c8da47f8 2025-02-15 Fixes\n2c34f18370 2025-02-15 More\nf0d8d2bd0d 2025-02-15 More\na8010901c0 2025-02-15 Format\n39069cbad6 2025-02-15 Iterative\n42bd15a3b4 2025-02-14 Format\ne5c6a1155c 2025-02-14 Actually track proofs in quantifiers rewriter\ncd7b2e092d 2025-02-14 More\n2b09c5d82b 2025-02-14 Format\ndd110c4c7d 2025-02-14 More\n4250b7612c 2025-02-14 More\n254fa6ed15 2025-02-14 More\ncf91530650 2025-02-14 More\n3fb4380c57 2025-02-14 Another\nf8627e9821 2025-02-14 More\n64481886e4 2025-02-14 Revert\na32a508091 2025-02-14 More\n65453623f4 2025-02-14 More\n28620acfea 2025-02-13 Fixes, sketching\n85ceaf90c3 2025-02-13 Fix\nc72088bf41 2025-02-13 Fixes\nb62b01ca73 2025-02-13 Fix\n82ed82033e 2025-02-13 Take\n998dbf9384 2025-02-13 Refactor xor\n2909073264 2025-02-13 Cardinality conflict\nfff2cbd644 2025-02-13 Doc\nd81006c48e 2025-02-13 Update\n5837040f66 2025-02-12 Support\ne2252d14cd 2025-02-12 Format\nf6a35ed180 2025-02-12 Fix\n28f228baa2 2025-02-12 Fix\n67c6c67064 2025-02-12 Annihilate\nf0b84bb63b 2025-02-12 Fix\n2f1389cdc0 2025-02-12 Format\n76a7751b97 2025-02-12 Final reduction cases\n658776b352 2025-02-12 Split\n45bbb7b737 2025-02-11 Fixes\n21ca807647 2025-02-11 Minor\n1c23fc8565 2025-02-11 Fix\n0315ddeea6 2025-02-11 More\n0cc4eaa5bc 2025-02-11 Fix, sketching updaters\n02d54406b5 2025-02-11 Generalize\n5d53d23756 2025-02-11 Guard again\ne6a232e405 2025-02-10 Revert\nffd98bd77a 2025-02-10 Don't rewrite\n942c0ddde2 2025-02-10 Fix\n7f2cfd2165 2025-02-10 Fix\n2551644701 2025-02-10 Format\n9066179ae1 2025-02-10 Fix\naa95357169 2025-02-10 More, ext component\n206115c92b 2025-02-09 Guard more cases of arrays-exp\n6d2edab3ce 2025-02-09 SEQ_EVAL_OP\nded91477b1 2025-02-09 Multiset working\n4e73ec6839 2025-02-08 Fix\nc19f27c115 2025-02-08 Fixes\nb4d1710859 2025-02-08 Finish sets eval op\n2444e263f5 2025-02-08 Use\na0b6085a55 2025-02-08 Move to utility\n890f35bd54 2025-02-08 New RARE rewrite\nc60dcf636c 2025-02-08 Fix\nf1c298761f 2025-02-08 Simplify\ne462eddc15 2025-02-08 RE_CONCAT to elaborate\nd97d71450d 2025-02-08 Introduce RE_CONCAT\ne8caa9130b 2025-02-07 More\n9bbe49bb1d 2025-02-07 More setup\nef4b81b7e7 2025-02-07 More\ncb83e50559 2025-02-07 Remove\n34f8ca3a81 2025-02-07 Fix\n6528356d3b 2025-02-07 Fix\n529aad9b5d 2025-02-06 Consolidate\nf6135851d5 2025-02-06 Revert\n5bcfb0e0b7 2025-02-06 Try\n176012ca6d 2025-02-06 Fix unify\nb56eab39f1 2025-02-06 Take simplification branch\na5f7548fb8 2025-02-05 Fixes\n8d1df7091b 2025-02-05 Fix\n67389a6866 2025-02-05 Minor\n3b1ef25148 2025-02-05 Minor\ncafeb152bf 2025-02-05 Fix\n2a69fec4fb 2025-02-04 Fix\nf58011a7d7 2025-02-04 Possible simplify\n6be2934758 2025-02-04 Format\n30994c9188 2025-02-04 More setup\n59469224cf 2025-02-04 Simplify\nf25498fc1c 2025-02-04 Formatg\nae0fcb053b 2025-02-04 More cases\n080fa61c76 2025-02-04 More\n0df49697f0 2025-02-04 Another\ne90216c92b 2025-02-04 Minor\n91e54168d9 2025-02-03 Format\nd9dde634d1 2025-02-03 Fix, more\n3729ef3562 2025-02-03 Another\nac1e817493 2025-02-03 Another\n744b10457e 2025-02-03 More\nb29d55d9aa 2025-02-03 Missing, try\nbf8dd955ec 2025-02-01 Sketch str in re inclusion, failing ethos sig\ne4672d3913 2025-02-01 Key steps\n8f12a5c589 2025-02-01 Another\n26c4aa895d 2025-02-01 Handle\n5d72f30990 2025-02-01 Fixes, doc, handled\n7afabcbf55 2025-01-31 Remove\na299643f89 2025-01-31 More\n975e795587 2025-01-30 More\n9dafd1e318 2025-01-30 More\nd347f0eac8 2025-01-30 More\nc5f962f6ec 2025-01-30 Format\nccdc3832c1 2025-01-30 More\n08025333cb 2025-01-30 More\nd93e907162 2025-01-30 More\n3b04c75156 2025-01-30 Positive\n8d6d311be2 2025-01-30 Fix\n41730fef11 2025-01-29 Fix\n63420809f6 2025-01-29 Minor\nafc2aae4ae 2025-01-29 Revert for now\n430782a4c9 2025-01-29 Format\n9464985253 2025-01-29 Fix again\n32470a1459 2025-01-29 Fixes\n952c7dd551 2025-01-28 Demote quant rewrite\n7d0d2d131d 2025-01-28 More\na970e1bddd 2025-01-28 Fixes\ne30635e69e 2025-01-28 Minor\n9cfcec59a7 2025-01-28 Format\n519e273a50 2025-01-28 Fix\ndf24d086fe 2025-01-28 More\nc9351a5293 2025-01-28 More setup\na49e0f7ac9 2025-01-28 Updates\n7ed69747f5 2025-01-28 Refactoring\n0bfb785046 2025-01-28 Update\nec7e134475 2025-01-28 Format\n3305380da1 2025-01-28 Draft rules\n4ada409ff7 2025-01-27  Fix\n1836f299c0 2025-01-27 More\n3660d22ca1 2025-01-27 Format\n9e84670824 2025-01-27 Simplify\nee4153e932 2025-01-27 Towards\n0134d52a86 2025-01-27 More\nd9fa49b9f8 2025-01-27 More\na26b05bec0 2025-01-27 Towards prefix\ne82aa3f48c 2025-01-25 Format\n02ade6694f 2025-01-25 Sequence eval\n4f07cb8f9f 2025-01-25 Other macro\n8915fb8f42 2025-01-25 Use first macro\nd65574d0dc 2025-01-25 Macro, new RARE\n8925bb8cd2 2025-01-25 Fixes, define macro\n5bbea7fdf3 2025-01-25 More infrastructure for macros\nce9da5b226 2025-01-25 Cleanup, simplify union/inter\ne65520a3ca 2025-01-25 Another RARE rewrite, 2 more macros\n706cf35782 2025-01-25 Fix unit\n5ce76d930e 2025-01-25 Minor\n729315e4ea 2025-01-25 Move more to extended\nd78b8722fb 2025-01-25 Moving rewrites to extended\n44e6f4b1b7 2025-01-25 One more RARE rule, possibly complete for SMT-LIB\ned7b9e3719 2025-01-25 More rewrites, simplification\n2e65d61815 2025-01-24 Two more\n1baa6bac62 2025-01-24 Two more, disable homogeneous\n9a329fca96 2025-01-24 Two more RARE rewrites\n56dc1c90bb 2025-01-24 More RARE\n72ed6ec1bd 2025-01-24 Break nested recursion\n9cd505dcbd 2025-01-24 Simplifications\n4c01acc054 2025-01-24 Another\nc98358ca58 2025-01-24 More reclassify\n63e38f3e39 2025-01-22 Revert\n36cc62e02c 2025-01-22 Fix\n2122d2e4b2 2025-01-22 More\n85cd6df8b8 2025-01-22 Another\n267f3ef378 2025-01-22 Fix\nfa60dfb8e0 2025-01-22 Try\n01a4ead8ae 2025-01-22 Fix\n838c5c3442 2025-01-22 Fixesg\n27d6e02fe0 2025-01-22 Minor\nebbfe2e3f8 2025-01-22 More\n8e6e946103 2025-01-22 Minor\n5e0b076879 2025-01-22 more\ndfe8e3bdb8 2025-01-22 Fix\na3c4971689 2025-01-22 More\n7ec818f25f 2025-01-21 Fix\nf898b539c5 2025-01-21 More\n7faf9d8f9f 2025-01-21 ANother\ncfdae1b2e6 2025-01-21 A few more\n86848c81bd 2025-01-21 Improve\n368b20363f 2025-01-21 Format\na9ed294076 2025-01-21 Improving\nfcd7e4aac8 2025-01-21 Back to regular\nad0985dcb0 2025-01-21 More\n9cba90da25 2025-01-21 Test\n9a969cf4be 2025-01-21 Format\nd12e761ec7 2025-01-21 Fix\nf8ffe81763 2025-01-18 Doc, working\n3d52fc1729 2025-01-18 Sketch distinct arrays\n82e514cc3b 2025-01-18 Format\n27c958c6f8 2025-01-18 More\nbd3624080a 2025-01-17 Fix\n3259098fe4 2025-01-17 Fix\n9a581fc8e7 2025-01-17 Fix\ne8ca3d645c 2025-01-17 Draft, use isSimple\n70c4b0d205 2025-01-17 More\nfb223b4b16 2025-01-17 Format\nf737cbf1b0 2025-01-17 More\nc1d3b0948f 2025-01-17 Minor\n93cdb0e20e 2025-01-17 Format\na43af0e53e 2025-01-17 Transitive\n3e69414dc3 2025-01-17 More\n84f270f30c 2025-01-16 Improve\n999581d456 2025-01-16 Closer\nf4b99678c2 2025-01-16 Fix\n26a85efed1 2025-01-16 More\n9340bae723 2025-01-16 Format\n511a394d1b 2025-01-16 More setup\n207ea601ce 2025-01-16 More setup\n4d59d15b9b 2025-01-16 Fix\n28f35b6e00 2025-01-16 Format\nc4a5354a90 2025-01-16 More\n6478f3afbb 2025-01-16 Simplify inequality elimination\n41c3f103b5 2025-01-16 Setup\n83fff5ff2e 2025-01-15 Arrays\n433b649d88 2025-01-15 More general dt ipc\n86e342d7ee 2025-01-15 Simpler\n5f20aa3b57 2025-01-15 Minor\nb35f7747c4 2025-01-15 Format\nb306fc0189 2025-01-15 Rewrite\nede9506c9a 2025-01-14 Fix assert\nee21c2b56e 2025-01-14 More\n44bb9572c7 2025-01-14 Format\nc532fad92f 2025-01-14 More\n2665e3dc53 2025-01-14 Eagerly rewrite bodies of define-fun\n8bfe8c9960 2025-01-14 Fix\n525750e1ce 2025-01-14 Format\nb0049832d5 2025-01-14 More\n06276eb93d 2025-01-14 Format\n4097792e18 2025-01-14 Doc\ncd3dc79aad 2025-01-14 Improved reconstruction for dt\n45c5b1d0d2 2025-01-14 Format\n9203d17955 2025-01-14 Another\n7b7e505fdd 2025-01-14 Fix, three more RARE rewrites\nd66f26bd63 2025-01-14 Another macro rewrite\n37cf712346 2025-01-14 Improve lambda shadow elim\n1795fe9f9f 2025-01-14 Doc\nc3777123cf 2025-01-14 Fixes, improvements, more regressions\nb8a1f7fa8c 2025-01-14 Fixes, improvements, more regressions\ncf46edc521 2025-01-13 Fix, two RARE rules\neb37d5dd31 2025-01-13 Format\ne82e0ed7c5 2025-01-13 more\ndb197202dd 2025-01-13 Minor, regression\nb9910c1388 2025-01-13 Improve rcons\nbd6e2583d3 2025-01-13 Minor\ncc6e8c3007 2025-01-13 Format\nda851e36d4 2025-01-13 Split dt case and new macro expansion\n014aad6492 2025-01-13 More\n8e28f76999 2025-01-12 Fix\n1f393f1bac 2025-01-12 More\nb43ec74364 2025-01-12 Minor change to avoid lambda value norm\n170563629c 2025-01-12 Elaborate array norm op\nacb89fca6c 2025-01-12 More\n22de36928a 2025-01-12 Some fixes\ndbe59845a4 2025-01-12 Fixes\n56a4c6141e 2025-01-12 Draft rcons\na7fb51ce82 2025-01-11 More string eval\ndd4918c4c7 2025-01-11 Another fix\nd30b819ea7 2025-01-11 More\n1558c8f1bb 2025-01-11 Another fix\n0fb3e3ce90 2025-01-11 Another regression\n835a1f3ec3 2025-01-11 More\ncea2b98b13 2025-01-11 More\n8408efb62e 2025-01-10 Fix\n574ddd188d 2025-01-10 Move to extended rewrites\nb059c69da2 2025-01-10 Support exists string length\n9cdff5323d 2025-01-10 Two more replace rules\na6574e5d71 2025-01-10 Fix, update doc\n62f363c9d4 2025-01-10 Elaboration for lambda shadow elim\n4e15d3f9da 2025-01-10 More\nf23bbc0ef5 2025-01-10 Formate\n55c4051dc5 2025-01-10 More\n38d9958495 2025-01-10 More\nf47758e4d5 2025-01-10 Format\n2be945a9d4 2025-01-10 DT, macro setup\n1d1562996e 2025-01-10 More\n2aa0e3c9b0 2025-01-10 eq clash\n95315fb528 2025-01-09 Support dt-cons-eq\nd127970730 2025-01-09 Eliminate elim shadow\n5a832c6711 2025-01-09 Fix\n5267b9febd 2025-01-09 Format\n7cd8ff14ae 2025-01-09 More\ncc6aa3dd03 2025-01-08 Fix assertion\n975d2331be 2025-01-08 Fix\n91a2b4f9f9 2025-01-08 Format\n295db81956 2025-01-08 More\n3228f465f8 2025-01-08 Format\n372b2d8a80 2025-01-08 Fix\n80e5a3be19 2025-01-08 Doc\na79e6928d5 2025-01-08 Fixes\n53a00abeac 2025-01-08 More\na54d4c63f1 2025-01-08 More\n2b720bcd7f 2025-01-07 Format\n509ee434e1 2025-01-07 More\n02314d5725 2025-01-07 Eunoia for ABS_COMPARISON\n0b370d46d5 2025-01-07 Fixed point DIO\n33d39f76de 2025-01-07 More\n96b77b106b 2025-01-07 Implement\ne008a80071 2025-01-07 Draft arith static learner proofs\nadeeacaf48 2025-01-06 Minor\nb4c6404a38 2025-01-06 Format\n41de469664 2025-01-06 Guard\n8884c71997 2025-01-04 More\n250d11a695 2025-01-03 Enable, fix corner cases\naa9b51b5d7 2025-01-03 Fix bug in sygus solver for trivially infeasible conjectures (#11481)\n788ed30d3e 2025-01-02 Fix\n8f075a0749 2025-01-02 Fix quant prenex\ncc5936bb5a 2025-01-02 Fix\n123c02709f 2025-01-01 Mino\ne26cd34d98 2024-12-31 More\n87f4cc912d 2024-12-31 Fixes\nd6ff65a564 2024-12-31 Take fix\n265ed0aa22 2024-12-30 Minor\nfb4a4fdd5b 2024-12-30 Generalize consume\nfe34b85f66 2024-12-30 Minor\n4b915c46eb 2024-12-30 Fix arith fail\n0b1e29959f 2024-12-30 More\n5dc4d56d0a 2024-12-29 Format\n56325e7ff5 2024-12-29 Macro strip endpoints\ne55684bd5c 2024-12-29 More rewrites\n2e06e09df1 2024-12-28 More refactor\n81d11ec455 2024-12-28 More\nc6722b9a4c 2024-12-28 Fix\n035ea5cee7 2024-12-28 Format\n66b94c223a 2024-12-28 Util function\n145c9d8e20 2024-12-28 Refactor, possible solution\nee749f057c 2024-12-28 More\n0ce3af3f0f 2024-12-25 More\n91a63c4e1a 2024-12-24 More\nfdacae8c48 2024-12-24 Fix\n7c6a9df029 2024-12-24 Try\n92c3841d89 2024-12-24 Re eval rewrites\neaece85403 2024-12-23 Length normalize rewrite\n32246d9a9c 2024-12-23 Eager reduction missing case\n13e1695a47 2024-12-23 More\nd23148195a 2024-12-23 More\nba6667d032 2024-12-23 And elim\n8b5f81ee6d 2024-12-23 More\ncf39780152 2024-12-23 Fix\nbeb2544701 2024-12-23 New rules\n677fd24c5a 2024-12-23 Format\n95f340675d 2024-12-23 More\nde34bb00a0 2024-12-23 More\n8f8db79e3e 2024-12-23 Generalize\na8b4cb2c22 2024-12-21 Format\n46b0a26b48 2024-12-21 More\n7bd4b4938e 2024-12-21 Fix\n9210687abe 2024-12-20 Another rule\n4b70d8d377 2024-12-20 Basic CTN decompose\n91993a1fbf 2024-12-20 Change name\nc5129343e1 2024-12-20 Doc\ne32f206894 2024-12-20 Use unpurified\n15020354c9 2024-12-20 Minor\nbe2a827f7f 2024-12-20 Foramt\n7d0c75bf61 2024-12-20 Unused variable tactic\n8c3176f019 2024-12-20 ANother\n1f0c2b9abb 2024-12-20 Refactor\nd30b360430 2024-12-20 More\n2779613874 2024-12-20 Fix\n44aca00429 2024-12-20 More\nc06d33bd3d 2024-12-19 Fixes\na21709022c 2024-12-19 Format\nff8fecf0f5 2024-12-19 Fix\n9914b82989 2024-12-19 Fix\n27653680c6 2024-12-18 Minor\ne61237605f 2024-12-18 More\nba13582639 2024-12-18 Minor\n206046d766 2024-12-18 Simplify\nad23fd4efb 2024-12-18 Format\nd91b5a7aad 2024-12-18 Doc\n029fbc7258 2024-12-18 More\ne3ba044437 2024-12-18 Fix\nd592fb35d3 2024-12-18 Format\n7d36e05485 2024-12-18 Simpler\nc75ceb763b 2024-12-18 Cleaner bvinvert\n04c471ef1d 2024-12-18 Minro\ncbe805c1a0 2024-12-18 More\n2764fdc389 2024-12-18 Fix NL compare proof check\nea14ea1678 2024-12-18 More\n08e924959c 2024-12-18 Datatypes\nd0f3d46af9 2024-12-17 Working\n4b0cdad1f4 2024-12-17 More\ne645db3859 2024-12-17 Setting up annotation\n3226cb05fc 2024-12-17 Format\n2e46dead5f 2024-12-17 Another fix\n499faf1353 2024-12-17 Two fixes\n8ce5451d3b 2024-12-17 Util, fix arrays\n9d80a4f254 2024-12-17 Fix\n47851b4993 2024-12-17 Format\n443553c9a7 2024-12-17 Infrastructure for invertibility conditions\n8a8eca8543 2024-12-17 More\na7c5e916ba 2024-12-16 Doc\nfc471075ec 2024-12-16 Fix\n7702735c9e 2024-12-16 Take\n4f85e253d4 2024-12-16 Foramt\nf068f4e5b4 2024-12-16 Simplify\n95bf223138 2024-12-16 More\n0e87ec4f45 2024-12-16 More\necf1ab8202 2024-12-16 More\n0b00c38417 2024-12-16 Minor\ne146600941 2024-12-16 More\n47d15870e3 2024-12-16 More\nee158ba125 2024-12-16 Format\nd1b17a0f7f 2024-12-16 Refactor\nbf63ff295a 2024-12-16 Format\n1de1d13415 2024-12-16 Setting up DIO lemma reconstruction\nbb9481e9d1 2024-12-15 Fix\n08ae92bba8 2024-12-15 More\n473a8ef45a 2024-12-15 Another fix\n90f6f6fd06 2024-12-15 ANother fix\nc21f5f00be 2024-12-15 Format\nade26ce53b 2024-12-15 Take\n7e8860a568 2024-12-14 Fix\n030e767d54 2024-12-14 Setup\nbbad7c06d2 2024-12-14 More\na42cafae43 2024-12-14 Carry\neaa0538fb1 2024-12-14 Format\nbc791cdb52 2024-12-14 Infrastructure for valid witness\n9a50f01dbd 2024-12-14 Fix\n51f76ed12a 2024-12-13 Format\n841cf818d6 2024-12-13 More pedantic\nbbb1bec523 2024-12-13 Minor arrays\n8d304f7eb1 2024-12-13 More\ne5ca824a7e 2024-12-13 Elaboration\nca2e334cc4 2024-12-13 Format\nac869e3834 2024-12-13 More\nad4d5279b0 2024-12-13 Proof for quant tdb\ne949189581 2024-12-13 Format\n551ea80fd7 2024-12-13 Sets norm rules\na9927e2df9 2024-12-13 Format\n78989d52ad 2024-12-13 Generalize quant prenex elaboration\n405ca98913 2024-12-12 Fix\n081608fea7 2024-12-12 Fix, support\n268f6622a3 2024-12-12 Set up\nfed3e18bff 2024-12-12 Do not support match\n40f2b3a3f2 2024-12-12 More\n9217328731 2024-12-11 Minor\n4ef9b77510 2024-12-11 Fix\nca785be5f7 2024-12-11 Foramt\n5be0d041df 2024-12-11 Update rules\n54a970b478 2024-12-11 More\n07adf01b96 2024-12-11 RARE empty infra\n4e7a8f69b8 2024-12-11 Format\n26637517ff 2024-12-11 Improve\nf15c8d1e6a 2024-12-11 Refactor, complete\n704aab8a81 2024-12-11  Format\n36509a509f 2024-12-11 Minor\nef5617fe67 2024-12-11 More\n0b6c82d526 2024-12-11 Format\ndc2cca2213 2024-12-11 Fix\n15a26269e0 2024-12-11 Refactor\na7af38d20d 2024-12-11 Minor\n5c08aa2b40 2024-12-11 Fix diamonds assertions\n1aceb111db 2024-12-11 Format\n674e05f6fe 2024-12-11 Another stat\n6d519a2ef3 2024-12-10 Use\nc4fda634f9 2024-12-10 More\ne515b60ce4 2024-12-10 Minor\n1d115379d8 2024-12-10 more\n68e30982a3 2024-12-10 More\nf08a5cc55f 2024-12-10 More\n5a2866b08c 2024-12-10 Fix\n0a7b03a389 2024-12-10 More\nbd382ca88f 2024-12-10 More\n59586b51f8 2024-12-10 Format\n2713e4bf5c 2024-12-10 Fixes, rename\n85b63852a9 2024-12-10 Simple\n74cb4bc2a1 2024-12-10 Fixes\n448e62cf01 2024-12-09 Finer theory inference\nabccf5b7e9 2024-12-09 More\n26d248f87c 2024-12-09 Fix\n79666c7625 2024-12-09 Fix\nef293437de 2024-12-08 Fix\n2327e11667 2024-12-07 Minor\n014cec9815 2024-12-07 Implement diamonds proofs\n40e883019e 2024-12-06 Minor\n1283c5bdf2 2024-12-06 Take alpha eq fix\n553a460536 2024-12-06 More\n09ffb0c43b 2024-12-06 Format\nd99b2dbbb7 2024-12-06 More\n2b737a544e 2024-12-05 Setup\n055fc0ce36 2024-12-05 Minor\nec991a31af 2024-12-05 Fixes, new macro\n7e3c88b20d 2024-12-05 Fix\n1e4b8fe22d 2024-12-05 Fix\n55dcee9a3b 2024-12-05 Format\n7ad21cf7b2 2024-12-05 More\n4f9e99e872 2024-12-05 More\n62fdf1bb36 2024-12-05 More\nb0e7bd1a30 2024-12-04 Minor revert\nb72cf3bf50 2024-12-04 More\n91a81312d9 2024-12-04 Fix\ncf3896c40c 2024-12-04 Fix\naeee5dcdcf 2024-12-04 Fix\na73b5f4232 2024-12-04 Format\ned8bb97874 2024-12-04 Move to file\nb0f8197670 2024-12-04 Move\n9f3f5b7826 2024-12-04 Refactor set defaults\n7c20307e75 2024-12-03 Minor\n6df9176c41 2024-12-03 Fix\n6185c193f8 2024-12-03 Format\nbe35fbf11e 2024-12-03 Fix\n71ccda36fe 2024-12-03 Del\nd915ac4c74 2024-11-26 More\n94aa2c2be8 2024-11-26 Format\n452e1f7af7 2024-11-26 Not so eager\nd6a3235b1a 2024-11-26 More setup\n23db21a75e 2024-11-26 Format\na03b3a7b25 2024-11-26 Instrumenting\ne3f075cabb 2024-11-26 More\n44555435f0 2024-11-26 Format\nf410a5179b 2024-11-26 Alpha equiv as tactic\nafcc0380f1 2024-11-26 More\n93d38ecf86 2024-11-26 More\nb8bfa860ec 2024-11-25 More\n1718164b7e 2024-11-23 Disable more for now\n172c8775a1 2024-11-22 Fix\nf632fa98d1 2024-11-22 Format\n627f1b495d 2024-11-22 More\n06c25d37fe 2024-11-22 More\n848b566769 2024-11-22 Fix\na6c632c80f 2024-11-21 More\n31de18d5df 2024-11-20 Format\n34e852b357 2024-11-20 Contains multiset\n9f21f99a2e 2024-11-20 Change\n4bb667db7f 2024-11-19 Take back\n5571189d3e 2024-11-19 Update\n7cf2e76f17 2024-11-19 More\n979ef5eed3 2024-11-19 Doc\n180ec40c11 2024-11-19 More\ncda93ffa6f 2024-11-19 More\ne67784e797 2024-11-19 Format\n7dca906f81 2024-11-19 More\n7ff7726a01 2024-11-18 Key rewrite for SUBS_EQ\nc84bbb83bd 2024-11-18 No rec calls\n85af4be565 2024-11-16 Another\n6b78603b31 2024-11-16 Two more ad-hoc string rewrites\n85c3ea4915 2024-11-16 More\n6d2262c7be 2024-11-16 Dont use ext rewrite\nf29ae68cfd 2024-11-16 More\n964a6ccecf 2024-11-16 Another rule\nedd8d63380 2024-11-14 Another\nb0d1e6378d 2024-11-14 Format\n20cd5a1907 2024-11-14 Fix\nd3e1cc01c8 2024-11-14 Strings ext\ne94030e9f1 2024-11-14 Extensionality for sequences\n20f494b4a0 2024-11-14 Datatypes cycle\nd1250151e6 2024-11-14 More\n06cf50dec5 2024-11-14 Fix\n0ce6479323 2024-11-14 Format\n677520186b 2024-11-14 More\n43ac0dba54 2024-11-13 Take, expert option\nb298051a0d 2024-11-13 Fix\nb1c6984307 2024-11-13 Improve\n5ab1ac40dc 2024-11-08 Minor\n70b587a7ac 2024-11-08 Format\n27d75ddd28 2024-11-08 Elim\n033f2c4073 2024-11-08 Updates\nf9499c0a7b 2024-11-07 Fixes\n8bcdb44b78 2024-11-07 Refactor\n37dc8f3e6d 2024-11-07 Towards bv poly norm\n709f7c1337 2024-11-07 Fix\n08fc0f9643 2024-11-07 Collapse updater\n6d75bce4bf 2024-11-06 Options tweaking, strings ipc\n02c5d24c74 2024-11-06 Fix\n4231097e6d 2024-11-06 Format\n73f28c0014 2024-11-06 Fixes for arithExp\n67588ed5d3 2024-11-06 More\nf4a47e82f6 2024-11-05 Another rew\n4a65d25c05 2024-11-05 ANother\n54e844428e 2024-11-05 Take split\n57d9e55882 2024-11-05 More\n11178b6a27 2024-11-05 More\nda78787733 2024-11-05 More\n572e966639 2024-11-05 More\n5f2ee46d97 2024-11-05 Repeat\nee2403640b 2024-11-05 Fix and add\n91b36145e6 2024-11-05 More rules\ne791c85140 2024-11-04 More rewrites\n6c1517f7e3 2024-11-01 More strings rules\ncedd78b6eb 2024-11-01 Another RARE\n00387d3d4a 2024-11-01 Fixes\ne3da025f76 2024-11-01 More\nd73f441b96 2024-11-01 More\n3e14354a93 2024-10-30 Nl compare\n1aa7fdfa06 2024-10-30 ANother\n9100f8c8d8 2024-10-30 More\nca340090d2 2024-10-29 Improve\n80d4da0462 2024-10-29 More\n60ee88f262 2024-10-25 More rules\nc8c7aa3b0c 2024-10-25 Fix\n90437a40bd 2024-10-25 Fix\n211bba98ac 2024-10-25 Improve\na598f05208 2024-10-24 Take more changes\n9ae30c2839 2024-10-24 More\n852aae5706 2024-10-24 More RARE\nc6bda9bf8b 2024-10-24 More\n6234ac108d 2024-10-23 Another\n5faca4d3a8 2024-10-23 Improvements\n3e16e789db 2024-10-23 More\n9e37133679 2024-10-23 Minor\n131f002cea 2024-10-23 Take\n6fd977d856 2024-10-22 Quant rules\ncd4f982ada 2024-10-22 Unhandled EO\n5715fcaeaa 2024-10-22 Format\n46fdcc7eaf 2024-10-22 More\n73eb3ef806 2024-10-22 Improve label\nfe69a508a1 2024-10-21 More\n98bbc5b7a3 2024-10-21 Fixes for datatypes theory inferences\ne9ef3b8e0c 2024-10-21 Format\nbf419190e2 2024-10-21 More\n4c49cfaebc 2024-10-18 Format\nacb8ecbba2 2024-10-17 Quant split\nfbbeb12e0c 2024-10-16 Format\n0af51267be 2024-10-16 More\n9bb11dba80 2024-10-16 Tweak\n0a215511bb 2024-10-15 More\n26eef98781 2024-10-15 More\n969e1a7562 2024-10-14 Format\nca3474c5f4 2024-10-14 Fixes\nde41a29410 2024-10-14 Format\n5043ad2549 2024-10-14 More\nfb5ced1f19 2024-10-14 More\nfabc8ff49c 2024-10-10 Proofs for extended theory\n009fe15ac5 2024-10-10 Format\n63a7df72c2 2024-10-10 More\n73c0892693 2024-10-10 Fix\n731d9176f1 2024-10-10 Format\n0a889ca93b 2024-10-10 Another\ncff1bc1498 2024-10-10 Fixes\ne591f55425 2024-10-10 More\n4e054967b0 2024-10-10 Format\n3c88575904 2024-10-10 Bags\n921d46cb10 2024-10-10 Format\n2bdc2a68d8 2024-10-10 More\n7553fd02c8 2024-10-10 Fix\nce83b12296 2024-10-10 Refactor\n917b515362 2024-10-10 Fix\n0307c44a62 2024-10-10 More\neafd14cc54 2024-10-10 More\n7c9722b04f 2024-10-09 Lemmas\n9ba0412745 2024-10-09 Fix\n29bac49b74 2024-10-09 Format\n2f0b613db5 2024-10-09 Simplify\n41f9f91a4f 2024-10-09 More\n4b9e883228 2024-10-09 More\n5d53e55090 2024-10-09 More\n4779d58b86 2024-10-09 More\n74ec69626b 2024-10-09 Minor\ncdeb83e74b 2024-10-09 Format\n493d41c679 2024-10-09 More\nad42d9e59f 2024-10-09 More\nb3f316ed96 2024-10-09 More\n6ad54405fe 2024-10-09 More\n8ebcffe696 2024-10-09 Format\nf5a47f0dc8 2024-10-09 More setup\n26edae04cb 2024-10-09 Format\n418d665fa4 2024-10-09 More\n05c3df17bf 2024-10-09 More\nc25f9f671c 2024-10-09 Filling in sources of trust ids"
+    },
+    {
+      "branch": "doki-1",
+      "sha": "1130c56e4af3e5b603ef990e36ce08d82f4574be",
+      "date": "2026-09-17",
+      "merge_base": "95050cf8155d5bc446e89c6a114135786b8ecfd7",
+      "behind": 4,
+      "ahead": 2,
+      "source_numstat": "0\t6\tsrc/proof/trust_id.cpp\n0\t7\tsrc/proof/trust_id.h\n0\t18\tsrc/theory/inference_id.cpp\n3\t27\tsrc/theory/inference_id.h\n0\t1\tsrc/theory/strings/infer_proof_cons.cpp",
+      "source_log": "1130c56e4a 2026-09-17 Unstage RARE\nd362165d90 2026-09-17 Some initial fixes from dokimasia"
+    },
+    {
+      "branch": "fixDupBrc",
+      "sha": "1cfa1443bd9878399f64c5c0cb411acee0842328",
+      "date": "2025-12-01",
+      "merge_base": "a4ca2503064d2d112fd1ee3f3e73637d44848676",
+      "behind": 479,
+      "ahead": 4,
+      "source_numstat": "2\t0\tsrc/rewriter/basic_rewrite_rcons.cpp\n5\t2\tsrc/rewriter/rewrite_db_proof_cons.cpp",
+      "source_log": "d48e787b04 2025-12-01 Format\n9001f1a34b 2025-12-01 Fix issue with duplicate proof steps in theory rewrite reconstruction"
+    },
+    {
+      "branch": "macroQuantOnce",
+      "sha": "80d09b24b36745b10da7b46aa434a405ea91c805",
+      "date": "2025-12-22",
+      "merge_base": "029490f508b371f68e7859b6a9a873108d5c587b",
+      "behind": 438,
+      "ahead": 2,
+      "source_numstat": "1\t1\tsrc/rewriter/basic_rewrite_rcons.cpp",
+      "source_log": "c3622235be 2025-12-22 Fix conversion mode for proof reconstruction MACRO_QUANT_REWRITE_BODY"
+    }
+  ]
+}
