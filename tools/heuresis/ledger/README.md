@@ -24,6 +24,7 @@ Entries:
 - [`2026-09-17-central-ieval-segfault.md`](2026-09-17-central-ieval-segfault.md)
 - [`2026-09-17-self-contained-launcher-and-current-main.md`](2026-09-17-self-contained-launcher-and-current-main.md)
 - [`2026-09-17-segfault-scope-and-failure-logging.md`](2026-09-17-segfault-scope-and-failure-logging.md)
+- [`2026-09-17-cvc5-1-4-0-release.md`](2026-09-17-cvc5-1-4-0-release.md)
 
 Full results and statistics files remain on the execution host and may be
 copied into [`data/`](data/) with `job_launcher/fetch` for local analysis, but
