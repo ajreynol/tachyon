@@ -1,4 +1,13 @@
-# Rewrite convention
+# Rewrite scope and convention
+
+Report **candidate rewrites**, each with an explicit `lhs -> rhs`, sorts and
+side conditions. GitHub issues are sources of candidates, not database entries
+in their own right. Keep rewriter bugs, proof-export issues, search-order
+problems, known-rule reachability/context investigations, and leads without
+an exact rule in the survey or ledger, outside `rewrite_db/rewrites.json`.
+Uncertain validity or availability may be labeled unchecked for a concrete
+proposal. Retain genuine filed candidates and their evidence when later closed;
+closure concerns the proposed rewrite, not whether its source issue is solved.
 
 Always write rewrites as **LHS -> RHS, complex -> simpler**. Prefer eliminating
 costly operators even when this grows the expression. Use a **lexicographic

@@ -53,7 +53,10 @@ class RewriteViewTests(unittest.TestCase):
                 for event in row.get("reassessments", []):
                     self.assertIn("](../../../" + event["previous_record"] + ")", result)
         self.assertIn("](" + "../../../docs/github-issues-rewrites.md#m-1-singleton-replacement)", result)
-        self.assertIn("No exact rewrite is filed.", result)
+        self.assertNotIn("No exact rewrite is filed.", result)
+        for candidate in ("M-8", "M-11", "M-15", "M-17", "M-19", "M-20"):
+            self.assertNotIn(f"## {candidate}\n", result)
+        self.assertIn("[scope archive]", result)
         self.assertIn("**Closure:** no closure recorded.", result)
 
     def test_closure_landing_debt_and_delivery_remain_visible(self):

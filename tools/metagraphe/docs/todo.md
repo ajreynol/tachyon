@@ -8,6 +8,10 @@ as a source audit and candidate writeup, and then requested the
 assessment within the human's string and bit-vector focus. The executable
 baseline and experiments below remain open.
 
+File concrete candidate rewrites only, following the
+[scope correction](ledger/2026-09-19-rewrite-candidate-scope.md). Existing-rule
+controls support experiments in the ledger; they are not new rewrite findings.
+
 | priority | next step | concrete output |
 | ---: | --- | --- |
 | 1 | Build a clean binary matching the survey's pinned source (or record a newer baseline), options, and simplification entry point. Probe M-1/M-2/M-3 and the BV candidate M-4 under the clarified operator-first ordering. | A baseline ledger entry with inputs, exact commands, and actual outcomes. |

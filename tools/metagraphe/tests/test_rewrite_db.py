@@ -19,26 +19,57 @@ class RewriteDatabaseTests(unittest.TestCase):
         self.document = json.loads(contract.DATABASE.read_text())
         self.rows = self.document["rewrites"]
         self.by_id = {row["candidate"]: row for row in self.rows}
+        self.scope_archive = json.loads((ROOT / "tools/metagraphe/docs/ledger/2026-09-19-rewrite-candidate-scope-before.json").read_text())
+        self.historical = {row["candidate"]: row for row in self.scope_archive["records"]}
+        self.historical.update(self.by_id)
 
     def test_retained_records_satisfy_owner_contract(self):
         contract.validate(self.document)
 
     def test_current_survey_and_drafts_agree(self):
-        self.assertTrue({f"M-{n}" for n in range(1, 21)} <= set(self.by_id))
+        self.assertTrue({f"M-{n}" for n in range(1, 21)} <= set(self.historical))
         survey = (ROOT / "docs/github-issues-rewrites.md").read_text()
         drafts = []
         for block in re.findall(r"```lisp\n(.*?)```", survey, re.S):
             drafts.extend(part.strip() for part in re.split(r"\n\n(?=\(define-)", block.strip()))
         filed = [draft for n in range(1, 11)
+                 if f"M-{n}" in self.by_id
                  for draft in self.by_id[f"M-{n}"]["proposal"]["rare_drafts"]]
         self.assertEqual(filed, drafts)
         issues = {int(n) for n in re.findall(r"/issues/(\d+)", survey)}
-        filed_issues = {i["number"] for row in self.rows for i in row["origin"]["issues"]}
+        filed_issues = {i["number"] for row in self.historical.values() for i in row["origin"]["issues"]}
         self.assertTrue(issues <= filed_issues)
-        self.assertEqual(self.by_id["M-11"]["classification"], "existing-coverage")
-        self.assertEqual(self.by_id["M-12"]["classification"], "existing-coverage")
-        self.assertEqual(self.by_id["M-19"]["classification"], "excluded")
-        self.assertEqual(self.by_id["M-20"]["classification"], "excluded")
+
+    def test_scope_archive_preserves_triage_and_m12_reassessment(self):
+        archived = {"M-8", "M-11", "M-15", "M-17", "M-19", "M-20"}
+        self.assertEqual(set(self.scope_archive["archived_ids"]),
+                         {"metagraphe:" + candidate for candidate in archived})
+        self.assertFalse(archived & set(self.by_id))
+        self.assertTrue(archived <= set(self.historical))
+        before = next(row for row in self.scope_archive["records"] if row["candidate"] == "M-12")
+        after = self.by_id["M-12"]
+        self.assertEqual(after["classification"], "candidate")
+        self.assertEqual(after["proposal"]["rewrites"], before["proposal"]["rewrites"])
+        self.assertEqual(after["assessment"], before["assessment"])
+        self.assertEqual(after["reassessments"][:-1], before["reassessments"])
+
+    def test_issue_only_and_known_rule_filings_are_rejected(self):
+        self.rejected(lambda r: r.update(classification="excluded", priority=None))
+        self.rejected(lambda r: r.update(classification="existing-coverage", priority=None))
+        self.rejected(lambda r: r["proposal"].update(rewrites=[]))
+        row = copy.deepcopy(self.rows[0])
+        row["assessment"].update(validity="unchecked", availability="unchecked")
+        contract.validate([row], filing=True)
+        row["assessment"]["availability"] = "existing-rule-needs-context"
+        with self.assertRaisesRegex(ValueError, "known-rule context or reachability"):
+            contract.validate([row], filing=True)
+        # Later discovery of existing support is a reassessment, not a reason
+        # to delete a previously filed candidate or prevent its closure.
+        contract.validate({"rewrites": [row]})
+        row.update(closed_verdict="withdrawn", closed_on="2026-09-19",
+                   closed_why="Synthetic existing-support correction.",
+                   closed_evidence=[row["origin"]["ledger"]])
+        contract.validate([row], filing=True)
 
     def test_known_semantic_conditions_survive_filing(self):
         first = self.by_id["M-1"]["proposal"]["rewrites"][0]
@@ -60,7 +91,7 @@ class RewriteDatabaseTests(unittest.TestCase):
         self.assertEqual({row["candidate"] for row in archive["records"]},
                          {"M-1", "M-5", "M-11", "M-12", "M-16"})
         for before in archive["records"]:
-            after = self.by_id[before["candidate"]]
+            after = self.historical[before["candidate"]]
             self.assertTrue(after["reassessments"])
             for original, corrected in zip(before["proposal"]["rewrites"], after["proposal"]["rewrites"]):
                 sides = ("rhs", "lhs") if before["candidate"] == "M-12" else ("lhs", "rhs")
@@ -98,7 +129,7 @@ class RewriteDatabaseTests(unittest.TestCase):
     def test_operator_review_preserves_prior_directions_and_rejects_reversed_drafts(self):
         archive = json.loads((ROOT / "tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order-before.json").read_text())
         for before in archive["records"]:
-            after = self.by_id[before["candidate"]]
+            after = self.historical[before["candidate"]]
             self.assertEqual(after["reassessments"][:-1], before["reassessments"])
             for old, new in zip(before["proposal"]["rewrites"], after["proposal"]["rewrites"]):
                 self.assertEqual((old["lhs"], old["rhs"]), (new["rhs"], new["lhs"]))

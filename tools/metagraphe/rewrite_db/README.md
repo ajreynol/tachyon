@@ -1,19 +1,22 @@
 # Metagraphe's rewrite database
 
-[`rewrites.json`](rewrites.json) is the persistent record of rewrite candidates,
-existing coverage, and rejected search directions. **These are proposals and
+[`rewrites.json`](rewrites.json) is the persistent record of **candidate rewrites**,
+including their later dispositions. **These are proposals and
 source observations, not established solver fixes.** Validity, availability,
 and usefulness are separate assessments. Metagraphe owns those assessments;
 koine supplies append mechanics and checks the scope of closure edits.
 
 Browse [rewrites.md](rewrites.md) for a generated overview and each record's
-terms, side conditions, RARE drafts, assessments, and evidence. It includes
-existing coverage, exclusions, and any closed records as well as candidates.
+terms, side conditions, RARE drafts, assessments, and evidence. Every entry
+proposes an explicit `lhs -> rhs` with sorts and conditions. GitHub issues
+provide motivation; rewriter bugs, known-rule context/reachability work, and
+leads without a concrete rule belong in the survey or ledger.
 
 The initial filing lifts the [GitHub survey](../../../docs/github-issues-rewrites.md)
-into structured records. M-1 through M-10 retain their survey identities.
-M-11 through M-20 record the survey's additional triage rows, including two
-existing-coverage controls and two exclusions. A record groups a candidate
+into structured records. The [scope correction](../docs/ledger/2026-09-19-rewrite-candidate-scope.md)
+retains 14 candidate families and archives six triage rows with their original
+IDs and evidence. M-12 is retained for its concrete `abs`-elimination proposal;
+its availability remains unchecked. A record groups a candidate
 family; its individual identities live in `proposal.rewrites`. A family is
 not a count of new rules or solved issues.
 
@@ -35,10 +38,10 @@ from `bugs`, preserving every record, ID, date, assessment, and history event.
 | --- | --- |
 | `id`, `candidate` | Global `metagraphe:M-N` identity and local `M-N` label. Allocate above the highest ever used, including Git history; never reuse or derive IDs from mutable wording. |
 | `schema_version`, `tool`, `owner` | Record format version (`1`), producer (`metagraphe`), and subject owner (`cvc5`). |
-| `description`, `classification`, `priority`, `theories` | Original claim/title; `candidate`, `existing-coverage`, or `excluded`; agent-assigned priority 1–3, or null for controls/exclusions; affected theories. |
+| `description`, `classification`, `priority`, `theories` | Proposed rewrite/title; classification must be `candidate`; agent-assigned priority 1–3; affected theories. |
 | `found_at`, `observed_on` | Full cvc5 **source** commit and observation date. They do not identify a matching executable or imply a solver run. |
 | `origin` | Issue URLs and state at review, local survey/ledger references, the tachyon commit containing that survey, and supporting external/source links. File references are relative to tachyon's root. |
-| `proposal.rewrites` | Term schemas with variables/sorts, `lhs`, `rhs`, conditions, and notation. An empty array explicitly means the lead has no exact rule yet. |
+| `proposal.rewrites` | At least one term schema with variables/sorts, `lhs`, `rhs`, conditions, and notation. An issue or lead without an exact rule cannot be filed. |
 | `proposal.rare_drafts`, `application_context` | Literal RARE declarations, if available, and the facts/stage needed to apply the proposal. |
 | `proposal.orientation` (optional) | `{kind: "lexicographic", operators: [...], reason: "..."}` declares complex operators in descending priority, followed by structural term size. Applies to all schemas and ordinary RARE drafts in that family. |
 | `assessment` | Separate validity, availability, and value statuses, each with its reasoning. `argued` means a written argument, not a checked proof. |
@@ -47,13 +50,14 @@ from `bugs`, preserving every record, ID, date, assessment, and history event.
 | `first_seen`, `last_seen` | Koine ingestion dates. Re-ingesting an old survey is not a fresh reproduction. |
 | `carried` (optional) | Append-only list of `{to, on, evidence}` for actual deliveries; absence means none recorded. Existing issue links do not count as delivery by us. |
 | `reassessments` (optional) | Dated `{on, reason, evidence, previous_record}` events linking the review and the retained original record. |
-| `closed_*`, `awaiting_landing` (optional) | An explicit verdict under the [reporting policy](reporting-policy.md#closure). Absence means no closure recorded. Initial exclusions and existing coverage do not imply a maintainer verdict. |
+| `closed_*`, `awaiting_landing` (optional) | An explicit verdict on the proposed rewrite under the [reporting policy](reporting-policy.md#closure). Absence means no closure recorded. The source issue's status is not this verdict. |
 
 Keep related issues in one record when they motivate the same identity. A new
 issue is additional evidence, not automatically a new rewrite. A genuinely
 different identity or corrected condition can receive a new ID that names the
 old one in its evidence; preserve the original and record the decision in the
-ledger. Current files and Git history are both part of the identity register.
+ledger. Current files, ledger archives, and Git history are all part of the
+identity register. Never reuse archived IDs; M-1 through M-20 remain reserved.
 
 ## Orientation
 
@@ -89,6 +93,8 @@ direction-dependent assessments and syntax checks under the reporting policy.
 
 Prepare a curated JSON list in `scratch/metagraphe-filing/new.json` using the
 fields above. Do not copy raw API responses or invent observation dates. Omit
+records about implementation defects or known-rule reachability alone; a
+concrete candidate may still have unchecked validity or availability. Omit
 ingestion dates for new records and let koine set them. For an exact repeat,
 re-submit the original fields rather than replacing `found_at` with a newer
 commit: changed content on a known ID is a conflict, not an update.
@@ -146,7 +152,8 @@ for an intentional amendment of an existing closure after preserving its old
 decision in the ledger. The local validator still enforces verdict/evidence
 requirements; koine does not know that vocabulary.
 
-The baseline must contain the same collection envelope. The `bugs` ->
+The baseline must contain the same collection envelope. Scope migrations such
+as the candidate-only correction change membership and are not closures. The `bugs` ->
 `rewrites` migration is a separate reviewed change and correctly fails a
 closure-only comparison to a pre-migration commit. Ordinary filings and
 reassessments also have their own workflow; this is not a general CI diff gate.

@@ -154,11 +154,10 @@ def validate(document, root=ROOT, filing=False):
                 require(nonempty(row.get(field)), "missing " + field)
             require(strings(row.get("theories")), "theories must be a nonempty string list")
             require(strings(row.get("cautions"), empty=True), "cautions must be a string list")
-            kind = row.get("classification")
-            require(kind in {"candidate", "existing-coverage", "excluded"}, "invalid classification")
+            require(row.get("classification") == "candidate",
+                    "rewrite_db accepts only candidate rewrites; keep issue triage in the ledger")
             priority = row.get("priority")
-            require((type(priority) is int and 1 <= priority <= 3) if kind == "candidate"
-                    else priority is None, "invalid priority for classification")
+            require(type(priority) is int and 1 <= priority <= 3, "invalid candidate priority")
             require(revision(row.get("found_at")), "found_at must be a full source commit")
             observed = day(row.get("observed_on"))
             if not filing or "first_seen" in row or "last_seen" in row:
@@ -190,7 +189,8 @@ def validate(document, root=ROOT, filing=False):
             proposal = object_at(row, "proposal")
             require(nonempty(proposal.get("application_context")), "missing application context")
             rewrites = proposal.get("rewrites")
-            require(isinstance(rewrites, list), "rewrites must be a list")
+            require(isinstance(rewrites, list) and bool(rewrites),
+                    "candidate requires at least one explicit lhs -> rhs rewrite")
             for rewrite in rewrites:
                 require(isinstance(rewrite, dict), "rewrite must be an object")
                 for field in ("lhs", "rhs", "condition", "notation"):
@@ -216,12 +216,9 @@ def validate(document, root=ROOT, filing=False):
                     "invalid value status")
             for field in ("validity_reason", "availability_reason", "value_reason"):
                 require(nonempty(assessment.get(field)), "missing " + field)
-            if not rewrites:
-                require(assessment["validity"] in {"unchecked", "not-applicable"},
-                        "a lead without an identity cannot have an argued validity status")
-            if kind == "excluded":
-                require(not rewrites and not drafts and all(assessment[f] == "not-applicable"
-                        for f in ("validity", "availability", "value")), "inconsistent exclusion")
+            if filing and "closed_verdict" not in row:
+                require(assessment["availability"] in {"source-gap-candidate", "unchecked"},
+                        "file a proposed rewrite, not a known-rule context or reachability issue")
             checks = object_at(row, "checks")
             require(checks.get("rare_syntax") in {"passed", "not-run"}, "invalid RARE check")
             if checks["rare_syntax"] == "passed":

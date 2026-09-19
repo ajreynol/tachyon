@@ -1,0 +1,501 @@
+{
+  "recorded_on": "2026-09-19",
+  "basis": "Before the human-requested candidate-only scope correction. Six rows move to the historical ledger; M-12 remains a candidate with corrected classification.",
+  "source_revision": "258102dcfd0a7d21bc2963825acef58bea119214",
+  "archived_ids": [
+    "metagraphe:M-8",
+    "metagraphe:M-11",
+    "metagraphe:M-15",
+    "metagraphe:M-17",
+    "metagraphe:M-19",
+    "metagraphe:M-20"
+  ],
+  "records": [
+    {
+      "id": "metagraphe:M-8",
+      "tool": "metagraphe",
+      "description": "Learned lengths and encoded reversal",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "An in-range substring of requested nonnegative length has that length. This local rule already exists; encoded reversal needs composition with length reasoning.",
+        "availability": "existing-rule-needs-context",
+        "availability_reason": "str-len-substr-in-range and native seq-rev-rev already exist. The issue uses substring-encoded reversal and globally learned length facts.",
+        "value": "unmeasured",
+        "value_reason": "Could expose simplification of encoded reversals; no new native double-reversal rule is needed."
+      },
+      "candidate": "M-8",
+      "cautions": [
+        "#10522 constrains length modulo 2^64 to four, not exactly four; nonnegativity implies only the needed lower bound.",
+        "#11010 does assert exact length four, but uses concatenated substrings rather than str.rev.",
+        "int2bv(8,str.to_code(...)) is modulo 256 and does not preserve arbitrary Unicode codes.",
+        "PR #10717 is prior relevant work, not evidence the issue is resolved."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "candidate",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Compare native reversal and the encoded form, with exact and modular length constraints separately.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#m-8-learned-lengths-and-encoded-reversal",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 10522,
+            "url": "https://github.com/cvc5/cvc5/issues/10522",
+            "state_at_review": "open"
+          },
+          {
+            "number": 11010,
+            "url": "https://github.com/cvc5/cvc5/issues/11010",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/10522",
+          "https://github.com/cvc5/cvc5/files/14657704/str20.smt2.txt",
+          "https://github.com/cvc5/cvc5/issues/10522#issuecomment-2090831450",
+          "https://github.com/cvc5/cvc5/issues/10522#issuecomment-2015208979",
+          "https://github.com/cvc5/cvc5/pull/10717",
+          "https://github.com/cvc5/cvc5/issues/11010",
+          "https://github.com/user-attachments/files/16110870/symcc-structs-assertions-modified.smt2.txt"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/rewrites"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": 3,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "s": "String",
+              "i": "Int",
+              "n": "Int"
+            },
+            "lhs": "(str.len (str.substr s i n))",
+            "rhs": "n",
+            "condition": "(and (<= 0 i) (<= 0 n) (<= (+ i n) (str.len s)))",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [],
+        "application_context": "Requires learned length bounds and composition of existing substring rules."
+      },
+      "schema_version": 1,
+      "theories": [
+        "strings",
+        "bit-vector-conversions"
+      ]
+    },
+    {
+      "id": "metagraphe:M-11",
+      "tool": "metagraphe",
+      "description": "BV remainder comparison already represented",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "For nonzero x unsigned remainder is less than x; for zero x it equals C.",
+        "availability": "existing-rule-reachability-unchecked",
+        "availability_reason": "bv-ugt-urem and UgtUrem already express the symmetric greater-than form.",
+        "value": "unmeasured",
+        "value_reason": "Use as an existing-rule control; the nonzero constant in the issue leaves x=0."
+      },
+      "candidate": "M-11",
+      "cautions": [
+        "Source presence does not show the original less-than orientation reaches the rule."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "existing-coverage",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Probe the original orientation and its symmetric form before claiming either a new rule or an issue resolution.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 10520,
+            "url": "https://github.com/cvc5/cvc5/issues/10520",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/10520"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/rewrites-simplification",
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/theory_bv_rewrite_rules_simplification.h"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": null,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "x": "BitVec(w)",
+              "C": "BitVec(w)"
+            },
+            "lhs": "(bvult x (bvurem C x))",
+            "rhs": "(and (= x zero(w)) (not (= C zero(w))))",
+            "condition": "w is positive; zero(w) is the width-w zero",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [],
+        "application_context": "Local term rewriting; normalized matching remains to be tested.",
+        "orientation": {
+          "kind": "lexicographic",
+          "operators": [
+            "bvurem"
+          ],
+          "reason": "Eliminate unsigned remainder before minimizing syntax size. Zero/nonzero tests are simpler operations despite 5 -> 8 nodes; with the issue's nonzero constant the result reduces further to x=0."
+        }
+      },
+      "schema_version": 1,
+      "theories": [
+        "bit-vectors"
+      ],
+      "reassessments": [
+        {
+          "on": "2026-09-19",
+          "reason": "Reoriented the same equality from complex -> simpler by structural term size; reviewed direction-dependent availability and value.",
+          "evidence": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md",
+          "previous_record": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json"
+        },
+        {
+          "on": "2026-09-19",
+          "reason": "The human clarified lexicographic precedence: complex operators first, structural term size last. Restored operator elimination, allowing the stated syntax growth.",
+          "evidence": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order.md",
+          "previous_record": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order-before.json"
+        }
+      ]
+    },
+    {
+      "id": "metagraphe:M-12",
+      "tool": "metagraphe",
+      "description": "Modulus sign has conditional support",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "Euclidean remainder depends on the absolute magnitude of a nonzero divisor.",
+        "availability": "unchecked",
+        "availability_reason": "The issue discussion concerns sign normalization and --learned-rewrite; it does not establish the pinned solver's behavior for removing abs.",
+        "value": "unmeasured",
+        "value_reason": "Reduces structural term size from 4 to 3 nodes by removing abs. Runtime usefulness and interaction with sign normalization remain unmeasured."
+      },
+      "candidate": "M-12",
+      "cautions": [
+        "The nonzero condition is required for surface mod.",
+        "Historical option support does not establish the behavior of the pinned default solver."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "existing-coverage",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Probe mod(x,abs(y)) with a known nonzero y under default and learned-rewrite settings; check whether the smaller divisor is expanded again.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 9420,
+            "url": "https://github.com/cvc5/cvc5/issues/9420",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/9420",
+          "https://github.com/cvc5/cvc5/issues/9420#issuecomment-1404268724"
+        ],
+        "source_references": []
+      },
+      "owner": "cvc5",
+      "priority": null,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "x": "Int",
+              "y": "Int"
+            },
+            "lhs": "(mod x (abs y))",
+            "rhs": "(mod x y)",
+            "condition": "(not (= y 0))",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [],
+        "application_context": "Remove abs from a modulus divisor under the unchanged nonzero condition. Existing-coverage classification records related learned-rewrite support, not a runtime check of this direction."
+      },
+      "schema_version": 1,
+      "theories": [
+        "integers"
+      ],
+      "reassessments": [
+        {
+          "on": "2026-09-19",
+          "reason": "Reoriented the same equality from complex -> simpler by structural term size; reviewed direction-dependent availability and value.",
+          "evidence": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md",
+          "previous_record": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json"
+        }
+      ]
+    },
+    {
+      "id": "metagraphe:M-15",
+      "tool": "metagraphe",
+      "description": "Absence propagates to an included slice",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "unchecked",
+        "validity_reason": "The proposed direction needs exact substring inclusion, nonempty character and in-range index conditions from the unreduced attachment.",
+        "availability": "unchecked",
+        "availability_reason": "The attachment was not reduced and no concrete rule has been audited.",
+        "value": "unmeasured",
+        "value_reason": "May expose the contradiction caused by the final character constraint."
+      },
+      "candidate": "M-15",
+      "cautions": [
+        "No exact rewrite is filed until slice inclusion and bounds are stated."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "candidate",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Reduce the attachment and state the exact indices and side conditions before proposing a rule.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 11460,
+            "url": "https://github.com/cvc5/cvc5/issues/11460",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/11460"
+        ],
+        "source_references": []
+      },
+      "owner": "cvc5",
+      "priority": 3,
+      "proposal": {
+        "rewrites": [],
+        "rare_drafts": [],
+        "application_context": "Arithmetic context must establish that the one-character slice is inside the larger substring."
+      },
+      "schema_version": 1,
+      "theories": [
+        "strings",
+        "integers"
+      ]
+    },
+    {
+      "id": "metagraphe:M-17",
+      "tool": "metagraphe",
+      "description": "Nested ITE and extract synthesis",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "unchecked",
+        "validity_reason": "No exact identity has been extracted from the attachment.",
+        "availability": "unchecked",
+        "availability_reason": "Grammar feasibility, quantifiers and signedness need attachment-level analysis.",
+        "value": "unmeasured",
+        "value_reason": "Comparison decomposition is an investigation lead, not an established rewrite."
+      },
+      "candidate": "M-17",
+      "cautions": [
+        "A synthesis grammar restriction is not evidence of a missing solver rewrite."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "candidate",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Inspect and reduce the attachment, distinguishing synthesis feasibility from SMT equivalence.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 10850,
+            "url": "https://github.com/cvc5/cvc5/issues/10850",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/10850"
+        ],
+        "source_references": []
+      },
+      "owner": "cvc5",
+      "priority": 3,
+      "proposal": {
+        "rewrites": [],
+        "rare_drafts": [],
+        "application_context": "Local term rewriting; normalized matching remains to be tested."
+      },
+      "schema_version": 1,
+      "theories": [
+        "bit-vectors",
+        "synthesis"
+      ]
+    },
+    {
+      "id": "metagraphe:M-19",
+      "tool": "metagraphe",
+      "description": "RARE name in Alethe is a consistency issue",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "not-applicable",
+        "validity_reason": "No simplifying identity is proposed.",
+        "availability": "not-applicable",
+        "availability_reason": "The issue concerns proof export/database naming consistency.",
+        "value": "not-applicable",
+        "value_reason": "Retain as an exclusion so a future survey does not misclassify it as a missing rewrite."
+      },
+      "candidate": "M-19",
+      "cautions": [
+        "An occurrence of RARE in an issue title is not evidence of a missing simplification."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "excluded",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Track through proof-export consistency work if separately authorized.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 12801,
+            "url": "https://github.com/cvc5/cvc5/issues/12801",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/12801"
+        ],
+        "source_references": []
+      },
+      "owner": "cvc5",
+      "priority": null,
+      "proposal": {
+        "rewrites": [],
+        "rare_drafts": [],
+        "application_context": "Local term rewriting; normalized matching remains to be tested."
+      },
+      "schema_version": 1,
+      "theories": [
+        "proof-export"
+      ]
+    },
+    {
+      "id": "metagraphe:M-20",
+      "tool": "metagraphe",
+      "description": "Boolean operand order is a search-order lead",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "not-applicable",
+        "validity_reason": "Commutativity by itself does not identify a beneficial missing rewrite.",
+        "availability": "not-applicable",
+        "availability_reason": "The report is about search-order performance.",
+        "value": "not-applicable",
+        "value_reason": "Retain the exclusion from the rewrite queue."
+      },
+      "candidate": "M-20",
+      "cautions": [
+        "Do not file Boolean commutativity as a new performance rewrite without a concrete mechanism."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "excluded",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Reconsider only if reduction identifies a specific missing transformation.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 12353,
+            "url": "https://github.com/cvc5/cvc5/issues/12353",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/12353"
+        ],
+        "source_references": []
+      },
+      "owner": "cvc5",
+      "priority": null,
+      "proposal": {
+        "rewrites": [],
+        "rare_drafts": [],
+        "application_context": "Local term rewriting; normalized matching remains to be tested."
+      },
+      "schema_version": 1,
+      "theories": [
+        "booleans"
+      ]
+    }
+  ]
+}

@@ -6,14 +6,16 @@ See the [database guide](README.md) for filing and the
 
 Regenerate from tachyon's root with `python3 tools/metagraphe/scripts/render_rewrite_db.py`; add `--check` to check freshness.
 
-**20 records:** 16 candidates, 2 existing-coverage controls, 2 exclusions.
+**14 candidate families; 16 proposed rewrites; 10 RARE drafts.**
 **0 explicit closure verdicts; 0 fixes awaiting landing.**
 
 A record is a candidate family, not a count of new rules or solved issues.
 `argued` denotes a written validity argument, not a checked proof. RARE parser
-acceptance does not establish correctness or solver performance. Classifications
-and priorities are metagraphe's assessments; closure requires a separate verdict.
-Issue states below are snapshots at review, not live GitHub status.
+acceptance does not establish correctness or solver performance. Priorities
+are metagraphe's assessments; closure concerns the proposed rewrite.
+Issues supply motivation and evidence; their states are snapshots at review.
+Existing-rule investigations and other issue triage are retained in the
+[scope archive](../docs/ledger/2026-09-19-rewrite-candidate-scope.md).
 
 **Orientation: LHS -> RHS, complex -> simpler.** Compare lexicographically:
 counts of the declared complex operators first, then structural term size.
@@ -22,34 +24,28 @@ the precedence and rationale; these are candidate orderings, not measured runtim
 
 ## Overview
 
-| Record | Priority | Classification | Validity | RARE drafts | Closure | Issues |
-| --- | --- | --- | --- | --- | --- | --- |
-| [M-1: Singleton replacement](#m-1) | 1 | candidate | argued | 2 | no closure recorded | [\#12936](https://github.com/cvc5/cvc5/issues/12936), [\#9875](https://github.com/cvc5/cvc5/issues/9875) |
-| [M-2: Prefix before first match](#m-2) | 1 | candidate | argued | 1 | no closure recorded | [\#11362](https://github.com/cvc5/cvc5/issues/11362) |
-| [M-3: Lexicographic prefix cancellation](#m-3) | 1 | candidate | argued | 2 | no closure recorded | [\#11151](https://github.com/cvc5/cvc5/issues/11151), [\#9875](https://github.com/cvc5/cvc5/issues/9875) |
-| [M-4: Signed comparison disjunction](#m-4) | 1 | candidate | argued | 1 | no closure recorded | [\#11357](https://github.com/cvc5/cvc5/issues/11357) |
-| [M-5: Complement of a character](#m-5) | 2 | candidate | argued | 1 | no closure recorded | [\#12815](https://github.com/cvc5/cvc5/issues/12815) |
-| [M-6: Guarded zero division](#m-6) | 2 | candidate | argued | 1 | no closure recorded | [\#11201](https://github.com/cvc5/cvc5/issues/11201) |
-| [M-7: Modular arithmetic](#m-7) | 2 | candidate | argued | 2 | no closure recorded | [\#11535](https://github.com/cvc5/cvc5/issues/11535), [\#11872](https://github.com/cvc5/cvc5/issues/11872) |
-| [M-8: Learned lengths and encoded reversal](#m-8) | 3 | candidate | argued | 0 | no closure recorded | [\#10522](https://github.com/cvc5/cvc5/issues/10522), [\#11010](https://github.com/cvc5/cvc5/issues/11010) |
-| [M-9: String order totality](#m-9) | 3 | candidate | argued | 0 | no closure recorded | [\#12042](https://github.com/cvc5/cvc5/issues/12042) |
-| [M-10: Character\-language intersections](#m-10) | 3 | candidate | argued | 0 | no closure recorded | [\#11206](https://github.com/cvc5/cvc5/issues/11206) |
-| [M-11: BV remainder comparison already represented](#m-11) | — | existing\-coverage | argued | 0 | no closure recorded | [\#10520](https://github.com/cvc5/cvc5/issues/10520) |
-| [M-12: Modulus sign has conditional support](#m-12) | — | existing\-coverage | argued | 0 | no closure recorded | [\#9420](https://github.com/cvc5/cvc5/issues/9420) |
-| [M-13: Nested replacement emptiness](#m-13) | 3 | candidate | argued | 0 | no closure recorded | [\#10508](https://github.com/cvc5/cvc5/issues/10508) |
-| [M-14: Sequence prefix forces index zero](#m-14) | 3 | candidate | argued | 0 | no closure recorded | [\#11156](https://github.com/cvc5/cvc5/issues/11156) |
-| [M-15: Absence propagates to an included slice](#m-15) | 3 | candidate | unchecked | 0 | no closure recorded | [\#11460](https://github.com/cvc5/cvc5/issues/11460) |
-| [M-16: Inverse case conversion](#m-16) | 3 | candidate | unchecked | 0 | no closure recorded | [\#11970](https://github.com/cvc5/cvc5/issues/11970) |
-| [M-17: Nested ITE and extract synthesis](#m-17) | 3 | candidate | unchecked | 0 | no closure recorded | [\#10850](https://github.com/cvc5/cvc5/issues/10850) |
-| [M-18: BV quotient with no\-overflow conditions](#m-18) | 3 | candidate | argued | 0 | no closure recorded | [\#9417](https://github.com/cvc5/cvc5/issues/9417) |
-| [M-19: RARE name in Alethe is a consistency issue](#m-19) | — | excluded | not\-applicable | 0 | no closure recorded | [\#12801](https://github.com/cvc5/cvc5/issues/12801) |
-| [M-20: Boolean operand order is a search\-order lead](#m-20) | — | excluded | not\-applicable | 0 | no closure recorded | [\#12353](https://github.com/cvc5/cvc5/issues/12353) |
+| Candidate | Priority | Validity | RARE drafts | Closure | Source issues |
+| --- | --- | --- | --- | --- | --- |
+| [M-1: Singleton replacement](#m-1) | 1 | argued | 2 | no closure recorded | [\#12936](https://github.com/cvc5/cvc5/issues/12936), [\#9875](https://github.com/cvc5/cvc5/issues/9875) |
+| [M-2: Prefix before first match](#m-2) | 1 | argued | 1 | no closure recorded | [\#11362](https://github.com/cvc5/cvc5/issues/11362) |
+| [M-3: Lexicographic prefix cancellation](#m-3) | 1 | argued | 2 | no closure recorded | [\#11151](https://github.com/cvc5/cvc5/issues/11151), [\#9875](https://github.com/cvc5/cvc5/issues/9875) |
+| [M-4: Signed comparison disjunction](#m-4) | 1 | argued | 1 | no closure recorded | [\#11357](https://github.com/cvc5/cvc5/issues/11357) |
+| [M-5: Complement of a character](#m-5) | 2 | argued | 1 | no closure recorded | [\#12815](https://github.com/cvc5/cvc5/issues/12815) |
+| [M-6: Guarded zero division](#m-6) | 2 | argued | 1 | no closure recorded | [\#11201](https://github.com/cvc5/cvc5/issues/11201) |
+| [M-7: Modular arithmetic](#m-7) | 2 | argued | 2 | no closure recorded | [\#11535](https://github.com/cvc5/cvc5/issues/11535), [\#11872](https://github.com/cvc5/cvc5/issues/11872) |
+| [M-9: String order totality](#m-9) | 3 | argued | 0 | no closure recorded | [\#12042](https://github.com/cvc5/cvc5/issues/12042) |
+| [M-10: Character\-language intersections](#m-10) | 3 | argued | 0 | no closure recorded | [\#11206](https://github.com/cvc5/cvc5/issues/11206) |
+| [M-12: Remove absolute value from a modulus divisor](#m-12) | 3 | argued | 0 | no closure recorded | [\#9420](https://github.com/cvc5/cvc5/issues/9420) |
+| [M-13: Nested replacement emptiness](#m-13) | 3 | argued | 0 | no closure recorded | [\#10508](https://github.com/cvc5/cvc5/issues/10508) |
+| [M-14: Sequence prefix forces index zero](#m-14) | 3 | argued | 0 | no closure recorded | [\#11156](https://github.com/cvc5/cvc5/issues/11156) |
+| [M-16: Inverse case conversion](#m-16) | 3 | unchecked | 0 | no closure recorded | [\#11970](https://github.com/cvc5/cvc5/issues/11970) |
+| [M-18: BV quotient with no\-overflow conditions](#m-18) | 3 | argued | 0 | no closure recorded | [\#9417](https://github.com/cvc5/cvc5/issues/9417) |
 
 ## M-1
 
 **Singleton replacement**
 
-Classification: candidate. Priority: 1. Theories: sequences, strings.
+Priority: 1. Theories: sequences, strings.
 
 **Closure:** no closure recorded.
 
@@ -115,7 +111,7 @@ Lexicographic cost: **(1, 6) -> (0, 7)**.
 
 ### Evidence and follow-up
 
-Issues: [\#12936](https://github.com/cvc5/cvc5/issues/12936) (open at review), [\#9875](https://github.com/cvc5/cvc5/issues/9875) (open at review).
+Source issues: [\#12936](https://github.com/cvc5/cvc5/issues/12936) (open at review), [\#9875](https://github.com/cvc5/cvc5/issues/9875) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -146,7 +142,7 @@ No delivery recorded.
 
 **Prefix before first match**
 
-Classification: candidate. Priority: 1. Theories: strings, sequences.
+Priority: 1. Theories: strings, sequences.
 
 **Closure:** no closure recorded.
 
@@ -200,7 +196,7 @@ Structural size: **9 -> 4** term nodes.
 
 ### Evidence and follow-up
 
-Issues: [\#11362](https://github.com/cvc5/cvc5/issues/11362) (open at review).
+Source issues: [\#11362](https://github.com/cvc5/cvc5/issues/11362) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -227,7 +223,7 @@ No delivery recorded.
 
 **Lexicographic prefix cancellation**
 
-Classification: candidate. Priority: 1. Theories: strings.
+Priority: 1. Theories: strings.
 
 **Closure:** no closure recorded.
 
@@ -304,7 +300,7 @@ Structural size: **5 -> 3** term nodes.
 
 ### Evidence and follow-up
 
-Issues: [\#11151](https://github.com/cvc5/cvc5/issues/11151) (open at review), [\#9875](https://github.com/cvc5/cvc5/issues/9875) (open at review).
+Source issues: [\#11151](https://github.com/cvc5/cvc5/issues/11151) (open at review), [\#9875](https://github.com/cvc5/cvc5/issues/9875) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -330,7 +326,7 @@ No delivery recorded.
 
 **Signed comparison disjunction**
 
-Classification: candidate. Priority: 1. Theories: bit\-vectors, booleans.
+Priority: 1. Theories: bit\-vectors, booleans.
 
 **Closure:** no closure recorded.
 
@@ -385,7 +381,7 @@ Structural size: **7 -> 3** term nodes.
 
 ### Evidence and follow-up
 
-Issues: [\#11357](https://github.com/cvc5/cvc5/issues/11357) (open at review).
+Source issues: [\#11357](https://github.com/cvc5/cvc5/issues/11357) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -410,7 +406,7 @@ No delivery recorded.
 
 **Complement of a character**
 
-Classification: candidate. Priority: 2. Theories: strings, regular\-expressions.
+Priority: 2. Theories: strings, regular\-expressions.
 
 **Closure:** no closure recorded.
 
@@ -467,7 +463,7 @@ Lexicographic cost: **(1, 5) -> (0, 7)**.
 
 ### Evidence and follow-up
 
-Issues: [\#12815](https://github.com/cvc5/cvc5/issues/12815) (open at review).
+Source issues: [\#12815](https://github.com/cvc5/cvc5/issues/12815) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -499,7 +495,7 @@ No delivery recorded.
 
 **Guarded zero division**
 
-Classification: candidate. Priority: 2. Theories: integers, strings.
+Priority: 2. Theories: integers, strings.
 
 **Closure:** no closure recorded.
 
@@ -551,7 +547,7 @@ Structural size: **8 -> 1** term nodes.
 
 ### Evidence and follow-up
 
-Issues: [\#11201](https://github.com/cvc5/cvc5/issues/11201) (open at review).
+Source issues: [\#11201](https://github.com/cvc5/cvc5/issues/11201) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -576,7 +572,7 @@ No delivery recorded.
 
 **Modular arithmetic**
 
-Classification: candidate. Priority: 2. Theories: integers.
+Priority: 2. Theories: integers.
 
 **Closure:** no closure recorded.
 
@@ -653,7 +649,7 @@ Structural size: **7 -> 1** term nodes.
 
 ### Evidence and follow-up
 
-Issues: [\#11535](https://github.com/cvc5/cvc5/issues/11535) (open at review), [\#11872](https://github.com/cvc5/cvc5/issues/11872) (open at review).
+Source issues: [\#11535](https://github.com/cvc5/cvc5/issues/11535) (open at review), [\#11872](https://github.com/cvc5/cvc5/issues/11872) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -676,90 +672,11 @@ No delivery recorded.
 
 [Back to overview](#overview)
 
-## M-8
-
-**Learned lengths and encoded reversal**
-
-Classification: candidate. Priority: 3. Theories: strings, bit\-vector\-conversions.
-
-**Closure:** no closure recorded.
-
-**Application context:** Requires learned length bounds and composition of existing substring rules\.
-
-**Orientation rationale:** decrease structural term size.
-
-### Rewrite 1
-
-Notation: SMT\-LIB term schema.
-
-Variables: s: String; i: Int; n: Int.
-
-```text
-(str.len (str.substr s i n))
-  ->
-n
-
-when: (and (<= 0 i) (<= 0 n) (<= (+ i n) (str.len s)))
-```
-
-Structural size: **5 -> 1** term nodes.
-
-No RARE draft is filed.
-
-### Assessment and next step
-
-- **Validity: argued.** An in\-range substring of requested nonnegative length has that length\. This local rule already exists; encoded reversal needs composition with length reasoning\.
-- **Availability: existing\-rule\-needs\-context.** str\-len\-substr\-in\-range and native seq\-rev\-rev already exist\. The issue uses substring\-encoded reversal and globally learned length facts\.
-- **Value: unmeasured.** Could expose simplification of encoded reversals; no new native double\-reversal rule is needed\.
-
-**RARE syntax:** not\-run.
-
-**Solver check:** not\-run.
-
-**Performance check:** not\-run.
-
-**Cautions:**
-
-- \#10522 constrains length modulo 2^64 to four, not exactly four; nonnegativity implies only the needed lower bound\.
-- \#11010 does assert exact length four, but uses concatenated substrings rather than str\.rev\.
-- int2bv\(8,str\.to\_code\(\.\.\.\)\) is modulo 256 and does not preserve arbitrary Unicode codes\.
-- PR \#10717 is prior relevant work, not evidence the issue is resolved\.
-
-**Next step:** Compare native reversal and the encoded form, with exact and modular length constraints separately\.
-
-### Evidence and follow-up
-
-Issues: [\#10522](https://github.com/cvc5/cvc5/issues/10522) (open at review), [\#11010](https://github.com/cvc5/cvc5/issues/11010) (open at review).
-
-Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
-
-Koine ingestion: first 2026-09-19; last 2026-09-19.
-
-[Survey](../../../docs/github-issues-rewrites.md#m-8-learned-lengths-and-encoded-reversal) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
-
-**Supporting references:**
-
-- [https://github\.com/cvc5/cvc5/issues/10522](https://github.com/cvc5/cvc5/issues/10522)
-- [https://github\.com/cvc5/cvc5/files/14657704/str20\.smt2\.txt](https://github.com/cvc5/cvc5/files/14657704/str20.smt2.txt)
-- [https://github\.com/cvc5/cvc5/issues/10522\#issuecomment\-2090831450](https://github.com/cvc5/cvc5/issues/10522#issuecomment-2090831450)
-- [https://github\.com/cvc5/cvc5/issues/10522\#issuecomment\-2015208979](https://github.com/cvc5/cvc5/issues/10522#issuecomment-2015208979)
-- [https://github\.com/cvc5/cvc5/pull/10717](https://github.com/cvc5/cvc5/pull/10717)
-- [https://github\.com/cvc5/cvc5/issues/11010](https://github.com/cvc5/cvc5/issues/11010)
-- [https://github\.com/user\-attachments/files/16110870/symcc\-structs\-assertions\-modified\.smt2\.txt](https://github.com/user-attachments/files/16110870/symcc-structs-assertions-modified.smt2.txt)
-
-**Source references:**
-
-- [https://github\.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/rewrites](https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/rewrites)
-
-No delivery recorded.
-
-[Back to overview](#overview)
-
 ## M-9
 
 **String order totality**
 
-Classification: candidate. Priority: 3. Theories: strings, booleans.
+Priority: 3. Theories: strings, booleans.
 
 **Closure:** no closure recorded.
 
@@ -805,7 +722,7 @@ No RARE draft is filed.
 
 ### Evidence and follow-up
 
-Issues: [\#12042](https://github.com/cvc5/cvc5/issues/12042) (open at review).
+Source issues: [\#12042](https://github.com/cvc5/cvc5/issues/12042) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -829,7 +746,7 @@ No delivery recorded.
 
 **Character\-language intersections**
 
-Classification: candidate. Priority: 3. Theories: strings, regular\-expressions.
+Priority: 3. Theories: strings, regular\-expressions.
 
 **Closure:** no closure recorded.
 
@@ -876,7 +793,7 @@ No RARE draft is filed.
 
 ### Evidence and follow-up
 
-Issues: [\#11206](https://github.com/cvc5/cvc5/issues/11206) (open at review).
+Source issues: [\#11206](https://github.com/cvc5/cvc5/issues/11206) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -896,93 +813,15 @@ No delivery recorded.
 
 [Back to overview](#overview)
 
-## M-11
-
-**BV remainder comparison already represented**
-
-Classification: existing\-coverage. Priority: not ranked. Theories: bit\-vectors.
-
-**Closure:** no closure recorded.
-
-**Application context:** Local term rewriting; normalized matching remains to be tested\.
-
-**Orientation order:** bvurem count > term size. Eliminate unsigned remainder before minimizing syntax size\. Zero/nonzero tests are simpler operations despite 5 \-&gt; 8 nodes; with the issue's nonzero constant the result reduces further to x=0\.
-
-### Rewrite 1
-
-Notation: SMT\-LIB term schema.
-
-Variables: x: BitVec\(w\); C: BitVec\(w\).
-
-```text
-(bvult x (bvurem C x))
-  ->
-(and (= x zero(w)) (not (= C zero(w))))
-
-when: w is positive; zero(w) is the width-w zero
-```
-
-Structural size: **5 -> 8** term nodes.
-
-Lexicographic cost: **(1, 5) -> (0, 8)**.
-
-No RARE draft is filed.
-
-### Assessment and next step
-
-- **Validity: argued.** For nonzero x unsigned remainder is less than x; for zero x it equals C\.
-- **Availability: existing\-rule\-reachability\-unchecked.** bv\-ugt\-urem and UgtUrem already express the symmetric greater\-than form\.
-- **Value: unmeasured.** Use as an existing\-rule control; the nonzero constant in the issue leaves x=0\.
-
-**RARE syntax:** not\-run.
-
-**Solver check:** not\-run.
-
-**Performance check:** not\-run.
-
-**Cautions:**
-
-- Source presence does not show the original less\-than orientation reaches the rule\.
-
-**Next step:** Probe the original orientation and its symmetric form before claiming either a new rule or an issue resolution\.
-
-### Evidence and follow-up
-
-Issues: [\#10520](https://github.com/cvc5/cvc5/issues/10520) (open at review).
-
-Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
-
-Koine ingestion: first 2026-09-19; last 2026-09-19.
-
-[Survey](../../../docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
-
-**Dated reassessments:**
-
-- 2026-09-19: Reoriented the same equality from complex \-&gt; simpler by structural term size; reviewed direction\-dependent availability and value\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json).
-- 2026-09-19: The human clarified lexicographic precedence: complex operators first, structural term size last\. Restored operator elimination, allowing the stated syntax growth\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order-before.json).
-
-**Supporting references:**
-
-- [https://github\.com/cvc5/cvc5/issues/10520](https://github.com/cvc5/cvc5/issues/10520)
-
-**Source references:**
-
-- [https://github\.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/rewrites\-simplification](https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/rewrites-simplification)
-- [https://github\.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/theory\_bv\_rewrite\_rules\_simplification\.h](https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/theory_bv_rewrite_rules_simplification.h)
-
-No delivery recorded.
-
-[Back to overview](#overview)
-
 ## M-12
 
-**Modulus sign has conditional support**
+**Remove absolute value from a modulus divisor**
 
-Classification: existing\-coverage. Priority: not ranked. Theories: integers.
+Priority: 3. Theories: integers.
 
 **Closure:** no closure recorded.
 
-**Application context:** Remove abs from a modulus divisor under the unchanged nonzero condition\. Existing\-coverage classification records related learned\-rewrite support, not a runtime check of this direction\.
+**Application context:** Remove abs from a modulus divisor under the explicit nonzero condition\. Availability of this direction is unchecked; historical learned\-rewrite discussion is source context, not the proposed finding\.
 
 **Orientation rationale:** decrease structural term size.
 
@@ -1025,7 +864,7 @@ No RARE draft is filed.
 
 ### Evidence and follow-up
 
-Issues: [\#9420](https://github.com/cvc5/cvc5/issues/9420) (open at review).
+Source issues: [\#9420](https://github.com/cvc5/cvc5/issues/9420) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -1036,6 +875,7 @@ Koine ingestion: first 2026-09-19; last 2026-09-19.
 **Dated reassessments:**
 
 - 2026-09-19: Reoriented the same equality from complex \-&gt; simpler by structural term size; reviewed direction\-dependent availability and value\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json).
+- 2026-09-19: The candidate\-only scope review retains the explicit abs\-elimination proposal and corrects its historical existing\-coverage classification\. No new availability or runtime claim is made\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-candidate-scope.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-candidate-scope-before.json).
 
 **Supporting references:**
 
@@ -1050,7 +890,7 @@ No delivery recorded.
 
 **Nested replacement emptiness**
 
-Classification: candidate. Priority: 3. Theories: strings.
+Priority: 3. Theories: strings.
 
 **Closure:** no closure recorded.
 
@@ -1096,7 +936,7 @@ No RARE draft is filed.
 
 ### Evidence and follow-up
 
-Issues: [\#10508](https://github.com/cvc5/cvc5/issues/10508) (open at review).
+Source issues: [\#10508](https://github.com/cvc5/cvc5/issues/10508) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -1116,7 +956,7 @@ No delivery recorded.
 
 **Sequence prefix forces index zero**
 
-Classification: candidate. Priority: 3. Theories: sequences.
+Priority: 3. Theories: sequences.
 
 **Closure:** no closure recorded.
 
@@ -1162,7 +1002,7 @@ No RARE draft is filed.
 
 ### Evidence and follow-up
 
-Issues: [\#11156](https://github.com/cvc5/cvc5/issues/11156) (open at review).
+Source issues: [\#11156](https://github.com/cvc5/cvc5/issues/11156) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -1178,61 +1018,11 @@ No delivery recorded.
 
 [Back to overview](#overview)
 
-## M-15
-
-**Absence propagates to an included slice**
-
-Classification: candidate. Priority: 3. Theories: strings, integers.
-
-**Closure:** no closure recorded.
-
-**Application context:** Arithmetic context must establish that the one\-character slice is inside the larger substring\.
-
-No exact rewrite is filed.
-
-No RARE draft is filed.
-
-### Assessment and next step
-
-- **Validity: unchecked.** The proposed direction needs exact substring inclusion, nonempty character and in\-range index conditions from the unreduced attachment\.
-- **Availability: unchecked.** The attachment was not reduced and no concrete rule has been audited\.
-- **Value: unmeasured.** May expose the contradiction caused by the final character constraint\.
-
-**RARE syntax:** not\-run.
-
-**Solver check:** not\-run.
-
-**Performance check:** not\-run.
-
-**Cautions:**
-
-- No exact rewrite is filed until slice inclusion and bounds are stated\.
-
-**Next step:** Reduce the attachment and state the exact indices and side conditions before proposing a rule\.
-
-### Evidence and follow-up
-
-Issues: [\#11460](https://github.com/cvc5/cvc5/issues/11460) (open at review).
-
-Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
-
-Koine ingestion: first 2026-09-19; last 2026-09-19.
-
-[Survey](../../../docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
-
-**Supporting references:**
-
-- [https://github\.com/cvc5/cvc5/issues/11460](https://github.com/cvc5/cvc5/issues/11460)
-
-No delivery recorded.
-
-[Back to overview](#overview)
-
 ## M-16
 
 **Inverse case conversion**
 
-Classification: candidate. Priority: 3. Theories: strings, regular\-expressions.
+Priority: 3. Theories: strings, regular\-expressions.
 
 **Closure:** no closure recorded.
 
@@ -1280,7 +1070,7 @@ No RARE draft is filed.
 
 ### Evidence and follow-up
 
-Issues: [\#11970](https://github.com/cvc5/cvc5/issues/11970) (open at review).
+Source issues: [\#11970](https://github.com/cvc5/cvc5/issues/11970) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -1302,61 +1092,11 @@ No delivery recorded.
 
 [Back to overview](#overview)
 
-## M-17
-
-**Nested ITE and extract synthesis**
-
-Classification: candidate. Priority: 3. Theories: bit\-vectors, synthesis.
-
-**Closure:** no closure recorded.
-
-**Application context:** Local term rewriting; normalized matching remains to be tested\.
-
-No exact rewrite is filed.
-
-No RARE draft is filed.
-
-### Assessment and next step
-
-- **Validity: unchecked.** No exact identity has been extracted from the attachment\.
-- **Availability: unchecked.** Grammar feasibility, quantifiers and signedness need attachment\-level analysis\.
-- **Value: unmeasured.** Comparison decomposition is an investigation lead, not an established rewrite\.
-
-**RARE syntax:** not\-run.
-
-**Solver check:** not\-run.
-
-**Performance check:** not\-run.
-
-**Cautions:**
-
-- A synthesis grammar restriction is not evidence of a missing solver rewrite\.
-
-**Next step:** Inspect and reduce the attachment, distinguishing synthesis feasibility from SMT equivalence\.
-
-### Evidence and follow-up
-
-Issues: [\#10850](https://github.com/cvc5/cvc5/issues/10850) (open at review).
-
-Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
-
-Koine ingestion: first 2026-09-19; last 2026-09-19.
-
-[Survey](../../../docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
-
-**Supporting references:**
-
-- [https://github\.com/cvc5/cvc5/issues/10850](https://github.com/cvc5/cvc5/issues/10850)
-
-No delivery recorded.
-
-[Back to overview](#overview)
-
 ## M-18
 
 **BV quotient with no\-overflow conditions**
 
-Classification: candidate. Priority: 3. Theories: bit\-vectors.
+Priority: 3. Theories: bit\-vectors.
 
 **Closure:** no closure recorded.
 
@@ -1403,7 +1143,7 @@ No RARE draft is filed.
 
 ### Evidence and follow-up
 
-Issues: [\#9417](https://github.com/cvc5/cvc5/issues/9417) (open at review).
+Source issues: [\#9417](https://github.com/cvc5/cvc5/issues/9417) (open at review).
 
 Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
 
@@ -1414,106 +1154,6 @@ Koine ingestion: first 2026-09-19; last 2026-09-19.
 **Supporting references:**
 
 - [https://github\.com/cvc5/cvc5/issues/9417](https://github.com/cvc5/cvc5/issues/9417)
-
-No delivery recorded.
-
-[Back to overview](#overview)
-
-## M-19
-
-**RARE name in Alethe is a consistency issue**
-
-Classification: excluded. Priority: not ranked. Theories: proof\-export.
-
-**Closure:** no closure recorded.
-
-**Application context:** Local term rewriting; normalized matching remains to be tested\.
-
-No exact rewrite is filed.
-
-No RARE draft is filed.
-
-### Assessment and next step
-
-- **Validity: not\-applicable.** No simplifying identity is proposed\.
-- **Availability: not\-applicable.** The issue concerns proof export/database naming consistency\.
-- **Value: not\-applicable.** Retain as an exclusion so a future survey does not misclassify it as a missing rewrite\.
-
-**RARE syntax:** not\-run.
-
-**Solver check:** not\-run.
-
-**Performance check:** not\-run.
-
-**Cautions:**
-
-- An occurrence of RARE in an issue title is not evidence of a missing simplification\.
-
-**Next step:** Track through proof\-export consistency work if separately authorized\.
-
-### Evidence and follow-up
-
-Issues: [\#12801](https://github.com/cvc5/cvc5/issues/12801) (open at review).
-
-Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
-
-Koine ingestion: first 2026-09-19; last 2026-09-19.
-
-[Survey](../../../docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
-
-**Supporting references:**
-
-- [https://github\.com/cvc5/cvc5/issues/12801](https://github.com/cvc5/cvc5/issues/12801)
-
-No delivery recorded.
-
-[Back to overview](#overview)
-
-## M-20
-
-**Boolean operand order is a search\-order lead**
-
-Classification: excluded. Priority: not ranked. Theories: booleans.
-
-**Closure:** no closure recorded.
-
-**Application context:** Local term rewriting; normalized matching remains to be tested\.
-
-No exact rewrite is filed.
-
-No RARE draft is filed.
-
-### Assessment and next step
-
-- **Validity: not\-applicable.** Commutativity by itself does not identify a beneficial missing rewrite\.
-- **Availability: not\-applicable.** The report is about search\-order performance\.
-- **Value: not\-applicable.** Retain the exclusion from the rewrite queue\.
-
-**RARE syntax:** not\-run.
-
-**Solver check:** not\-run.
-
-**Performance check:** not\-run.
-
-**Cautions:**
-
-- Do not file Boolean commutativity as a new performance rewrite without a concrete mechanism\.
-
-**Next step:** Reconsider only if reduction identifies a specific missing transformation\.
-
-### Evidence and follow-up
-
-Issues: [\#12353](https://github.com/cvc5/cvc5/issues/12353) (open at review).
-
-Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](https://github.com/cvc5/cvc5/commit/dbf176dfb71b272ffbfdee06888dace73fee5aa8).
-
-Koine ingestion: first 2026-09-19; last 2026-09-19.
-
-[Survey](../../../docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
-
-**Supporting references:**
-
-- [https://github\.com/cvc5/cvc5/issues/12353](https://github.com/cvc5/cvc5/issues/12353)
 
 No delivery recorded.
 

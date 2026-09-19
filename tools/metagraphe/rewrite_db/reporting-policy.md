@@ -16,9 +16,17 @@ term is not a measured speedup. Keep these assessments separate. Source pins,
 parser checks, executable runs, and proof checks describe different evidence.
 Silence from a search or checker establishes none of those claims.
 
-Record the exact identity, conditions and sorts before calling something a
-rewrite. A lead with no such identity remains explicitly unchecked. Preserve
-counterexamples to rejected generalizations and already-covered cases. Rank
+File only candidate rewrites: an exact `lhs -> rhs` with conditions and sorts,
+and a proposed simplification to investigate. Validity and availability may
+remain explicitly unchecked. A GitHub issue is motivation or evidence, not
+itself a finding. Rewriter bugs, proof-export problems, search-order behavior,
+and investigations solely about applying an already-known rule belong in the
+survey or ledger. Leads without an exact identity also stay there until a
+concrete proposal is available. Conditional rewrites remain eligible when their
+premises are stated; explain where those premises must be established.
+
+Preserve counterexamples, rejected generalizations and already-covered cases
+in the investigation history, without filing them as new rewrite candidates. Rank
 opportunities as an agent's assessment unless a person supplies the ranking.
 Do not present database size or parser pass counts as solver quality, usefulness,
 or success at reporting. The initial survey's screening counts remain dated
@@ -46,6 +54,13 @@ its family ID: retain the complete previous record in the ledger, link a dated
 `reassessments` event, update direction-dependent claims, and recheck changed
 RARE drafts. This is a reviewed correction, not a routine koine append.
 
+The human-requested [candidate-only scope migration](../docs/ledger/2026-09-19-rewrite-candidate-scope.md)
+archives six earlier triage records outside the database, retaining their full
+contents and reserving their IDs. This explicit scope correction is separate
+from routine append and closure. It does not authorize deleting genuine filed
+candidates when later investigation rejects them or finds existing support;
+retain those records and add an evidence-backed verdict or reassessment.
+
 Raw API responses, solver output and traces stay in ignored scratch space.
 Curated claims, exact candidate terms, normalized verdicts and reproducible
 source references are retained. Do not change `observed_on` or `found_at`
@@ -67,8 +82,11 @@ the survey do not become experiences of this project.
 
 ## Closure
 
-Closure is an explicit verdict on the recorded claim, not a fresh search that
-happened to find nothing. Keep the entry and its original evidence. Add
+Closure is an explicit verdict on the proposed rewrite. Establish whether the
+proposal was implemented, declined, withdrawn, or otherwise disposed of; the
+source GitHub issue may remain open or require additional work. An issue being
+closed or a fresh search finding nothing is insufficient. Keep the entry and
+its original evidence. Add
 `closed_verdict`, `closed_on`, `closed_why`, and `closed_evidence` (nonempty list
 of source, ledger, or reply references). Use anoieu's closed vocabulary:
 
@@ -109,6 +127,7 @@ metadata changes, not append or closure operations.
 | position | current tier |
 | --- | --- |
 | Add once, preserve previous content, lock and replace atomically | Enforced by the pinned koine append tool. |
+| Candidate classification and at least one explicit term schema; new open filings cannot be known-rule/context controls | Enforced by the local validator; substantive scope still requires review. |
 | Required record fields, separate assessment vocabularies, explicit closure vocabulary and landing debt | Enforced by the local validator and tests for retained JSON. |
 | Closure-only changes preserve claims, record membership, and ordering | Checked by pinned `koine_check_db` through `koine_db.py check-closure`; intentional amendments are explicit. |
 | Validity, runtime reachability, performance, and actual landing | Evidence obligations; not established by the validator. |

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Render rewrites.md from the validated JSON; --check detects a stale view."""
 import argparse
-from collections import Counter
 import html
 import json
 from pathlib import Path
@@ -48,7 +47,8 @@ def disposition(row):
 
 def render(document):
     rows = sorted(validate(document), key=lambda row: int(row["candidate"].split("-")[1]))
-    counts = Counter(row["classification"] for row in rows)
+    rewrites = sum(len(row["proposal"]["rewrites"]) for row in rows)
+    drafts = sum(len(row["proposal"]["rare_drafts"]) for row in rows)
     closed = sum("closed_verdict" in row for row in rows)
     pending = sum("awaiting_landing" in row for row in rows)
     lines = [
@@ -57,21 +57,22 @@ def render(document):
         "See the [database guide](README.md) for filing and the",
         "[reporting policy](reporting-policy.md) for reassessment and closure.", "",
         f"Regenerate from tachyon's root with `{COMMAND}`; add `--check` to check freshness.", "",
-        f"**{len(rows)} records:** {counts['candidate']} candidates, "
-        f"{counts['existing-coverage']} existing-coverage controls, {counts['excluded']} exclusions.",
+        f"**{len(rows)} candidate families; {rewrites} proposed rewrites; {drafts} RARE drafts.**",
         f"**{closed} explicit closure verdicts; {pending} fixes awaiting landing.**", "",
         "A record is a candidate family, not a count of new rules or solved issues.",
         "`argued` denotes a written validity argument, not a checked proof. RARE parser",
-        "acceptance does not establish correctness or solver performance. Classifications",
-        "and priorities are metagraphe's assessments; closure requires a separate verdict.",
-        "Issue states below are snapshots at review, not live GitHub status.", "",
+        "acceptance does not establish correctness or solver performance. Priorities",
+        "are metagraphe's assessments; closure concerns the proposed rewrite.",
+        "Issues supply motivation and evidence; their states are snapshots at review.",
+        "Existing-rule investigations and other issue triage are retained in the",
+        "[scope archive](../docs/ledger/2026-09-19-rewrite-candidate-scope.md).", "",
         "**Orientation: LHS -> RHS, complex -> simpler.** Compare lexicographically:",
         "counts of the declared complex operators first, then structural term size.",
         "Eliminating a costly operator can therefore justify a larger RHS. Records name",
         "the precedence and rationale; these are candidate orderings, not measured runtimes.", "",
         "## Overview", "",
-        "| Record | Priority | Classification | Validity | RARE drafts | Closure | Issues |",
-        "| --- | --- | --- | --- | --- | --- | --- |",
+        "| Candidate | Priority | Validity | RARE drafts | Closure | Source issues |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
     for row in rows:
         candidate = row["candidate"]
@@ -79,14 +80,13 @@ def render(document):
                            for issue in row["origin"]["issues"])
         cells = [f"[{candidate}: {prose(row['description'])}](#{candidate.lower()})",
                  str(row["priority"]) if row["priority"] else "—",
-                 prose(row["classification"]), prose(row["assessment"]["validity"]),
+                 prose(row["assessment"]["validity"]),
                  str(len(row["proposal"]["rare_drafts"])), prose(disposition(row)), issues]
         lines.append("| " + " | ".join(cells) + " |")
 
     for row in rows:
         proposal, checks, origin = row["proposal"], row["checks"], row["origin"]
         lines += ["", f"## {row['candidate']}", "", f"**{prose(row['description'])}**", "",
-                  f"Classification: {prose(row['classification'])}. "
                   f"Priority: {row['priority'] or 'not ranked'}. "
                   f"Theories: {', '.join(prose(t) for t in row['theories'])}.", "",
                   f"**Closure:** {prose(disposition(row))}.", ""]
@@ -113,8 +113,7 @@ def render(document):
                       + " > term size. "
                       + prose(orientation["reason"]), ""]
         else:
-            if proposal["rewrites"]:
-                lines += ["**Orientation rationale:** decrease structural term size.", ""]
+            lines += ["**Orientation rationale:** decrease structural term size.", ""]
         for i, rewrite in enumerate(proposal["rewrites"], 1):
             variables = "; ".join(f"{prose(name)}: {prose(sort)}"
                                   for name, sort in rewrite["variables"].items())
@@ -126,8 +125,6 @@ def render(document):
                 costs = [orientation_cost(expression_tree(rewrite[side]), proposal["orientation"])
                          for side in ("lhs", "rhs")]
                 lines += [f"Lexicographic cost: **{costs[0]} -> {costs[1]}**.", ""]
-        if not proposal["rewrites"]:
-            lines += ["No exact rewrite is filed.", ""]
         if proposal["rare_drafts"]:
             lines += ["### RARE drafts", ""]
             for draft in proposal["rare_drafts"]:
@@ -150,7 +147,7 @@ def render(document):
             lines += ["**Cautions:**", ""] + ["- " + prose(c) for c in row["cautions"]] + [""]
         lines += [f"**Next step:** {prose(row['next_step'])}", "",
                   "### Evidence and follow-up", "",
-                  "Issues: " + ", ".join(link(f"#{i['number']}", i["url"])
+                  "Source issues: " + ", ".join(link(f"#{i['number']}", i["url"])
                                          + f" ({i['state_at_review']} at review)"
                                          for i in origin["issues"]) + ".", "",
                   f"Observed: {row['observed_on']} at cvc5 source {source_revision(row['found_at'])}.", "",

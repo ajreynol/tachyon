@@ -27,6 +27,8 @@ conditions, evidence, assessments, and later verdicts. The
 [GitHub issue survey](../../../docs/github-issues-rewrites.md) is the dated
 narrative behind the initial M-1 through M-10 families and the triage rows
 subsequently filed as M-11 through M-20. The
+[scope correction](ledger/2026-09-19-rewrite-candidate-scope.md) moves six triage
+rows to the ledger, leaving only concrete candidate rewrites in the database. The
 [source audit](ledger/2026-09-19-github-issues.md) and
 [filing record](ledger/2026-09-19-rewrite-db.md) distinguish the original
 investigation from its migration to JSON.
@@ -38,10 +40,13 @@ investigation from its migration to JSON.
 | M-4 | B3 | Signed comparison disjunction. |
 | M-5, M-10 | S3 | Character complements and intersections of character-language stars. |
 | M-6, M-7 | Secondary arithmetic | Guarded division and modular identities motivated by issues. |
-| M-8 | S1, S2, S3 | Learned lengths and substring-encoded reversal; existing rules need context. |
+| M-12 | Secondary arithmetic | Remove absolute value from a nonzero modulus divisor. |
+| M-13, M-14 | S2 | Nested replacement emptiness and prefix/index identities. |
+| M-16 | S3 | Inverse case conversion. |
+| M-18 | B3 | Quotient simplification under explicit no-overflow premises. |
 
 This table is a search-area map, not a parallel status register. Use the
-database's `classification` to distinguish proposals, existing coverage, and
+database for candidate proposals and the ledger for existing coverage and
 excluded directions. Allocate subsequent IDs under its identity policy and
 preserve these IDs. Each filed record carries:
 
@@ -56,6 +61,7 @@ preserve these IDs. Each filed record carries:
 - The open question or next discriminating experiment, and links to the
   [ledger](ledger/README.md) and any saved cases.
 
-Preserve rejected and already-handled candidates with the reason, so the next
-search does not rediscover them. A finding can motivate further research while
+Preserve rejected and already-handled search leads in the ledger with the
+reason, so the next search does not rediscover them. Genuine filed proposals
+remain in the database with their later verdicts. A finding can motivate further research while
 its performance value remains unmeasured; state that limitation plainly.

@@ -20,6 +20,15 @@ dated source narrative, not a parallel current-status database. See the
 [filing ledger](../tools/metagraphe/docs/ledger/2026-09-19-rewrite-db.md) and
 [experience log](../tools/metagraphe/docs/experience.md).
 
+**Reporting scope clarified, 2026-09-19.** The current database reports only
+concrete candidate rewrites. M-8, M-11, M-15, M-17, M-19, and M-20 are now
+[historical triage](../tools/metagraphe/docs/ledger/2026-09-19-rewrite-candidate-scope.md),
+with their complete records preserved outside the database. M-12 remains for
+its explicit `abs`-elimination candidate, with availability unchecked. The
+[generated view](../tools/metagraphe/rewrite_db/rewrites.md) lists the current
+14 families. Existing-rule and issue-only notes below retain the survey's
+history; they are not candidate reports or requests to fix the rewriter.
+
 **Orientation clarification, 2026-09-19.** Use `LHS -> RHS`, complex -> simpler,
 with a lexicographic ordering: complex operator counts first, term size last.
 The human allows growth to eliminate costly operators. M-1, M-5, M-11, and
@@ -83,6 +92,9 @@ counterexamples, and commands, rather than a copy of mutable GitHub output.
 
 ## Ranked candidates
 
+This table covers the survey's original concrete proposals. M-8 is retained
+below as historical triage; the generated view includes the later candidates.
+
 | priority | candidate | issues | assessment |
 | --- | --- | --- | --- |
 | 1 | [M-1: singleton replacement](#m-1-singleton-replacement) | [#12936](https://github.com/cvc5/cvc5/issues/12936), [#9875](https://github.com/cvc5/cvc5/issues/9875) | Direct rewrite request; correct the proposed identity before implementation. |
@@ -92,7 +104,6 @@ counterexamples, and commands, rather than a copy of mutable GitHub output.
 | 2 | [M-5: complement of a character](#m-5-complement-of-a-character) | [#12815](https://github.com/cvc5/cvc5/issues/12815) | Exact regex normalization; benchmark impact still uncertain. |
 | 2 | [M-6: guarded zero division](#m-6-guarded-zero-division) | [#11201](https://github.com/cvc5/cvc5/issues/11201) | Explicit small simplification; preserve division-by-zero semantics. |
 | 2 | [M-7: modular arithmetic](#m-7-modular-arithmetic) | [#11535](https://github.com/cvc5/cvc5/issues/11535), [#11872](https://github.com/cvc5/cvc5/issues/11872) | Secondary theory; short algebraic rules, with normalization and context work. |
-| 3 | [M-8: learned lengths and encoded reversal](#m-8-learned-lengths-and-encoded-reversal) | [#10522](https://github.com/cvc5/cvc5/issues/10522), [#11010](https://github.com/cvc5/cvc5/issues/11010) | Existing local identities; the main gap is exposing or transporting conditions. |
 | 3 | [M-9: string order totality](#m-9-string-order-totality) | [#12042](https://github.com/cvc5/cvc5/issues/12042) | Valid Boolean identity, but three assertions must meet at the right stage. |
 | 3 | [M-10: character-language intersections](#m-10-character-language-intersections) | [#11206](https://github.com/cvc5/cvc5/issues/11206) | Useful normalization, insufficient on its own to solve the full report. |
 
@@ -351,6 +362,9 @@ not a solution to arbitrary nonlinear arithmetic.
 
 ### M-8: learned lengths and encoded reversal
 
+**Historical triage; outside the current rewrite database.** The exact rule
+below is already known. This investigation concerns its context and application.
+
 **Origin and correction.** [#10522](https://github.com/cvc5/cvc5/issues/10522)
 asks to reduce lengths of one-character substrings using a known input length.
 The [attachment](https://github.com/cvc5/cvc5/files/14657704/str20.smt2.txt)
@@ -423,6 +437,9 @@ normalized full query. A syntax rule alone may need a character-language
 entailment check to discharge its condition.
 
 ## Existing coverage and leads needing more work
+
+This is historical survey triage. Only rows with a concrete candidate are
+retained in the current database; the scope correction above records the split.
 
 | issue | disposition |
 | --- | --- |

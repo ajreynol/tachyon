@@ -2,9 +2,8 @@
 
 *Which useful rewrites is cvc5 missing, especially for strings and bit-vectors?*
 
-A child research project for finding concrete gaps in cvc5's rewriting and
-simplification. Its result is a small, reproducible example of a missing
-opportunity, with the rule or research question, its conditions, and the
+A child research project for proposing useful cvc5 rewrites. Its result is a
+concrete `lhs -> rhs` candidate, a small motivating example, its conditions, and the
 evidence. A human may be inspired to pursue it independently, at their
 discretion. Discovery continues without waiting for that follow-up.
 
@@ -12,15 +11,15 @@ discretion. Discovery continues without waiting for that follow-up.
 
 **The question.** Which equivalent forms could cvc5 use to simplify string and
 bit-vector expressions, and where does its current rewriting miss a useful
-opportunity? A candidate may be a missing rule, a rule whose conditions are
-unnecessarily restrictive, or an interaction that prevents existing rules
-from exposing a simplification.
+opportunity? A candidate may be a new identity or an existing pattern with
+weaker sufficient conditions, stated as an explicit rule. Reports concern
+candidate rewrites; issues in the rewriter belong in separate investigation notes.
 
 **The focus.** Strings and fixed-size bit-vectors are the primary search areas.
 String length arithmetic, regular expressions, Boolean structure, and
 conversions are included where they bear directly on those rewrites. Other
 theories are secondary and considered only when a concrete candidate leads
-there. This is a search for cvc5 shortcomings, with other solvers and the
+there. This is a search for candidate simplifications, with other solvers and the
 literature serving as sources of candidates.
 
 **The goals, in order.**
@@ -41,9 +40,9 @@ literature serving as sources of candidates.
    inputs, or its effect in a focused experiment. Record the cost of applying
    it and possible growth or rewrite cycles. A smaller expression alone does
    not establish a solver speedup.
-4. **Write the finding.** Preserve the minimal input, actual and proposed
-   outputs, validity evidence, observed limitation, and remaining questions.
-   A well-supported research question is useful even before a remedy exists.
+4. **Write the finding.** Preserve the proposed rewrite, its conditions,
+   minimal input, actual and proposed outputs, validity evidence, and remaining
+   questions. Keep leads without a concrete rule in the investigation ledger.
 
 **The wishue.** A small set of findings inspires useful new cvc5 rewrites or a
 research contribution about how to discover or apply them. That subsequent
@@ -53,6 +52,8 @@ work is a human's independent choice.
 patches, tuning the whole solver, and surveying every theory. Add instruments
 only as concrete experiments require them. Incorrect solver answers encountered
 along the way are recorded separately for a human to consider reporting.
+Rewriter defects, proof-export problems, search-order issues, and work solely
+on applying an already-known rule are outside the rewrite database's scope.
 Publishing findings, filing issues, and opening upstream pull requests are
 outside this project's discovery workflow.
 
@@ -60,6 +61,11 @@ outside this project's discovery workflow.
 independent human research; the project does not commit to developing it.
 
 ## What counts as a finding
+
+Every filing proposes at least one exact rewrite with sorts and side conditions.
+Validity and availability may still be unchecked. GitHub issues are sources
+of motivation and evidence; a report or closure addresses the rewrite proposal,
+independently of whether that issue is resolved.
 
 **Standing rule: write every rewrite as `LHS -> RHS`, complex -> simpler.**
 The human clarified the **lexicographic ordering: complex operators first,
@@ -147,11 +153,14 @@ rewrite probes record their exact commands directly in the ledger.
 **Authorized by the human maintainer**, with strings and bit-vectors as the
 main focus. The first investigation is the
 [GitHub issue survey](../../docs/github-issues-rewrites.md), requested on
-2026-09-19. It screens 144 open issues and records ten ranked candidate
-families, ten parser-checked RARE drafts, existing coverage, and semantic
+2026-09-19. It screened 144 open issues and initially ranked ten families,
+with ten parser-checked RARE drafts, existing coverage, and semantic
 corrections to tempting rules. The [source audit](docs/ledger/2026-09-19-github-issues.md)
 pins upstream cvc5. The [initial database filing](docs/ledger/2026-09-19-rewrite-db.md)
-preserves the main candidates and the additional triage rows as JSON. No
+preserved the main candidates and additional triage rows as JSON. The later
+[scope correction](docs/ledger/2026-09-19-rewrite-candidate-scope.md) keeps 14
+concrete candidate families in the database and retains six triage records in
+the historical ledger. No
 matching executable baseline, solver reproduction, or performance improvement
 has been established. The next task is to probe the
 highest-priority string/sequence and bit-vector candidates on a matching build.

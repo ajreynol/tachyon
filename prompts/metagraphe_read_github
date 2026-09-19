@@ -38,8 +38,9 @@ done
 PROMPT=$(cat <<'PROMPT_END'
 Work in this tachyon checkout on metagraphe's cvc5 rewrite investigation.
 
-Scan https://github.com/cvc5/cvc5/issues for issues that could be solved or
-materially improved by rewriting. Record dated updates to docs/github-issues-rewrites.md
+Scan https://github.com/cvc5/cvc5/issues for concrete candidate rewrites.
+Report proposed simplifying identities, not issues in the rewriter.
+Record dated updates to docs/github-issues-rewrites.md
 and file curated JSON records in tools/metagraphe/rewrite_db/rewrites.json
 through the documented koine append workflow. Keep the main README links current.
 Report the strongest findings to the user.
@@ -72,6 +73,12 @@ Search and coverage:
   Do not infer an issue is still reproducible merely because it is open.
 
 For each candidate:
+- Require an explicit lhs -> rhs with sorts/widths and side conditions before
+  filing. Validity and availability can remain labeled unchecked. Keep rewriter
+  bugs, proof-export issues, search-order reports, known-rule context/reachability
+  investigations, and leads without an exact rule in the survey or ledger.
+  Conditional identities qualify when their premises are explicit; a need to
+  apply an already-known rule is not a new candidate rewrite.
 - Give a stable ID, issue number/title/link, theory, reported behavior,
   proposed lhs -> rhs, exact sorts/widths and side conditions, and why it helps.
 - Always orient LHS -> RHS from complex -> simpler. The human allows growth
@@ -103,8 +110,9 @@ For each candidate:
   Do not report historical issue timings as measurements made in this run.
 
 Deliver a concise ranked table followed by enough detail to hand the strongest
-candidates to a cvc5 implementer. Include already-covered and rejected examples
-so later scans do not rediscover them. State the next discriminating test and
+candidates to a cvc5 implementer. Preserve already-covered and rejected examples
+in historical survey/ledger notes, outside the rewrite database and its candidate
+report, so later scans do not rediscover them. State the next discriminating test and
 remaining uncertainty for every substantive lead. Preserve stable IDs and
 prior evidence; add dated corrections when revising earlier conclusions.
 The existing survey records the original investigation and dated corrections.
@@ -113,8 +121,10 @@ updating their current presentation. The JSON owns filed claims and verdicts.
 
 Filing and follow-up:
 - Reuse known family IDs rather than creating duplicates per issue. Allocate
-  new IDs above the highest ever used, including Git history. Preserve the
-  existing distinctions between candidate, existing-coverage, and excluded.
+  new IDs above the highest ever used, including ledger archives and Git history.
+  Never reuse archived IDs. File only classification=candidate entries with a
+  nonempty proposal.rewrites list. Keep genuine candidates and their evidence
+  when later investigation closes them; do not remove closed proposals.
 - Prepare a curated producer JSON list in ignored scratch space. Validate it
   and file it with tools/metagraphe/scripts/koine_db.py append FILE --dry-run,
   then the same command without --dry-run. Set KOINE to an existing checkout
@@ -127,6 +137,8 @@ Filing and follow-up:
   Review conflicts and repeats of closed rows instead of treating them as fixes.
 - Reassessment, delivery, closure, and reopening are separate evidence-backed
   decisions under the reporting policy, not operations of the append command.
+  Closure addresses the proposed rewrite; the originating GitHub issue may
+  remain open or require other work. Issue status alone is not a verdict.
 - For a closure-only edit, run tools/metagraphe/scripts/koine_db.py check-closure
   against the committed pre-closure baseline. General reassessments and collection
   migrations are not closures; do not weaken the diff check to pass those changes.
