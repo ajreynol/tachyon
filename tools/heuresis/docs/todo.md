@@ -3,7 +3,7 @@
 **These priorities are the AI agent's current assessment, not a measured
 ranking or a human-approved plan.** They are based on the initial internal
 Google Doc of cvc5 performance notes, its structured
-[`notes.md`](../notes.md) summary, and the subsequent source audit in
+[`notes.md`](notes.md) summary, and the subsequent source audit in
 [`directions.md`](directions.md).
 
 **The measuring stick is [`progress.md`](progress.md).** Every goal and rank
@@ -33,9 +33,9 @@ means the host scripts are now ours to change.
 
 | # | short-term goal | blocked on | closed when |
 | ---: | --- | --- | --- |
-| ✅ S1, S2, S6, S7 | the bounded-eager line: read out the arms, take the module's counters, find what separates rescues from slowdowns, test the timeout boundary | — | **Closed 2026-09-16.** [`bounded-eager`](../ledger/2026-09-16-bounded-eager-instantiation.md) and [`counters-and-timeout`](../ledger/2026-09-16-eager-counters-and-timeout-sensitivity.md). Eager costs 19.46% PAR2 at a 0.77% match rate; 12 gap cases are reachable only through it; rescues and slowdowns separate on cumulative pairs processed |
+| ✅ S1, S2, S6, S7 | the bounded-eager line: read out the arms, take the module's counters, find what separates rescues from slowdowns, test the timeout boundary | — | **Closed 2026-09-16.** [`bounded-eager`](ledger/2026-09-16-bounded-eager-instantiation.md) and [`counters-and-timeout`](ledger/2026-09-16-eager-counters-and-timeout-sensitivity.md). Eager costs 19.46% PAR2 at a 0.77% match rate; 12 gap cases are reachable only through it; rescues and slowdowns separate on cumulative pairs processed |
 | ✅ S11 | Record *why* a run failed, without changing the result token | — | **Closed 2026-09-17.** The wrappers append the reason to `errors-<script>-<name>.txt`; the token stays `error`, so no existing number moved. Proven in production: the S12 sweep's log reads `cvc5 suffered a segfault.` for both failures |
-| ✅ S12 | Find how many benchmarks the segfault actually affects | — | **Closed 2026-09-17.** [`segfault-scope`](../ledger/2026-09-17-segfault-scope-and-failure-logging.md): **2 crashes among the 5845 benchmarks that reach a terminal answer** at 300 s — the same two. A floor, not a total: 279 still time out |
+| ✅ S12 | Find how many benchmarks the segfault actually affects | — | **Closed 2026-09-17.** [`segfault-scope`](ledger/2026-09-17-segfault-scope-and-failure-logging.md): **2 crashes among the 5845 benchmarks that reach a terminal answer** at 300 s — the same two. A floor, not a total: 279 still time out |
 | **S10** | File the segfault upstream | the maintainer checking whether the two benchmarks may be shared publicly | the report in [`upstream-questions.md`](upstream-questions.md) is filed. It now carries a measured scope as well as a backtrace and an option bisection. Still the only thing this project has that can go upstream today, and [`progress.md`](progress.md)'s PR table is empty |
 | S13 | Measure `--ee-mode=central` on a second corpus | nothing — the launcher is self-contained, and the host carries other benchmark sets | central mode's 10.3% PAR2 win is confirmed or refuted off this one set, which is the stated blocker on an R15 default-change proposal, and the only path that turns an already-measured win into a PR |
 | S8 | Add a cumulative eager pair budget, after which the module stands down and lazy instantiation proceeds | nothing — a bounded patch to `eager_inst.cpp` | the option is run on the set. **Success criterion:** eager-plus-budget must beat `best` (35532.7 PAR2), not merely beat unbudgeted eager — halving a 19% loss would be a real result that still moves nothing in `progress.md` |
@@ -51,15 +51,15 @@ direction has one row. Where genuinely independent starting choices are
 useful, a continuation row leaves the first three columns blank.
 
 Each direction comes from [`directions.md`](directions.md). After completing a
-step, record the evidence in [`../ledger/`](../ledger/), rerank the ten
+step, record the evidence in [`../ledger/`](ledger), rerank the ten
 directions, and replace or refine that direction's possible first steps.
 
 The ranking now incorporates the first whole-set attribution statistics and
-option A/Bs ([evidence](../ledger/2026-09-15-attribution-stats.md)); it should
+option A/Bs ([evidence](ledger/2026-09-15-attribution-stats.md)); it should
 continue to move when evidence changes.
 
 **Updated.** 2026-09-16, after the eager-instantiation runs
-([evidence](../ledger/2026-09-16-bounded-eager-instantiation.md)). The
+([evidence](ledger/2026-09-16-bounded-eager-instantiation.md)). The
 provisional rank R1 and R28 held in the preceding revision is now settled by
 measurement, and it did not survive intact: eager instantiation as implemented
 is a net loss, so R1 falls from a rank it held on promise. It does not fall

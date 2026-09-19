@@ -22,9 +22,9 @@ usual address.
 | page | built from |
 | --- | --- |
 | the index | the [front page](../README.md)'s research-project table, and each project's report description |
-| [`heuresis/`](../tools/heuresis/report) | the gap lists retained under `tools/heuresis/ledger/data/`, the ledger entries that cite them, and the protocol and history tables of [`progress.md`](../tools/heuresis/docs/progress.md) |
+| [`heuresis/`](../tools/heuresis/reports/build) | the gap lists retained beside the builder in [`reports/data/`](../tools/heuresis/reports/data/README.md), the ledger entries that cite them, the protocol and history tables of [`progress.md`](../tools/heuresis/docs/progress.md), and the head of the ranking in [`todo.md`](../tools/heuresis/docs/todo.md) |
 | `heuresis/queue.html` | every section of [`todo.md`](../tools/heuresis/docs/todo.md), and the pull-request record in `progress.md` |
-| [`elaphros/`](../tools/elaphros/report) | the ranked queue and planning work in [`todo.md`](../tools/elaphros/docs/todo.md), the register in [`directions.md`](../tools/elaphros/docs/directions.md), the record in [`progress.md`](../tools/elaphros/docs/progress.md), and the evidence index in [`ledger/README.md`](../tools/elaphros/ledger/README.md) |
+| [`elaphros/`](../tools/elaphros/reports/build) | the ranked queue and planning work in [`todo.md`](../tools/elaphros/docs/todo.md), the whole register in [`directions.md`](../tools/elaphros/docs/directions.md), the record in [`progress.md`](../tools/elaphros/docs/progress.md), the evidence index in [`ledger/README.md`](../tools/elaphros/docs/ledger/README.md), and the snapshots in [`reports/data/`](../tools/elaphros/reports/data/README.md) |
 
 **A project with nothing measured still has something to publish.** What a
 research project produces before its first measurement is its *reasoning*:
@@ -61,7 +61,7 @@ document nobody compares it to is drift that has not surfaced yet.
 ## How a project publishes
 
 `scripts/build_site.py` knows nothing about any project's measurements. A
-project publishes by providing an executable `tools/<project>/report` that
+project publishes by providing an executable `tools/<project>/reports/build` that
 
 1. accepts `--out DIR` (where to write), `--base-url URL` (where that directory
    will be served), `--repo-url URL` (what links to the evidence should point
@@ -91,10 +91,21 @@ the index card links to; anything else it writes under `--out` is its own, and
 must be reachable from that page. Heuresis writes two — the gap report and the
 queue beside it.
 
+**A publishing project keeps one directory, `tools/<project>/reports/`**, and
+it holds the whole of what publishing needs: the `build` entry point, the hand-
+maintained templates, any other program that produces the data (heuresis's
+[`gap`](../tools/heuresis/reports/gap)), and the retained `data/` the pages are
+computed from. Written records stay in `docs/`, where the project's own
+documentation index names them. The split is *what we recorded* against *what we
+publish*, and it is also what keeps the ecosystem's
+[tooling audit](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/audits/tooling_audit.py)
+able to describe a child project in one row: every other directory a child keeps
+is one the shared layout already has a purpose for.
+
 The page templates — [`scripts/site.html`](../scripts/site.html) for the index,
-[`tools/heuresis/report.html`](../tools/heuresis/report.html) and
-[`queue.html`](../tools/heuresis/queue.html) for heuresis, and
-[`tools/elaphros/report.html`](../tools/elaphros/report.html) for elaphros — are
+[`tools/heuresis/reports/report.html`](../tools/heuresis/reports/report.html) and
+[`queue.html`](../tools/heuresis/reports/queue.html) for heuresis, and
+[`tools/elaphros/reports/report.html`](../tools/elaphros/reports/report.html) for elaphros — are
 maintained by hand, with the builders substituting the marked placeholders. The
 gap report is one HTML file with its data embedded: it works offline,
 `#<comparison>` links to a particular recorded comparison, and the CSV beside it

@@ -19,9 +19,9 @@
 | Which branches build and produce validated proofs? | Not established here. |
 | Which optimizations improve time or memory? | None established. |
 
-All inventory counts come from the [source survey](../ledger/2026-09-18-branch-survey.md),
+All inventory counts come from the [source survey](ledger/2026-09-18-branch-survey.md),
 and the pipeline observations from the
-[pipeline audit](../ledger/2026-09-19-pinned-main-pipeline-audit.md).
+[pipeline audit](ledger/2026-09-19-pinned-main-pipeline-audit.md).
 The [priority queue](todo.md) ranks information to acquire, not measured wins.
 Readiness to measure requires a fixed comparison and a genuine proof output and
 validation path; Tachyon's solve wrapper alone does not provide that path.

@@ -3,7 +3,7 @@
 **The measuring stick.** One table, kept over time, that says whether cvc5 is
 getting better or worse on this set. Everything else in this project —
 [`directions.md`](directions.md), [`todo.md`](todo.md), the
-[ledger](../ledger/) — exists to move a number in this file. If a piece of
+[ledger](ledger) — exists to move a number in this file. If a piece of
 work does not eventually show up here, it did not count.
 
 **What it is a history of:** cvc5 `main` revisions. A row is one revision of
@@ -22,7 +22,7 @@ worse. A regression found here is worth reporting upstream whether or not this
 project caused it, and whether or not anyone here intends to fix it. Check
 semi-frequently — a new row costs two runs and about fifteen minutes.
 
-**Every number here comes from a [ledger](../ledger/) entry**, named in the row.
+**Every number here comes from a [ledger](ledger) entry**, named in the row.
 A figure that is not in the ledger does not belong in this file. Nothing here
 is a claim about cvc5 in general; it is a claim about this set, at this
 timeout, on one host.
@@ -37,7 +37,7 @@ not add a row to this one.
 | set | `quant-07-25`, **6124 benchmarks**, Verus-derived; see [`README.md`](../README.md), "The set" |
 | timeout | 30 s wall |
 | host | the execution host, run idle, one job at a time, never overlapping |
-| reading | [`gap`](../gap) with its defaults: factor 10, floor 1 s |
+| reading | [`gap`](../reports/gap) with its defaults: factor 10, floor 1 s |
 | PAR2 | time if solved, else 2 × timeout, summed over all 6124 |
 | ratio | PAR2(cvc5) / PAR2(z3 reference) — **lower is better, 1.00 is parity** |
 | gap set | benchmarks where cvc5 is unsolved and z3 solved, or both solved and cvc5 is ≥10× slower |
@@ -58,13 +58,13 @@ does not address.
 > ⚠️ **`best` segfaults.** `--ee-mode=central` and `--ieval=off` together crash
 > cvc5 on at least 2 of the 6124 benchmarks, deterministically, on current main
 > and on every earlier main tested
-> ([2026-09-17](../ledger/2026-09-17-central-ieval-segfault.md)). Either flag
+> ([2026-09-17](ledger/2026-09-17-central-ieval-segfault.md)). Either flag
 > alone is fine. The PAR2 effect is nil — both benchmarks are unsolved in every
 > arm regardless — so the history below is unaffected, but **this is not a
 > configuration to recommend to anyone** until the crash is fixed. A 300 s sweep
 > puts the count at exactly two among the 5845 benchmarks that reach a terminal
 > answer — rare, but a floor rather than a total, since 279 still time out
-> ([2026-09-17](../ledger/2026-09-17-segfault-scope-and-failure-logging.md)).
+> ([2026-09-17](ledger/2026-09-17-segfault-scope-and-failure-logging.md)).
 
 ## The targets — z3
 
@@ -73,9 +73,9 @@ are measuring against.
 
 | z3 | options | solved | unknown | timeout | PAR2 | ledger |
 | --- | --- | ---: | ---: | ---: | ---: | --- |
-| **4.15.4** | **full current Verus set (nine options)** | 5785 | 310 | 29 | **23413.7** | [2026-09-15](../ledger/2026-09-15-z3-full-verus-options.md) |
-| 4.15.4 | five-option subset | 6014 | 31 | 79 | 10128.3 | [2026-09-14](../ledger/2026-09-14-baseline.md) |
-| 4.8.17 | five-option subset | 5966 | 28 | 130 | 13466 | [2026-09-14](../ledger/2026-09-14-baseline.md) |
+| **4.15.4** | **full current Verus set (nine options)** | 5785 | 310 | 29 | **23413.7** | [2026-09-15](ledger/2026-09-15-z3-full-verus-options.md) |
+| 4.15.4 | five-option subset | 6014 | 31 | 79 | 10128.3 | [2026-09-14](ledger/2026-09-14-baseline.md) |
+| 4.8.17 | five-option subset | 5966 | 28 | 130 | 13466 | [2026-09-14](ledger/2026-09-14-baseline.md) |
 
 **The first row is the reference**, because it is what Verus actually runs. Note
 that it is the *worse* of the two 4.15.4 rows by PAR2: the full option set makes
@@ -90,18 +90,18 @@ One row per cvc5 `main` revision, per configuration. Newest last.
 
 | date | cvc5 `main` | config | solved | timeout | PAR2 | ratio | gap | Δ PAR2 | ledger |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| 2026-09-14 | `5cc03f4b9` | default | 5418 | 702 | 53390 | 2.28 | 2266 | — | [baseline](../ledger/2026-09-14-baseline.md) |
-| 2026-09-15 | `5cc03f4b9` | default | 5414 | 706 | 53479 | 2.28 | — | +0.17% | [quantifier-controls](../ledger/2026-09-15-quantifier-controls.md) |
-| 2026-09-15 | `5cc03f4b9` | verus | 5550 | 569 | 41056.3 | 1.75 | 1073 | — | [sat-and-instance-order](../ledger/2026-09-15-sat-and-instance-order.md) |
-| 2026-09-16 | `5cc03f4b9` | verus | 5548 | 571 | 41135.4 | 1.76 | — | +0.19% | [combined](../ledger/2026-09-16-combined-central-equality-and-evaluator-off.md) |
-| 2026-09-16 | `5cc03f4b9` | **best** | 5625 | 473 | **35619.5** | **1.52** | 789 | — | [combined](../ledger/2026-09-16-combined-central-equality-and-evaluator-off.md) |
-| 2026-09-16 | `d7d03b082c` | verus | 5546 | 573 | 41207.7 | 1.76 | — | +0.37% | [rebased-branches](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) |
-| 2026-09-16 | `d7d03b082c` | **best** | 5623 | 474 | **35600.5** | **1.52** | 796 | −0.05% | [rebased-branches](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) |
-| 2026-09-16 | `95050cf8155d` | **best** | 5624 | 473 | **35557.3** | **1.52** | 789 | −0.12% | [bounded-eager](../ledger/2026-09-16-bounded-eager-instantiation.md) † |
-| 2026-09-17 | `67954d09dc` | verus | 5548 | 571 | 41142.2 | 1.76 | 1073 | −0.16% | [self-contained](../ledger/2026-09-17-self-contained-launcher-and-current-main.md) |
-| 2026-09-17 | `67954d09dc` | **best** | 5626 | 471 | **35532.7** | **1.52** | **784** | −0.07% | [self-contained](../ledger/2026-09-17-self-contained-launcher-and-current-main.md) |
-| 2026-09-17 | `a07d513075` ‡ | verus | 5545 | 574 | 41191.8 | 1.76 | 1079 | +0.12% | [1.4.0](../ledger/2026-09-17-cvc5-1-4-0-release.md) |
-| 2026-09-17 | `a07d513075` ‡ | **best** | 5624 | 473 | **35580.3** | **1.52** | 786 | +0.13% | [1.4.0](../ledger/2026-09-17-cvc5-1-4-0-release.md) |
+| 2026-09-14 | `5cc03f4b9` | default | 5418 | 702 | 53390 | 2.28 | 2266 | — | [baseline](ledger/2026-09-14-baseline.md) |
+| 2026-09-15 | `5cc03f4b9` | default | 5414 | 706 | 53479 | 2.28 | — | +0.17% | [quantifier-controls](ledger/2026-09-15-quantifier-controls.md) |
+| 2026-09-15 | `5cc03f4b9` | verus | 5550 | 569 | 41056.3 | 1.75 | 1073 | — | [sat-and-instance-order](ledger/2026-09-15-sat-and-instance-order.md) |
+| 2026-09-16 | `5cc03f4b9` | verus | 5548 | 571 | 41135.4 | 1.76 | — | +0.19% | [combined](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md) |
+| 2026-09-16 | `5cc03f4b9` | **best** | 5625 | 473 | **35619.5** | **1.52** | 789 | — | [combined](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md) |
+| 2026-09-16 | `d7d03b082c` | verus | 5546 | 573 | 41207.7 | 1.76 | — | +0.37% | [rebased-branches](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) |
+| 2026-09-16 | `d7d03b082c` | **best** | 5623 | 474 | **35600.5** | **1.52** | 796 | −0.05% | [rebased-branches](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) |
+| 2026-09-16 | `95050cf8155d` | **best** | 5624 | 473 | **35557.3** | **1.52** | 789 | −0.12% | [bounded-eager](ledger/2026-09-16-bounded-eager-instantiation.md) † |
+| 2026-09-17 | `67954d09dc` | verus | 5548 | 571 | 41142.2 | 1.76 | 1073 | −0.16% | [self-contained](ledger/2026-09-17-self-contained-launcher-and-current-main.md) |
+| 2026-09-17 | `67954d09dc` | **best** | 5626 | 471 | **35532.7** | **1.52** | **784** | −0.07% | [self-contained](ledger/2026-09-17-self-contained-launcher-and-current-main.md) |
+| 2026-09-17 | `a07d513075` ‡ | verus | 5545 | 574 | 41191.8 | 1.76 | 1079 | +0.12% | [1.4.0](ledger/2026-09-17-cvc5-1-4-0-release.md) |
+| 2026-09-17 | `a07d513075` ‡ | **best** | 5624 | 473 | **35580.3** | **1.52** | 786 | +0.13% | [1.4.0](ledger/2026-09-17-cvc5-1-4-0-release.md) |
 
 † measured on `claude-eagerInst@995b23bcfa` with its module off, which is 0
 behind `95050cf8155d`. Compared against the `best` row at `d7d03b082c` it
@@ -166,8 +166,8 @@ without a repeat.
 
 1. Run the tracked configuration on the current set at 30 s, on an idle host.
    Configs for `verus` and `best` are in
-   [`job_launcher/configs/`](../../../job_launcher/configs/).
-2. Read it with [`gap`](../gap) against the z3 reference above.
+   [`job_launcher/configs/`](../../../job_launcher/configs).
+2. Read it with [`gap`](../reports/gap) against the z3 reference above.
 3. Write the ledger entry first. The row here cites it; it is not the record.
 4. Add the row, with the exact cvc5 `main` revision — not "current main".
 5. If Δ PAR2 exceeds the noise band, say so in the entry and in the summary
@@ -188,7 +188,7 @@ regressions and wins an A/B is not an entry here; a merged commit is.
 | *(none yet)* | | | | |
 
 **Ready to file now:** the `--ee-mode=central --ieval=off` segfault
-([2026-09-17](../ledger/2026-09-17-central-ieval-segfault.md)) — a
+([2026-09-17](ledger/2026-09-17-central-ieval-segfault.md)) — a
 reproducible crash on current main with a backtrace and a two-flag bisection.
 Not a performance change, so it will not move a row, but it is the first
 upstream-reportable defect this project has produced.
@@ -198,7 +198,7 @@ upstream-reportable defect this project has produced.
 - **A cumulative eager pair budget** (R1/R28, short-term goal S8). The strongest
   candidate: rescues and slowdowns separate cleanly on cumulative pairs
   processed, and no option expresses that axis
-  ([evidence](../ledger/2026-09-16-eager-counters-and-timeout-sensitivity.md)).
+  ([evidence](ledger/2026-09-16-eager-counters-and-timeout-sensitivity.md)).
   Untested — the cap is fitted in-sample on twelve benchmarks.
 - **`--ee-mode=central` as a default for this workload** (R15). It is 10.3% of
   PAR2 and is already in `best`, but a default change needs cross-corpus and
@@ -208,4 +208,4 @@ upstream-reportable defect this project has produced.
   (within noise) and
   [`ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie)
   (neutral, and worse than evaluator-off)
-  ([evidence](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)).
+  ([evidence](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)).

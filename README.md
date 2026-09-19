@@ -9,16 +9,24 @@ Its research projects keep their own questions, hypotheses, priorities and
 evidence. A human may independently pursue a finding; that follow-up is outside
 this repository's discovery work.
 
-Two shared tools support the investigations. [`job_launcher/`](job_launcher/)
-validates and launches remote experiments using the host scripts in this
-repository, and records launches.
-[`stats_profiler/`](stats_profiler/) reads local cvc5 statistics and produces
-offline HTML, CSV, JSON and optional vector PDF reports. Research lives under
-[`tools/`](tools/), with a charter and evidence in each project's directory.
+## The published reports
 
-What those projects have measured is published at
-**<https://ajreynol.github.io/tachyon/>**, built from the recorded evidence in
-this repository; the [site guide](docs/site.md) describes what may go there.
+Everything these projects have measured, and what each is working on next, is
+published at **<https://ajreynol.github.io/tachyon/>** and rebuilt on every
+push:
+
+| report | what it publishes |
+| --- | --- |
+| [**The cvc5–z3 gap**](https://ajreynol.github.io/tachyon/heuresis/) | Every benchmark where cvc5 loses time to z3 on a fixed quantifier set — one point each, the recorded experiment behind every list, and a CSV of the same rows the page draws. |
+| [**Heuresis's queue**](https://ajreynol.github.io/tachyon/heuresis/queue.html) | What that project is doing about the gap: the goals in flight, its own ranking of the research directions, the maintainer's separate ranking, and which branches of the fork are worth maintaining. |
+| [**Elaphros's queue**](https://ajreynol.github.io/tachyon/elaphros/) | What producing a proof might cost cvc5 and which mechanisms are worth investigating first, read from the solver's source — with no measurement taken yet, which the page says on its own front tile. |
+
+**No figure on those pages is typed into them.** Each is read from a tracked
+document or recomputed from retained evidence while the page is built, so the
+site cannot state a number this repository has not recorded, and a project that
+has measured nothing has no way to imply otherwise. The
+[site guide](docs/site.md) describes what may be published, what the builders
+refuse, and how a project adds a report.
 
 ## Research projects
 
@@ -30,7 +38,14 @@ this repository; the [site guide](docs/site.md) describes what may go there.
 
 Each project owns its charter, priorities and evidence. Its README records the
 current findings and links to its investigation; the shared tools supply the
-measurements.
+measurements. Research lives under [`tools/`](tools), with a charter, a queue
+and the evidence in each project's directory.
+
+Two shared tools support the investigations. [`job_launcher/`](job_launcher)
+validates and launches remote experiments using the host scripts in this
+repository, and records launches. [`stats_profiler/`](stats_profiler) reads
+local cvc5 statistics and produces offline HTML, CSV, JSON and optional vector
+PDF reports.
 
 ## Run it
 
@@ -77,7 +92,7 @@ measurement.
 
 Timer coverage is accounting against a selected total, not proof that timers
 form a disjoint or complete partition. Missing output cannot be reconstructed.
-The [regression tests](tests/) and [profiler tests](stats_profiler/tests/)
+The [regression tests](tests) and [profiler tests](stats_profiler/tests)
 exercise the local tools with synthetic inputs; they establish neither solver
 correctness nor the research conclusions.
 

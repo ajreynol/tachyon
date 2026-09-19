@@ -8,7 +8,7 @@ import tempfile
 import unittest
 
 
-SCRIPT = Path(__file__).resolve().parents[1] / "gap"
+SCRIPT = Path(__file__).resolve().parents[1] / "reports/gap"
 SPEC = importlib.util.spec_from_loader("gap", importlib.machinery.SourceFileLoader("gap", str(SCRIPT)))
 gap = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(gap)

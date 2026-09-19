@@ -11,7 +11,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = "https://example.invalid/repo"
-SCRIPT = Path(__file__).resolve().parents[1] / "report"
+SCRIPT = ROOT / "reports/build"
 SPEC = importlib.util.spec_from_loader("report", importlib.machinery.SourceFileLoader("report", str(SCRIPT)))
 report = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(report)
@@ -177,13 +177,15 @@ class BuildTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        (self.root / "ledger/data").mkdir(parents=True)
-        (self.root / "docs").mkdir()
-        (self.root / "ledger/2026-01-01-example.md").write_text(ENTRY)
-        (self.root / "ledger/data/gapset-arm-vs-ref-010126.txt").write_text(GAPSET)
+        (self.root / "reports/data").mkdir(parents=True)
+        (self.root / "docs/ledger").mkdir(parents=True)
+        (self.root / "docs/ledger/2026-01-01-example.md").write_text(ENTRY)
+        (self.root / "reports/data/gapset-arm-vs-ref-010126.txt").write_text(GAPSET)
         (self.root / "docs/progress.md").write_text(PROGRESS + PULL_REQUESTS)
         (self.root / "docs/todo.md").write_text(TODO)
         self.real, report.ROOT = report.ROOT, self.root
+        self.real_here, report.HERE = report.HERE, self.root / "reports"
+        self.addCleanup(setattr, report, "HERE", self.real_here)
         self.addCleanup(setattr, report, "ROOT", self.real)
 
     def build(self, **kwargs):
@@ -232,25 +234,28 @@ class BuildTests(unittest.TestCase):
         self.assertTrue((out / "data/arm-vs-ref-010126.csv").is_file())
 
     def test_a_gap_list_no_ledger_entry_cites_is_refused(self):
-        (self.root / "ledger/data/gapset-orphan-vs-ref-010126.txt").write_text(GAPSET)
+        (self.root / "reports/data/gapset-orphan-vs-ref-010126.txt").write_text(GAPSET)
         with self.assertRaises(ValueError) as refusal:
             self.build()
         self.assertIn("no ledger entry cites", str(refusal.exception))
 
     def test_a_list_that_is_not_named_as_a_comparison_is_refused(self):
-        (self.root / "ledger/data/gapset-nothing.txt").write_text(GAPSET)
+        (self.root / "reports/data/gapset-nothing.txt").write_text(GAPSET)
         with self.assertRaises(ValueError):
             self.build()
 
-    def test_writing_into_the_recorded_evidence_is_refused(self):
+    def test_writing_into_the_retained_lists_is_refused(self):
+        """The builder writes CSVs; it must not be pointed at the lists it reads."""
         with self.assertRaises(ValueError):
-            self.build(out=self.root / "ledger/data/site")
+            self.build(out=self.root / "reports/data/site")
+        with self.assertRaises(ValueError):
+            self.build(out=self.root / "reports/data")
 
     def test_the_lists_this_project_retains_all_publish(self):
-        report.ROOT = self.real
+        report.ROOT, report.HERE = self.real, self.real_here
         out = self.root / "real"
         summary = report.build(out, "https://example.invalid/site/heuresis", "https://example.invalid/repo")
-        retained = sorted((self.real / "ledger/data").glob("gapset-*.txt"))
+        retained = sorted((self.real_here / "data").glob("gapset-*.txt"))
         self.assertEqual(summary["comparisons"], len(retained))
         data, _ = self.data(out)
         for comparison in data["comparisons"]:
@@ -321,6 +326,22 @@ class QueueTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             report.landed(record)
 
+    def test_the_gap_report_says_what_is_being_done_about_the_gap(self):
+        """A measurement with no stated next step leaves the reader nowhere to go."""
+        self.build()
+        page = (self.out / "index.html").read_text()
+        self.assertIn("What we are doing about it", page)
+        self.assertIn('href="queue.html"', page)
+        self.assertIn("docs/directions.md", page)
+        sections = report.sections(self.todo(), REPO, "tools/heuresis/docs/todo.md")
+        ranked = report.named(sections, "AI-agent priorities")
+        table, total, shown = report.next_steps(sections, REPO)
+        self.assertEqual(total, len(ranked))
+        self.assertEqual(shown, min(5, len(ranked)))
+        self.assertEqual(table.count("<tr>"), shown + 1, "the header row plus one per direction")
+        for row in ranked[:shown]:
+            self.assertIn(report.render_cell(row[1]), page)
+
     def test_a_section_that_loses_its_table_is_refused(self):
         original = report.ROOT
         tree = Path(self.temp.name) / "heuresis"
@@ -330,10 +351,10 @@ class QueueTests(unittest.TestCase):
         start = body.index("## Branch maintenance")
         todo.write_text(body[:start] + "## Branch maintenance\n\nNo table any more.\n")
         report.ROOT = tree
-        report.TEMPLATE = tree / "report.html"
-        report.QUEUE_TEMPLATE = tree / "queue.html"
-        self.addCleanup(setattr, report, "QUEUE_TEMPLATE", original / "queue.html")
-        self.addCleanup(setattr, report, "TEMPLATE", original / "report.html")
+        report.TEMPLATE = tree / "reports/report.html"
+        report.QUEUE_TEMPLATE = tree / "reports/queue.html"
+        self.addCleanup(setattr, report, "QUEUE_TEMPLATE", original / "reports/queue.html")
+        self.addCleanup(setattr, report, "TEMPLATE", original / "reports/report.html")
         self.addCleanup(setattr, report, "ROOT", original)
         with self.assertRaises(ValueError) as refusal:
             self.build()

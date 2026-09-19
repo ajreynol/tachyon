@@ -7,4 +7,4 @@ criteria. These documents organize the investigation.
 | --- | --- |
 | [directions.md](directions.md) | Search areas and the register of concrete rewrite candidates as they are found. |
 | [todo.md](todo.md) | The next experiments, in priority order. |
-| [ledger](../ledger/README.md) | Recorded source audits, reproduction commands, and experimental evidence. |
+| [ledger](ledger/README.md) | Recorded source audits, reproduction commands, and experimental evidence. |

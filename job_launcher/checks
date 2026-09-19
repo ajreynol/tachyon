@@ -20,10 +20,11 @@ note() { echo "  ok: $*"; }
 
 # Public files = tracked + untracked-but-not-ignored.
 PUBLIC=$( { git ls-files; git ls-files --others --exclude-standard; } | sort -u )
-# The records are exempt from the personal-data check: the launch log and the
-# ledger name the host and the binaries on purpose, because a result that does
-# not say where and with what it was produced is not a record.
-RECORDS='^(job_launcher/log\.txt|tools/[^/]+/ledger/)'
+# The records are exempt from the personal-data check: the launch log, the
+# ledgers and the retained report data name the host and the binaries on
+# purpose, because a result that does not say where and with what it was
+# produced is not a record.
+RECORDS='^(job_launcher/log\.txt|tools/[^/]+/docs/ledger/|tools/[^/]+/reports/data/)'
 PUBLIC_NONRECORD=$(echo "$PUBLIC" | grep -vE "$RECORDS")
 
 # ---- 1. every script parses -------------------------------------------------

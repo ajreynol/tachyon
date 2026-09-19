@@ -6,10 +6,10 @@ this directory, and it is not part of what tachyon ships. Its charter is below;
 what governs the subject rather than this account is under
 [authority and working boundary](#authority-and-working-boundary).
 
-**Planning status, 2026-09-19.** The [branch survey](ledger/2026-09-18-branch-survey.md)
+**Planning status, 2026-09-19.** The [branch survey](docs/ledger/2026-09-18-branch-survey.md)
 screens all 809 public heads of `ajreynol/cvc5` and characterizes 49 selected
 branches against pinned upstream source, and the
-[pipeline audit](ledger/2026-09-19-pinned-main-pipeline-audit.md) reads
+[pipeline audit](docs/ledger/2026-09-19-pinned-main-pipeline-audit.md) reads
 allocation, traversals and instrumentation directly in pinned main. Together
 they support sixteen [research directions](docs/directions.md) and a
 provisional [priority queue](docs/todo.md), with `ajreynol:unrewrite` and
@@ -19,7 +19,7 @@ hypotheses; no experiments, performance results or validated optimizations are
 delivered.
 
 The queue is published at
-**<https://ajreynol.github.io/tachyon/elaphros/>**, built by [`report`](report)
+**<https://ajreynol.github.io/tachyon/elaphros/>**, built by [`report`](reports/build)
 from the documents below and refusing to state a figure they do not.
 Start at the [documentation index](docs/README.md) for the register and evidence.
 
@@ -127,17 +127,17 @@ solving the problem, measured in time and memory.
 
 Tachyon's evidence supplies the experimental discipline and concrete cautions:
 
-- Heuresis's [baseline caveats](../heuresis/ledger/2026-09-15-baseline-caveats.md)
+- Heuresis's [baseline caveats](../heuresis/docs/ledger/2026-09-15-baseline-caveats.md)
   show how an implicit SAT-backend choice and an incomplete option list can
   change a comparison. Elaphros records effective settings as well as requested
   ones, especially when enabling proofs changes what the solver can use.
-- Its [attribution experiment](../heuresis/ledger/2026-09-15-attribution-stats.md)
+- Its [attribution experiment](../heuresis/docs/ledger/2026-09-15-attribution-stats.md)
   demonstrates profiles guiding a focused search, while explicitly identifying
   missing attribution. The same entry records empty processed proof-summary
   headings. Such a summary is not evidence that a proof was produced.
 - Tachyon's [solve wrapper](../../job_launcher/host/cvc5_solve.sh) accepts but
   ignores its signature and checker arguments. Its
-  [recorded launcher run](../heuresis/ledger/2026-09-17-self-contained-launcher-and-current-main.md)
+  [recorded launcher run](../heuresis/docs/ledger/2026-09-17-self-contained-launcher-and-current-main.md)
   documents that limitation. Those arguments do not establish proof generation
   or validation, and the recorded solving results are not an elaphros baseline.
 - The [profiler guide](../../docs/stats-profiler.md#choosing-a-partition)
@@ -171,8 +171,8 @@ from the site and leaves everything else in tachyon as it was.
 both the parent's choice and both written down here so they are named exceptions
 rather than drift. Tachyon's front page names and advertises it, which is a link
 inward that a reader meets before this page. And the parent's site builder runs
-[`report`](report) when that file exists, as it runs the tests in
-[`tests/`](tests/), to publish this project's queue at
+[`report`](reports/build) when that file exists, as it runs the tests in
+[`tests/`](tests), to publish this project's queue at
 <https://ajreynol.github.io/tachyon/elaphros/>; it reads nothing here itself,
 and a project without a `report` is listed and not published
 ([site.md](../../docs/site.md)).

@@ -1,8 +1,8 @@
 # Research directions for proof-production overhead
 
 **Source assessment, 2026-09-18; extended 2026-09-19.** These sixteen
-directions start from the [hypothesis register](../notes.md) and the
-[public-branch survey](../ledger/2026-09-18-branch-survey.md). No performance
+directions start from the [hypothesis register](notes.md) and the
+[public-branch survey](ledger/2026-09-18-branch-survey.md). No performance
 effect is measured. The [queue](todo.md) separates the agent's priorities from
 maintainer guidance.
 

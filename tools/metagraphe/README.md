@@ -98,7 +98,7 @@ meaning. **Metagraphe** is the working name.
 ## Working here
 
 The [documentation index](docs/README.md) leads to the search register and
-initial work queue. The [ledger](ledger/README.md) records source audits and
+initial work queue. The [ledger](docs/ledger/README.md) records source audits and
 experiments. Keep project code, cases, and results inside this directory as
 they become necessary. Nothing outside it imports or runs it, and deleting
 `tools/metagraphe/` would leave the rest of the repository as functional as it

@@ -6,8 +6,8 @@
 The site index is tachyon's own: the front page's research projects, the limits
 of the evidence, and a card for every project that publishes a report. It knows
 nothing about any project's measurements. A project publishes by providing an
-executable `tools/<project>/report` that writes a report into `--out` and prints
-one JSON object describing it (see docs/site.md). Projects without one are
+executable `tools/<project>/reports/build` that writes a report into `--out` and
+prints one JSON object describing it (see docs/site.md). Projects without one are
 listed and not published, and deleting a project directory removes its report
 from the site and nothing else. A report says what its date is the date of; this
 page never calls something a measurement on a project's behalf.
@@ -63,7 +63,7 @@ def projects(readme, repo_url):
 
 def run_report(builder, out, base_url, repo_url):
     """Run one project's report builder and check what it says it published."""
-    name = builder.parent.name
+    name = builder.parent.parent.name
     destination = out / name
     result = subprocess.run(
         [sys.executable, str(builder), "--out", str(destination), "--base-url", f"{base_url}/{name}",
@@ -126,7 +126,7 @@ def build(out, base_url, repo_url):
 
     out.mkdir(parents=True, exist_ok=True)
     published = {}
-    for builder in sorted(ROOT.glob("tools/*/report")):
+    for builder in sorted(ROOT.glob("tools/*/reports/build")):
         if not builder.is_file():
             continue
         report = run_report(builder, out, base_url, repo_url)

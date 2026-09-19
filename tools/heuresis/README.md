@@ -20,23 +20,24 @@ hypothesis until it has been run against the set, however good the branch
 looks.
 
 **An independent child project, with two named exceptions.** Heuresis keeps its
-own notes and ledger and uses the shared [`job_launcher/`](../../job_launcher/)
-for experiments. No code outside this directory imports it, and deleting
+own notes and ledger in [`docs/`](docs), everything it publishes in
+[`reports/`](reports), and uses the shared
+[`job_launcher/`](../../job_launcher) for experiments. No code outside this directory imports it, and deleting
 `tools/heuresis/` would leave the launcher and the profiler exactly as they are.
 In two respects it is **not an island**, both the parent's choice and both
 written down here so that they are named exceptions rather than drift. Tachyon's
 front page names and advertises it, which is a link inward that a reader meets
 before this page — it is advertised in Eunoia listings. And the parent's site
-builder runs [`report`](report) when that file exists, as it runs the tests in
-[`tests/`](tests/), to publish this project's evidence at
+builder runs [`reports/build`](reports/build) when that file exists, as it runs
+the tests in [`tests/`](tests), to publish this project's evidence at
 <https://ajreynol.github.io/tachyon/heuresis/>; it reads nothing here itself,
-and a project without a `report` is listed and not published
+and a project without one is listed and not published
 ([site.md](../../docs/site.md)).
 
 **What it has delivered, and who decides what comes next.** The set is named and
-fixed, the gap is measured ([2026-09-14](ledger/2026-09-14-baseline.md)), and the
+fixed, the gap is measured ([2026-09-14](docs/ledger/2026-09-14-baseline.md)), and the
 register of directions is backed by whole-set statistics and option experiments.
-The [bounded eager-instantiation experiment](ledger/2026-09-16-bounded-eager-instantiation.md)
+The [bounded eager-instantiation experiment](docs/ledger/2026-09-16-bounded-eager-instantiation.md)
 identifies 29 otherwise-unsolved gap cases as a candidate finding; a complete
 per-benchmark attribution table is still absent. The human maintainer steers
 this search. Any independent work inspired by a finding is their choice, and
@@ -62,10 +63,10 @@ reveal, and what evidence makes them worth a human's further investigation?**
 
 **Why this and not "make cvc5 faster".** Because the register already exists,
 and it is long. The performance notes this project starts from
-([`notes.md`](notes.md)) list around thirty candidate causes, and the one that
+([`notes.md`](docs/notes.md)) list around thirty candidate causes, and the one that
 has been measured — handling large `distinct` lazily — gave an average speedup
 of 1.75 on the set at a 60-second timeout, from a single preprocessing change
-([`h-25`](notes.md#f--preprocessing)). That is the argument for attribution
+([`h-25`](docs/notes.md#f--preprocessing)). That is the argument for attribution
 before construction. The gap is probably a few large terms and a long tail, and
 the branches already written may or may not be aimed at the large terms. Nobody
 knows, because the gap has never been decomposed.
@@ -91,9 +92,9 @@ knows, because the gap has never been decomposed.
   Further solver development and research may follow independently at a
   human's discretion. Continue the search without waiting for that choice.
 - **Only measured claims.** Every number here comes from a row in
-  [`ledger/`](ledger/) with a config in [`job_launcher/configs/`](../../job_launcher/configs/)
+  [`ledger/`](docs/ledger) with a config in [`job_launcher/configs/`](../../job_launcher/configs)
   and an entry in [`job_launcher/log.txt`](../../job_launcher/log.txt) beside it. A claim
-  without one lives in [`notes.md`](notes.md) as a hypothesis, marked as one.
+  without one lives in [`notes.md`](docs/notes.md) as a hypothesis, marked as one.
 
 **The goals, in order.**
 
@@ -176,7 +177,7 @@ give a human a solid starting point whenever they choose to use it.
 by a person on 2026-09-14: **6124 benchmarks** — 5207 in `sundance/`, 779 in
 `verus-no-option/`, 138 in `slow/` — all Verus-generated, all `unsat` where
 solved, none carrying options of their own. In `job_launcher/site.conf` it is
-`QUANT_DIR`. Counted by the baseline run ([ledger, 2026-09-14](ledger/2026-09-14-baseline.md)).
+`QUANT_DIR`. Counted by the baseline run ([ledger, 2026-09-14](docs/ledger/2026-09-14-baseline.md)).
 
 Fixed with it, for goal 0:
 
@@ -188,7 +189,7 @@ Fixed with it, for goal 0:
 | gap set | unsolved by cvc5 and solved by z3, or both solved and cvc5 at least 10× slower with cvc5 taking at least 1 s |
 | aggregate | PAR2 ratio, cvc5 over z3, over the benchmarks both runs report |
 
-The gap factor, time floor and timeout are the defaults of [`gap`](gap), the
+The gap factor, time floor and timeout are the defaults of [`gap`](reports/gap), the
 script that reads results in this project. It compares the intersection of all
 supplied runs; solver options and versions come from the inputs, not the script.
 A ledger entry that uses different thresholds says so.
@@ -234,12 +235,12 @@ records the finding as soon as the evidence supports it.
 
 | inherited | where it was established |
 | --- | --- |
-| the launcher: configs, site file, results format, host conventions | [`job_launcher/`](../../job_launcher/) |
-| the register of hypotheses, with each one's branch or pull request | [`notes.md`](notes.md), a summary of performance notes dated 2026-09-14 |
+| the launcher: configs, site file, results format, host conventions | [`job_launcher/`](../../job_launcher) |
+| the register of hypotheses, with each one's branch or pull request | [`notes.md`](docs/notes.md), a summary of performance notes dated 2026-09-14 |
 | the research directions, with risk/gain estimates, flags, branches, z3's mechanisms and papers | [`docs/directions.md`](docs/directions.md), written 2026-09-15 from cvc5 and z3 source, the fork's 847 remote branch refs, and the literature |
-| the configuration under study | [`notes.md`](notes.md#the-configuration-under-study) |
-| the measured number inherited from the notes | [`h-25`](notes.md#f--preprocessing): 1.75× average, lazy `distinct`, 60 s |
-| what the notes say z3 has that cvc5 does not | [`notes.md`](notes.md#what-z3-has-according-to-the-notes) |
+| the configuration under study | [`notes.md`](docs/notes.md#the-configuration-under-study) |
+| the measured number inherited from the notes | [`h-25`](docs/notes.md#f--preprocessing): 1.75× average, lazy `distinct`, 60 s |
+| what the notes say z3 has that cvc5 does not | [`notes.md`](docs/notes.md#what-z3-has-according-to-the-notes) |
 | the shape — charter, goals in order, wishue, ledger, three endings | dokimasia's [`tools/`](https://github.com/ajreynol/dokimasia/tree/main/tools) |
 
 ## Using it
@@ -261,11 +262,11 @@ job_launcher/submit    quant-cvc5.conf quant-z3.conf  # the baseline, queued in 
 job_launcher/status
 ```
 
-Results land on the host; a ledger entry ([`ledger/README.md`](ledger/README.md))
+Results land on the host; a ledger entry ([`ledger/README.md`](docs/ledger/README.md))
 records what was read from them and what it settled.
 
-[`report`](report) builds the public pages from what the ledger retained — the
-gap lists under [`ledger/data/`](ledger/data/), the entries that cite them, and
+[`reports/build`](reports/build) builds the public pages from what this project
+retained — the gap lists in [`reports/data/`](reports/data), the entries that cite them, and
 the tables of [`docs/progress.md`](docs/progress.md) — and refuses a list no
 entry cites. It computes its figures from those files rather than restating
 them, so the page cannot say a number this project has not recorded. It writes
@@ -278,10 +279,10 @@ rankings apart, because a page that merged them would misreport whose judgement
 each one is:
 
 ```bash
-tools/heuresis/report --out scratch/heuresis-report   # then open index.html
+tools/heuresis/reports/build --out scratch/heuresis-report   # then open index.html
 ```
 
-For local comparisons, run `tools/heuresis/gap z3=REFERENCE cvc5=RESULTS` on
+For local comparisons, run `tools/heuresis/reports/gap z3=REFERENCE cvc5=RESULTS` on
 complete result files. The parser accepts `.smt2` and `.smt2.gz` benchmark
 headers and refuses incomplete blocks, duplicate paths, and an empty shared
 cohort. It reports the intersection of all supplied runs. Positive factor and
@@ -289,22 +290,22 @@ timeout values and a nonnegative floor must be finite; reference times below
 1 ms use 1 ms for the slowdown comparison. `--gapset FILE` rewrites that file
 with benchmark, reference seconds, and comparison seconds or unsolved status.
 Wrong-answer disagreements are flagged separately and excluded from the gap
-list. [Local tests](tests/) cover these boundaries without running a solver.
+list. [Local tests](tests) cover these boundaries without running a solver.
 
 ## Status
 
 **Authorized by the human maintainer.** The fixed set is recorded in the
-[baseline ledger](ledger/2026-09-14-baseline.md). Comparisons use the
-[nine-option Verus z3 baseline](ledger/2026-09-15-z3-full-verus-options.md)
-and [explicit CaDiCaL](ledger/2026-09-15-sat-and-instance-order.md).
+[baseline ledger](docs/ledger/2026-09-14-baseline.md). Comparisons use the
+[nine-option Verus z3 baseline](docs/ledger/2026-09-15-z3-full-verus-options.md)
+and [explicit CaDiCaL](docs/ledger/2026-09-15-sat-and-instance-order.md).
 The latest recorded measurements are dated 2026-09-17, on `main@a07d513075`
-— the cvc5 1.4.0 release ([ledger](ledger/2026-09-17-cvc5-1-4-0-release.md)):
+— the cvc5 1.4.0 release ([ledger](docs/ledger/2026-09-17-cvc5-1-4-0-release.md)):
 
 > **the gap** — PAR2 ratio **1.52** (cvc5 `--no-cbqi
 > --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off` over
 > z3 4.15.4 with the nine recorded Verus options, 30 s); gap set **786** of
 > 6124. The same configuration measured 35532.7 and a gap of 784 one revision
-> earlier ([ledger](ledger/2026-09-17-self-contained-launcher-and-current-main.md)),
+> earlier ([ledger](docs/ledger/2026-09-17-self-contained-launcher-and-current-main.md)),
 > so the release moved this number by a tenth of a percent — inside the noise
 > band. It lowers PAR2 13.6% versus the fixed control at the same revision
 > (41191.8, in the same entry).
@@ -320,17 +321,17 @@ The published [report](https://ajreynol.github.io/tachyon/heuresis/) is built
 from the retained gap lists rather than from this table, and the newest of those
 is the 2026-09-16 `best` list — 789 benchmarks, 460 cvc5-unsolved and 329 both
 solved with cvc5 at least 10× slower
-([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
+([ledger](docs/ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
 The 2026-09-17 runs retained no gap list, so the report does not move with the
 rows above.
 
 The fresh explicit-CaDiCaL control is ratio 1.76 with a gap of 1071
-([ledger](ledger/2026-09-16-entailment-filtering.md)). Central
+([ledger](docs/ledger/2026-09-16-entailment-filtering.md)). Central
 equality alone cuts PAR2 9.6%, evaluator-off alone cuts it 3.1%, and together
-they cut it 13.4% ([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
+they cut it 13.4% ([ledger](docs/ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
 The first whole-set statistics run also shows that the earlier 1122-case gap,
 18.3% of the corpus, consumes 86.0% of cvc5 time and that E-matching consumes
-27.8% within it ([ledger](ledger/2026-09-15-attribution-stats.md)). This is
+27.8% within it ([ledger](docs/ledger/2026-09-15-attribution-stats.md)). This is
 evidence for the next attribution work, not yet an attributed fraction.
 
 The one number inherited from the notes (`h-25`) remains marked as inherited.

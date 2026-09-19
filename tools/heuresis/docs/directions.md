@@ -14,7 +14,7 @@ and inform future work.
 and the same four inventories: the cvc5 flags that test it today,
 what has been tried, what z3 and others do, and the papers.** Written
 2026-09-15 from the performance notes
-summarised in [`../notes.md`](../notes.md) (the `h-N` rows referenced below),
+summarised in [`../notes.md`](notes.md) (the `h-N` rows referenced below),
 from cvc5 `main` at
 [`f294265`](https://github.com/cvc5/cvc5/commit/f294265c2b939a8e6cee8551f5a08afe5fb01efa)
 and z3 `master` at
@@ -44,7 +44,7 @@ remaining gap. Repeated fixed-control runs measure a PAR2 ratio of 1.75–1.76
 and gap sets of 1071–1073 of 6124 for explicit CaDiCaL against z3 with all
 nine current Verus options. Central equality plus evaluator-off was repeated
 on current main and improves this to **1.52 / 796**
-([ledger](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)).
+([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)).
 The host sweeps also separated the two quantifier flags, tested the selected
 mainline controls, and captured whole-set internal statistics. Those measured
 updates are recorded under the affected directions and in the ledger; two
@@ -235,7 +235,7 @@ Theories*](https://theory.stanford.edu/~barrett/pubs/GBT09-abstract.html), CADE
 Internals*](https://z3prover.github.io/papers/z3internals.html), §7.1.5–7.1.6.
 
 **Evidence and next step.** The [2026-09-15 statistics
-run](../ledger/2026-09-15-attribution-stats.md) measured 31,334 full
+run](ledger/2026-09-15-attribution-stats.md) measured 31,334 full
 instantiation rounds on the then-current 1122-case gap: 1121 cases were nonzero,
 with median 22 and p90 54. The missing comparison is z3's instance-generation
 depth on a fixed sample. Push the rebased tip of the five-commit
@@ -318,7 +318,7 @@ Bjørner et al., [*Z3
 Internals*](https://z3prover.github.io/papers/z3internals.html), §7.1.2–7.1.3.
 
 **Evidence and next step.** The [2026-09-15 statistics
-run](../ledger/2026-09-15-attribution-stats.md) measures E-matching at 6015 s,
+run](ledger/2026-09-15-attribution-stats.md) measures E-matching at 6015 s,
 or 27.8% of total time, on the current gap set. The timer prerequisite is
 therefore positive. Add the still-missing counter for matches found versus
 matches rediscovered; that ratio decides whether incrementality, rather than
@@ -557,11 +557,11 @@ SMT*](https://homepage.cs.uiowa.edu/~tinelli/papers/ReyTD-FMCAD-14.pdf), FMCAD
 2021](https://doi.org/10.1007/978-3-030-67067-2_24).
 
 **Evidence and next step.** The [four-arm 2026-09-15
-run](../ledger/2026-09-15-quantifier-controls.md) did that A/B. `--no-cbqi`
+run](ledger/2026-09-15-quantifier-controls.md) did that A/B. `--no-cbqi`
 alone rescues 96 default failures, strict patterns rescue 90, and 87 overlap;
 the combined arm rescues 93. Either option recovers nearly all of the bundle's
 aggregate gain. The [2026-09-16 mode and statistics
-run](../ledger/2026-09-16-conflict-instantiation.md) confirms the policy:
+run](ledger/2026-09-16-conflict-instantiation.md) confirms the policy:
 conflict-only and propagation/equality QCF worsen PAR2 1.1% and 1.4%. More
 decisively, conflict-only performs 272,280 QCF rounds but emits only 54
 conflict lemmas on 49 benchmarks, while consuming just 0.24% of total time.
@@ -604,15 +604,15 @@ filter.
 analogue.
 
 **Evidence and next step.** The [2026-09-15 statistics
-run](../ledger/2026-09-15-attribution-stats.md) records 247,662 entailed
+run](ledger/2026-09-15-attribution-stats.md) records 247,662 entailed
 duplicates on 985 of 1122 gap cases, 8.1% of total gap-set instantiations. The
-[2026-09-16 controls](../ledger/2026-09-16-entailment-filtering.md) separate
+[2026-09-16 controls](ledger/2026-09-16-entailment-filtering.md) separate
 the mechanisms: `--ieval=off` solves 16 net additional cases and cuts PAR2
 3.1%, while generalized learning preserves the control's status results and
 slightly worsens PAR2, and disabling only the completed-instance entailment
 check is also slightly worse. Thus the signal is the incremental partial
 evaluator, not positive entailment filtering in general. The [current-main
-and branch run](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)
+and branch run](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)
 reproduces evaluator-off's composition with central equality but finds
 [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie)
 neutral against evaluator-on (+0.09% PAR2, one net lost solve) and 3.91% worse
@@ -734,7 +734,7 @@ Moura and Bjørner, [*Efficient E-Matching for SMT
 Solvers*](https://leodemoura.github.io/files/ematching.pdf), CADE 2007.
 
 **Evidence and next step.** The [2026-09-16 controls and
-statistics](../ledger/2026-09-16-conflict-instantiation.md) rule out “run
+statistics](ledger/2026-09-16-conflict-instantiation.md) rule out “run
 mainline QCF earlier” as the implementation: 272,280 structural QCF rounds
 produce only 54 conflict lemmas, and both enabled modes regress. Use the
 compact [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
@@ -803,7 +803,7 @@ of inst-local that avoids re-deriving instantiations after backtracking");
 module that holds lemmas back, with arithmetic branch-and-bound hooks);
 [`ajreynol:smtLazyAssert`](https://github.com/ajreynol/cvc5/tree/smtLazyAssert) (2022); [`ajreynol:satNotify`](https://github.com/ajreynol/cvc5/tree/satNotify), [`ajreynol:notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause) (the deletion
 callback). None but `--inst-local` is on `main`. The [2026-09-15
-run](../ledger/2026-09-15-sat-and-instance-order.md) measured it on this set:
+run](ledger/2026-09-15-sat-and-instance-order.md) measured it on this set:
 it rescues 84 control failures and loses 75 control solves, while raising
 PAR2 1.2% and making 480 common solves at least 2× slower. Its upstream PR
 also reports significantly worse overall performance despite improvements on
@@ -893,7 +893,7 @@ SAT*](https://doi.org/10.1007/3-540-45657-0_18), CAV 2002 (the justification
 idea).
 
 **Evidence and next step.** In the [2026-09-15
-run](../ledger/2026-09-15-sat-and-instance-order.md), `--inst-local` raises
+run](ledger/2026-09-15-sat-and-instance-order.md), `--inst-local` raises
 PAR2 1.2% and the gap from 1122 to 1332; `--jh-rlv-order` raises PAR2 7.2%,
 loses 66 net solves, but reduces time on the cases it still solves. These are
 negative as global policies but heterogeneous. Classify their wins and losses
@@ -1062,7 +1062,7 @@ Solvers*](https://doi.org/10.1007/978-3-540-72788-0_28), SAT 2007 (phase
 saving).
 
 **Evidence and next step.** The [2026-09-15
-run](../ledger/2026-09-15-sat-and-instance-order.md) explicitly selected
+run](ledger/2026-09-15-sat-and-instance-order.md) explicitly selected
 CaDiCaL: it rescues 55 control failures, loses none, removes 50 timeouts, and
 cuts PAR2 6.5%; that experiment's gap falls from 1122 to 1073. Explicit
 CaDiCaL remains a fixed component of the measured configurations, even though
@@ -1189,7 +1189,7 @@ et al., [*cvc5: A Versatile and Industrial-Strength SMT
 Solver*](https://doi.org/10.1007/978-3-030-99524-9_24), TACAS 2022.
 
 **Evidence and next step.** The [current-main whole-set
-run](../ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) confirms
+run](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md) confirms
 this as one of the strongest measured directions: `--ee-mode=central` solves
 5616 versus 5546 and lowers PAR2 10.3%; combined with evaluator-off it reaches
 5623 solves and lowers PAR2 13.6%. The one-effective-commit
@@ -1266,9 +1266,9 @@ Reasoning*](https://arxiv.org/abs/1611.02908), POPL 2017. Hojjat and Rümmer,
 Reduction*](https://arxiv.org/abs/1801.02367), 2018.
 
 **Evidence and next step.** The [2026-09-15 statistics
-run](../ledger/2026-09-15-attribution-stats.md) records 27,484
+run](ledger/2026-09-15-attribution-stats.md) records 27,484
 `DATATYPES_SPLIT` lemmas on 920 of 1122 gap cases (median 7, p90 79), but the
-[2026-09-16 control](../ledger/2026-09-16-datatype-and-equality-controls.md)
+[2026-09-16 control](ledger/2026-09-16-datatype-and-equality-controls.md)
 shows that changing their shape globally with `--dt-binary-split` loses eight
 net solves and makes PAR2 1.15% worse. Do not infer that fewer splits are bad:
 the relevance hypothesis is different. Before asking for a branch rebase, add
@@ -1342,7 +1342,7 @@ cubes and equalities*](https://doi.org/10.1007/s10703-017-0278-7), FMSD 51(3),
 2017.
 
 **Evidence and next step.** The [2026-09-15 statistics
-run](../ledger/2026-09-15-attribution-stats.md) finds DIO conflict calls on 283
+run](ledger/2026-09-15-attribution-stats.md) finds DIO conflict calls on 283
 gap cases, DIO cut calls on 242, and external branch-and-bound on 278. These
 counters narrow R17 to roughly one quarter of the gap rather than supporting
 a global policy. Classify that slice before running `--no-dio-solver` or
@@ -1784,7 +1784,7 @@ Ghost Types*](https://doi.org/10.1145/3586037), OOPSLA 2023.
 **Evidence and next step.** This direction is the instrument: its deliverable
 is evidence for goal 2's attribution table and the findings it supports. The
 first whole-set `--stats-internal` capture is in the [2026-09-15
-ledger](../ledger/2026-09-15-attribution-stats.md). It already reprioritizes
+ledger](ledger/2026-09-15-attribution-stats.md). It already reprioritizes
 several directions, but does not raise the project's attributed fraction;
 normalize its per-benchmark evidence next. Current `main` still lacks
 new-versus-rediscovered E-match, persistent-clause, and instance-clause
@@ -1878,7 +1878,7 @@ forgetting — and the attribution still has to earn it.
 # Sources
 
 - The performance notes of 2026-09-14, as summarised in
-  [`../notes.md`](../notes.md).
+  [`../notes.md`](notes.md).
 - cvc5 `main` at
   [`f294265`](https://github.com/cvc5/cvc5/commit/f294265c2b939a8e6cee8551f5a08afe5fb01efa)
   (2026-09-14): `src/options/*.toml`,

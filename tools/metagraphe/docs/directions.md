@@ -34,7 +34,7 @@ No concrete candidates have been recorded yet. Give each new candidate a stable
 - **Value:** unmeasured, a structural simplification, or a measured effect,
   with an explicit cost model and the limits of any performance claim.
 - The open question or next discriminating experiment, and links to the
-  [ledger](../ledger/README.md) and any saved cases.
+  [ledger](ledger/README.md) and any saved cases.
 
 Preserve rejected and already-handled candidates with the reason, so the next
 search does not rediscover them. A finding can motivate further research while

@@ -31,7 +31,7 @@ class ReportTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.out = Path(self.temp.name) / "site"
-        self.report = load(ROOT / "report")
+        self.report = load(ROOT / "reports/build")
 
     def build(self):
         return self.report.build(self.out, "https://example.invalid/site/elaphros", REPO)
@@ -41,9 +41,11 @@ class ReportTests(unittest.TestCase):
         tree = Path(tempfile.mkdtemp(dir=self.temp.name)) / "elaphros"
         shutil.copytree(ROOT, tree, ignore=shutil.ignore_patterns("tests", "__pycache__"))
         self.report.ROOT = tree
-        self.report.TEMPLATE = tree / "report.html"
+        self.report.HERE = tree / "reports"
+        self.report.TEMPLATE = tree / "reports/report.html"
         self.addCleanup(setattr, self.report, "ROOT", ROOT)
-        self.addCleanup(setattr, self.report, "TEMPLATE", ROOT / "report.html")
+        self.addCleanup(setattr, self.report, "HERE", ROOT / "reports")
+        self.addCleanup(setattr, self.report, "TEMPLATE", ROOT / "reports/report.html")
         return tree
 
     def test_the_report_describes_itself_and_writes_what_it_names(self):
@@ -115,6 +117,54 @@ class ReportTests(unittest.TestCase):
             self.build()
         self.assertIn("Updated", str(refusal.exception))
 
+    def test_the_register_publishes_every_direction_with_a_resolving_anchor(self):
+        """The queue shows thirteen; the register must show what was left out too."""
+        summary = self.build()
+        page = (self.out / "index.html").read_text()
+        register = (ROOT / "docs/directions.md").read_text()
+        headings = re.findall(r"^##\s+(.+?)\s*$", register, re.MULTILINE)
+        slugs = {"-".join(re.sub(r"[^\w\s-]", "", h.lower()).split()) for h in headings}
+        used = set(re.findall(r"directions\.md#([a-z0-9-]+)", page))
+        self.assertEqual(len(used), summary["directions"])
+        self.assertEqual(used - slugs, set(), "an anchor the register does not define")
+        self.assertIn("unranked", page)
+
+    def test_a_direction_that_states_no_effort_is_refused(self):
+        tree = self.stand_in()
+        register = tree / "docs/directions.md"
+        body = register.read_text()
+        start = body.index("## E1 Unrewriting")
+        end = body.index("**Question.**", start)
+        register.write_text(body[:start] + "## E1 Unrewriting\n\n" + body[end:])
+        with self.assertRaises(ValueError) as refusal:
+            self.build()
+        self.assertIn("E1", str(refusal.exception))
+
+    def test_the_retained_snapshots_are_counted_and_checked_against_their_register(self):
+        summary = self.build()
+        page = (self.out / "index.html").read_text()
+        data = ROOT / "reports/data"
+        files = [p for p in data.iterdir() if p.is_file() and p.name != "README.md"
+                 and not p.name.startswith(".")]
+        for path in files:
+            with self.subTest(artifact=path.name):
+                lines = sum(1 for _ in path.open(encoding="utf-8", errors="replace"))
+                self.assertIn(f"<td class=\"rank\">{lines:,}</td>", page)
+        self.assertIn(f"<strong>{len(files)}</strong>", page)
+
+    def test_a_register_and_a_directory_that_disagree_are_refused(self):
+        for damage in ("extra file", "missing file"):
+            with self.subTest(damage=damage):
+                tree = self.stand_in()
+                if damage == "extra file":
+                    (tree / "reports/data/2026-09-18-unlisted.tsv").write_text("a\tb\n")
+                else:
+                    next(p for p in (tree / "reports/data").iterdir()
+                         if p.suffix == ".json").unlink()
+                with self.assertRaises(ValueError) as refusal:
+                    self.build()
+                self.assertRegex(str(refusal.exception), "not retained here|named by no register row")
+
     def test_writing_into_the_project_itself_is_refused(self):
         for destination in (ROOT, ROOT / "docs"):
             with self.subTest(destination=destination.name):
@@ -134,8 +184,8 @@ class ReportTests(unittest.TestCase):
         source = "tools/elaphros/docs/todo.md"
         self.assertEqual(resolve(REPO, source, "directions.md#e1-unrewriting"),
                          f"{REPO}/blob/main/tools/elaphros/docs/directions.md#e1-unrewriting")
-        self.assertEqual(resolve(REPO, source, "../ledger/README.md"),
-                         f"{REPO}/blob/main/tools/elaphros/ledger/README.md")
+        self.assertEqual(resolve(REPO, source, "ledger/README.md"),
+                         f"{REPO}/blob/main/tools/elaphros/docs/ledger/README.md")
         self.assertEqual(resolve(REPO, source, "https://example.com/x"), "https://example.com/x")
 
     def test_the_json_description_is_one_object_on_stdout(self):

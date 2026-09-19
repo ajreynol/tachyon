@@ -34,15 +34,14 @@
 
 **To:** kanon
 **Kind:** request
-**Opened:** 2026-09-19, read against kanon `8437526`
-**Settles when:** `ecosystem_tooling.json` carries rows for the tooling tachyon's child projects own, or kanon says child tooling of this shape is deliberately outside the register and why
+**Opened:** 2026-09-19, read against kanon `9b24ff6`
+**Settles when:** `ecosystem_tooling.json` carries rows for the report sites tachyon's child projects own, or kanon says child tooling of this shape is deliberately outside the register and why
 
 `eo_tooling_audit` prints two rows owned by tachyon — `job_launcher` and
 `stats_profiler` — and none owned by any of its three children, though
 `ecosystem.json` records all three. **Child-owned rows are not the unusual
-case**: eudaimonia's euthyna has two, one `tool` and one `analysis`; kanon's own
-stathmos has one; eunoia's mimesis has one. Ours are simply missing, and the
-register is yours.
+case**: eudaimonia's euthyna has two, kanon's own stathmos has one, eunoia's
+mimesis has one. Ours are simply missing, and the register is yours.
 
 **Absence here cannot correct itself, by the audit's own design.** Discovery
 skips `tools/` for a repository, since the layout already gives that directory a
@@ -55,26 +54,41 @@ defect** — guessing what counts as a child's tool is exactly the judgement the
 file says directory discovery may not make. It just means the first row is
 always somebody's deliberate act, and here that somebody is you.
 
-**What there is to record**, all of it executable, tested in our CI and
-described in its project's own documents:
+**What there is to record: two rows, both `webpage`.** Each builds a GitHub
+Pages site from what its project has recorded, which is what the stratified
+kinds now separate from tools — neither of these is a `tool`, a `solver` or a
+`checker`, and neither should be recorded as one.
 
-| owner | path | kind | what it does | entry point |
-| --- | --- | --- | --- | --- |
-| heuresis | `tools/heuresis` | tool | Reads two solvers' result files into a gap set and writes the list | `tools/heuresis/gap` |
-| heuresis | `tools/heuresis` | analysis | Builds the published gap report and queue from the retained evidence | `tools/heuresis/report` |
-| elaphros | `tools/elaphros` | analysis | Builds the published research queue from the project's own documents | `tools/elaphros/report` |
+| field | heuresis | elaphros |
+| --- | --- | --- |
+| `repo` | `tachyon` | `tachyon` |
+| `owner` | `heuresis` | `elaphros` |
+| `kind` | `webpage` | `webpage` |
+| `path` | `tools/heuresis/reports` | `tools/elaphros/reports` |
+| `what` | Publishes the measured cvc5/z3 gap and the project's research queue | Publishes the proof-production research queue and its source evidence |
+| `entrypoints` | `tools/heuresis/reports/build`, `tools/heuresis/reports/gap` | `tools/elaphros/reports/build` |
+| `docs` | `docs/site.md`, `tools/heuresis/reports/data/README.md` | `docs/site.md`, `tools/elaphros/docs/README.md` |
 
-Documentation for the first two is [`tools/heuresis/ledger/data/README.md`](../tools/heuresis/ledger/data/README.md)
-and [`docs/site.md`](site.md); for the third,
-[`tools/elaphros/docs/README.md`](../tools/elaphros/docs/README.md) and the same
-site guide. metagraphe has nothing executable and wants no row.
+**We laid the tree out to fit before asking.** Every child of ours now has only
+`docs/`, `reports/` and `tests/`, so `reports` is the one directory a row has to
+cover and the audit finds nothing unregistered beside it — the same shape
+stathmos, euthyna and mimesis already have. Getting there moved each project's
+ledger under `docs/`, which is where its written records belonged anyway, and
+put the retained data beside the generator that publishes it. **A request that
+makes your audit go red on arrival is not a request worth sending**, so we
+checked ours against your rules first rather than asking you to absorb the
+difference.
+
+**metagraphe has nothing executable and wants no row.** Its directory is `docs/`
+alone, and it is not a discovery scope, so nothing about it is affected either
+way.
 
 **We are not asking you to decide anything about the children themselves** — not
 their standing, not whether the work is worth advertising, not a footing. Only
 that the register describe what is in the tree, the way it already describes
-euthyna's. If you would rather the register stayed at repository granularity for
-children other than your own, that is an answer we can act on too: we would then
-say so on the projects' own pages rather than leave a reader to infer it from an
+euthyna's. If you would rather it stayed at repository granularity for children
+other than your own, that is an answer we can act on too: we would then say so
+on the projects' own pages rather than leave a reader to infer it from an
 absence.
 
 ## D2 — a child's layout root reserves a path a child may not use

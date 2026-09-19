@@ -20,7 +20,7 @@ job_launcher/checks
 [`host/heuresis.conf.example`](../job_launcher/host/heuresis.conf.example) the first time and
 never overwrites it afterwards — it is host-local in the same way `site.conf`
 is machine-local. Set `JOBS` in it at least. Re-run `deploy` after changing
-anything in [`host/`](../job_launcher/host/).
+anything in [`host/`](../job_launcher/host).
 
 The host also needs GNU `parallel`, `timeout` and `strip` on its `PATH`, and
 the directories `~/analysis/data`, `~/analysis/stats` and `~/analysis/binaries`.
@@ -51,7 +51,7 @@ and `-r` are blocking instead, streaming progress and ending in an explicit
 verdict. `log.txt` records launch metadata and final verdicts. Full blocking-job
 output is written to a local temporary file, whose path the launcher prints.
 
-**Host.** [`host/`](../job_launcher/host/) is installed to `~/bin/heuresis`, and every job runs
+**Host.** [`host/`](../job_launcher/host) is installed to `~/bin/heuresis`, and every job runs
 with `PATH=$HOME/bin/heuresis:$HOME/bin:$PATH`, so the drivers and wrappers a
 job uses are the ones from the latest deployment. Redeploy after host-script
 changes and record that revision when recording an experiment. A

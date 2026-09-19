@@ -2,7 +2,7 @@
 
 The [front page](../README.md) introduces tachyon. These guides describe the
 shared tools and how to maintain them. Each research project under
-[`tools/`](../tools/) has its own charter, documentation index and evidence.
+[`tools/`](../tools) has its own charter, documentation index and evidence.
 
 | document | purpose |
 | --- | --- |

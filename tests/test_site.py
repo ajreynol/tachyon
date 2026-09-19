@@ -81,7 +81,7 @@ class ContractTests(unittest.TestCase):
         self.out = self.root / "site"
 
     def builder(self, writes, prints):
-        path = self.root / "tools/alpha/report"
+        path = self.root / "tools/alpha/reports/build"
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(BUILDER % (writes, prints))
         return path
@@ -153,9 +153,9 @@ class BuildTests(unittest.TestCase):
     def test_a_published_report_the_front_page_does_not_advertise_is_refused(self):
         original = site.ROOT
         stand_in = Path(self.temp.name) / "tree"
-        (stand_in / "tools/gamma").mkdir(parents=True)
+        (stand_in / "tools/gamma/reports").mkdir(parents=True)
         (stand_in / "README.md").write_text(README)
-        (stand_in / "tools/gamma/report").write_text(
+        (stand_in / "tools/gamma/reports/build").write_text(
             BUILDER % ('(args.out / "index.html").write_text("page")', repr({**DESCRIPTION, "name": "gamma"})))
         site.ROOT = stand_in
         self.addCleanup(setattr, site, "ROOT", original)
@@ -179,11 +179,11 @@ class BuildTests(unittest.TestCase):
     def test_a_missing_or_malformed_date_label_is_refused_or_defaulted(self):
         original = site.ROOT
         stand_in = Path(self.temp.name) / "labelled"
-        (stand_in / "tools/alpha").mkdir(parents=True)
+        (stand_in / "tools/alpha/reports").mkdir(parents=True)
         (stand_in / "README.md").write_text(README)
         site.ROOT = stand_in
         self.addCleanup(setattr, site, "ROOT", original)
-        builder = stand_in / "tools/alpha/report"
+        builder = stand_in / "tools/alpha/reports/build"
 
         builder.write_text(BUILDER % ('(args.out / "index.html").write_text("page")',
                                       repr({**DESCRIPTION, "name": "alpha"})))

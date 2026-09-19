@@ -83,7 +83,7 @@ python3 stats_profiler/plots.py scratch/profile-quant-07-25/summary.json --max-s
 
 The recorded example uses `quant-091526-u-ss-stats`
 ([log](../job_launcher/log.txt),
-[ledger](../tools/heuresis/ledger/2026-09-15-attribution-stats.md)), without
+[ledger](../tools/heuresis/docs/ledger/2026-09-15-attribution-stats.md)), without
 explicit CaDiCaL. The tracked config selects CaDiCaL and a fresh submit measures
 `u-ssc`; the two runs are not interchangeable.
 
@@ -144,7 +144,7 @@ and only a benchmark that is *both* long and dominated by the timer ranks high.
 Being slower than z3 enters as a **filter, not a third factor**. A benchmark is
 listed only if it is in the loss set — unsolved where z3 solved, or at least
 `--factor` (10) times slower having spent at least `--floor` (1) seconds, which
-is [`gap`](../tools/heuresis/gap)'s gap-set rule, not a new threshold. Weighting
+is [`gap`](../tools/heuresis/reports/gap)'s gap-set rule, not a new threshold. Weighting
 by the ratio instead would swamp the other two: z3 at 0.01 s against a cvc5
 timeout is 3000x, so the list would fill with benchmarks that are quick for cvc5
 and quicker still for z3. Each row still prints its ratio, so the degree of the

@@ -12,7 +12,7 @@ ranking has been supplied. All tasks below remain open.
 | 4 | Look for those patterns in a named benchmark sample or generated term set. | A recorded manifest or generation recipe and an account of where the patterns occur. |
 | 5 | Assess the strongest candidate's usefulness and write up the finding. | Evidence of simplification or measured impact, with remaining uncertainty and possible next experiments. |
 
-After an experiment, add its evidence to the [ledger](../ledger/README.md),
+After an experiment, add its evidence to the [ledger](ledger/README.md),
 update the candidate register, and revise this queue. Build a helper only when
 the next experiment needs it. A human's independent decision to pursue a
 finding is not a prerequisite for further discovery.

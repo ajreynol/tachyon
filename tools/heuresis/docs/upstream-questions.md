@@ -13,15 +13,15 @@ person carries. The cross-repository channel is tachyon's
 [`docs/discussion.md`](../../../docs/discussion.md) and is not this file.
 
 Performance work lives in [`progress.md`](progress.md) and the
-[ledger](../ledger/); this file is for things worth a conversation upstream.
+[ledger](ledger); this file is for things worth a conversation upstream.
 
 ---
 
 ## 1. Segfault with `--ee-mode=central --ieval=off`
 
 **Status:** reproducible on current `main`, not yet filed upstream.
-**Evidence:** [ledger 2026-09-17](../ledger/2026-09-17-central-ieval-segfault.md),
-scope in [2026-09-17 segfault-scope](../ledger/2026-09-17-segfault-scope-and-failure-logging.md).
+**Evidence:** [ledger 2026-09-17](ledger/2026-09-17-central-ieval-segfault.md),
+scope in [2026-09-17 segfault-scope](ledger/2026-09-17-segfault-scope-and-failure-logging.md).
 
 ### Summary
 
@@ -76,7 +76,7 @@ The reason-clause callback enters `TheoryProxy::explainPropagation` and
 then the equality engine's `mkExplainLit`, `explainLit` and `explainEquality`.
 
 This summarizes the diagnostic under the
-[retention correction](../ledger/2026-09-19-output-retention.md); raw debugger
+[retention correction](ledger/2026-09-19-output-retention.md); raw debugger
 output belongs in the external diagnostic artifact, not this document.
 
 ### What it is not
@@ -96,7 +96,7 @@ output belongs in the external diagnostic artifact, not this document.
 - **The scope, now measured.** A 300 s sweep of the whole set in the crashing
   configuration finds **exactly two** crashes — the same two — among the
   **5845** benchmarks that reach a terminal answer
-  ([ledger](../ledger/2026-09-17-segfault-scope-and-failure-logging.md)). This
+  ([ledger](ledger/2026-09-17-segfault-scope-and-failure-logging.md)). This
   is a floor rather than a total: 279 benchmarks still hit the 300 s timeout
   and never got the chance to crash. So: rare, reproducible, and not
   widespread.

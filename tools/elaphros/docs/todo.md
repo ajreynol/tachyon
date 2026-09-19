@@ -26,7 +26,7 @@ design and E13's accounting instrument are prerequisites across the table and
 are not ranked as optimizations.
 
 **Revised 2026-09-19** to place E14–E16 from the [pipeline
-audit](../ledger/2026-09-19-pinned-main-pipeline-audit.md). The relative order
+audit](ledger/2026-09-19-pinned-main-pipeline-audit.md). The relative order
 of the branch-derived entries is unchanged; the new rows were inserted around
 them. Their positions reflect how well grounded and how contained each is in
 this planning pass, **not** a belief that they matter less than what sits

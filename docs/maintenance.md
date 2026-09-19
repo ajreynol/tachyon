@@ -9,7 +9,13 @@ charter and active queue of the research project you are working on. The
 Tachyon owns its launcher, host scripts, timing profiler, and research records.
 Solver implementations are maintained elsewhere. Keep experiments
 inside their research directory, personal settings in ignored `site.conf`,
-and transient output under ignored `scratch/`. A person sets research scope
+and transient output under ignored `scratch/`.
+
+**A research project keeps three directories and no others**: `docs/` for
+everything written, including its dated ledger; `reports/` for what it
+publishes, including the programs that build it and the data they read; and
+`tests/`. Anything else would be a directory the shared layout has no purpose
+for, which is the shape the ecosystem's tooling audit reports as unregistered. A person sets research scope
 and owns the priorities recorded in their name; an agent's ranking is separate.
 Do not revise an experimental record to match a new result: add a correction
 entry and update the claims that cite it.
@@ -29,7 +35,9 @@ ledger entry identifies its source artifacts, derivation command, schema and
 use in a recorded finding or report. Keep only the fields needed for that use:
 benchmark identifiers, numeric measurements and normalized statuses are
 appropriate; copied diagnostic messages and free-form output are not. The
-heuresis gap lists and elaphros source inventories meet this distinction.
+heuresis gap lists and elaphros source inventories meet this distinction, and
+both live in their project's `reports/data/` beside the builder that publishes
+them, each named by a register the build compares against the directory.
 Synthetic parser inputs in test code are allowed; do not use real run dumps as
 test fixtures. Summarize a failure's category and affected benchmarks in the
 ledger, and cite where its raw diagnostic can be retrieved.
@@ -63,7 +71,8 @@ This is the local definition of the `checks / tooling` CI job:
 2. Run `job_launcher/checks` to parse launcher scripts and configs, resolve
    configs against the template, check host-script syntax and executability,
    and scan public files for local identity.
-   The launch log and research ledgers are exempt from that identity scan.
+   The launch log, the research ledgers and the retained report data are
+   exempt from that identity scan.
 3. Run unittest discovery in `tests/` and `stats_profiler/tests/`, and in each
    existing `tools/*/tests/` directory. Launcher tests use local stand-ins;
    nothing contacts a host or starts a benchmark job.
