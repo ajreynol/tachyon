@@ -23,7 +23,7 @@ class RewriteDatabaseTests(unittest.TestCase):
     def test_retained_records_satisfy_owner_contract(self):
         contract.validate(self.document)
 
-    def test_initial_survey_and_drafts_were_not_lost(self):
+    def test_current_survey_and_drafts_agree(self):
         self.assertTrue({f"M-{n}" for n in range(1, 21)} <= set(self.by_id))
         survey = (ROOT / "docs/github-issues-rewrites.md").read_text()
         drafts = []
@@ -54,6 +54,67 @@ class RewriteDatabaseTests(unittest.TestCase):
         change(row)
         with self.assertRaises(ValueError):
             contract.validate({"bugs": [row]})
+
+    def test_orientation_corrections_preserve_the_original_equalities(self):
+        archive = json.loads((ROOT / "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json").read_text())
+        self.assertEqual({row["candidate"] for row in archive["records"]},
+                         {"M-1", "M-5", "M-11", "M-12", "M-16"})
+        for before in archive["records"]:
+            after = self.by_id[before["candidate"]]
+            self.assertTrue(after["reassessments"])
+            for original, corrected in zip(before["proposal"]["rewrites"], after["proposal"]["rewrites"]):
+                sides = ("rhs", "lhs") if before["candidate"] == "M-12" else ("lhs", "rhs")
+                self.assertEqual((original["lhs"], original["rhs"]),
+                                 tuple(corrected[side] for side in sides))
+                for field in ("variables", "condition", "notation"):
+                    self.assertEqual(original[field], corrected[field])
+
+    def test_growth_needs_a_declared_order_and_reverse_introduction_is_rejected(self):
+        contract.validate({"bugs": [copy.deepcopy(self.by_id["M-1"])]})
+        self.rejected(lambda r: r["proposal"].pop("orientation"))
+        self.rejected(lambda r: r["proposal"]["orientation"].update(reason=""))
+        self.rejected(lambda r: r["proposal"]["orientation"].update(operators=["abs"]))
+        def reverse(row):
+            rule = row["proposal"]["rewrites"][0]
+            rule["lhs"], rule["rhs"] = rule["rhs"], rule["lhs"]
+        self.rejected(reverse)
+        self.rejected(lambda r: r["proposal"].update(rare_drafts=[
+            '(define-rule expansion ((x Int)) x (+ x 0))']))
+        self.rejected(lambda r: r["proposal"]["rewrites"][0].update(lhs="true", rhs="true"))
+
+    def test_lexicographic_precedence_and_size_tiebreak(self):
+        order = {"kind": "lexicographic", "operators": ["expensive", "cheap"],
+                 "reason": "Synthetic precedence example."}
+        lhs = contract.expression_tree('(expensive x)')
+        rhs = contract.expression_tree('(cheap (cheap x))')
+        contract.check_orientation(lhs, rhs, order)
+        with self.assertRaises(ValueError):
+            contract.check_orientation(rhs, lhs, order)
+        larger = contract.expression_tree('(expensive (+ x 0))')
+        contract.check_orientation(larger, lhs, order)
+        with self.assertRaises(ValueError):
+            contract.check_orientation(lhs, larger, order)
+
+    def test_operator_review_preserves_prior_directions_and_rejects_reversed_drafts(self):
+        archive = json.loads((ROOT / "tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order-before.json").read_text())
+        for before in archive["records"]:
+            after = self.by_id[before["candidate"]]
+            self.assertEqual(after["reassessments"][:-1], before["reassessments"])
+            for old, new in zip(before["proposal"]["rewrites"], after["proposal"]["rewrites"]):
+                self.assertEqual((old["lhs"], old["rhs"]), (new["rhs"], new["lhs"]))
+                self.assertEqual(old["condition"], new["condition"])
+                self.assertEqual(old["variables"], new["variables"])
+        reversed_drafts = archive["records"][0]["proposal"]["rare_drafts"]
+        self.rejected(lambda r: r["proposal"].update(rare_drafts=reversed_drafts))
+
+    def test_structural_size_counts_terms_not_text_or_indices(self):
+        self.assertEqual(contract.term_size('(= s "long (text) with ""quotes""")'), 3)
+        self.assertEqual(contract.term_size('((_ extract 7 0) x)'), 2)
+        self.assertEqual(contract.term_size('(_ bv0 32)'), 1)
+        self.assertEqual(contract.term_size('(= x zero(w))'), 3)
+        for malformed in ('(f x', 'x y', '"unterminated', ')'):
+            with self.assertRaises(ValueError):
+                contract.term_size(malformed)
 
     def test_parser_acceptance_cannot_be_mislabeled_as_proof(self):
         self.rejected(lambda r: r["assessment"].update(validity="proved"))

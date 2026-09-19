@@ -9,7 +9,7 @@ import re
 import sys
 from urllib.parse import quote, urlsplit
 
-from check_rewrite_db import DATABASE, validate
+from check_rewrite_db import DATABASE, expression_tree, orientation_cost, term_size, validate
 
 
 OUTPUT = DATABASE.with_suffix(".md")
@@ -65,6 +65,10 @@ def render(document):
         "acceptance does not establish correctness or solver performance. Classifications",
         "and priorities are metagraphe's assessments; closure requires a separate verdict.",
         "Issue states below are snapshots at review, not live GitHub status.", "",
+        "**Orientation: LHS -> RHS, complex -> simpler.** Compare lexicographically:",
+        "counts of the declared complex operators first, then structural term size.",
+        "Eliminating a costly operator can therefore justify a larger RHS. Records name",
+        "the precedence and rationale; these are candidate orderings, not measured runtimes.", "",
         "## Overview", "",
         "| Record | Priority | Classification | Validity | RARE drafts | Closure | Issues |",
         "| --- | --- | --- | --- | --- | --- | --- |",
@@ -102,12 +106,26 @@ def render(document):
                 lines += [f"**Awaiting landing:** {prose(debt['project'])}, "
                           f"branch {prose(debt['branch'])}, {source_revision(debt['commit'])}.", ""]
         lines += [f"**Application context:** {prose(proposal['application_context'])}", ""]
+        if proposal.get("orientation"):
+            orientation = proposal["orientation"]
+            lines += ["**Orientation order:** "
+                      + " > ".join(prose(op) + " count" for op in orientation["operators"])
+                      + " > term size. "
+                      + prose(orientation["reason"]), ""]
+        else:
+            if proposal["rewrites"]:
+                lines += ["**Orientation rationale:** decrease structural term size.", ""]
         for i, rewrite in enumerate(proposal["rewrites"], 1):
             variables = "; ".join(f"{prose(name)}: {prose(sort)}"
                                   for name, sort in rewrite["variables"].items())
             lines += [f"### Rewrite {i}", "", f"Notation: {prose(rewrite['notation'])}.", "",
                       f"Variables: {variables or 'none'}.", "",
-                      block(f"{rewrite['lhs']}\n  ->\n{rewrite['rhs']}\n\nwhen: {rewrite['condition']}"), ""]
+                      block(f"{rewrite['lhs']}\n  ->\n{rewrite['rhs']}\n\nwhen: {rewrite['condition']}"), "",
+                      f"Structural size: **{term_size(rewrite['lhs'])} -> {term_size(rewrite['rhs'])}** term nodes.", ""]
+            if proposal.get("orientation"):
+                costs = [orientation_cost(expression_tree(rewrite[side]), proposal["orientation"])
+                         for side in ("lhs", "rhs")]
+                lines += [f"Lexicographic cost: **{costs[0]} -> {costs[1]}**.", ""]
         if not proposal["rewrites"]:
             lines += ["No exact rewrite is filed.", ""]
         if proposal["rare_drafts"]:
@@ -139,6 +157,12 @@ def render(document):
                   f"Koine ingestion: first {row['first_seen']}; last {row['last_seen']}.", "",
                   link("Survey", origin["survey"]) + f" (tachyon revision `{origin['survey_revision']}`); "
                   + link("investigation ledger", origin["ledger"]) + ".", ""]
+        if row.get("reassessments"):
+            lines += ["**Dated reassessments:**", ""]
+            lines += [f"- {event['on']}: {prose(event['reason'])} "
+                      + link("review", event["evidence"]) + "; "
+                      + link("previous record", event["previous_record"]) + "."
+                      for event in row["reassessments"]] + [""]
         for field, label in (("references", "Supporting references"),
                              ("source_references", "Source references")):
             if origin[field]:

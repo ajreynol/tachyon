@@ -57,6 +57,76 @@ def object_at(row, name):
     return value
 
 
+def expression_tree(expression):
+    """Read a term schema for size checking, not SMT-LIB type/validity checking.
+
+    Strings use SMT-LIB doubled quotes. zero(w) is the database's existing
+    shorthand for a width-parameterized zero literal, counted as one atom.
+    """
+    token = re.compile(r'\s*("(?:[^"]|"")*"|\|[^|]*\||zero\(w\)|[()]|[^\s()"|]+)')
+    stack, roots = [], []
+    pos = 0
+    while expression[pos:].strip():
+        match = token.match(expression, pos)
+        require(match is not None, "unrecognized term syntax")
+        value, pos = match.group(1), match.end()
+        if value == "(":
+            node = []
+            (stack[-1] if stack else roots).append(node)
+            stack.append(node)
+        elif value == ")":
+            require(bool(stack), "unmatched closing parenthesis")
+            stack.pop()
+        else:
+            (stack[-1] if stack else roots).append(value)
+    require(not stack and len(roots) == 1, "expected one complete term")
+    return roots[0]
+
+
+def tree_size(tree):
+    if isinstance(tree, str):
+        return 1
+    require(bool(tree), "empty application")
+    # Indexed literals and qualified constants denote a single term node;
+    # an indexed operator in function position is also one application node.
+    if tree[0] in ("_", "as"):
+        return 1
+    return 1 + sum(tree_size(child) for child in tree[1:])
+
+
+def term_size(expression):
+    return tree_size(expression_tree(expression))
+
+
+def operator_count(tree, operator):
+    if isinstance(tree, str):
+        return 0
+    require(bool(tree), "empty application")
+    head = tree[0]
+    if isinstance(head, list) and len(head) > 1 and head[0] == "_":
+        head = head[1]
+    return int(head == operator) + sum(operator_count(child, operator) for child in tree[1:])
+
+
+def orientation_cost(tree, orientation):
+    """Lexicographic operator counts, highest priority first, then term size."""
+    if orientation is None:
+        return (tree_size(tree),)
+    require(isinstance(orientation, dict) and orientation.get("kind") == "lexicographic",
+            "invalid orientation rationale")
+    require(strings(orientation.get("operators")) and nonempty(orientation.get("reason")),
+            "lexicographic orientation requires ordered operators and a reason")
+    require(len(set(orientation["operators"])) == len(orientation["operators"]),
+            "operator precedence must not contain duplicates")
+    return tuple(operator_count(tree, op) for op in orientation["operators"]) + (tree_size(tree),)
+
+
+def check_orientation(lhs, rhs, orientation):
+    """Check the declared ordering, not actual runtime cost."""
+    require(orientation_cost(lhs, orientation) > orientation_cost(rhs, orientation),
+            "rewrite must decrease the lexicographic cost: complex operators first, size last")
+
+
 def validate(document, root=ROOT, filing=False):
     """Return validated records, or raise ValueError with the affected identity."""
     if filing and isinstance(document, list):
@@ -128,10 +198,16 @@ def validate(document, root=ROOT, filing=False):
                 variables = object_at(rewrite, "variables")
                 require(all(nonempty(k) and nonempty(v) for k, v in variables.items()),
                         "variables must name their sorts")
+                check_orientation(expression_tree(rewrite["lhs"]), expression_tree(rewrite["rhs"]),
+                                  proposal.get("orientation"))
             drafts = proposal.get("rare_drafts")
             require(strings(drafts, empty=True), "rare_drafts must be a string list")
             require(all(re.match(r"\(define-(?:cond-)?rule\*?\s", d) for d in drafts),
                     "RARE draft must be a declaration")
+            for draft in drafts:
+                tree = expression_tree(draft)
+                if tree[0] in {"define-rule", "define-cond-rule"}:
+                    check_orientation(tree[-2], tree[-1], proposal.get("orientation"))
             assessment = object_at(row, "assessment")
             require(assessment.get("validity") in {"argued", "unchecked", "refuted", "not-applicable"},
                     "invalid validity status; parser acceptance is not a proof")
@@ -167,6 +243,14 @@ def validate(document, root=ROOT, filing=False):
                         "delivery requires a recipient")
                 day(delivery.get("on"))
                 reference(delivery.get("evidence"), root)
+            reassessments = row.get("reassessments", [])
+            require(isinstance(reassessments, list), "reassessments must be an event list")
+            for event in reassessments:
+                require(isinstance(event, dict) and nonempty(event.get("reason")),
+                        "reassessment requires a reason")
+                require(day(event.get("on")) >= observed, "reassessment precedes observation")
+                reference(event.get("evidence"), root)
+                reference(event.get("previous_record"), root)
             closed = any(k.startswith("closed_") for k in row)
             verdict = row.get("closed_verdict")
             if closed:

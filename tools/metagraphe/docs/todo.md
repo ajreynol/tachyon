@@ -10,7 +10,7 @@ baseline and experiments below remain open.
 
 | priority | next step | concrete output |
 | ---: | --- | --- |
-| 1 | Build a clean binary matching the survey's pinned source (or record a newer baseline), options, and simplification entry point. Probe M-1/M-2/M-3 and the BV candidate M-4. | A baseline ledger entry with inputs, exact commands, and actual outcomes. |
+| 1 | Build a clean binary matching the survey's pinned source (or record a newer baseline), options, and simplification entry point. Probe M-1/M-2/M-3 and the BV candidate M-4 under the clarified operator-first ordering. | A baseline ledger entry with inputs, exact commands, and actual outcomes. |
 | 2 | Extend the survey's targeted source audit to normalization paths, preprocessing, and regressions for those candidates. Check the existing #10520 rule as a control. | Distinguish missing rules from matching, context, or configuration gaps. |
 | 3 | Reduce the strongest gap from each primary theory and check its conditions and equivalence, including the survey's counterexamples. | Small reproduction cases, validity queries or arguments, and recorded results. |
 | 4 | Look for those patterns in a named benchmark sample or generated term set. | A recorded manifest or generation recipe and an account of where the patterns occur. |

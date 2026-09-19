@@ -15,6 +15,11 @@ acceptance does not establish correctness or solver performance. Classifications
 and priorities are metagraphe's assessments; closure requires a separate verdict.
 Issue states below are snapshots at review, not live GitHub status.
 
+**Orientation: LHS -> RHS, complex -> simpler.** Compare lexicographically:
+counts of the declared complex operators first, then structural term size.
+Eliminating a costly operator can therefore justify a larger RHS. Records name
+the precedence and rationale; these are candidate orderings, not measured runtimes.
+
 ## Overview
 
 | Record | Priority | Classification | Validity | RARE drafts | Closure | Issues |
@@ -50,6 +55,8 @@ Classification: candidate. Priority: 1. Theories: sequences, strings.
 
 **Application context:** Local term rewriting; normalized matching remains to be tested\.
 
+**Orientation order:** str\.replace\_all count > term size. Eliminate replace\_all before minimizing syntax size: containment of a replaced singleton becomes two plain containment tests\. The 6 \-&gt; 7 node growth and duplicated needle are explicit; matching cost and solver benefit remain unmeasured\.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -63,6 +70,10 @@ Variables: s: String or Seq\(T\); u: same sort as s; r: same sort as s.
 
 when: (= (str.len u) 1)
 ```
+
+Structural size: **6 -> 7** term nodes.
+
+Lexicographic cost: **(1, 6) -> (0, 7)**.
 
 ### RARE drafts
 
@@ -112,6 +123,11 @@ Koine ingestion: first 2026-09-19; last 2026-09-19.
 
 [Survey](../../../docs/github-issues-rewrites.md#m-1-singleton-replacement) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
 
+**Dated reassessments:**
+
+- 2026-09-19: Reoriented the same equality from complex \-&gt; simpler by structural term size; reviewed direction\-dependent availability and value\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json).
+- 2026-09-19: The human clarified lexicographic precedence: complex operators first, structural term size last\. Restored operator elimination, allowing the stated syntax growth\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order-before.json).
+
 **Supporting references:**
 
 - [https://github\.com/cvc5/cvc5/issues/12936](https://github.com/cvc5/cvc5/issues/12936)
@@ -136,6 +152,8 @@ Classification: candidate. Priority: 1. Theories: strings, sequences.
 
 **Application context:** Local term rewriting; normalized matching remains to be tested\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -149,6 +167,8 @@ Variables: s: String or Seq\(T\); t: same sort as s.
 
 when: true
 ```
+
+Structural size: **9 -> 4** term nodes.
 
 ### RARE drafts
 
@@ -213,6 +233,8 @@ Classification: candidate. Priority: 1. Theories: strings.
 
 **Application context:** Local term rewriting; normalized matching remains to be tested\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -227,6 +249,8 @@ false
 when: true
 ```
 
+Structural size: **5 -> 1** term nodes.
+
 ### Rewrite 2
 
 Notation: SMT\-LIB term schema.
@@ -240,6 +264,8 @@ Variables: s: String; t: String.
 
 when: true
 ```
+
+Structural size: **5 -> 3** term nodes.
 
 ### RARE drafts
 
@@ -310,6 +336,8 @@ Classification: candidate. Priority: 1. Theories: bit\-vectors, booleans.
 
 **Application context:** Local term rewriting; normalized matching remains to be tested\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -323,6 +351,8 @@ Variables: x: BitVec\(w\); y: BitVec\(w\).
 
 when: w is a positive integer
 ```
+
+Structural size: **7 -> 3** term nodes.
 
 ### RARE drafts
 
@@ -386,6 +416,8 @@ Classification: candidate. Priority: 2. Theories: strings, regular\-expressions.
 
 **Application context:** Local term rewriting; normalized matching remains to be tested\.
 
+**Orientation order:** re\.comp count > term size. Eliminate general regex complement inside this one\-character class before minimizing syntax size\. Two full\-alphabet ranges expose a positive character\-class representation at 5 \-&gt; 7 nodes; actual regex\-engine benefit remains unmeasured\.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -399,6 +431,10 @@ Variables: none.
 
 when: SMT-LIB Unicode Strings alphabet: code points 0 through 0x2ffff
 ```
+
+Structural size: **5 -> 7** term nodes.
+
+Lexicographic cost: **(1, 5) -> (0, 7)**.
 
 ### RARE drafts
 
@@ -439,6 +475,11 @@ Koine ingestion: first 2026-09-19; last 2026-09-19.
 
 [Survey](../../../docs/github-issues-rewrites.md#m-5-complement-of-a-character) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
 
+**Dated reassessments:**
+
+- 2026-09-19: Reoriented the same equality from complex \-&gt; simpler by structural term size; reviewed direction\-dependent availability and value\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json).
+- 2026-09-19: The human clarified lexicographic precedence: complex operators first, structural term size last\. Restored operator elimination, allowing the stated syntax growth\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order-before.json).
+
 **Supporting references:**
 
 - [https://github\.com/cvc5/cvc5/issues/12815](https://github.com/cvc5/cvc5/issues/12815)
@@ -464,6 +505,8 @@ Classification: candidate. Priority: 2. Theories: integers, strings.
 
 **Application context:** Local term rewriting; normalized matching remains to be tested\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -477,6 +520,8 @@ Variables: v: Int.
 
 when: true
 ```
+
+Structural size: **8 -> 1** term nodes.
 
 ### RARE drafts
 
@@ -537,6 +582,8 @@ Classification: candidate. Priority: 2. Theories: integers.
 
 **Application context:** Internal totalized arithmetic; surface\-to\-internal conversion may require contextual nonzero facts\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -551,6 +598,8 @@ Variables: a: Int; b: Int; c: Int.
 when: true
 ```
 
+Structural size: **6 -> 1** term nodes.
+
 ### Rewrite 2
 
 Notation: SMT\-LIB term schema.
@@ -564,6 +613,8 @@ Variables: n: Int.
 
 when: true
 ```
+
+Structural size: **7 -> 1** term nodes.
 
 ### RARE drafts
 
@@ -635,6 +686,8 @@ Classification: candidate. Priority: 3. Theories: strings, bit\-vector\-conversi
 
 **Application context:** Requires learned length bounds and composition of existing substring rules\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -648,6 +701,8 @@ n
 
 when: (and (<= 0 i) (<= 0 n) (<= (+ i n) (str.len s)))
 ```
+
+Structural size: **5 -> 1** term nodes.
 
 No RARE draft is filed.
 
@@ -710,6 +765,8 @@ Classification: candidate. Priority: 3. Theories: strings, booleans.
 
 **Application context:** May require preprocessing across assertions or a theory lemma\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -723,6 +780,8 @@ Variables: x: String; y: String.
 
 when: true
 ```
+
+Structural size: **9 -> 3** term nodes.
 
 No RARE draft is filed.
 
@@ -776,6 +835,8 @@ Classification: candidate. Priority: 3. Theories: strings, regular\-expressions.
 
 **Application context:** Requires a character\-language entailment check before applying the schema\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -789,6 +850,8 @@ Variables: A: RegLan; B: RegLan.
 
 when: A and B accept only strings of length one
 ```
+
+Structural size: **5 -> 4** term nodes.
 
 No RARE draft is filed.
 
@@ -843,6 +906,8 @@ Classification: existing\-coverage. Priority: not ranked. Theories: bit\-vectors
 
 **Application context:** Local term rewriting; normalized matching remains to be tested\.
 
+**Orientation order:** bvurem count > term size. Eliminate unsigned remainder before minimizing syntax size\. Zero/nonzero tests are simpler operations despite 5 \-&gt; 8 nodes; with the issue's nonzero constant the result reduces further to x=0\.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -856,6 +921,10 @@ Variables: x: BitVec\(w\); C: BitVec\(w\).
 
 when: w is positive; zero(w) is the width-w zero
 ```
+
+Structural size: **5 -> 8** term nodes.
+
+Lexicographic cost: **(1, 5) -> (0, 8)**.
 
 No RARE draft is filed.
 
@@ -887,6 +956,11 @@ Koine ingestion: first 2026-09-19; last 2026-09-19.
 
 [Survey](../../../docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
 
+**Dated reassessments:**
+
+- 2026-09-19: Reoriented the same equality from complex \-&gt; simpler by structural term size; reviewed direction\-dependent availability and value\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json).
+- 2026-09-19: The human clarified lexicographic precedence: complex operators first, structural term size last\. Restored operator elimination, allowing the stated syntax growth\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order-before.json).
+
 **Supporting references:**
 
 - [https://github\.com/cvc5/cvc5/issues/10520](https://github.com/cvc5/cvc5/issues/10520)
@@ -908,7 +982,9 @@ Classification: existing\-coverage. Priority: not ranked. Theories: integers.
 
 **Closure:** no closure recorded.
 
-**Application context:** Conditional reasoning with a known nonzero divisor\.
+**Application context:** Remove abs from a modulus divisor under the unchanged nonzero condition\. Existing\-coverage classification records related learned\-rewrite support, not a runtime check of this direction\.
+
+**Orientation rationale:** decrease structural term size.
 
 ### Rewrite 1
 
@@ -917,20 +993,22 @@ Notation: SMT\-LIB term schema.
 Variables: x: Int; y: Int.
 
 ```text
-(mod x y)
-  ->
 (mod x (abs y))
+  ->
+(mod x y)
 
 when: (not (= y 0))
 ```
+
+Structural size: **4 -> 3** term nodes.
 
 No RARE draft is filed.
 
 ### Assessment and next step
 
 - **Validity: argued.** Euclidean remainder depends on the absolute magnitude of a nonzero divisor\.
-- **Availability: existing\-conditional\-support.** The issue discussion already points to \-\-learned\-rewrite and records mixed suite results\.
-- **Value: unmeasured.** An option/context investigation rather than an established missing identity\.
+- **Availability: unchecked.** The issue discussion concerns sign normalization and \-\-learned\-rewrite; it does not establish the pinned solver's behavior for removing abs\.
+- **Value: unmeasured.** Reduces structural term size from 4 to 3 nodes by removing abs\. Runtime usefulness and interaction with sign normalization remain unmeasured\.
 
 **RARE syntax:** not\-run.
 
@@ -943,7 +1021,7 @@ No RARE draft is filed.
 - The nonzero condition is required for surface mod\.
 - Historical option support does not establish the behavior of the pinned default solver\.
 
-**Next step:** Compare current default and learned\-rewrite behavior and trace availability of the nonzero condition\.
+**Next step:** Probe mod\(x,abs\(y\)\) with a known nonzero y under default and learned\-rewrite settings; check whether the smaller divisor is expanded again\.
 
 ### Evidence and follow-up
 
@@ -954,6 +1032,10 @@ Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](h
 Koine ingestion: first 2026-09-19; last 2026-09-19.
 
 [Survey](../../../docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
+
+**Dated reassessments:**
+
+- 2026-09-19: Reoriented the same equality from complex \-&gt; simpler by structural term size; reviewed direction\-dependent availability and value\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json).
 
 **Supporting references:**
 
@@ -974,6 +1056,8 @@ Classification: candidate. Priority: 3. Theories: strings.
 
 **Application context:** Local term rewriting; normalized matching remains to be tested\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -987,6 +1071,8 @@ Variables: a: String; b: String; c: String.
 
 when: true
 ```
+
+Structural size: **9 -> 3** term nodes.
 
 No RARE draft is filed.
 
@@ -1036,6 +1122,8 @@ Classification: candidate. Priority: 3. Theories: sequences.
 
 **Application context:** Requires the prefix fact as a premise or in a combined Boolean term\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -1049,6 +1137,8 @@ Variables: s: Seq\(T\); t: Seq\(T\).
 
 when: (seq.prefixof t s)
 ```
+
+Structural size: **4 -> 1** term nodes.
 
 No RARE draft is filed.
 
@@ -1148,6 +1238,8 @@ Classification: candidate. Priority: 3. Theories: strings, regular\-expressions.
 
 **Application context:** Local term rewriting; normalized matching remains to be tested\.
 
+**Orientation order:** str\.to\_lower count > term size. Eliminate case conversion against the fixed ASCII target before minimizing syntax size\. Two constant equality tests grow from 4 \-&gt; 7 nodes and duplicate s; exact extension semantics and runtime benefit remain unchecked\.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -1161,6 +1253,10 @@ Variables: s: String.
 
 when: Subject to verification against cvc5 case-conversion semantics
 ```
+
+Structural size: **4 -> 7** term nodes.
+
+Lexicographic cost: **(1, 4) -> (0, 7)**.
 
 No RARE draft is filed.
 
@@ -1191,6 +1287,11 @@ Observed: 2026-09-19 at cvc5 source [dbf176dfb71b272ffbfdee06888dace73fee5aa8](h
 Koine ingestion: first 2026-09-19; last 2026-09-19.
 
 [Survey](../../../docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work) (tachyon revision `d2ef784441e59059e44d23c6a594d216a2eb75ad`); [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-19-github-issues.md).
+
+**Dated reassessments:**
+
+- 2026-09-19: Reoriented the same equality from complex \-&gt; simpler by structural term size; reviewed direction\-dependent availability and value\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json).
+- 2026-09-19: The human clarified lexicographic precedence: complex operators first, structural term size last\. Restored operator elimination, allowing the stated syntax growth\. [review](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order.md); [previous record](../../../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order-before.json).
 
 **Supporting references:**
 
@@ -1261,6 +1362,8 @@ Classification: candidate. Priority: 3. Theories: bit\-vectors.
 
 **Application context:** Requires divisor, remainder and no\-overflow facts from the assertion context\.
 
+**Orientation rationale:** decrease structural term size.
+
 ### Rewrite 1
 
 Notation: SMT\-LIB term schema.
@@ -1274,6 +1377,8 @@ q
 
 when: w>0; y!=0; unsigned r<y; unsigned q*y and q*y+r do not overflow
 ```
+
+Structural size: **7 -> 1** term nodes.
 
 No RARE draft is filed.
 

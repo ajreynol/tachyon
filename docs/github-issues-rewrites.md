@@ -20,6 +20,15 @@ dated source narrative, not a parallel current-status database. See the
 [filing ledger](../tools/metagraphe/docs/ledger/2026-09-19-rewrite-db.md) and
 [experience log](../tools/metagraphe/docs/experience.md).
 
+**Orientation clarification, 2026-09-19.** Use `LHS -> RHS`, complex -> simpler,
+with a lexicographic ordering: complex operator counts first, term size last.
+The human allows growth to eliminate costly operators. M-1, M-5, M-11, and
+M-16 therefore retain elimination directions; M-12 removes `abs`. The
+[operator-order ledger](../tools/metagraphe/docs/ledger/2026-09-19-rewrite-operator-order.md)
+records the clarification and supersedes the earlier size-only interpretation.
+The JSON names the precedence and rationale; the generated view shows cost
+vectors and syntax growth. These orderings are not measured runtimes.
+
 ## Coverage and how to repeat the survey
 
 The [open issue list](https://github.com/cvc5/cvc5/issues) was retrieved through
@@ -122,6 +131,10 @@ proposed RHS is true. The corrected rule follows because every original
 occurrence of the element is replaced, and an occurrence in the result can
 only come from an inserted replacement. This argument works for arbitrary
 sequence element sorts and for one-character strings.
+
+**Orientation.** Removing `replace_all` takes precedence over term size:
+`(replace_all count, term nodes)` changes from `(1, 6)` to `(0, 7)`.
+The extra containment test is an explicit growth tradeoff.
 
 ```lisp
 (define-rule metagraphe-contains-replace-all-unit
@@ -262,6 +275,11 @@ restricts the language; it is not an equivalent rewrite for arbitrary strings.
 The intersection with `re.allchar` is essential: complement alone also contains
 strings of other lengths. A general implementation should evaluate arbitrary
 constant character exclusions and handle endpoint characters with one range.
+
+**Orientation.** Removing general regex complement takes precedence over
+size: `(re.comp count, term nodes)` changes from `(1, 5)` to `(0, 7)`.
+This positive character-class representation is a candidate simplification;
+its benefit for the full query still needs measurement.
 
 **Availability and next check.** No literal character-complement-to-ranges
 rule was found in [the RARE file][str-rules]; the regex inclusion machinery in
@@ -408,12 +426,12 @@ entailment check to discharge its condition.
 
 | issue | disposition |
 | --- | --- |
-| [#10520](https://github.com/cvc5/cvc5/issues/10520), small BV remainder query | **Already represented in RARE and C++.** `bvult(x,bvurem(C,x))` is equivalent to `x=0 AND C!=0`. With the issue's nonzero constant it becomes `x=0`; BV remainder by zero is the dividend. `bv-ugt-urem` in [RARE][bv-rules] and `UgtUrem` in [C++][bv-cpp] express the symmetric greater-than form. Investigate orientation/reachability and rerun before declaring either a missing rule or a fixed issue. |
-| [#9420](https://github.com/cvc5/cvc5/issues/9420), modulus sign | `mod(x,y)=mod(x,abs(y))` for nonzero `y` is valid, but [the comments](https://github.com/cvc5/cvc5/issues/9420#issuecomment-1404268724) already point to `--learned-rewrite`; the reporter found mixed suite results. This is existing conditional support and a default-policy question. |
+| [#10520](https://github.com/cvc5/cvc5/issues/10520), small BV remainder query | **Existing-coverage control.** M-11 eliminates remainder: `bvult(x,bvurem(C,x)) -> x=0 AND C!=0`. The cost `(bvurem count, term nodes)` decreases `(1,5) -> (0,8)`; with the issue's nonzero constant the result is simply `x=0`. [RARE][bv-rules] and [C++][bv-cpp] contain the symmetric comparison rule. Probe reachability before claiming a missing rule or a fixed issue. |
+| [#9420](https://github.com/cvc5/cvc5/issues/9420), modulus sign | M-12 now removes the extra operator: `mod(x,abs(y)) -> mod(x,y)` for nonzero `y`, 4 -> 3 nodes. [Historical comments](https://github.com/cvc5/cvc5/issues/9420#issuecomment-1404268724) point to `--learned-rewrite` with mixed suite results; they do not establish current availability of this compact direction. |
 | [#10508](https://github.com/cvc5/cvc5/issues/10508), nested replacement emptiness | A further string candidate: `replace_all(replace_all(a,b,a),c,a) = ""` iff `a = ""`. If `a` is nonempty, both stages preserve nonemptiness. Together with `str.<= "A" a`, this contradicts the report. Reduce to reusable emptiness rules rather than hard-coding two nested replacements; availability remains unchecked. |
 | [#11156](https://github.com/cvc5/cvc5/issues/11156), sequence prefix/index | `prefixof(t,s)` implies `indexof(s,t,0)=0`, including empty `t`. This contradicts the issue's index bound already. A conditional lemma or conjunction rewrite is plausible, but the assertions are separate and prefix elimination may change the match. |
 | [#11460](https://github.com/cvc5/cvc5/issues/11460), substring containment | Propagate absence of a character from a substring to a contained one-character slice. Requires proving index inclusion and nonempty/in-range slices from arithmetic context. The attachment was not reduced here. |
-| [#11970](https://github.com/cvc5/cvc5/issues/11970), inverse case conversion | A fixed ASCII target can suggest regex preimages, e.g. `to_lower(s)="a"` iff `s` is `"a"` or `"A"`. Longer targets need length control and per-character choices. Check cvc5's exact conversion semantics and growth; the [maintainer](https://github.com/cvc5/cvc5/issues/11970#issuecomment-2956111004) describes a broader solver technique. |
+| [#11970](https://github.com/cvc5/cvc5/issues/11970), inverse case conversion | M-16 eliminates conversion: `to_lower(s)="a" -> (s="a" OR s="A")`. The cost `(str.to_lower count, term nodes)` decreases `(1,4) -> (0,7)`, but exact conversion semantics remain unchecked. The [maintainer](https://github.com/cvc5/cvc5/issues/11970#issuecomment-2956111004) describes a broader preimage technique. Check compound-term duplication and growth for longer targets. |
 | [#10850](https://github.com/cvc5/cvc5/issues/10850), nested ITE/extract synthesis | Comparison decomposition may supply rules, but grammar feasibility, quantifiers, and signedness need attachment-level analysis. No specific missing rule established. |
 | [#9417](https://github.com/cvc5/cvc5/issues/9417), BV quotient/remainder | The identity requires a nonzero divisor, remainder bound, and **both** multiplication and addition no-overflow conditions. These are contextual facts, not permission for modular cancellation. Keep as a lemma candidate. |
 | [#12801](https://github.com/cvc5/cvc5/issues/12801), RARE name in Alethe | Proof export/database consistency, not evidence of a missing simplifying identity. Track separately from this queue. |
@@ -433,7 +451,8 @@ in the historical search is not evidence for a new rule.
 pinned cvc5 sources. The candidate validity arguments are mathematical case
 analyses, not machine-checked proofs.
 
-**Draft syntax.** The ten draft rules in the `lisp` blocks were parsed and passed through
+**Draft syntax.** After the orientation correction, all ten current draft
+rules in the `lisp` blocks were re-parsed and passed through
 `mkrewrites.validate_rule` using the pinned upstream parser. This checks the
 draft language accepted by that parser, not proof validity, full generated C++
 compilation, or operational matching. Reproduce with an unpacked checkout at

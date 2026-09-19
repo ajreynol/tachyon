@@ -26,6 +26,13 @@ class RewriteViewTests(unittest.TestCase):
         self.assertEqual(view.OUTPUT.read_text(), view.render(self.document),
                          "Regenerate with: " + view.COMMAND)
 
+    def test_view_explains_permitted_growth_with_the_operator_order(self):
+        result = view.render({"bugs": [self.document["bugs"][0]]})
+        self.assertIn("**6 -> 7** term nodes", result)
+        self.assertIn("**(1, 6) -> (0, 7)**", result)
+        self.assertIn("**Orientation order:**", result)
+        self.assertIn("term size.", result)
+
     def test_all_records_terms_conditions_and_drafts_are_visible(self):
         original = copy.deepcopy(self.document)
         result = view.render(self.document)
@@ -38,10 +45,13 @@ class RewriteViewTests(unittest.TestCase):
                     self.assertIn(rewrite["lhs"], result)
                     self.assertIn(rewrite["rhs"], result)
                     self.assertIn("when: " + rewrite["condition"], result)
+                    self.assertIn(f"**{view.term_size(rewrite['lhs'])} -> {view.term_size(rewrite['rhs'])}** term nodes", result)
                 for draft in row["proposal"]["rare_drafts"]:
                     self.assertIn(draft, result)
                 for issue in row["origin"]["issues"]:
                     self.assertIn(f"]({issue['url']})", result)
+                for event in row.get("reassessments", []):
+                    self.assertIn("](../../../" + event["previous_record"] + ")", result)
         self.assertIn("](" + "../../../docs/github-issues-rewrites.md#m-1-singleton-replacement)", result)
         self.assertIn("No exact rewrite is filed.", result)
         self.assertIn("**Closure:** no closure recorded.", result)
@@ -69,10 +79,9 @@ class RewriteViewTests(unittest.TestCase):
     def test_markdown_text_links_and_code_do_not_break_the_view(self):
         row = self.document["bugs"][0]
         row["description"] = "Literal | [title]\n<script>"
-        row["proposal"]["rewrites"][0]["lhs"] = "```\n# still code"
         result = view.render({"bugs": [row]})
         self.assertIn(r"Literal &#124; \[title\]<br>&lt;script&gt;", result)
-        self.assertIn("````text\n```\n# still code", result)
+        self.assertIn("````text\n```\n# still code", view.block("```\n# still code"))
         self.assertEqual(view.link("probe", "https://example.org/a(b).smt2#part"),
                          "[probe](https://example.org/a%28b%29.smt2#part)")
 

@@ -1,0 +1,376 @@
+{
+  "recorded_on": "2026-09-19",
+  "reason": "Original records before the human-requested complex -> simpler orientation correction.",
+  "tachyon_revision": "bf65e853de473c0d1aefb6f5aeb68be5cf9677a2",
+  "records": [
+    {
+      "id": "metagraphe:M-1",
+      "tool": "metagraphe",
+      "description": "Singleton replacement",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "Every original singleton occurrence is replaced. An output occurrence must be inserted by a replacement, which requires both a source match and an occurrence in the replacement.",
+        "availability": "source-gap-candidate",
+        "availability_reason": "The audited RARE and rewriteContains/rewriteReplaceAll paths lack this composition; related single-replacement rules exist.",
+        "value": "unmeasured",
+        "value_reason": "Empty replacement makes the containment assertion false; prefix variants need additional reasoning."
+      },
+      "candidate": "M-1",
+      "cautions": [
+        "The issue proposal omits source containment: s=[], u=[0], r=[0] makes its LHS false and RHS true.",
+        "Do not generalize to longer needles: deleting ab from aabb creates ab across a boundary.",
+        "The nonempty-replacement RHS adds containment work."
+      ],
+      "checks": {
+        "rare_syntax": "passed",
+        "rare_parser_revision": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "candidate",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Probe both singleton sequences and one-character strings, including no-match and empty-replacement cases; measure matching and proof support.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#m-1-singleton-replacement",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 12936,
+            "url": "https://github.com/cvc5/cvc5/issues/12936",
+            "state_at_review": "open"
+          },
+          {
+            "number": 9875,
+            "url": "https://github.com/cvc5/cvc5/issues/9875",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/12936",
+          "https://github.com/cvc5/cvc5/issues/9875#issuecomment-1625411673"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/rewrites",
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/sequences_rewriter.cpp"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": 1,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "s": "String or Seq(T)",
+              "u": "same sort as s",
+              "r": "same sort as s"
+            },
+            "lhs": "(str.contains (str.replace_all s u r) u)",
+            "rhs": "(and (str.contains s u) (str.contains r u))",
+            "condition": "(= (str.len u) 1)",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [
+          "(define-rule metagraphe-contains-replace-all-unit\n  ((s ?Seq) (r ?Seq) (x ?))\n  (str.contains (str.replace_all s (seq.unit x) r) (seq.unit x))\n  (and (str.contains s (seq.unit x))\n       (str.contains r (seq.unit x))))",
+          "(define-cond-rule metagraphe-contains-replace-all-char\n  ((s ?Seq) (u ?Seq) (r ?Seq))\n  (= (str.len u) 1)\n  (str.contains (str.replace_all s u r) u)\n  (and (str.contains s u) (str.contains r u)))"
+        ],
+        "application_context": "Local term rewriting; normalized matching remains to be tested."
+      },
+      "schema_version": 1,
+      "theories": [
+        "sequences",
+        "strings"
+      ]
+    },
+    {
+      "id": "metagraphe:M-5",
+      "tool": "metagraphe",
+      "description": "Complement of a character",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "The two ranges contain exactly the permitted single characters other than slash, whose code point is 47.",
+        "availability": "source-gap-candidate",
+        "availability_reason": "No literal complement-to-ranges RARE rule was found; regex inclusion and normalization need further investigation.",
+        "value": "unmeasured",
+        "value_reason": "Simplifies the path-segment character class; impact on concatenated language inclusion remains unmeasured."
+      },
+      "candidate": "M-5",
+      "cautions": [
+        "The printable-ASCII replacement in a comment restricts the language and is not equivalent.",
+        "Complement alone also admits strings whose length is not one.",
+        "A general character-class normalizer should handle endpoint exclusions."
+      ],
+      "checks": {
+        "rare_syntax": "passed",
+        "rare_parser_revision": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "candidate",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Compare the exact full-alphabet encoding on the original inclusion query, then investigate a general constant character-class rule.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#m-5-complement-of-a-character",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 12815,
+            "url": "https://github.com/cvc5/cvc5/issues/12815",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/12815",
+          "https://github.com/cvc5/cvc5/issues/12815#issuecomment-5257520827"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/rewrites",
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/sequences_rewriter.cpp",
+          "https://smt-lib.org/theories-UnicodeStrings.shtml"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": 2,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {},
+            "lhs": "(re.inter re.allchar (re.comp (str.to_re \"/\")))",
+            "rhs": "(re.union (re.range \"\\u{0}\" \".\") (re.range \"0\" \"\\u{2ffff}\"))",
+            "condition": "SMT-LIB Unicode Strings alphabet: code points 0 through 0x2ffff",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [
+          "(define-rule metagraphe-re-allchar-except-slash ()\n  (re.inter re.allchar (re.comp (str.to_re \"/\")))\n  (re.union (re.range \"\\u{0}\" \".\")\n            (re.range \"0\" \"\\u{2ffff}\")))"
+        ],
+        "application_context": "Local term rewriting; normalized matching remains to be tested."
+      },
+      "schema_version": 1,
+      "theories": [
+        "strings",
+        "regular-expressions"
+      ]
+    },
+    {
+      "id": "metagraphe:M-11",
+      "tool": "metagraphe",
+      "description": "BV remainder comparison already represented",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "For nonzero x unsigned remainder is less than x; for zero x it equals C.",
+        "availability": "existing-rule-reachability-unchecked",
+        "availability_reason": "bv-ugt-urem and UgtUrem already express the symmetric greater-than form.",
+        "value": "unmeasured",
+        "value_reason": "Use as an existing-rule control; the nonzero constant in the issue leaves x=0."
+      },
+      "candidate": "M-11",
+      "cautions": [
+        "Source presence does not show the original less-than orientation reaches the rule."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "existing-coverage",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Probe the original orientation and its symmetric form before claiming either a new rule or an issue resolution.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 10520,
+            "url": "https://github.com/cvc5/cvc5/issues/10520",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/10520"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/rewrites-simplification",
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/theory_bv_rewrite_rules_simplification.h"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": null,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "x": "BitVec(w)",
+              "C": "BitVec(w)"
+            },
+            "lhs": "(bvult x (bvurem C x))",
+            "rhs": "(and (= x zero(w)) (not (= C zero(w))))",
+            "condition": "w is positive; zero(w) is the width-w zero",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [],
+        "application_context": "Local term rewriting; normalized matching remains to be tested."
+      },
+      "schema_version": 1,
+      "theories": [
+        "bit-vectors"
+      ]
+    },
+    {
+      "id": "metagraphe:M-12",
+      "tool": "metagraphe",
+      "description": "Modulus sign has conditional support",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "Euclidean remainder depends on the absolute magnitude of a nonzero divisor.",
+        "availability": "existing-conditional-support",
+        "availability_reason": "The issue discussion already points to --learned-rewrite and records mixed suite results.",
+        "value": "unmeasured",
+        "value_reason": "An option/context investigation rather than an established missing identity."
+      },
+      "candidate": "M-12",
+      "cautions": [
+        "The nonzero condition is required for surface mod.",
+        "Historical option support does not establish the behavior of the pinned default solver."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "existing-coverage",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Compare current default and learned-rewrite behavior and trace availability of the nonzero condition.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 9420,
+            "url": "https://github.com/cvc5/cvc5/issues/9420",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/9420",
+          "https://github.com/cvc5/cvc5/issues/9420#issuecomment-1404268724"
+        ],
+        "source_references": []
+      },
+      "owner": "cvc5",
+      "priority": null,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "x": "Int",
+              "y": "Int"
+            },
+            "lhs": "(mod x y)",
+            "rhs": "(mod x (abs y))",
+            "condition": "(not (= y 0))",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [],
+        "application_context": "Conditional reasoning with a known nonzero divisor."
+      },
+      "schema_version": 1,
+      "theories": [
+        "integers"
+      ]
+    },
+    {
+      "id": "metagraphe:M-16",
+      "tool": "metagraphe",
+      "description": "Inverse case conversion",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "unchecked",
+        "validity_reason": "An ASCII preimage suggests this identity, but the survey did not audit the exact extension semantics.",
+        "availability": "unchecked",
+        "availability_reason": "The maintainer describes a broader solver technique; no existing implementation audit was completed.",
+        "value": "unmeasured",
+        "value_reason": "Could replace inverse conversion against a fixed target by character choices or regex membership."
+      },
+      "candidate": "M-16",
+      "cautions": [
+        "Long targets require length control and growth analysis; do not claim the ASCII example establishes a Unicode-wide conversion rule."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "candidate",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Verify the exact conversion semantics, then measure preimage encodings and term growth.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 11970,
+            "url": "https://github.com/cvc5/cvc5/issues/11970",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/11970",
+          "https://github.com/cvc5/cvc5/issues/11970#issuecomment-2956111004"
+        ],
+        "source_references": []
+      },
+      "owner": "cvc5",
+      "priority": 3,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "s": "String"
+            },
+            "lhs": "(= (str.to_lower s) \"a\")",
+            "rhs": "(or (= s \"a\") (= s \"A\"))",
+            "condition": "Subject to verification against cvc5 case-conversion semantics",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [],
+        "application_context": "Local term rewriting; normalized matching remains to be tested."
+      },
+      "schema_version": 1,
+      "theories": [
+        "strings",
+        "regular-expressions"
+      ]
+    }
+  ]
+}

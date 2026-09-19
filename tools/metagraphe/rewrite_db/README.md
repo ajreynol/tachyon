@@ -40,11 +40,13 @@ asks for a configurable collection name without changing the append guarantees.
 | `origin` | Issue URLs and state at review, local survey/ledger references, the tachyon commit containing that survey, and supporting external/source links. File references are relative to tachyon's root. |
 | `proposal.rewrites` | Term schemas with variables/sorts, `lhs`, `rhs`, conditions, and notation. An empty array explicitly means the lead has no exact rule yet. |
 | `proposal.rare_drafts`, `application_context` | Literal RARE declarations, if available, and the facts/stage needed to apply the proposal. |
+| `proposal.orientation` (optional) | `{kind: "lexicographic", operators: [...], reason: "..."}` declares complex operators in descending priority, followed by structural term size. Applies to all schemas and ordinary RARE drafts in that family. |
 | `assessment` | Separate validity, availability, and value statuses, each with its reasoning. `argued` means a written argument, not a checked proof. |
 | `checks` | Parser outcome and revision, plus solver/performance check status. A parser pass does not promote validity or establish default-solver reachability. |
 | `cautions`, `next_step` | Counterexamples, applicability limits, and the next discriminating investigation. |
 | `first_seen`, `last_seen` | Koine ingestion dates. Re-ingesting an old survey is not a fresh reproduction. |
 | `carried` (optional) | Append-only list of `{to, on, evidence}` for actual deliveries; absence means none recorded. Existing issue links do not count as delivery by us. |
+| `reassessments` (optional) | Dated `{on, reason, evidence, previous_record}` events linking the review and the retained original record. |
 | `closed_*`, `awaiting_landing` (optional) | An explicit verdict under the [reporting policy](reporting-policy.md#closure). Absence means no closure recorded. Initial exclusions and existing coverage do not imply a maintainer verdict. |
 
 Keep related issues in one record when they motivate the same identity. A new
@@ -52,6 +54,36 @@ issue is additional evidence, not automatically a new rewrite. A genuinely
 different identity or corrected condition can receive a new ID that names the
 old one in its evidence; preserve the original and record the decision in the
 ledger. Current files and Git history are both part of the identity register.
+
+## Orientation
+
+Always write **`LHS -> RHS`, complex -> simpler**. The human clarified a
+**lexicographic ordering: complex operators first, structural term size last**.
+Reducing the count of a higher-priority operator may grow lower-priority
+structure. Only when those operator counts tie does term size decide.
+
+For example, M-1 declares `operators: ["str.replace_all"]`. Its cost is
+`(replace_all count, term nodes)`: `(1, 6) -> (0, 7)` decreases lexicographically
+despite adding a syntax node. Name each family's operator precedence and explain
+the expected simplification and growth tradeoff in `reason`. These priorities
+are proposals for review, not universal operation-cost measurements.
+
+The validator checks this order for schemas and ordinary RARE drafts. Without
+an explicit precedence, it checks structural size alone; this fallback is not
+permission to introduce a costly operator merely to shorten the expression.
+Size counts one node per operator application and variable/constant occurrence;
+indexed literals and `zero(w)` each count as one constant. Conditions remain
+premises. The generated view shows both sizes and the declared cost vectors.
+
+This checks the written schema, not validity or runtime. Check duplication
+after substitution and interactions with existing rules. Fixed-point RARE
+rules require a separate review of their context and decrease.
+
+The [operator-order clarification](../docs/ledger/2026-09-19-rewrite-operator-order.md)
+supersedes the earlier size-only review, restoring four elimination directions
+while retaining M-12's removal of `abs`. Both reviews retain previous records.
+Direction-only corrections preserve the same equality and stable ID; update
+direction-dependent assessments and syntax checks under the reporting policy.
 
 ## File new records
 

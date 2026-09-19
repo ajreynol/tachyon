@@ -74,6 +74,14 @@ Search and coverage:
 For each candidate:
 - Give a stable ID, issue number/title/link, theory, reported behavior,
   proposed lhs -> rhs, exact sorts/widths and side conditions, and why it helps.
+- Always orient LHS -> RHS from complex -> simpler. The human allows growth
+  when eliminating costly operators: use a lexicographic ordering with complex
+  operator counts first and structural term size last. Record the precedence
+  and benefit/growth tradeoff in proposal.orientation. Size breaks ties in the
+  operator counts; do not introduce costly operators just to save syntax nodes.
+  Keep JSON, RARE drafts, and prose aligned, preserving side conditions. Check
+  duplication after substituting actual subterms and interactions with other
+  rules. An elimination rationale does not establish a measured speedup.
 - Separate a local rewrite from a transformation requiring asserted facts,
   learned bounds, quantifier handling, a generated lemma, or a solver change.
 - State a semantic argument and actively seek counterexamples. Cover empty
@@ -99,9 +107,9 @@ candidates to a cvc5 implementer. Include already-covered and rejected examples
 so later scans do not rediscover them. State the next discriminating test and
 remaining uncertainty for every substantive lead. Preserve stable IDs and
 prior evidence; add dated corrections when revising earlier conclusions.
-The existing survey is the historical narrative behind its original filing;
-preserve its original candidate sections and RARE drafts when adding new dated
-observations. The JSON database owns filed claims and verdicts.
+The existing survey records the original investigation and dated corrections.
+Preserve superseded proposals, RARE drafts, and assessments in the ledger before
+updating their current presentation. The JSON owns filed claims and verdicts.
 
 Filing and follow-up:
 - Reuse known family IDs rather than creating duplicates per issue. Allocate

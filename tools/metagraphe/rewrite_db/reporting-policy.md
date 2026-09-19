@@ -24,6 +24,14 @@ Do not present database size or parser pass counts as solver quality, usefulness
 or success at reporting. The initial survey's screening counts remain dated
 retrieval provenance, not a measure of the subject.
 
+Every rewrite is oriented **`LHS -> RHS`, complex -> simpler**, following the
+[standing rule](../README.md#what-counts-as-a-finding). Eliminating costly
+operators may justify growth; use a lexicographic ordering of complex operator
+counts, then structural term size. Record the precedence, rationale, and
+growth tradeoff. Reversing a
+valid equality preserves meaning but requires reassessing
+matching, availability, usefulness, and interactions with existing rules.
+
 ## Preserve the observation
 
 Routine filings are additive through the pinned koine writer. IDs survive
@@ -32,7 +40,11 @@ ingestion time changes on a repeat; neither omission from a new scan nor an
 issue becoming closed settles our record. A changed claim or new evidence
 requires a separate dated reassessment linked to the original, never a silent
 replacement of the first observation. When correcting the identity itself,
-preserve the original, allocate a new ID, and explain the relationship.
+preserve the original, allocate a new ID, and explain the relationship. A
+direction-only correction of the same equality, sorts, and conditions keeps
+its family ID: retain the complete previous record in the ledger, link a dated
+`reassessments` event, update direction-dependent claims, and recheck changed
+RARE drafts. This is a reviewed correction, not a routine koine append.
 
 Raw API responses, solver output and traces stay in ignored scratch space.
 Curated claims, exact candidate terms, normalized verdicts and reproducible

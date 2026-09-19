@@ -61,6 +61,16 @@ independent human research; the project does not commit to developing it.
 
 ## What counts as a finding
 
+**Standing rule: write every rewrite as `LHS -> RHS`, complex -> simpler.**
+The human clarified the **lexicographic ordering: complex operators first,
+structural term size last**. Eliminating costly operators may justify a larger
+RHS. Record their precedence and explain the benefit and growth tradeoff;
+size breaks ties in those operator counts. Check the JSON, RARE
+declaration, and prose directions together, retaining sorts and side conditions.
+Check duplication after substituting actual matched subterms and interactions
+with other rules. Operator elimination and smaller syntax are rationales to
+investigate, not measured speedups or proofs of termination.
+
 Keep three questions separate in each candidate's record:
 
 | question | evidence to record |
@@ -97,6 +107,7 @@ meaning. **Metagraphe** is the working name.
 
 ## Working here
 
+The [local agent guidance](AGENTS.md) records the standing rewrite convention.
 The [rewrite database](rewrite_db/README.md) owns filed candidate records and
 verdicts; [rewrites.md](rewrite_db/rewrites.md) provides a generated view.
 Its [reporting policy](rewrite_db/reporting-policy.md) follows

@@ -1,0 +1,339 @@
+{
+  "recorded_on": "2026-09-19",
+  "basis": "Working-tree state after the structural-size review, before the human clarified complex-operator precedence.",
+  "records": [
+    {
+      "id": "metagraphe:M-1",
+      "tool": "metagraphe",
+      "description": "Singleton replacement",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "Every original singleton occurrence is replaced. An output occurrence must be inserted by a replacement, which requires both a source match and an occurrence in the replacement.",
+        "availability": "unchecked",
+        "availability_reason": "The original source audit inspected contains/replace_all elimination, not conjunction compression. Availability of the smaller direction has not been audited.",
+        "value": "unmeasured",
+        "value_reason": "Reduces structural term size from 7 to 6 nodes. Introduces replace_all, so cheaper solving is not established; the deletion example motivates a separate conditional reduction to false."
+      },
+      "candidate": "M-1",
+      "cautions": [
+        "The equality requires both source containment and replacement containment. Dropping the source conjunct is invalid: s=[], u=[0], r=[0].",
+        "Do not generalize to longer needles: deleting ab from aabb creates ab across a boundary.",
+        "The smaller RHS introduces replace_all. Do not combine both orientations or claim this compression resolves the original replacement-shaped issue."
+      ],
+      "checks": {
+        "rare_syntax": "passed",
+        "rare_parser_revision": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "candidate",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Audit conjunction compression and its interactions with replacement elimination. For the original deletion inputs, investigate a separate decreasing rule to false under an empty replacement.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#m-1-singleton-replacement",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 12936,
+            "url": "https://github.com/cvc5/cvc5/issues/12936",
+            "state_at_review": "open"
+          },
+          {
+            "number": 9875,
+            "url": "https://github.com/cvc5/cvc5/issues/9875",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/12936",
+          "https://github.com/cvc5/cvc5/issues/9875#issuecomment-1625411673"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/rewrites",
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/sequences_rewriter.cpp"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": 3,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "s": "String or Seq(T)",
+              "u": "same sort as s",
+              "r": "same sort as s"
+            },
+            "lhs": "(and (str.contains s u) (str.contains r u))",
+            "rhs": "(str.contains (str.replace_all s u r) u)",
+            "condition": "(= (str.len u) 1)",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [
+          "(define-rule metagraphe-contains-conjunction-to-replace-all-unit\n  ((s ?Seq) (r ?Seq) (x ?))\n  (and (str.contains s (seq.unit x))\n       (str.contains r (seq.unit x)))\n  (str.contains (str.replace_all s (seq.unit x) r) (seq.unit x)))",
+          "(define-cond-rule metagraphe-contains-conjunction-to-replace-all-char\n  ((s ?Seq) (u ?Seq) (r ?Seq))\n  (= (str.len u) 1)\n  (and (str.contains s u) (str.contains r u))\n  (str.contains (str.replace_all s u r) u))"
+        ],
+        "application_context": "Local compression of a conjunction of singleton-containment tests. The original issue contains the reverse shape; this direction is not an established remedy for that input."
+      },
+      "schema_version": 1,
+      "theories": [
+        "sequences",
+        "strings"
+      ],
+      "reassessments": [
+        {
+          "on": "2026-09-19",
+          "reason": "Reoriented the same equality from complex -> simpler by structural term size; reviewed direction-dependent availability and value.",
+          "evidence": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md",
+          "previous_record": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json"
+        }
+      ]
+    },
+    {
+      "id": "metagraphe:M-5",
+      "tool": "metagraphe",
+      "description": "Complement of a character",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "The two ranges contain exactly the permitted single characters other than slash, whose code point is 47.",
+        "availability": "unchecked",
+        "availability_reason": "The source audit looked for the opposite complement-to-ranges expansion. Availability of ranges-to-complement compression remains unchecked.",
+        "value": "unmeasured",
+        "value_reason": "Reduces structural term size from 7 to 5 nodes. The issue already uses this RHS, so this direction does not establish a missing simplification of its original input."
+      },
+      "candidate": "M-5",
+      "cautions": [
+        "The printable-ASCII replacement in a comment restricts the language and is not equivalent.",
+        "Complement alone also admits strings whose length is not one.",
+        "A general character-class normalizer should handle endpoint exclusions."
+      ],
+      "checks": {
+        "rare_syntax": "passed",
+        "rare_parser_revision": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "candidate",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Audit range-union compression and interaction with regex normalization. Treat complement-to-ranges expansion as a separate encoding experiment.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#m-5-complement-of-a-character",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 12815,
+            "url": "https://github.com/cvc5/cvc5/issues/12815",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/12815",
+          "https://github.com/cvc5/cvc5/issues/12815#issuecomment-5257520827"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/rewrites",
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/strings/sequences_rewriter.cpp",
+          "https://smt-lib.org/theories-UnicodeStrings.shtml"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": 3,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {},
+            "lhs": "(re.union (re.range \"\\u{0}\" \".\") (re.range \"0\" \"\\u{2ffff}\"))",
+            "rhs": "(re.inter re.allchar (re.comp (str.to_re \"/\")))",
+            "condition": "SMT-LIB Unicode Strings alphabet: code points 0 through 0x2ffff",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [
+          "(define-rule metagraphe-re-ranges-to-allchar-except-slash ()\n  (re.union (re.range \"\\u{0}\" \".\")\n            (re.range \"0\" \"\\u{2ffff}\"))\n  (re.inter re.allchar (re.comp (str.to_re \"/\"))))"
+        ],
+        "application_context": "Compress the full-alphabet union of two ranges into a one-character exclusion. The original issue already uses the compact target."
+      },
+      "schema_version": 1,
+      "theories": [
+        "strings",
+        "regular-expressions"
+      ],
+      "reassessments": [
+        {
+          "on": "2026-09-19",
+          "reason": "Reoriented the same equality from complex -> simpler by structural term size; reviewed direction-dependent availability and value.",
+          "evidence": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md",
+          "previous_record": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json"
+        }
+      ]
+    },
+    {
+      "id": "metagraphe:M-11",
+      "tool": "metagraphe",
+      "description": "BV remainder comparison already represented",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "For nonzero x unsigned remainder is less than x; for zero x it equals C.",
+        "availability": "unchecked",
+        "availability_reason": "bv-ugt-urem and UgtUrem support the original comparison-to-Boolean direction. They do not establish availability of this smaller, reversed direction.",
+        "value": "unmeasured",
+        "value_reason": "Reduces structural term size from 8 to 5 nodes but introduces bvurem. For the issue's nonzero constant, reducing the comparison directly to x=0 remains the useful existing-coverage control."
+      },
+      "candidate": "M-11",
+      "cautions": [
+        "Source presence does not show the original less-than orientation reaches the rule.",
+        "This orientation introduces remainder and may conflict with its existing elimination. Keep the general equivalence separate from the issue-specific nonzero-constant simplification."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "existing-coverage",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Use the original nonzero-constant query as an existing-rule control. Audit compression separately and check for cycles before considering it an operational rewrite.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 10520,
+            "url": "https://github.com/cvc5/cvc5/issues/10520",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/10520"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/rewrites-simplification",
+          "https://github.com/cvc5/cvc5/blob/dbf176dfb71b272ffbfdee06888dace73fee5aa8/src/theory/bv/theory_bv_rewrite_rules_simplification.h"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": null,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "x": "BitVec(w)",
+              "C": "BitVec(w)"
+            },
+            "lhs": "(and (= x zero(w)) (not (= C zero(w))))",
+            "rhs": "(bvult x (bvurem C x))",
+            "condition": "w is positive; zero(w) is the width-w zero",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [],
+        "application_context": "Compress the general zero/nonzero conjunction into a remainder comparison only when the instantiated RHS is smaller: it repeats x, so structural size(x) must be less than 4. Existing-coverage classification records the original issue's opposite-direction rule, not implementation of this compressed direction."
+      },
+      "schema_version": 1,
+      "theories": [
+        "bit-vectors"
+      ],
+      "reassessments": [
+        {
+          "on": "2026-09-19",
+          "reason": "Reoriented the same equality from complex -> simpler by structural term size; reviewed direction-dependent availability and value.",
+          "evidence": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md",
+          "previous_record": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json"
+        }
+      ]
+    },
+    {
+      "id": "metagraphe:M-16",
+      "tool": "metagraphe",
+      "description": "Inverse case conversion",
+      "first_seen": "2026-09-19",
+      "last_seen": "2026-09-19",
+      "assessment": {
+        "validity": "unchecked",
+        "validity_reason": "An ASCII preimage suggests this identity, but the survey did not audit the exact extension semantics.",
+        "availability": "unchecked",
+        "availability_reason": "The maintainer describes a broader solver technique; no existing implementation audit was completed.",
+        "value": "unmeasured",
+        "value_reason": "Reduces structural term size from 7 to 4 nodes. This is the reverse of the issue's proposed preimage expansion and does not establish a remedy for that query."
+      },
+      "candidate": "M-16",
+      "cautions": [
+        "Long targets require length control and growth analysis; do not claim the ASCII example establishes a Unicode-wide conversion rule.",
+        "The smaller RHS introduces case conversion. Check interaction with preimage expansion; do not enable both directions."
+      ],
+      "checks": {
+        "rare_syntax": "not-run",
+        "rare_parser_revision": null,
+        "solver": "not-run",
+        "performance": "not-run"
+      },
+      "classification": "candidate",
+      "found_at": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+      "next_step": "Verify the exact conversion semantics, then audit the compact direction separately from the broader preimage-encoding technique.",
+      "observed_on": "2026-09-19",
+      "origin": {
+        "kind": "github-issue-survey",
+        "survey": "docs/github-issues-rewrites.md#existing-coverage-and-leads-needing-more-work",
+        "survey_revision": "d2ef784441e59059e44d23c6a594d216a2eb75ad",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-19-github-issues.md",
+        "issues": [
+          {
+            "number": 11970,
+            "url": "https://github.com/cvc5/cvc5/issues/11970",
+            "state_at_review": "open"
+          }
+        ],
+        "references": [
+          "https://github.com/cvc5/cvc5/issues/11970",
+          "https://github.com/cvc5/cvc5/issues/11970#issuecomment-2956111004"
+        ],
+        "source_references": []
+      },
+      "owner": "cvc5",
+      "priority": 3,
+      "proposal": {
+        "rewrites": [
+          {
+            "variables": {
+              "s": "String"
+            },
+            "lhs": "(or (= s \"a\") (= s \"A\"))",
+            "rhs": "(= (str.to_lower s) \"a\")",
+            "condition": "Subject to verification against cvc5 case-conversion semantics",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [],
+        "application_context": "Compress an explicit choice of the two ASCII strings into a fixed-target lower-case test, subject to the still-unchecked conversion semantics."
+      },
+      "schema_version": 1,
+      "theories": [
+        "strings",
+        "regular-expressions"
+      ],
+      "reassessments": [
+        {
+          "on": "2026-09-19",
+          "reason": "Reoriented the same equality from complex -> simpler by structural term size; reviewed direction-dependent availability and value.",
+          "evidence": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation.md",
+          "previous_record": "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json"
+        }
+      ]
+    }
+  ]
+}
