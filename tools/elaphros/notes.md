@@ -1,10 +1,16 @@
 # Hypothesis register
 
-**2026-09-18: source evidence only.** Unlike Heuresis's inherited performance
-notes, this register starts from a fresh public-branch survey and maintainer
-guidance. Every proposed performance effect below is unmeasured. The
-[survey](ledger/2026-09-18-branch-survey.md) pins the code; the
-[directions](docs/directions.md) explain mechanisms and limitations.
+**2026-09-18: source evidence only; extended 2026-09-19.** Unlike Heuresis's
+inherited performance notes, this register starts from a fresh public-branch
+survey and maintainer guidance. Every proposed performance effect below is
+unmeasured. The [survey](ledger/2026-09-18-branch-survey.md) pins the code;
+the [directions](docs/directions.md) explain mechanisms and limitations.
+
+Hypotheses e-1 through e-12 are branch-derived: each rests on code someone
+wrote on `ajreynol/cvc5`. Hypotheses e-13 through e-16 rest instead on the
+[pipeline audit](ledger/2026-09-19-pinned-main-pipeline-audit.md) of pinned
+main and have no branch behind them. The distinction is about the kind of
+prior support each has, not about their likelihood.
 
 Identifiers are stable. A source observation is not evidence of time saved,
 proof completeness or a branch's correctness. Related branches need not be
@@ -25,9 +31,18 @@ main. No branch has been built or tested here.
 | e-10 | Proof bookkeeping and theory reconstruction retain or rebuild more material than the final proof needs. | `ajreynol:theoryEngineLazyProofs`; strings substitution/reconstruction variants. | [E10](docs/directions.md#e10-lazy-bookkeeping-and-theory-reconstruction): retained objects, generator calls, reconstruction failures and scope lifetime. |
 | e-11 | Related incremental queries repay proof setup and printing costs repeatedly. | `ajreynol:ai-pfIncremental` adds scoped CPC output; older logging branches supply context. | [E11](docs/directions.md#e11-incremental-output-and-reuse): whole-session cost, query coverage and validation across push/pop. |
 | e-12 | Some proof overhead is lost solving capability or changed configuration rather than proof construction. | Main's effective-setting changes; `ajreynol:ai-macroPf` is an adjacent support candidate. | [E12](docs/directions.md#e12-proof-induced-search-changes): ordinary, matched-settings and proof-enabled controls. |
+| e-13 | The cost of proof production cannot presently be attributed, because no phase partition exists and no counter separates proof material that reaches the final proof from material constructed and discarded. | Audited: existing counters are attempts and outcomes; the final-proof histograms are reachable only under `--check-proofs`. | [E13](docs/directions.md#e13-proof-work-accounting): a non-overlapping phase partition, a discarded-work measure and the instrument's own overhead. |
+| e-14 | Allocating every proof node individually, with no structural sharing, costs memory and time that a different representation would not. | Audited: `mkNode` allocates per call; the header records that mutability is why results are not cached and names the unbuilt immutable layer. | [E14](docs/directions.md#e14-proof-node-representation-and-allocation): live/total nodes, duplicate structure, peak memory and allocator time, against the cost at each `updateNode` site. |
+| e-15 | Materializing the whole proof before emitting any of it sets peak memory higher than the output requires. | Audited: the pipeline postprocesses, scopes and then prints; `--proof-log` streams the SAT layer only; the Eo/CPC printer is two-pass by construction. | [E15](docs/directions.md#e15-streaming-proof-emission): peak memory versus total allocation and output bytes, under a stated incremental-output contract. |
+| e-16 | The proof is walked more times than the work requires, and some passes could ride along with an existing traversal. | Audited: updater, optional subtype conversion, trusted-step scan and a two-pass printer; other traversals are gated by checking options. | [E16](docs/directions.md#e16-traversal-fusion): traversal and per-node visit counts in the measured configuration, and whether fusion preserves the order of effects. |
 
 The central research question joins e-1 through e-6: **how much of the proof
 work is logically necessary, and how early can unnecessary work be recognized?**
 That is a proposed organizing question, not an attribution result. e-7 and e-8
 offer smaller implementation candidates; their convenience does not establish
 that they address the largest costs.
+
+e-13 stands before the others rather than beside them: while it is open, the
+ordering of every remaining hypothesis rests on how much source each one has
+behind it. e-14 and e-15 are the register's only entries about memory, which
+the charter names as half the subject.

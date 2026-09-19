@@ -1,10 +1,20 @@
 # Research directions for proof-production overhead
 
-**Source assessment, 2026-09-18.** These twelve directions start from the
-[hypothesis register](../notes.md) and the
+**Source assessment, 2026-09-18; extended 2026-09-19.** These sixteen
+directions start from the [hypothesis register](../notes.md) and the
 [public-branch survey](../ledger/2026-09-18-branch-survey.md). No performance
 effect is measured. The [queue](todo.md) separates the agent's priorities from
 maintainer guidance.
+
+**Two provenances.** E1–E12 are branch-derived: each starts from code someone
+already wrote on `ajreynol/cvc5`, so together they map what has been *tried*,
+not where the cost is. E13–E16 come instead from the 2026-09-19 [pipeline
+audit][audit] of pinned main and have **no branch behind them**; they are
+mechanisms visible in the current source that no surveyed branch addresses.
+Neither provenance is evidence of a performance effect, but they fail
+differently: a branch-derived direction inherits an author's judgment that the
+idea was worth prototyping, while an audit-derived one has not had even that
+filter applied to it.
 
 Source comparisons use upstream [main at `3dcc1ef542`][main]. Fork branches use
 `ajreynol:NAME` and link to living branches for navigation; their **audited tips,
@@ -33,9 +43,9 @@ measurements below remain future work; the current phase is planning only.
 | part of the problem | directions | distinguishing question |
 | --- | --- | --- |
 | Avoid unnecessary proof work | E1–E4 | Can we avoid a justification, reduce its dependencies, or represent it compactly? |
-| Process the necessary proof efficiently | E5–E8 | Can sharing, provenance, caching or better rule algorithms reduce the work? |
-| Retain and emit proofs efficiently | E9–E11 | Which representation, lifetime and session costs can be avoided? |
-| Make the comparison interpretable | E12 | Did proof mode change the solving problem or available algorithms? |
+| Process the necessary proof efficiently | E5–E8, E16 | Can sharing, provenance, caching or better rule algorithms reduce the work? |
+| Retain and emit proofs efficiently | E9–E11, E14–E15 | Which representation, lifetime and session costs can be avoided? |
+| Make the comparison interpretable | E12–E13 | Did proof mode change the solving problem or available algorithms, and where does the cost fall? |
 
 The first four directions are related but distinct. **Unrewriting** changes
 which atom representation the refutation uses. **Macro decomposition** reduces
@@ -446,6 +456,162 @@ state where matching is impossible. Close this prerequisite with an explicit
 comparison design, then revisit it when revisions or proof settings change.
 It does not expand into general solver tuning.
 
+## E13 Proof-work accounting
+
+**Effort.** 🟢 Low Risk / 🟢 High Gain — instrumentation changes no proof
+obligation, and it supplies the partition on which every other direction's
+priority depends. The gain is information needed to rank E1–E16, not a solver
+speedup.
+
+**Question.** Which phases of proof production consume the time and memory,
+and how much constructed proof material never reaches the final proof?
+
+**Code.** The counters named below under
+[attribution](#attribution-before-an-experiment-queue) are attempt and outcome
+counts, not phase timers. The [pipeline audit][audit] adds two findings about
+the final-proof statistics. `ProofFinalCallback::finalize` is reached only
+through `PfManager::checkFinalProof`, whose sole call site is guarded by
+`options().smt.checkProofs`; the final rule and trust histograms are therefore
+unavailable in a run that does not also enable proof checking. That same
+guarded block calls `connectProofToAssertions`, which the proof-retrieval path
+calls again, against the method's own stated assumption that it runs once per
+unsat response. No counter found distinguishes proof nodes reaching the final
+proof from nodes constructed and discarded, and no non-overlapping per-phase
+timer partition exists.
+
+**Critical measurement distinction.** Instrumentation that is reachable only
+under `--check-proofs` measures a different configuration from the one whose
+overhead is in question, and may add postprocessing work rather than only
+observing it. Whether that work is in fact performed twice is a code reading
+in the audit, not an observation; the first instrumented run should settle it
+before any timing comparison relies on those numbers.
+
+**Controls and next evidence.** Establish timer scopes before adding or
+subtracting them, following the [profiler
+guide](../../../docs/stats-profiler.md#choosing-a-partition). Separate
+search-time proof bookkeeping, postprocessing/elaboration, rewrite
+reconstruction, conversion, scoping and output, and state which costs the
+instrument cannot separate. Add a discarded-work measure — nodes constructed
+versus nodes reachable from the final proof — and a peak-memory attribution;
+count the instrument's own overhead. Prefer observations available without
+enabling checking, and report any that are not.
+
+**Manage the risk.** Build the smallest partition that can distinguish the
+three competing explanations: expensive necessary proof, large discarded
+proof, and lost solving capability (E12). Do not let the instrument grow into
+general profiling infrastructure before an experiment needs it, and do not
+report a phase attribution whose scopes overlap.
+
+## E14 Proof node representation and allocation
+
+**Effort.** 🔴 High Risk / 🟡 Medium Gain — mutability is load-bearing in the
+postprocessor, so an immutable or shared representation reaches much of the
+pipeline. It is the only direction aimed at allocation and memory, which the
+charter names as half the subject; the gain estimate is conditional on E13.
+
+**Question.** Terms are hash-consed; proof nodes are not. What do per-call
+allocation and the absence of structural sharing cost in memory and time?
+
+**Code.** `ProofNodeManager::mkNode` allocates a fresh
+`std::make_shared<ProofNode>` per call, with no uniqueness table found on that
+path. The class comment states the reason and names the unbuilt alternative
+directly: proof nodes are mutable, "hence this class does not cache the
+results of mkNode", and a caching layer over immutable proof nodes "could be
+built as an extension or layer on top of this class". The mutability is used:
+`ProofPostprocess::process` splices its subtype-converted proof back with
+`updateNode`. Main's `--proof-pp-merge` and `--proof-dag-global` govern
+merging and printing, which is a different mechanism from construction-time
+uniquing. Line anchors are in the [pipeline audit][audit]. No surveyed branch
+proposes this; `ajreynol:proofTerm` is a broader proof-as-term prototype, not
+an allocation change.
+
+**Controls and next evidence.** Keep three separable changes apart: allocation
+strategy for `ProofNode`, construction-time uniquing of immutable nodes, and
+the existing merge and DAG options. Measure first — live and total nodes,
+duplicate structure, peak RSS, allocator time — since E13's discarded-work
+measure bounds what either change can recover. An immutable layer must state
+its behavior at every existing `updateNode` site rather than assume there are
+few.
+
+**Manage the risk.** Begin with an allocation change that preserves the
+current object model and mutation points, and treat uniquing as a separate
+later proposal. Promote if allocation or duplicate structure is material.
+Reduce priority if merging already captures the available sharing, or if the
+mutation sites make an immutable layer equivalent to rewriting the
+postprocessor.
+
+## E15 Streaming proof emission
+
+**Effort.** 🔴 High Risk / 🟡 Medium Gain — peak memory could fall if the
+final proof need not coexist with its output, but scoping, letification and
+the checker's input contract constrain what may be emitted early. The gain is
+conditional on peak memory being a binding cost on the corpus.
+
+**Question.** Must the whole final proof be materialized before any part of it
+is emitted?
+
+**Code.** The pipeline materializes: the prop-engine proof is connected and
+postprocessed by `PfManager::connectProofToAssertions`, scoped, then printed.
+`--proof-log` streams at the SAT layer through `ProofLogger`, which calls
+`connectProofToAssertions` per logged component; the `ajreynol:pfLogInferface`
+lineage is that feature's history and E11 covers its incremental use. Whole-
+pipeline streaming is absent from main and from the surveyed branches. The
+[audit][audit] identifies the first obstacle in the Eo/CPC path: `EoPrinter`
+runs the proof twice by construction, passing it through `EoPrintChannelPre`
+to compute letification and the variable set before printing.
+
+**Controls and next evidence.** Specify the output contract first: whether the
+pinned checker accepts a proof whose let bindings and declarations arrive
+incrementally, and what a partially emitted proof means if the run is then
+interrupted. Main already rejects `--proof-log` with incremental solving,
+which is a fact about that logging mode and not about streaming in general.
+Later separate peak memory from total allocation and from output bytes, which
+is E9's subject. Reordering output without reducing live nodes is not this
+direction.
+
+**Manage the risk.** Treat the two-pass letification requirement as the
+gating question and answer it before designing an emission schedule. Keep
+this distinct from E14: cheaper nodes and fewer simultaneously live nodes are
+different mechanisms and should not be bundled into one measurement. Reduce
+priority if the postprocessed proof must be complete for the chosen format
+anyway.
+
+## E16 Traversal fusion
+
+**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the passes are identifiable and
+fusing them changes no proof obligation, but each exists for a reason, and
+their per-node work may be small beside elaboration.
+
+**Question.** How many times is the proof walked between the prop-engine proof
+and the emitted output, and how much of that is separable bookkeeping?
+
+**Code.** Verified at the pin by the [audit][audit]. Inside
+`ProofPostprocess::process`: the updater pass always runs; under
+`--proof-elim-subtypes` a `ProofNodeConverter` builds a converted proof and
+splices it back with `updateNode`; when trusted-rule elimination is
+configured, `expr::getSubproofRules` scans for the remaining trusted steps
+before reconstruction. The Eo/CPC printer then walks the proof twice. Other
+traversals are gated rather than default: `pfgEnsureClosed*` returns
+immediately unless eager checking or its trace is on, the final-callback
+traversal runs only under `--check-proofs`, and `proof_letify` belongs to the
+LFSC path. Fusion candidates must therefore be identified in the configuration
+actually measured.
+
+**Controls and next evidence.** Count traversals and per-node visits in a
+production build under the intended configuration, not in a debug build with
+traces on; traversal count is not traversal cost. Separate passes that could
+ride along with an existing walk, such as a scan for remaining trusted steps,
+from passes that rebuild the proof, such as the subtype converter. Record what
+each fused pass observed and whether the order of effects is preserved. Fusing
+two cheap walks while elaboration dominates is a measurable non-result worth
+recording.
+
+**Manage the risk.** Establish visit counts before changing any pass, then
+fuse a single pair whose combination demonstrably preserves the current order
+of effects, keeping the separate passes available for comparison. Deprioritize
+if visits are few or per-node work is dominated by the updater's own
+elaboration.
+
 ## Attribution before an experiment queue
 
 Useful counters already present in source include
@@ -456,6 +622,15 @@ histograms. Their source definitions are starting points, not observed data.
 An attempt count does not measure time, and final nodes do not count all
 temporary proof construction. Dedicated, non-overlapping timings for every
 phase above have not been established by this audit.
+
+The final-proof histograms carry a further condition established by the
+[pipeline audit][audit]: they are produced by `ProofFinalCallback::finalize`,
+which is reached only through a call site guarded by
+`options().smt.checkProofs`. They are not free observations of an
+unchecked proof-producing run, and requesting them changes the configuration
+being measured. [E13](#e13-proof-work-accounting) treats that coupling, and
+the absence of any discarded-work measure, as the instrumentation gap to close
+before the queue below can be ordered by cost rather than by readiness.
 
 [`ajreynol:proofDisable`][proofDisable] replaces selected parts with trusted/opaque
 steps; `ajreynol:rpcAlwaysPre` inherits those switches. Such ablations may inform later
@@ -483,6 +658,7 @@ than interpreting the switch name as a timer boundary.
   format and API entry point, read on 2026-09-18. Pin the implementation,
   specification and checker before any measurement.
 
+[audit]: ../ledger/2026-09-19-pinned-main-pipeline-audit.md
 [main]: https://github.com/cvc5/cvc5/tree/3dcc1ef5421ab62cc1ee9af52d70042ce6861af0
 [defaults]: https://github.com/cvc5/cvc5/blob/3dcc1ef5421ab62cc1ee9af52d70042ce6861af0/src/smt/set_defaults.cpp
 [unrewrite]: https://github.com/ajreynol/cvc5/tree/unrewrite

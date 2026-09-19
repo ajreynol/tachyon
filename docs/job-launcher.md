@@ -48,7 +48,8 @@ Paths below are relative to `job_launcher/`.
 **Local.** `submit` reads a config, derives the job name, runs read-only
 sanity checks over ssh, and opens one tmux window per launch. `-b BRANCH`
 and `-r` are blocking instead, streaming progress and ending in an explicit
-verdict. Everything it does is recorded in `log.txt`.
+verdict. `log.txt` records launch metadata and final verdicts. Full blocking-job
+output is written to a local temporary file, whose path the launcher prints.
 
 **Host.** [`host/`](../job_launcher/host/) is installed to `~/bin/heuresis`, and every job runs
 with `PATH=$HOME/bin/heuresis:$HOME/bin:$PATH`, so the drivers and wrappers a
@@ -109,6 +110,11 @@ to `DEFAULT_HOST` and ignored `scratch/results/`, needs only the site file,
 and never changes the host. Listing and copy failures return nonzero; no
 matching files is reported separately. Help and argument checks work before
 site setup. Repeated copies replace local files.
+
+Fetched results, statistics (including `-processed.txt`) and error sidecars are
+raw job artifacts. Keep them under ignored `scratch/` or outside the checkout;
+do not commit them or paste their contents into a ledger. Record summaries and
+artifact locations according to the [retention policy](maintenance.md#result-retention).
 
 ## Things that will bite
 

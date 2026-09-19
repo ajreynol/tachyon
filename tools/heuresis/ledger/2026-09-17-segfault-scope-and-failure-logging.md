@@ -50,13 +50,17 @@ unknown, 29 timeout, zero benchmarks differing in either direction, PAR2 within
 | **error (segfault)** | **2** |
 | timeout | 279 |
 
-The failure log contains exactly two lines, and says what the previous entry
-needed an ssh session to discover:
+The failure sidecar `~/analysis/data/errors-cvc5_solve.sh-quant-091726-u-ssc-best-t300.txt`
+contains two failures, summarized here by category:
 
-```
-…verusatmosphere/allocator__page_allocator_spec_impl.18.smt2	cvc5 suffered a segfault.
-…v_ironfleet/unsolvable/single_delivery_model_v.5.smt2	cvc5 suffered a segfault.
-```
+| benchmark suffix | failure category |
+| --- | --- |
+| `verusatmosphere/allocator__page_allocator_spec_impl.18.smt2` | segmentation fault |
+| `v_ironfleet/unsolvable/single_delivery_model_v.5.smt2` | segmentation fault |
+
+The full identifiers are in the [diagnosis](2026-09-17-central-ieval-segfault.md).
+The pasted messages are replaced with this table under the
+[2026-09-19 retention correction](2026-09-19-output-retention.md).
 
 They are the same two benchmarks found at 120 s.
 

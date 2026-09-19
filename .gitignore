@@ -11,3 +11,17 @@ __pycache__/
 # working space, never committed
 scratch/
 *.local.md
+# Raw job output: these basename patterns also drive the retention check.
+# BEGIN raw job output
+results-*.txt
+results-*.txt.*
+stats-*.txt
+stats-*.txt.*
+errors-*.txt
+errors-*.txt.*
+*.log
+*.stdout
+*.stderr
+stdout
+stderr
+# END raw job output

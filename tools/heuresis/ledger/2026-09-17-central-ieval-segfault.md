@@ -61,21 +61,14 @@ on the same combination. `-q --ee-mode=central --ieval=off` alone, without the
 quantifier options, did not crash within a 150 s CPU limit, so the quantifier
 configuration is part of reaching the faulty state.
 
-Both benchmarks crash at the identical frame:
-
-```
-#0  EqualityEngine::getExplanation(unsigned, unsigned, vector<Node>&, map<...>&, EqProof*) const
-#1  EqualityEngine::explainEquality(Node, Node, bool, vector<Node>&, EqProof*) const
-#2  EqualityEngine::explainLit(Node, vector<Node>&) const
-#3  EqualityEngine::mkExplainLit(Node) const
-#4  SharedTermsDatabase::explain(Node) const
-#5  SharedSolverDistributed::explain(Node, TheoryId)
-#6  TheoryEngine::getExplanation(vector<NodeTheoryPair>&)
-#8  prop::TheoryProxy::explainPropagation(SatLiteral, vector<SatLiteral>&)
-#9  prop::cadical::CadicalPropagator::cb_add_reason_clause_lit(int)
-#13 CaDiCaL::Internal::explain_external_propagations()
-#14 CaDiCaL::Internal::analyze()
-```
+Both benchmarks crash in `EqualityEngine::getExplanation`. The recorded call
+chain goes from CaDiCaL analysis and external-propagation explanation through
+`CadicalPropagator::cb_add_reason_clause_lit`, `TheoryProxy::explainPropagation`,
+`TheoryEngine::getExplanation`, `SharedSolverDistributed::explain` and
+`SharedTermsDatabase::explain`. Within the equality engine it passes through
+`mkExplainLit`, `explainLit` and `explainEquality` before the fault.
+The pasted backtrace is replaced with this summary under the
+[2026-09-19 retention correction](2026-09-19-output-retention.md).
 
 **It is not a stack overflow.** The crashing frame sits at `0x7fffffffc810`,
 within a few kilobytes of the stack top, and the backtrace shows no recursion

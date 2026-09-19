@@ -1,9 +1,3 @@
-# Full per-benchmark job output is retained locally or on the execution host.
-# Commit only small processed summaries; keep generated benchmark lists local.
-results-*.txt
-stats-*.txt
+# Raw output, including processed text and error logs, is ignored repository-wide.
+# Keep new derived benchmark lists local until deliberately retained as evidence.
 gapset-*.txt
-!stats-*-processed.txt
-# errors-*.txt is one line per failed benchmark and is only written when
-# something failed, so it is small by nature and worth tracking: it is the
-# record of which benchmarks crashed and why.  Not ignored, deliberately.

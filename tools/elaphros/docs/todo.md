@@ -22,7 +22,17 @@ This section records the guidance without converting it into invented ranks.
 The main recommendation is to lead with **avoiding unnecessary elaboration**.
 Smaller cache and checker patches stay visible, but should not define the
 research agenda merely because they are easier to port. E12's comparison
-design is a prerequisite across the table and is not ranked as an optimization.
+design and E13's accounting instrument are prerequisites across the table and
+are not ranked as optimizations.
+
+**Revised 2026-09-19** to place E14–E16 from the [pipeline
+audit](../ledger/2026-09-19-pinned-main-pipeline-audit.md). The relative order
+of the branch-derived entries is unchanged; the new rows were inserted around
+them. Their positions reflect how well grounded and how contained each is in
+this planning pass, **not** a belief that they matter less than what sits
+above them. Until E13 exists, this table is ordered by how much is known
+about each candidate, which correlates with how much source someone happened
+to write rather than with cost.
 
 | rank | direction | why it is here | next planning step |
 | ---: | --- | --- | --- |
@@ -32,10 +42,13 @@ design is a prerequisite across the table and is not ranked as an optimization.
 | 4 | [E4: rewrite dependencies](directions.md#e4-rewrite-dependencies) | Directly targets proofs of irrelevant child rewrites; closely complements E1/E2. | Specify probe/translation costs and candidate shapes where dependency minimization can help. |
 | 5 | [E5: DAG simplification/sharing](directions.md#e5-proof-dag-simplification-and-sharing) | Can discard work before expansion and exposes meaningful deltas inside misleadingly named bundles. | Separate existing mainline behavior from additional TRANS/CONG simplification. |
 | 6 | [E6: rewrite provenance](directions.md#e6-recorded-rewrite-provenance) | High potential to replace reconstruction search, but broad changes to rewriting complicate attribution. | Split the `ajreynol:rdbExec` design into execution, recording and reconstruction effects. |
-| 7 | [E7: reconstruction cache/policy](directions.md#e7-reconstruction-cache-and-search-policy) | Narrow comparison candidates, including the surviving cache-clear delta. | Audit cache validity/lifetime and remove inherited ablation changes from the conceptual comparison. |
-| 8 | [E8: internal resolution checking](directions.md#e8-resolution-construction-and-internal-checking) | Recent one-file candidate; relevance depends on checker calls in the actual production path. | Map construction/checking call sites before predicting an end-to-end benefit. |
-| 9 | [E9: definitions/output](directions.md#e9-definitions-and-proof-output) | Potentially important on large generated inputs, but can improve size without reducing production time. | Compare definition handling and agree on output/validation semantics. |
-| 10 | [E10: lazy/theory bookkeeping](directions.md#e10-lazy-bookkeeping-and-theory-reconstruction) | Memory and reconstruction may matter greatly; old branch interfaces and corpus dependence reduce readiness. | Inventory retained generators and identify the applicable theory strata. |
+| 7 | [E16: traversal fusion](directions.md#e16-traversal-fusion) | Verified in pinned main rather than inferred from a branch, and fusing passes changes no proof obligation; the cheapest entry to settle in either direction. | Enumerate the traversals reached in the intended production configuration and estimate per-node work before proposing any fusion. |
+| 8 | [E7: reconstruction cache/policy](directions.md#e7-reconstruction-cache-and-search-policy) | Narrow comparison candidates, including the surviving cache-clear delta. | Audit cache validity/lifetime and remove inherited ablation changes from the conceptual comparison. |
+| 9 | [E8: internal resolution checking](directions.md#e8-resolution-construction-and-internal-checking) | Recent one-file candidate; relevance depends on checker calls in the actual production path. | Map construction/checking call sites before predicting an end-to-end benefit. |
+| 10 | [E14: proof node representation](directions.md#e14-proof-node-representation-and-allocation) | The only entry aimed at allocation, and cvc5's own header names the unbuilt alternative; the payoff is unknown until E13 bounds it. | Separate allocation strategy from construction-time uniquing, and inventory the `updateNode` sites an immutable layer would have to handle. |
+| 11 | [E9: definitions/output](directions.md#e9-definitions-and-proof-output) | Potentially important on large generated inputs, but can improve size without reducing production time. | Compare definition handling and agree on output/validation semantics. |
+| 12 | [E10: lazy/theory bookkeeping](directions.md#e10-lazy-bookkeeping-and-theory-reconstruction) | Memory and reconstruction may matter greatly; old branch interfaces and corpus dependence reduce readiness. | Inventory retained generators and identify the applicable theory strata. |
+| 13 | [E15: streaming emission](directions.md#e15-streaming-proof-emission) | Targets peak memory rather than time, but rests on an output and checker contract that is not fixed, so it is the least ready of the new entries. | Establish whether the pinned checker accepts incrementally emitted let bindings and declarations; the printer's letification pre-pass is the gating obstacle. |
 
 [E11: incremental output](directions.md#e11-incremental-output-and-reuse) is
 conditional: promote it into the leading group if real incremental sessions
@@ -51,6 +64,8 @@ to build the branches in that order.
 | Identify the nontrivial postprocessor families | Initial pass complete: E1–E7, including `ajreynol:reduceTransform`, `ajreynol:rewriteDep` and additional simplifications in CPC/trust bundles. |
 | Distinguish mainline, sketch and alternative designs | Initial pass complete in the survey; correctness/build readiness remains untested. |
 | Deepen the top four designs | Next: short design comparisons specifying preserved proof obligations, fallback paths, phase placement and interactions. No solver execution needed. |
+| Audit the pipeline of pinned main directly | Initial pass complete 2026-09-19: allocation, traversals and instrumentation read at the pin, yielding E13–E16. Theory-level generators, prop-engine proof construction and formats other than Eo/CPC were not read. |
+| Specify E13's instrument | Open: name the phase boundaries, the discarded-work measure and the observations obtainable without enabling proof checking. Required before the ranking above can be ordered by cost. |
 | Select the benchmark subject | Open: choose a fixed corpus and intended use with the maintainer. Candidate strata are rewriting/preprocessing-heavy UNSAT, theory reconstruction, definition-heavy inputs and genuine incremental sessions. Heuresis's corpus is an option, not the default subject. |
 | Fix the proof contract | Open: propose CPC with a pinned compatible checker first; decide granularity, allowed trust, input references/definitions and what constitutes a complete proof. Other formats are separate comparisons. |
 | Specify the baseline and observables | Open: ordinary / matched settings / proof enabled / emitted proof arms; explicit checking policy, timing boundaries, memory, failures and repetitions. Use existing counters first. |

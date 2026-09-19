@@ -13,4 +13,5 @@ snapshots, described in the data index.
 | [progress.md](progress.md) | What is established and which measurements remain absent. |
 | [ledger/README.md](../ledger/README.md) | Evidence conventions and dated records. |
 | [branch survey](../ledger/2026-09-18-branch-survey.md) | Scope, pinned revisions, branch comparisons and source-audit limitations. |
+| [pipeline audit](../ledger/2026-09-19-pinned-main-pipeline-audit.md) | Allocation, traversals and instrumentation read directly in pinned main; the basis for E13–E16. |
 | [data/README.md](../ledger/data/README.md) | Snapshot contents and reproduction procedure. |

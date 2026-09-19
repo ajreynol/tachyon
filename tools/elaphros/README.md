@@ -1,12 +1,16 @@
 # elaphros
 
-**Planning status, 2026-09-18.** The [branch survey](ledger/2026-09-18-branch-survey.md)
+**Planning status, 2026-09-19.** The [branch survey](ledger/2026-09-18-branch-survey.md)
 screens all 809 public heads of `ajreynol/cvc5` and characterizes 49 selected
-branches against pinned upstream source. It supports twelve
-[research directions](docs/directions.md) and a provisional
-[priority queue](docs/todo.md), with `ajreynol:unrewrite` and `ajreynol:pfrConvert` explicitly
-highlighted by the maintainer. These are source observations and hypotheses;
-no experiments, performance results or validated optimizations are delivered.
+branches against pinned upstream source, and the
+[pipeline audit](ledger/2026-09-19-pinned-main-pipeline-audit.md) reads
+allocation, traversals and instrumentation directly in pinned main. Together
+they support sixteen [research directions](docs/directions.md) and a
+provisional [priority queue](docs/todo.md), with `ajreynol:unrewrite` and
+`ajreynol:pfrConvert` explicitly highlighted by the maintainer. The last four
+directions have no branch behind them. These are source observations and
+hypotheses; no experiments, performance results or validated optimizations are
+delivered.
 Start at the [documentation index](docs/README.md) for the register and evidence.
 
 ## The charter

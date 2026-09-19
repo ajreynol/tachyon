@@ -25,14 +25,15 @@ Entries:
 - [`2026-09-17-self-contained-launcher-and-current-main.md`](2026-09-17-self-contained-launcher-and-current-main.md)
 - [`2026-09-17-segfault-scope-and-failure-logging.md`](2026-09-17-segfault-scope-and-failure-logging.md)
 - [`2026-09-17-cvc5-1-4-0-release.md`](2026-09-17-cvc5-1-4-0-release.md)
+- [`2026-09-19-output-retention.md`](2026-09-19-output-retention.md)
+  (retention correction, nothing run)
 
-Full results and statistics files remain on the execution host and may be
-copied into [`data/`](data/) with `job_launcher/fetch` for local analysis, but
-they are ignored by Git. Each entry records the exact raw artifact name,
-command, solver revision, and aggregate result. The gap lists already tracked
-alongside these entries are retained evidence; newly generated lists are
-ignored by default. Small processed summaries are also tracked. See the [data-retention
-policy](data/README.md).
+Raw results, statistics, processed text dumps and error sidecars remain on the
+execution host; fetch local copies into ignored `scratch/results/`. Each entry
+records the exact raw artifact name, command, solver revision and aggregate
+result. The gap lists tracked in [`data/`](data/) contain derived measurements;
+new lists are ignored by default. See the [retained-data guide](data/README.md)
+and repository [retention policy](../../../docs/maintenance.md#result-retention).
 
 ## An entry
 
@@ -55,5 +56,6 @@ the two NAMEs of an A/B, joined by `-vs-`). Each entry carries, in this order:
 6. **What it did not settle**, if the run's design left an obvious question
    open — a timeout that was hiding the answer, a confound.
 
-An entry is never edited after the fact; a correction is a new entry that
-names the old one.
+An entry's results and conclusions are never revised after the fact; a
+correction is a new entry that names the old one. Removing raw output to comply
+with retention preserves its derived facts and links to a dated correction.

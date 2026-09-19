@@ -1,2 +1,0 @@
-./sundance/UFDTNIA/20241211-verus/20241211-verusatmosphere/allocator__page_allocator_spec_impl.18.smt2	cvc5 suffered a segfault.
-./verus-no-option/mariposa_queries/v_ironfleet/unsolvable/single_delivery_model_v.5.smt2	cvc5 suffered a segfault.

@@ -11,8 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     suites = ["tests", "stats_profiler/tests"]
     guide = (ROOT / "docs/maintenance.md").read_text()
-    if "job_launcher/checks" not in guide or any(f"`{suite}/`" not in guide for suite in suites):
-        sys.exit("check: maintenance.md must describe the launcher lint and shared test suites")
+    if (any(name not in guide for name in ("job_launcher/checks", "scripts/check_data_retention.py"))
+            or any(f"`{suite}/`" not in guide for suite in suites)):
+        sys.exit("check: maintenance.md must describe retention, launcher lint and shared test suites")
+    result = subprocess.run([sys.executable, str(ROOT / "scripts/check_data_retention.py")], cwd=ROOT)
+    if result.returncode:
+        return result.returncode
     result = subprocess.run([str(ROOT / "job_launcher/checks")], cwd=ROOT)
     if result.returncode:
         return result.returncode

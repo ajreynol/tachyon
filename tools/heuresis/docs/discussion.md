@@ -29,10 +29,8 @@ reproduces on builds several months apart.
 cvc5 -q --no-cbqi --user-pat=strict --ee-mode=central --ieval=off BENCHMARK
 ```
 
-```
-cvc5 suffered a segfault.
-Offending address is 0x119db0e40
-```
+The run terminates with a segmentation fault; the reported offending address
+was `0x119db0e40`.
 
 Confirmed on `main@67954d09dc`, and on `main@5cc03f4b9` (a build roughly one
 month older), on Linux x86-64. Two benchmarks trigger it, both
@@ -54,7 +52,7 @@ Bisected on one benchmark, each run to a 100 s CPU limit:
 - **Both flags are required.** Neither alone crashes, and each alone is enough
   to solve the benchmark that the combination crashes on.
 - **`--sat-solver=cadical` is not required.** The default SAT solver segfaults
-  on the same combination; the first backtrace below simply came from a
+  on the same combination; the call chain summarized below came from a
   CaDiCaL run.
 - `-q --ee-mode=central --ieval=off` *without* the quantifier options did not
   crash within a 150 s CPU limit, so the quantifier configuration appears to
@@ -63,28 +61,16 @@ Bisected on one benchmark, each run to a 100 s CPU limit:
 
 ### Backtrace
 
-Both benchmarks fault at an identical frame:
+Both benchmarks fault in `EqualityEngine::getExplanation`. CaDiCaL conflict
+analysis reaches the fault while explaining external propagations, through
+`explain_reason`, `learn_external_reason_clause` and `add_external_clause`.
+The reason-clause callback enters `TheoryProxy::explainPropagation` and
+`TheoryEngine::getExplanation`, then shared-solver and shared-terms explanation,
+then the equality engine's `mkExplainLit`, `explainLit` and `explainEquality`.
 
-```
-#0  EqualityEngine::getExplanation(unsigned, unsigned, vector<Node>&, map<...>&, EqProof*) const
-#1  EqualityEngine::explainEquality(Node, Node, bool, vector<Node>&, EqProof*) const
-#2  EqualityEngine::explainLit(Node, vector<Node>&) const
-#3  EqualityEngine::mkExplainLit(Node) const
-#4  SharedTermsDatabase::explain(Node) const
-#5  SharedSolverDistributed::explain(Node, TheoryId)
-#6  TheoryEngine::getExplanation(vector<NodeTheoryPair>&)
-#7  TheoryEngine::getExplanation(Node)
-#8  prop::TheoryProxy::explainPropagation(SatLiteral, vector<SatLiteral>&)
-#9  prop::cadical::CadicalPropagator::cb_add_reason_clause_lit(int)
-#10 CaDiCaL::Internal::add_external_clause(int, bool)
-#11 CaDiCaL::Internal::learn_external_reason_clause(int, int, bool)
-#12 CaDiCaL::Internal::explain_reason(int, CaDiCaL::Clause*, int&)
-#13 CaDiCaL::Internal::explain_external_propagations()
-#14 CaDiCaL::Internal::analyze()
-```
-
-So: explaining a propagated literal, during conflict analysis, through the
-shared-terms database into equality-engine explanation.
+This summarizes the diagnostic under the
+[retention correction](../ledger/2026-09-19-output-retention.md); raw debugger
+output belongs in the external diagnostic artifact, not this document.
 
 ### What it is not
 

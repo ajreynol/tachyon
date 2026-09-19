@@ -9,7 +9,7 @@ shared tools and how to maintain them. Each research project under
 | [job-launcher.md](job-launcher.md) | Configure experiments, deploy host scripts, launch jobs and retrieve results. |
 | [stats-profiler.md](stats-profiler.md) | Interpret statistics, configure timers and export offline reports and PDFs. |
 | [site.md](site.md) | Build and deploy the published report site, and add a project report to it. |
-| [maintenance.md](maintenance.md) | Maintain this tree, run CI checks and review findings and correspondence. |
+| [maintenance.md](maintenance.md) | Maintain this tree, apply result-retention rules, run CI checks and review findings and correspondence. |
 | [discussion.md](discussion.md) | Live correspondence drafted here for a person to carry. |
 
 These Markdown pages are maintained by hand. The profiler's HTML, CSV, JSON

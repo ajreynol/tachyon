@@ -61,7 +61,9 @@ job_launcher/status
 The [launcher guide](docs/job-launcher.md) explains installation, configuration,
 host deployment and result retrieval. Configs and the
 [launch log](job_launcher/log.txt) are tracked; personal settings and fetched
-raw results stay local.
+raw results stay local. **Raw job output must not be committed**, including
+processed text dumps and error logs; the [retention policy](docs/maintenance.md#result-retention)
+defines the derived evidence that may be kept.
 
 ## What the evidence supports
 
