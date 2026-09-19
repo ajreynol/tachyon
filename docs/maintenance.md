@@ -78,8 +78,8 @@ This is the local definition of the `checks / tooling` CI job:
    nothing contacts a host or starts a benchmark job.
 
 **One of those cases is about the interpreter rather than this code.** Every
-program here must parse on Python 3.9, which is what CI pins and what the front
-page promises, while a developer's interpreter is usually far newer — so syntax
+program here must parse on Python 3.9, which is what CI pins and what the tool
+guides promise, while a developer's interpreter is usually far newer — so syntax
 introduced after 3.9 passes locally and fails in CI. `tests/test_python_floor.py`
 reads the source for the cases `ast` alone will not catch, a backslash or the
 enclosing quote reused inside an f-string expression among them.

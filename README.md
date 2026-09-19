@@ -9,24 +9,7 @@ Its research projects keep their own questions, hypotheses, priorities and
 evidence. A human may independently pursue a finding; that follow-up is outside
 this repository's discovery work.
 
-## The published reports
-
-Everything these projects have measured, and what each is working on next, is
-published at **<https://ajreynol.github.io/tachyon/>** and rebuilt on every
-push:
-
-| report | what it publishes |
-| --- | --- |
-| [**The cvc5–z3 gap**](https://ajreynol.github.io/tachyon/heuresis/) | Every benchmark where cvc5 loses time to z3 on a fixed quantifier set — one point each, the recorded experiment behind every list, and a CSV of the same rows the page draws. |
-| [**Heuresis's queue**](https://ajreynol.github.io/tachyon/heuresis/queue.html) | What that project is doing about the gap: the goals in flight, its own ranking of the research directions, the maintainer's separate ranking, and which branches of the fork are worth maintaining. |
-| [**Elaphros's queue**](https://ajreynol.github.io/tachyon/elaphros/) | What producing a proof might cost cvc5 and which mechanisms are worth investigating first, read from the solver's source — with no measurement taken yet, which the page says on its own front tile. |
-
-**No figure on those pages is typed into them.** Each is read from a tracked
-document or recomputed from retained evidence while the page is built, so the
-site cannot state a number this repository has not recorded, and a project that
-has measured nothing has no way to imply otherwise. The
-[site guide](docs/site.md) describes what may be published, what the builders
-refuse, and how a project adds a report.
+**[Read the published analyses](https://ajreynol.github.io/tachyon/).**
 
 ## Research projects
 
@@ -41,45 +24,20 @@ current findings and links to its investigation; the shared tools supply the
 measurements. Research lives under [`tools/`](tools), with a charter, a queue
 and the evidence in each project's directory.
 
-Two shared tools support the investigations. [`job_launcher/`](job_launcher)
-validates and launches remote experiments using the host scripts in this
-repository, and records launches. [`stats_profiler/`](stats_profiler) reads
-local cvc5 statistics and produces offline HTML, CSV, JSON and optional vector
-PDF reports.
+Two shared tools support the investigations, and each has a guide.
+[`job_launcher/`](job_launcher) validates and launches remote experiments using
+the host scripts in this repository and records every launch; the
+[launcher guide](docs/job-launcher.md) covers configuration, host deployment
+and retrieving results. [`stats_profiler/`](stats_profiler) reads local cvc5
+statistics and produces offline HTML, CSV, JSON and optional vector PDF
+reports; the [profiler guide](docs/stats-profiler.md) covers timer selection,
+accounting, missing data and a worked experiment. **Setup and usage
+instructions live in those guides**, not here.
 
-## Run it
-
-The timing profiler requires Python 3.9+ and no third-party packages:
-
-```bash
-python3 stats_profiler/profile.py /path/to/raw-stats.txt --output scratch/profile
-```
-
-Open `scratch/profile/index.html` in a browser. Use raw benchmark blocks from a
-stats job, not a `-processed` proof summary. The
-[profiler guide](docs/stats-profiler.md) covers timer selection, accounting,
-missing data, exports and a worked experiment.
-
-Remote jobs require Bash, SSH and a configured execution host; the launcher
-and host scripts are included here:
-
-```bash
-cp job_launcher/site.conf.example job_launcher/site.conf
-# Edit site.conf: host, benchmark paths and solver binaries.
-job_launcher/deploy
-# Configure ~/bin/heuresis/heuresis.conf on the host (JOBS at least).
-job_launcher/checks
-job_launcher/submit -n quant-cvc5.conf quant-z3.conf
-job_launcher/submit    quant-cvc5.conf quant-z3.conf
-job_launcher/status
-```
-
-The [launcher guide](docs/job-launcher.md) explains installation, configuration,
-host deployment and result retrieval. Configs and the
-[launch log](job_launcher/log.txt) are tracked; personal settings and fetched
-raw results stay local. **Raw job output must not be committed**, including
-processed text dumps and error logs; the [retention policy](docs/maintenance.md#result-retention)
-defines the derived evidence that may be kept.
+**Raw job output is never committed.** Solver output, statistics dumps and
+error sidecars stay on the execution host or in ignored working space; the
+[retention policy](docs/maintenance.md#result-retention) defines the derived
+evidence that may be kept, and a check refuses the rest.
 
 ## What the evidence supports
 
@@ -105,7 +63,7 @@ measurement.
 ## Common questions
 
 - **Where are the documents?** The [documentation index](docs/README.md) is the route to the guides and maintenance workflow.
-- **Where can I see the measurements?** The [report site](https://ajreynol.github.io/tachyon/) publishes each project's recorded evidence; [site.md](docs/site.md) covers building and deploying it.
+- **How is the published site built?** [site.md](docs/site.md) covers what may be published, what the builders refuse, and how a project adds a report.
 - **How do I maintain this tree or run CI locally?** Start at [maintenance](docs/maintenance.md).
 - **Where does a solver finding go?** Record its evidence in the research ledger; [maintenance](docs/maintenance.md#findings-and-discussion) describes human review and the reporting route.
 - **Who defines the shared repository rules?** Kanon keeps the [policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md); anoieu publishes its checker.

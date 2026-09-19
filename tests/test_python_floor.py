@@ -1,7 +1,7 @@
 """Every program here must parse on the oldest Python this repository claims.
 
-The front page and both guides say Python 3.9+. A developer's interpreter is
-usually much newer, so syntax that only works on a later version passes locally
+The tool guides say Python 3.9+ and the CI workflow pins it. A developer's
+interpreter is usually much newer, so syntax that only works on a later version passes locally
 and fails in CI, which pins 3.9 -- exactly what happened with a backslash
 inside an f-string expression, legal from 3.12 and a SyntaxError before it.
 `ast.parse(feature_version=...)` does not catch that one, because the f-string
