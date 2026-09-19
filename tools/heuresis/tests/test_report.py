@@ -216,7 +216,11 @@ class BuildTests(unittest.TestCase):
         summary = self.build()
         self.assertEqual(summary["name"], "heuresis")
         self.assertEqual(summary["updated"], "2026-01-01")
-        self.assertEqual([tile["value"] for tile in summary["headline"]], ["3", "1", "2"])
+        self.assertEqual([(tile["label"], tile["value"]) for tile in summary["headline"]],
+                         [("gap set", "3"), ("cvc5 unsolved, z3 solved", "1"),
+                          ("both solved, cvc5 slower", "2"),
+                          # the pair both research projects put on the index card
+                          ("research directions", "2"), ("ranked in the queue", "1")])
         self.assertTrue((out / summary["href"]).is_file())
         data, page = self.data(out)
         comparison = data["comparisons"][0]

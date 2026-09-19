@@ -176,6 +176,26 @@ class BuildTests(unittest.TestCase):
                 if report["dated"] != "measured":
                     self.assertNotIn(f'measured {report["updated"]}', page)
 
+    def test_every_published_project_carries_the_shared_figures_on_its_card(self):
+        """The index is read across projects, so the comparable pair must be on it.
+
+        Both research projects keep a register of directions and a queue that
+        ranks part of it. Those two figures are the ones a reader compares
+        between cards, so each published report puts them in its `headline`
+        rather than only on its own page -- which is where they were, and why
+        the index did not show them for heuresis.
+        """
+        published = self.build()
+        page = (self.out / "index.html").read_text()
+        shared = {"research directions", "ranked in the queue"}
+        for name, report in sorted(published.items()):
+            labels = {tile["label"] for tile in report["headline"]}
+            with self.subTest(project=name):
+                self.assertEqual(shared - labels, set(),
+                                 f"{name}'s card omits a figure the other card shows")
+                for tile in report["headline"]:
+                    self.assertIn(f"<strong>{tile['value']}</strong>", page)
+
     def test_a_missing_or_malformed_date_label_is_refused_or_defaulted(self):
         original = site.ROOT
         stand_in = Path(self.temp.name) / "labelled"

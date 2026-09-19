@@ -620,12 +620,18 @@ def build(out, base_url, repo_url, site_href="../index.html"):
         "href": "index.html",
         "updated": latest["date"],
         "dated": "measured",
+        # The first three are what this project has measured; the last two are the
+        # pair both research projects answer, so the index can be read across them.
         "headline": [
             {"label": "gap set", "value": f"{summary['gap']:,}", "note": f"of {protocol['size']:,} benchmarks"},
             {"label": "cvc5 unsolved, z3 solved", "value": f"{summary['unsolved']:,}",
              "note": f"within {protocol['timeout']:g} s"},
             {"label": "both solved, cvc5 slower", "value": f"{summary['slower']:,}",
              "note": f"by at least {protocol['factor']:g}×"},
+            {"label": "research directions", "value": str(len(directions)),
+             "note": "read from cvc5 and z3 source"},
+            {"label": "ranked in the queue", "value": str(ranked_total),
+             "note": f"of {len(directions)}, by the agent"},
         ],
         "comparisons": len(found),
         "pages": ["index.html", "queue.html"],

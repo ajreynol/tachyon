@@ -29,8 +29,10 @@ usual address.
 **The two research projects answer the same two questions the same way.** How
 many research directions the project has written down, and how many of them its
 queue has ranked — read from `directions.md` and `todo.md`, counted at build
-time, shown as the first two figures on the page and again as a register listing
-every direction with its effort and its rank. The projects diverge after that,
+time, carried in each report's `headline` so both appear on the index card, and
+shown again on the project's own page as a register listing every direction with
+its effort and its rank. **The index is the place that pair earns its keep**,
+because it is the only page where the two projects are read side by side. The projects diverge after that,
 because what they have to report diverges: heuresis has measurements, fork
 branches and an upstream record; elaphros has planning items and retained
 snapshots. **What is mirrored is the part a reader compares across projects**,
