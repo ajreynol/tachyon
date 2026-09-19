@@ -359,13 +359,16 @@ def next_steps(found, repo_url, limit=5):
     """
     ranked = named(found, "AI-agent priorities")
     columns = ("Rank", "Research direction", "Effort", "Next possible step")
-    head = "".join(f'<th{" class=\"rank\"" if not i else ""}>{name}</th>'
+    # str.format rather than an f-string: a backslash inside an f-string
+    # expression needs Python 3.12, and this repository runs on 3.9.
+    rank, wrap = ' class="rank"', ' class="wrap"'
+    head = "".join("<th{}>{}</th>".format(rank if not i else "", name)
                    for i, name in enumerate(columns))
     body = "".join(
-        "<tr>" + "".join(f'<td{" class=\"rank\"" if not i else " class=\"wrap\""}>{render_cell(c)}</td>'
-                         for i, c in enumerate(row)) + "</tr>"
+        "<tr>" + "".join("<td{}>{}</td>".format(rank if not i else wrap, render_cell(cell))
+                         for i, cell in enumerate(row)) + "</tr>"
         for row in ranked[:limit])
-    return (f"<table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>",
+    return ("<table><thead><tr>{}</tr></thead><tbody>{}</tbody></table>".format(head, body),
             len(ranked), min(limit, len(ranked)))
 
 
