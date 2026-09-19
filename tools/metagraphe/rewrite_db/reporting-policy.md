@@ -95,9 +95,14 @@ Review closure metadata changes separately from the immutable original claim.
 Before changing a prior verdict or reopening, preserve the old decision and
 its evidence in a dated ledger entry and state why it changed. A later repeat
 of a closed record requires review; it never automatically reopens it.
+Use the [closure check](README.md#check-a-closure) to verify the scope of a
+closure-only edit against a committed baseline, naming an intentional amendment
+explicitly with `--amended`. Koine now checks preservation of the existing
+claims in that workflow; verdicts and evidence remain metagraphe's decisions.
 The [shared tooling request](../../../docs/discussion.md#d4--support-named-collections-for-metagraphes-rewrite-database)
-asks koine for history-preserving reassessment mechanics. Until then, these
-decisions are manually reviewed metadata changes, not append operations.
+also asks for history-preserving reassessment mechanics. That writer is still
+unavailable: changes to assessments or their history remain separately reviewed
+metadata changes, not append or closure operations.
 
 ## What is enforced here
 
@@ -105,8 +110,9 @@ decisions are manually reviewed metadata changes, not append operations.
 | --- | --- |
 | Add once, preserve previous content, lock and replace atomically | Enforced by the pinned koine append tool. |
 | Required record fields, separate assessment vocabularies, explicit closure vocabulary and landing debt | Enforced by the local validator and tests for retained JSON. |
+| Closure-only changes preserve claims, record membership, and ordering | Checked by pinned `koine_check_db` through `koine_db.py check-closure`; intentional amendments are explicit. |
 | Validity, runtime reachability, performance, and actual landing | Evidence obligations; not established by the validator. |
-| Original content preserved during manual reassessment | Review obligation; the append guarantee does not cover hand edits. |
+| Original content preserved during general reassessment | Review obligation; the closure diff checker deliberately rejects these changes rather than managing their history. |
 | No automatic cross-project delivery | Structural: this workflow has no sender. |
 
 These tiers describe metagraphe's mechanisms. They do not inherit anoieu's

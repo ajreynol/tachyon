@@ -132,9 +132,9 @@ def validate(document, root=ROOT, filing=False):
     if filing and isinstance(document, list):
         rows = document
     else:
-        require(isinstance(document, dict) and set(document) == {"bugs"},
-                "expected the koine-compatible object with only a bugs collection")
-        rows = document["bugs"]
+        require(isinstance(document, dict) and set(document) == {"rewrites"},
+                "expected an object with only a rewrites collection")
+        rows = document["rewrites"]
     require(isinstance(rows, list), "collection must be a list")
     seen = set()
     for row in rows:

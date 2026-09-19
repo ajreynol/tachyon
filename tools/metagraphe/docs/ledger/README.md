@@ -9,6 +9,7 @@ Each entry records work actually performed. Search proposals belong in the
 | 2026-09-19 | [Initial rewrite database filing](2026-09-19-rewrite-db.md) | Migration of the survey to JSON through koine, local metadata checks, and reporting policy. |
 | 2026-09-19 | [Rewrite orientation correction](2026-09-19-rewrite-orientation.md) | Five equalities reoriented from complex to simpler, original records retained, and current RARE drafts re-parsed. |
 | 2026-09-19 | [Complex operator precedence](2026-09-19-rewrite-operator-order.md) | Human clarification: lexicographic operator complexity before size; four elimination directions restored. |
+| 2026-09-19 | [Koine tooling upgrade](2026-09-19-koine-upgrade.md) | Native rewrites collection, pinned append/closure adapter, preserved records, and shared-tool checks. |
 
 ## An entry
 

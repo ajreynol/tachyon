@@ -4,7 +4,7 @@
 existing coverage, and rejected search directions. **These are proposals and
 source observations, not established solver fixes.** Validity, availability,
 and usefulness are separate assessments. Metagraphe owns those assessments;
-koine supplies the append mechanics.
+koine supplies append mechanics and checks the scope of closure edits.
 
 Browse [rewrites.md](rewrites.md) for a generated overview and each record's
 terms, side conditions, RARE drafts, assessments, and evidence. It includes
@@ -25,11 +25,11 @@ projects. Neither prose file maintains a second current status table.
 
 ## Format and identity
 
-The top-level key is **`bugs`**, solely for compatibility with koine's current
-writer. Its console also calls entries bugs; that wording does not classify
-rewrite proposals as defects. No fake `bug` field is needed: explicit IDs are
-supported. Tachyon's [request to koine](../../../docs/discussion.md#d4--support-named-collections-for-metagraphes-rewrite-database)
-asks for a configurable collection name without changing the append guarantees.
+The top-level key is **`rewrites`**. Koine reads and preserves that name and
+reports entries as rewrites. Explicit `metagraphe:M-N` IDs identify records;
+no `bug` field or compatibility envelope is needed. The
+[upgrade ledger](../docs/ledger/2026-09-19-koine-upgrade.md) records the migration
+from `bugs`, preserving every record, ID, date, assessment, and history event.
 
 | field | contract |
 | --- | --- |
@@ -93,63 +93,81 @@ ingestion dates for new records and let koine set them. For an exact repeat,
 re-submit the original fields rather than replacing `found_at` with a newer
 commit: changed content on a known ID is a conflict, not an update.
 
-Use an available koine Git checkout containing the revision in
-[`koine.lock`](koine.lock). The commands extract that **committed** writer,
-so local changes in the koine working tree cannot silently alter the tool.
-There is no automatic download or checkout mutation.
+Set `KOINE` to a Git checkout containing the revision in [`koine.lock`](koine.lock).
+The thin [adapter](../scripts/koine_db.py) reads the **committed** program at
+that pin into a temporary directory. It never uses the installed command or
+modified working-tree source, and does not fetch or change the koine checkout.
+`--koine /path/to/koine` before the subcommand also selects a checkout.
 
 ```bash
-# Run from tachyon's root. Set this to an existing koine checkout.
-KOINE=/path/to/koine
-KOINE_REV=$(cat tools/metagraphe/rewrite_db/koine.lock)
-mkdir -p scratch/metagraphe-filing
-git -C "$KOINE" show "$KOINE_REV:bug_db_manager/koine_append_db" \
-  > scratch/metagraphe-filing/koine_append_db.py
-
-python3 tools/metagraphe/scripts/check_rewrite_db.py --filing \
-  scratch/metagraphe-filing/new.json
-python3 tools/metagraphe/scripts/check_rewrite_db.py
-python3 scratch/metagraphe-filing/koine_append_db.py \
-  scratch/metagraphe-filing/new.json tools/metagraphe/rewrite_db/rewrites.json \
-  --dry-run
+export KOINE=/path/to/koine
+python3 tools/metagraphe/scripts/koine_db.py append scratch/metagraphe-filing/new.json --dry-run
 # Inspect the preview, then apply the same filing:
-python3 scratch/metagraphe-filing/koine_append_db.py \
-  scratch/metagraphe-filing/new.json tools/metagraphe/rewrite_db/rewrites.json
-python3 tools/metagraphe/scripts/check_rewrite_db.py
-python3 tools/metagraphe/scripts/render_rewrite_db.py
+python3 tools/metagraphe/scripts/koine_db.py append scratch/metagraphe-filing/new.json
 python3 scripts/check.py
 ```
+
+The adapter validates both inputs before invoking koine and regenerates
+`rewrites.md` after a successful append. A preview leaves both files unchanged.
+It supplies metagraphe's paths and policy; locking, merging, identity handling,
+and conflict/repeat reporting remain entirely koine's.
 
 The writer locks and atomically replaces the database. Its `.lock` and
 temporary replacement files are ignored. Do not bypass locking. A malformed
 dump is refused as a whole. Koine leaves original entries intact, adds new
 ones, and only changes `last_seen` on a repeat. It reports conflicting existing
 fields without overwriting them; **a zero exit code does not mean there were no
-conflicts**. Additional fields on a repeat are not merged either.
+conflicts**. Additional fields on a repeat are not merged either. Repeat
+sightings of entries carrying `closed_*` are reported as reopen candidates;
+koine preserves the verdict and does not reopen them.
 
-This pin passed upstream [tests](https://github.com/ajreynol/koine/actions/runs/35450241649)
-and [policy](https://github.com/ajreynol/koine/actions/runs/35450242015), checked
-2026-09-19. Updating the pin is a deliberate reviewed change. The pinned
-writer does not yet report closed entries seen again; inspect such repeats
-manually. Newer local koine work was read as design context, not used as the
-writer. The [filing ledger](../docs/ledger/2026-09-19-rewrite-db.md) records the
-actual initial append and checks.
+The pin is [`e4e4e2e`](https://github.com/ajreynol/koine/commit/e4e4e2e760197429ff182826ed9b7a90fea11633).
+Its append and closure-check suites and metagraphe's integration cases were
+run locally; see the upgrade ledger. The
+[initial filing ledger](../docs/ledger/2026-09-19-rewrite-db.md) remains the
+record of the earlier pin and original append.
+
+## Check a closure
+
+After a closure-only edit, run:
+
+```bash
+python3 tools/metagraphe/scripts/koine_db.py check-closure
+python3 tools/metagraphe/scripts/render_rewrite_db.py
+python3 scripts/check.py
+```
+
+This validates metagraphe's metadata, then delegates the diff check to pinned
+`koine_check_db`. By default it compares against `HEAD`; `--against REV` selects
+another committed pre-closure baseline. It permits adding `closed_*` and the
+owner's `awaiting_landing`/`replacement_id` fields, while rejecting changes to
+claims, assessments, evidence, IDs, order, or membership. Use `--amended` only
+for an intentional amendment of an existing closure after preserving its old
+decision in the ledger. The local validator still enforces verdict/evidence
+requirements; koine does not know that vocabulary.
+
+The baseline must contain the same collection envelope. The `bugs` ->
+`rewrites` migration is a separate reviewed change and correctly fails a
+closure-only comparison to a pre-migration commit. Ordinary filings and
+reassessments also have their own workflow; this is not a general CI diff gate.
 
 ## Reassessment is a separate operation
 
 An append does not revise an assessment, record a delivery, close a record,
 or reopen it. For those operations, retain the original observation and add
 dated evidence to the ledger; review the proposed metadata diff under the
-[reporting policy](reporting-policy.md). Koine currently has no shared
-evidence/closure writer. Do not work around its conflict protection by changing
+[reporting policy](reporting-policy.md). Koine supplies a closure diff checker,
+but still has no history-preserving reassessment or closure writer. Do not
+work around its conflict protection by changing
 IDs, replacing the database wholesale, or treating an absent entry in a later
 scan as a fix.
 
 `check_rewrite_db.py` validates local field/status requirements and evidence
 references. CI runs it through the child test suite. It does not prove a
-rewrite, audit whether a commit has landed, or prevent a human from editing an
-old claim; preservation of historical content currently relies on reviewing
-the diff.
+rewrite or audit whether a commit has landed. General reassessments still
+require retained previous records and a reviewed diff. Koine's checker
+protects the narrower closure-only workflow; do not whitelist `proposal`,
+`assessment`, or `reassessments` as closure fields to bypass its protection.
 
 ## Refresh the readable view
 

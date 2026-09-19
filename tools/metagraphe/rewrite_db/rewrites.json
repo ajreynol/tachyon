@@ -1,5 +1,5 @@
 {
-  "bugs": [
+  "rewrites": [
     {
       "id": "metagraphe:M-1",
       "tool": "metagraphe",

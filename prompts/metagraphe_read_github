@@ -116,16 +116,21 @@ Filing and follow-up:
   new IDs above the highest ever used, including Git history. Preserve the
   existing distinctions between candidate, existing-coverage, and excluded.
 - Prepare a curated producer JSON list in ignored scratch space. Validate it
-  with tools/metagraphe/scripts/check_rewrite_db.py --filing FILE, then use the
-  pinned koine writer described in tools/metagraphe/rewrite_db/README.md for
-  preview and append.
+  and file it with tools/metagraphe/scripts/koine_db.py append FILE --dry-run,
+  then the same command without --dry-run. Set KOINE to an existing checkout
+  containing the pin, as described in tools/metagraphe/rewrite_db/README.md.
+  The adapter validates inputs, invokes the committed koine writer, and
+  regenerates the view. The database's collection name is rewrites.
   Never replace the database with the latest scan or silently edit old claims.
 - first_seen and last_seen are ingestion dates. Keep observation dates and
   source revisions separate; an old input ingested again is not a new run.
   Review conflicts and repeats of closed rows instead of treating them as fixes.
 - Reassessment, delivery, closure, and reopening are separate evidence-backed
   decisions under the reporting policy, not operations of the append command.
-- After filing or updating metadata, regenerate the readable view with
+- For a closure-only edit, run tools/metagraphe/scripts/koine_db.py check-closure
+  against the committed pre-closure baseline. General reassessments and collection
+  migrations are not closures; do not weaken the diff check to pass those changes.
+- After updating metadata outside the append adapter, regenerate the view with
   python3 tools/metagraphe/scripts/render_rewrite_db.py. Do not hand-edit
   tools/metagraphe/rewrite_db/rewrites.md; repository checks enforce freshness.
 - Keep tools/metagraphe/docs/experience.md for actual exchanges with other

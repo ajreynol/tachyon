@@ -129,7 +129,8 @@ launcher lives at
 These parent-level entry points are deliberate exceptions to keeping project
 material inside this directory. The human also requested `rewrite_db/` as a
 named exception to tachyon's usual child layout; `scripts/` holds its record
-validator and Markdown renderer, and `tests/` checks the filing and view.
+validator, Markdown renderer, and thin pinned-koine adapter; `tests/` checks
+the filing, view, and shared-tool boundary.
 The survey supplies source-audited
 candidates;
 it does not establish a solver performance finding. The promotion decision

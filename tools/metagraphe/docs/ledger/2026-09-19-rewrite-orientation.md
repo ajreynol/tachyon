@@ -66,7 +66,9 @@ sys.path.insert(0, str(Path(sys.argv[1]) / "src/rewriter"))
 from rw_parser import Parser
 from mkrewrites import validate_rule
 
-rows = json.loads(Path(sys.argv[2]).read_text())["bugs"]
+document = json.loads(Path(sys.argv[2]).read_text())
+# Accept both the original envelope and the subsequent koine migration.
+rows = document["rewrites"] if "rewrites" in document else document["bugs"]
 rules = Parser().parse_rules("\n".join(
     draft for row in rows for draft in row["proposal"]["rare_drafts"]))
 for rule in rules:

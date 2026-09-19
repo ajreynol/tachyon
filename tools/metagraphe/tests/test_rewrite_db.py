@@ -17,7 +17,7 @@ SPEC.loader.exec_module(contract)
 class RewriteDatabaseTests(unittest.TestCase):
     def setUp(self):
         self.document = json.loads(contract.DATABASE.read_text())
-        self.rows = self.document["bugs"]
+        self.rows = self.document["rewrites"]
         self.by_id = {row["candidate"]: row for row in self.rows}
 
     def test_retained_records_satisfy_owner_contract(self):
@@ -53,7 +53,7 @@ class RewriteDatabaseTests(unittest.TestCase):
         row = copy.deepcopy(self.by_id["M-1"])
         change(row)
         with self.assertRaises(ValueError):
-            contract.validate({"bugs": [row]})
+            contract.validate({"rewrites": [row]})
 
     def test_orientation_corrections_preserve_the_original_equalities(self):
         archive = json.loads((ROOT / "tools/metagraphe/docs/ledger/2026-09-19-rewrite-orientation-before.json").read_text())
@@ -70,7 +70,7 @@ class RewriteDatabaseTests(unittest.TestCase):
                     self.assertEqual(original[field], corrected[field])
 
     def test_growth_needs_a_declared_order_and_reverse_introduction_is_rejected(self):
-        contract.validate({"bugs": [copy.deepcopy(self.by_id["M-1"])]})
+        contract.validate({"rewrites": [copy.deepcopy(self.by_id["M-1"])]})
         self.rejected(lambda r: r["proposal"].pop("orientation"))
         self.rejected(lambda r: r["proposal"]["orientation"].update(reason=""))
         self.rejected(lambda r: r["proposal"]["orientation"].update(operators=["abs"]))
@@ -127,14 +127,14 @@ class RewriteDatabaseTests(unittest.TestCase):
         self.rejected(lambda r: r.update(last_seen="2000-01-01"))
         self.rejected(lambda r: r["origin"].update(ledger="/tmp/not-retained.md"))
         with self.assertRaises(ValueError):
-            contract.validate({"bugs": [self.rows[0], self.rows[0]]})
+            contract.validate({"rewrites": [self.rows[0], self.rows[0]]})
 
     def test_filing_can_omit_only_ingestion_dates(self):
         row = copy.deepcopy(self.rows[0])
         del row["first_seen"], row["last_seen"]
         contract.validate([row], filing=True)
         with self.assertRaises(ValueError):
-            contract.validate({"bugs": [row]})
+            contract.validate({"rewrites": [row]})
         del row["observed_on"]
         with self.assertRaises(ValueError):
             contract.validate([row], filing=True)
@@ -146,17 +146,17 @@ class RewriteDatabaseTests(unittest.TestCase):
                    closed_evidence=[row["origin"]["ledger"]], closed_commit="a" * 40,
                    closed_checked_at="a" * 40)
         with self.assertRaises(ValueError):
-            contract.validate({"bugs": [row]})
+            contract.validate({"rewrites": [row]})
         row["awaiting_landing"] = {"project": "cvc5", "branch": "example", "commit": "a" * 40}
-        contract.validate({"bugs": [row]})
+        contract.validate({"rewrites": [row]})
         row["closed_verdict"] = "fixed and landed"
         with self.assertRaises(ValueError):
-            contract.validate({"bugs": [row]})
+            contract.validate({"rewrites": [row]})
         del row["awaiting_landing"]
-        contract.validate({"bugs": [row]})
+        contract.validate({"rewrites": [row]})
         row["closed_evidence"] = []
         with self.assertRaises(ValueError):
-            contract.validate({"bugs": [row]})
+            contract.validate({"rewrites": [row]})
 
     def test_delivery_and_recoding_require_evidence(self):
         self.rejected(lambda r: r.update(carried=[{"to": "cvc5", "on": "2026-09-19"}]))

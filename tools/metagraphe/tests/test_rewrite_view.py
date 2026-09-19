@@ -27,7 +27,7 @@ class RewriteViewTests(unittest.TestCase):
                          "Regenerate with: " + view.COMMAND)
 
     def test_view_explains_permitted_growth_with_the_operator_order(self):
-        result = view.render({"bugs": [self.document["bugs"][0]]})
+        result = view.render({"rewrites": [self.document["rewrites"][0]]})
         self.assertIn("**6 -> 7** term nodes", result)
         self.assertIn("**(1, 6) -> (0, 7)**", result)
         self.assertIn("**Orientation order:**", result)
@@ -37,7 +37,7 @@ class RewriteViewTests(unittest.TestCase):
         original = copy.deepcopy(self.document)
         result = view.render(self.document)
         self.assertEqual(self.document, original)
-        for row in self.document["bugs"]:
+        for row in self.document["rewrites"]:
             with self.subTest(candidate=row["candidate"]):
                 self.assertIn(f"## {row['candidate']}\n", result)
                 self.assertIn(f"](#{row['candidate'].lower()})", result)
@@ -57,7 +57,7 @@ class RewriteViewTests(unittest.TestCase):
         self.assertIn("**Closure:** no closure recorded.", result)
 
     def test_closure_landing_debt_and_delivery_remain_visible(self):
-        row = self.document["bugs"][0]
+        row = self.document["rewrites"][0]
         evidence = row["origin"]["ledger"]
         row.update(closed_verdict="accepted and fixed", closed_on="2026-09-19",
                    closed_why="Synthetic closure.", closed_evidence=[evidence],
@@ -66,7 +66,7 @@ class RewriteViewTests(unittest.TestCase):
                    carried=[{"to": "cvc5", "on": "2026-09-19", "evidence": evidence}])
         row["checks"].update(solver="recorded", solver_evidence=evidence,
                              performance="recorded", performance_evidence=evidence)
-        result = view.render({"bugs": [row]})
+        result = view.render({"rewrites": [row]})
         self.assertIn("1 explicit closure verdicts; 1 fixes awaiting landing", result)
         self.assertIn("accepted and fixed; awaiting landing", result)
         self.assertIn("**Awaiting landing:**", result)
@@ -77,9 +77,9 @@ class RewriteViewTests(unittest.TestCase):
         self.assertIn("**Performance check:** recorded; [evidence]", result)
 
     def test_markdown_text_links_and_code_do_not_break_the_view(self):
-        row = self.document["bugs"][0]
+        row = self.document["rewrites"][0]
         row["description"] = "Literal | [title]\n<script>"
-        result = view.render({"bugs": [row]})
+        result = view.render({"rewrites": [row]})
         self.assertIn(r"Literal &#124; \[title\]<br>&lt;script&gt;", result)
         self.assertIn("````text\n```\n# still code", view.block("```\n# still code"))
         self.assertEqual(view.link("probe", "https://example.org/a(b).smt2#part"),

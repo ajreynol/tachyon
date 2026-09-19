@@ -18,7 +18,7 @@ publishes, including the programs that build it and the data they read; and
 for, which is the shape the ecosystem's tooling audit reports as unregistered.
 The human-requested exception for metagraphe is `rewrite_db/` for its curated
 rewrite records, generated Markdown view, and reporting/update policy, with
-`scripts/` for validation and rendering.
+`scripts/` for validation, rendering, and the adapter to pinned koine tools.
 Its [database guide](../tools/metagraphe/rewrite_db/README.md) records
 the purpose and shared koine writer; its child test suite checks the retained
 records and catches a stale view. This exception does not change the other
