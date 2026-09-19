@@ -5,6 +5,14 @@ phase is source analysis and priority setting; experiments are not running.
 Documents are maintained by hand. Dated source inventories are generated
 snapshots, described in the data index.
 
+[`report`](../report) publishes the queue at
+<https://ajreynol.github.io/tachyon/elaphros/> from [todo.md](todo.md),
+[directions.md](directions.md), [progress.md](progress.md) and the
+[ledger index](../ledger/README.md). It counts what those documents say rather
+than restating them, and refuses to build when one of them loses the section or
+the table a part of the page is made from — so a document edited here is either
+reflected on the page at the next build or stops it.
+
 | document | purpose |
 | --- | --- |
 | [notes.md](../notes.md) | Stable hypothesis register, separating source evidence from expected effects. |

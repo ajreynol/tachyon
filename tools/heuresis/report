@@ -27,6 +27,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 TEMPLATE = ROOT / "report.html"
+QUEUE_TEMPLATE = ROOT / "queue.html"
 DEFAULT_REPO = "https://github.com/ajreynol/tachyon"
 DEFAULT_URL = "https://ajreynol.github.io/tachyon/heuresis"
 # The gap list names its arms: gapset-<cvc5 arm>-vs-<reference>[-<date>].txt
@@ -268,6 +269,138 @@ def comparisons(root, entry_list, repo_url):
     return found
 
 
+def sections(todo, repo_url, source):
+    """Every `## ` section of docs/todo.md, as its prose and its one table.
+
+    The queue page is that document, rendered: the short-term goals, the two
+    separate rankings and the branch assessment. Reading it rather than
+    restating it is what stops the page and the document drifting apart -- and
+    a section that loses its table is a refusal, not a page with a hole in it.
+    """
+    found = []
+    for match in re.finditer(r"^##\s+(.+?)\s*$(.*?)(?=^##\s|\Z)", todo, re.MULTILINE | re.DOTALL):
+        heading, body = match.group(1), match.group(2)
+        lines = [line for line in body.splitlines() if line.strip().startswith("|")]
+        if len(lines) < 3:
+            raise ValueError(f"{source}: section '{heading}' no longer carries a table")
+        columns, body_rows = table(lines, repo_url, source)
+        prose = notes([line for line in body.splitlines()[:body.splitlines().index(lines[0])]],
+                      repo_url, source)
+        found.append({"heading": heading, "prose": prose,
+                      "columns": columns, "rows": body_rows})
+    if not found:
+        raise ValueError(f"{source}: no '## ' sections to publish")
+    return found
+
+
+def render_cell(value):
+    """One parsed Markdown cell -- plain text, a link, or a run of both."""
+    if isinstance(value, str):
+        return html.escape(value)
+    if isinstance(value, dict):
+        return f'<a href="{html.escape(value["href"])}">{html.escape(value["text"])}</a>'
+    return "".join(render_cell(part) for part in value)
+
+
+def render_section(item):
+    prose = "".join(f'<p class="muted">{block["paragraph"]}</p>'
+                    for block in item["prose"] if "paragraph" in block)
+    ranked = item["columns"] and item["columns"][0] in ("rank", "#")
+    def attr(index):
+        if ranked and index == 0:
+            return ' class="rank"'
+        return ' class="wrap"' if index else ""
+    head = "".join(f"<th{attr(i)}>{render_cell(c)}</th>" for i, c in enumerate(item["columns"]))
+    rows = "".join("<tr>" + "".join(f"<td{attr(i)}>{render_cell(c)}</td>"
+                                    for i, c in enumerate(row)) + "</tr>"
+                   for row in item["rows"])
+    return (f'<section>\n<h2>{html.escape(item["heading"])}</h2>\n{prose}\n'
+            f'<div class="tablewrap"><table><thead><tr>{head}</tr></thead>'
+            f"<tbody>{rows}</tbody></table></div>\n</section>")
+
+
+def landed(path):
+    """How many pull requests progress.md records as having reached cvc5 main.
+
+    The document keeps the table whether or not anything is in it, so the page
+    reads the row count rather than stating a zero of its own -- the one figure
+    on this page that would otherwise be typed in, and the one this project
+    most wants nobody to be able to soften.
+    """
+    body = re.search(r"^## Pull requests to cvc5 main\s*$(.*?)(?=^## |\Z)",
+                     path.read_text(), re.MULTILINE | re.DOTALL)
+    if not body:
+        raise ValueError(f"{path.name}: no '## Pull requests to cvc5 main' section")
+    lines = [line.strip() for line in body.group(1).splitlines() if line.strip().startswith("|")]
+    if len(lines) < 3:
+        raise ValueError(f"{path.name}: the pull-request section has no table")
+    count = 0
+    for line in lines[2:]:
+        first = line.strip("|").split("|")[0].replace("*", "").replace("(none yet)", "").strip()
+        count += bool(first)
+    return count
+
+
+def named(found, heading):
+    for item in found:
+        if item["heading"] == heading:
+            return item["rows"]
+    raise ValueError(f"docs/todo.md: no '## {heading}' section to count")
+
+
+def queue_page(found, data, canonical, title, description, merged):
+    goals = named(found, "Short-term goals")
+    closed = sum(1 for row in goals if "\u2705" in render_cell(row[0]))
+    tiles = [("short-term goals open", f"{len(goals) - closed} of {len(goals)}",
+              "each closed by a ledger entry, not a judgement"),
+             ("research directions ranked", len(named(found, "AI-agent priorities")),
+              "by the agent, independently of the maintainer"),
+             ("fork branches assessed", len(named(found, "Branch maintenance")),
+              "against current upstream main"),
+             ("pull requests to cvc5", merged,
+              "counted from the project's own record" if merged else "nothing has landed upstream yet")]
+    body = QUEUE_TEMPLATE.read_text()
+    replacements = {
+        "__TITLE__": html.escape(title),
+        "__DESCRIPTION__": html.escape(description),
+        "__CANONICAL__": html.escape(canonical),
+        "__NAV_TITLE__": html.escape(data["nav"]),
+        "__SITE_HREF__": html.escape(data["site"]),
+        "__REPO_URL__": html.escape(data["repo"]),
+        "__PROJECT_URL__": html.escape(data["project"]),
+        "__EYEBROW__": html.escape(f"the queue · set {data['set']['name']}"),
+        "__TILES__": "".join(
+            f'<div class="tile"><span>{html.escape(label)}</span>'
+            f'<strong>{html.escape(str(value))}</strong><span>{html.escape(note)}</span></div>'
+            for label, value, note in tiles),
+        "__LEAD__": "This is the project's working queue, published as it stands in its own documents: what is "
+                    "in flight, which research directions the agent ranks highest and why, the separate "
+                    "ranking the human maintainer owns, and which branches of the fork are worth maintaining. "
+                    "Everything here is a plan or an assessment. The "
+                    '<a href="index.html">gap report</a> is where the measurements are.',
+        "__SECTIONS__": "\n\n".join(render_section(item) for item in found),
+        "__LIMITS__": "<strong>A rank is not a result.</strong> The agent ranking is this project's own "
+                      "assessment and is deliberately kept separate from the maintainer's, which is theirs "
+                      "alone; neither is a commitment that any of this work will be done, and neither orders "
+                      "the directions by measured benefit. A branch appearing here means somebody wrote code, "
+                      "not that it helps \u2014 several rows record branches that were tested and did not earn "
+                      "a pull request. Where a row carries a number it came from a ledger entry, and the "
+                      "entry is linked from the row.",
+        "__FOOTER__": " ".join(
+            f'<a href="{html.escape(href)}">{html.escape(text)}</a>' for text, href in (
+                ("The charter", data["project"]),
+                ("The register of directions", blob(data["repo"], "tools/heuresis/docs/directions.md")),
+                ("The queue", blob(data["repo"], "tools/heuresis/docs/todo.md")),
+                ("The progress table", blob(data["repo"], "tools/heuresis/docs/progress.md")),
+                ("Questions for cvc5", blob(data["repo"], "tools/heuresis/docs/upstream-questions.md")))),
+    }
+    for token, value in replacements.items():
+        if token not in body:
+            raise ValueError(f"{QUEUE_TEMPLATE.name}: the template no longer has {token}")
+        body = body.replace(token, value)
+    return body
+
+
 def page(data, canonical, title, description):
     body = TEMPLATE.read_text()
     replacements = {
@@ -349,6 +482,17 @@ def build(out, base_url, repo_url, site_href="../index.html"):
                    "experiment behind each list.")
     (out / "index.html").write_text(page(data, f"{base_url}/", title, description), encoding="utf-8")
 
+    queue_sections = sections((ROOT / "docs/todo.md").read_text(), repo_url,
+                              "tools/heuresis/docs/todo.md")
+    (out / "queue.html").write_text(
+        queue_page(queue_sections, data, f"{base_url}/queue.html",
+                   "Heuresis — the queue, and why that order",
+                   "What heuresis is working on: short-term goals, the agent's ranking of research "
+                   "directions, the maintainer's separate ranking, and which fork branches are worth "
+                   "maintaining.",
+                   landed(ROOT / "docs/progress.md")),
+        encoding="utf-8")
+
     summary = latest["summary"]
     return {
         "name": "heuresis",
@@ -358,6 +502,7 @@ def build(out, base_url, repo_url, site_href="../index.html"):
                    f"one point each, with the ledger entry that produced the list.",
         "href": "index.html",
         "updated": latest["date"],
+        "dated": "measured",
         "headline": [
             {"label": "gap set", "value": f"{summary['gap']:,}", "note": f"of {protocol['size']:,} benchmarks"},
             {"label": "cvc5 unsolved, z3 solved", "value": f"{summary['unsolved']:,}",
@@ -366,6 +511,7 @@ def build(out, base_url, repo_url, site_href="../index.html"):
              "note": f"by at least {protocol['factor']:g}×"},
         ],
         "comparisons": len(found),
+        "pages": ["index.html", "queue.html"],
         "files": sorted(str(path.relative_to(out)) for path in out.rglob("*") if path.is_file()),
     }
 

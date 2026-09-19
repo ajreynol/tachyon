@@ -4,10 +4,13 @@ import importlib.util
 import json
 from pathlib import Path
 import re
+import shutil
 import tempfile
 import unittest
 
 
+ROOT = Path(__file__).resolve().parents[1]
+REPO = "https://example.invalid/repo"
 SCRIPT = Path(__file__).resolve().parents[1] / "report"
 SPEC = importlib.util.spec_from_loader("report", importlib.machinery.SourceFileLoader("report", str(SCRIPT)))
 report = importlib.util.module_from_spec(SPEC)
@@ -126,6 +129,47 @@ class DocumentTests(unittest.TestCase):
         self.assertIn('<a href="https://example.invalid/repo/blob/main/x.md">a link</a>', rendered)
 
 
+TODO = """# demo queue
+
+## Short-term goals
+
+| # | short-term goal | blocked on | closed when |
+| --- | --- | --- | --- |
+| ✅ S1 | a finished thing | — | **Closed.** |
+| S2 | an unfinished thing | nothing | it is measured |
+
+## AI-agent priorities
+
+The agent's own ordering.
+
+| rank | research direction | effort | next possible step |
+| ---: | --- | --- | --- |
+| 1 | [R1 — a direction](directions.md#r1--a-direction) | 🟢 Low Risk | count something |
+
+## Human-maintainer priorities
+
+The maintainer's, kept separate.
+
+| rank | research direction | effort | next possible step | human rationale |
+| ---: | --- | --- | --- | --- |
+| 1 | [R1 — a direction](directions.md#r1--a-direction) | 🟢 Low Risk | count something | |
+
+## Branch maintenance
+
+| recommendation | branch | directions | behind / ahead | reason or trigger |
+| --- | --- | --- | ---: | --- |
+| ✅ No base action | `demo` | R1 | 0 / 0 | nothing to do |
+"""
+
+PULL_REQUESTS = """
+## Pull requests to cvc5 main
+
+| PR | direction | what it changes | landed | effect on this table |
+| --- | --- | --- | --- | --- |
+| *(none yet)* | | | | |
+"""
+
+
 class BuildTests(unittest.TestCase):
     """A whole report, built from a synthetic project tree and from this one."""
 
@@ -137,7 +181,8 @@ class BuildTests(unittest.TestCase):
         (self.root / "docs").mkdir()
         (self.root / "ledger/2026-01-01-example.md").write_text(ENTRY)
         (self.root / "ledger/data/gapset-arm-vs-ref-010126.txt").write_text(GAPSET)
-        (self.root / "docs/progress.md").write_text(PROGRESS)
+        (self.root / "docs/progress.md").write_text(PROGRESS + PULL_REQUESTS)
+        (self.root / "docs/todo.md").write_text(TODO)
         self.real, report.ROOT = report.ROOT, self.root
         self.addCleanup(setattr, report, "ROOT", self.real)
 
@@ -213,6 +258,91 @@ class BuildTests(unittest.TestCase):
                 self.assertTrue((out / comparison["csv"]).is_file())
                 self.assertEqual(len(comparison["rows"]), comparison["summary"]["gap"])
                 self.assertTrue(comparison["ledger"]["href"].endswith(comparison["ledger"]["text"]))
+
+
+
+class QueueTests(unittest.TestCase):
+    """The queue page: the project's plan, published from the document that holds it."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.out = Path(self.temp.name) / "site"
+
+    def build(self):
+        return report.build(self.out, "https://example.invalid/site/heuresis", REPO)
+
+    def todo(self):
+        return (ROOT / "docs/todo.md").read_text()
+
+    def test_the_queue_page_is_written_and_reachable_from_the_report(self):
+        summary = self.build()
+        page = (self.out / "queue.html").read_text()
+        self.assertEqual(re.findall(r"__[A-Z_]+__", page), [], "an unreplaced template placeholder")
+        self.assertIn("queue.html", summary["pages"])
+        self.assertIn('href="queue.html"', (self.out / "index.html").read_text())
+        self.assertIn('href="index.html"', page)
+
+    def test_it_publishes_every_section_of_the_document(self):
+        self.build()
+        page = (self.out / "queue.html").read_text()
+        for heading in re.findall(r"^## (.+)$", self.todo(), re.MULTILINE):
+            with self.subTest(heading=heading):
+                self.assertIn(f"<h2>{heading}</h2>", page)
+
+    def test_the_two_rankings_stay_separately_labelled(self):
+        """The maintainer's ranking is theirs; a page that merged them would misreport it."""
+        self.build()
+        page = (self.out / "queue.html").read_text()
+        self.assertIn("<h2>AI-agent priorities</h2>", page)
+        self.assertIn("<h2>Human-maintainer priorities</h2>", page)
+        self.assertLess(page.index("AI-agent priorities"), page.index("Human-maintainer priorities"))
+
+    def test_the_counts_come_from_the_documents(self):
+        self.build()
+        page = (self.out / "queue.html").read_text()
+        sections = report.sections(self.todo(), REPO, "tools/heuresis/docs/todo.md")
+        goals = [s for s in sections if s["heading"] == "Short-term goals"][0]["rows"]
+        closed = sum(1 for row in goals if "\u2705" in report.render_cell(row[0]))
+        self.assertIn(f"<strong>{len(goals) - closed} of {len(goals)}</strong>", page)
+        for heading in ("AI-agent priorities", "Branch maintenance"):
+            rows = [s for s in sections if s["heading"] == heading][0]["rows"]
+            self.assertIn(f"<strong>{len(rows)}</strong>", page)
+
+    def test_the_landed_pull_requests_are_read_and_not_asserted(self):
+        self.assertEqual(report.landed(ROOT / "docs/progress.md"), 0)
+        tree = Path(self.temp.name) / "docs"
+        tree.mkdir()
+        record = tree / "progress.md"
+        record.write_text("## Pull requests to cvc5 main\n\n| PR | what |\n| --- | --- |\n"
+                          "| #1 | a thing |\n| #2 | another |\n")
+        self.assertEqual(report.landed(record), 2)
+        record.write_text("# nothing here\n")
+        with self.assertRaises(ValueError):
+            report.landed(record)
+
+    def test_a_section_that_loses_its_table_is_refused(self):
+        original = report.ROOT
+        tree = Path(self.temp.name) / "heuresis"
+        shutil.copytree(ROOT, tree, ignore=shutil.ignore_patterns("tests", "__pycache__"))
+        todo = tree / "docs/todo.md"
+        body = todo.read_text()
+        start = body.index("## Branch maintenance")
+        todo.write_text(body[:start] + "## Branch maintenance\n\nNo table any more.\n")
+        report.ROOT = tree
+        report.TEMPLATE = tree / "report.html"
+        report.QUEUE_TEMPLATE = tree / "queue.html"
+        self.addCleanup(setattr, report, "QUEUE_TEMPLATE", original / "queue.html")
+        self.addCleanup(setattr, report, "TEMPLATE", original / "report.html")
+        self.addCleanup(setattr, report, "ROOT", original)
+        with self.assertRaises(ValueError) as refusal:
+            self.build()
+        self.assertIn("Branch maintenance", str(refusal.exception))
+
+    def test_markup_in_the_document_cannot_smuggle_tags_onto_the_page(self):
+        self.build()
+        page = (self.out / "queue.html").read_text()
+        self.assertNotIn("<script>", page[page.index("<main>"):])
 
 
 if __name__ == "__main__":

@@ -9,7 +9,8 @@ nothing about any project's measurements. A project publishes by providing an
 executable `tools/<project>/report` that writes a report into `--out` and prints
 one JSON object describing it (see docs/site.md). Projects without one are
 listed and not published, and deleting a project directory removes its report
-from the site and nothing else.
+from the site and nothing else. A report says what its date is the date of; this
+page never calls something a measurement on a project's behalf.
 
 Refusals, rather than a site that quietly says less than it appears to: a report
 that does not honour the contract, a published report the front page does not
@@ -31,6 +32,10 @@ TEMPLATE = Path(__file__).resolve().parent / "site.html"
 DEFAULT_REPO = "https://github.com/ajreynol/tachyon"
 DEFAULT_URL = "https://ajreynol.github.io/tachyon"
 CONTRACT = ("name", "title", "question", "summary", "href", "updated", "headline")
+# What `updated` is the date of. A project that has measured something says so;
+# one that has not must not have the word "measured" put in its mouth by this
+# page, which is the whole reason this is a field and not a constant here.
+DATED = "updated"
 LINK = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 
 
@@ -77,6 +82,10 @@ def run_report(builder, out, base_url, repo_url):
         raise ValueError(f"{name}: its report calls itself {report['name']!r}")
     if not (destination / report["href"]).is_file():
         raise ValueError(f"{name}: its report names {report['href']}, which it did not write")
+    label = report.get("dated", DATED)
+    if not isinstance(label, str) or not label.strip() or len(label.split()) > 1:
+        raise ValueError(f"{name}: its report's `dated` must be one word saying what `updated` dates")
+    report["dated"] = label.strip()
     report["path"] = f"{name}/{report['href']}"
     return report
 
@@ -87,7 +96,8 @@ def card(report):
         f'<div class="tile"><span>{esc(tile["label"])}</span><strong>{esc(str(tile["value"]))}</strong>'
         f'<span>{esc(tile.get("note", ""))}</span></div>'
         for tile in report["headline"])
-    return (f'<section>\n<p class="eyebrow">{esc(report["title"])} · measured {esc(report["updated"])}</p>\n'
+    return (f'<section>\n<p class="eyebrow">{esc(report["title"])} · '
+            f'{esc(report["dated"])} {esc(report["updated"])}</p>\n'
             f'<h2>{esc(report["question"])}</h2>\n<p>{esc(report["summary"])}</p>\n'
             f'<div class="tiles">{tiles}</div>\n'
             f'<p><a class="button" href="{esc(report["path"])}">Explore the report →</a></p>\n</section>')
@@ -98,7 +108,8 @@ def rows(project_list, published):
     cells = []
     for project in project_list:
         report = published.get(project["name"])
-        state = (f'<a href="{esc(report["path"])}">the report</a>, measured {esc(report["updated"])}'
+        state = (f'<a href="{esc(report["path"])}">the report</a>, '
+                 f'{esc(report["dated"])} {esc(report["updated"])}'
                  if report else "charter and search register only")
         cells.append(f'<tr><td><a href="{esc(project["href"])}">{esc(project["name"])}</a></td>'
                      f'<td>{esc(project["question"])}</td><td>{state}</td></tr>')

@@ -164,5 +164,36 @@ class BuildTests(unittest.TestCase):
         self.assertIn("the front page does not list it", str(refusal.exception))
 
 
+    def test_a_report_says_what_its_date_is_the_date_of(self):
+        """The index must not call something a measurement on a project's behalf."""
+        published = self.build()
+        page = (self.out / "index.html").read_text()
+        self.assertEqual(published["heuresis"]["dated"], "measured")
+        self.assertIn(f'measured {published["heuresis"]["updated"]}', page)
+        for name, report in published.items():
+            with self.subTest(project=name):
+                self.assertIn(f'{report["dated"]} {report["updated"]}', page)
+                if report["dated"] != "measured":
+                    self.assertNotIn(f'measured {report["updated"]}', page)
+
+    def test_a_missing_or_malformed_date_label_is_refused_or_defaulted(self):
+        original = site.ROOT
+        stand_in = Path(self.temp.name) / "labelled"
+        (stand_in / "tools/alpha").mkdir(parents=True)
+        (stand_in / "README.md").write_text(README)
+        site.ROOT = stand_in
+        self.addCleanup(setattr, site, "ROOT", original)
+        builder = stand_in / "tools/alpha/report"
+
+        builder.write_text(BUILDER % ('(args.out / "index.html").write_text("page")',
+                                      repr({**DESCRIPTION, "name": "alpha"})))
+        self.assertEqual(self.build()["alpha"]["dated"], "updated")
+
+        builder.write_text(BUILDER % ('(args.out / "index.html").write_text("page")',
+                                      repr({**DESCRIPTION, "name": "alpha", "dated": "two words"})))
+        with self.assertRaises(ValueError) as refusal:
+            self.build()
+        self.assertIn("one word", str(refusal.exception))
+
 if __name__ == "__main__":
     unittest.main()

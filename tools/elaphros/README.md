@@ -17,6 +17,10 @@ provisional [priority queue](docs/todo.md), with `ajreynol:unrewrite` and
 directions have no branch behind them. These are source observations and
 hypotheses; no experiments, performance results or validated optimizations are
 delivered.
+
+The queue is published at
+**<https://ajreynol.github.io/tachyon/elaphros/>**, built by [`report`](report)
+from the documents below and refusing to state a figure they do not.
 Start at the [documentation index](docs/README.md) for the register and evidence.
 
 ## The charter
@@ -160,16 +164,22 @@ and [reporting discipline](../../docs/maintenance.md#findings-and-discussion).
 It reads existing tools and records but imports no parent code. All project
 code, patches, inputs and outputs stay under `tools/elaphros/`; experiments do
 not write the parent's launcher configs or launch log. Nothing outside this
-directory imports or runs it, and removing the directory leaves tachyon's
-behavior and CI unchanged.
+directory imports it, and removing the directory removes this project's page
+from the site and leaves everything else in tachyon as it was.
 
-**One named exception.** In one respect this project is **not an island**:
-tachyon's front page names and advertises it, which is a link inward that a
-reader meets before this page. That is the parent's choice, recorded here so it
-is a named exception rather than drift. What has been delivered so far is the
-charter, a source survey and a planning queue — no corpus, no baseline and no
-measurement — so the promotion decision is open and it is the human
-maintainer's.
+**Two named exceptions.** In two respects this project is **not an island**,
+both the parent's choice and both written down here so they are named exceptions
+rather than drift. Tachyon's front page names and advertises it, which is a link
+inward that a reader meets before this page. And the parent's site builder runs
+[`report`](report) when that file exists, as it runs the tests in
+[`tests/`](tests/), to publish this project's queue at
+<https://ajreynol.github.io/tachyon/elaphros/>; it reads nothing here itself,
+and a project without a `report` is listed and not published
+([site.md](../../docs/site.md)).
+
+What has been delivered so far is the charter, a source survey, a pipeline audit
+and a planning queue — no corpus, no baseline and no measurement — so the
+promotion decision is open and it is the human maintainer's.
 
 **Status.** The human maintainer authorizes the proof-production performance
 question and a source survey to set priorities. The current instruction is

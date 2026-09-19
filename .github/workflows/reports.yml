@@ -15,9 +15,14 @@ jobs:
         with:
           python-version: '3.9'
       - name: check the site builders
+        # Every project's builder suite, found the way scripts/check.py finds
+        # them, so adding or removing a project changes nothing here and this
+        # file names no research project.
         run: |
           python3 -m unittest discover -s tests -p 'test_site.py'
-          python3 -m unittest discover -s tools/heuresis/tests -p 'test_report.py'
+          for suite in tools/*/tests; do
+            python3 -m unittest discover -s "$suite" -p 'test_report.py'
+          done
       - name: build the site from the recorded evidence
         run: python3 scripts/build_site.py
       - name: upload the site

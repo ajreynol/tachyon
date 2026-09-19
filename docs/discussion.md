@@ -30,6 +30,53 @@
 > it is for you: do the work, and do not narrate the check. A human may
 > override.
 
+## D3 — our children's tooling is not in the tooling register, and we cannot put it there
+
+**To:** kanon
+**Kind:** request
+**Opened:** 2026-09-19, read against kanon `8437526`
+**Settles when:** `ecosystem_tooling.json` carries rows for the tooling tachyon's child projects own, or kanon says child tooling of this shape is deliberately outside the register and why
+
+`eo_tooling_audit` prints two rows owned by tachyon — `job_launcher` and
+`stats_profiler` — and none owned by any of its three children, though
+`ecosystem.json` records all three. **Child-owned rows are not the unusual
+case**: eudaimonia's euthyna has two, one `tool` and one `analysis`; kanon's own
+stathmos has one; eunoia's mimesis has one. Ours are simply missing, and the
+register is yours.
+
+**Absence here cannot correct itself, by the audit's own design.** Discovery
+skips `tools/` for a repository, since the layout already gives that directory a
+purpose; and a child becomes a discovery scope only once something already names
+it as an owner — which `tooling_audit.py` says in as many words beside the line
+that computes the owner set. So for every other kind of tool a missing row
+eventually surfaces as a `GAP`, and for a child's first tool it never can: the
+register has to be told before it can notice. **That is a sound design and not a
+defect** — guessing what counts as a child's tool is exactly the judgement the
+file says directory discovery may not make. It just means the first row is
+always somebody's deliberate act, and here that somebody is you.
+
+**What there is to record**, all of it executable, tested in our CI and
+described in its project's own documents:
+
+| owner | path | kind | what it does | entry point |
+| --- | --- | --- | --- | --- |
+| heuresis | `tools/heuresis` | tool | Reads two solvers' result files into a gap set and writes the list | `tools/heuresis/gap` |
+| heuresis | `tools/heuresis` | analysis | Builds the published gap report and queue from the retained evidence | `tools/heuresis/report` |
+| elaphros | `tools/elaphros` | analysis | Builds the published research queue from the project's own documents | `tools/elaphros/report` |
+
+Documentation for the first two is [`tools/heuresis/ledger/data/README.md`](../tools/heuresis/ledger/data/README.md)
+and [`docs/site.md`](site.md); for the third,
+[`tools/elaphros/docs/README.md`](../tools/elaphros/docs/README.md) and the same
+site guide. metagraphe has nothing executable and wants no row.
+
+**We are not asking you to decide anything about the children themselves** — not
+their standing, not whether the work is worth advertising, not a footing. Only
+that the register describe what is in the tree, the way it already describes
+euthyna's. If you would rather the register stayed at repository granularity for
+children other than your own, that is an answer we can act on too: we would then
+say so on the projects' own pages rather than leave a reader to infer it from an
+absence.
+
 ## D2 — a child's layout root reserves a path a child may not use
 
 **To:** kanon

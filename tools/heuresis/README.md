@@ -264,11 +264,18 @@ job_launcher/status
 Results land on the host; a ledger entry ([`ledger/README.md`](ledger/README.md))
 records what was read from them and what it settled.
 
-[`report`](report) builds the public page from what the ledger retained — the
+[`report`](report) builds the public pages from what the ledger retained — the
 gap lists under [`ledger/data/`](ledger/data/), the entries that cite them, and
 the tables of [`docs/progress.md`](docs/progress.md) — and refuses a list no
 entry cites. It computes its figures from those files rather than restating
-them, so the page cannot say a number this project has not recorded:
+them, so the page cannot say a number this project has not recorded. It writes
+two: the [gap report](https://ajreynol.github.io/tachyon/heuresis/), and beside
+it a [queue page](https://ajreynol.github.io/tachyon/heuresis/queue.html) that
+publishes [`docs/todo.md`](docs/todo.md) — what is in flight, this project's own
+ranking of the research directions, the separate ranking the maintainer owns,
+and which branches of the fork are worth maintaining. The second keeps the two
+rankings apart, because a page that merged them would misreport whose judgement
+each one is:
 
 ```bash
 tools/heuresis/report --out scratch/heuresis-report   # then open index.html
