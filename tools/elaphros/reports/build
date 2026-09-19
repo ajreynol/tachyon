@@ -200,6 +200,17 @@ def evidence(index, source, repo_url):
             max(date.strip() for date, _, _ in records))
 
 
+def slug(heading):
+    """A heading's anchor, the way the renderer makes one.
+
+    Runs of spaces are *not* collapsed: a heading whose title is separated by an
+    em dash loses the dash and keeps both spaces, so its anchor carries a double
+    hyphen. Collapsing them produces a link that resolves nowhere, which nothing
+    here would catch because these anchors are generated rather than written.
+    """
+    return re.sub(r"[^\w\s-]", "", heading.lower()).replace(" ", "-")
+
+
 def register(text, source, repo_url, ranks):
     """Every direction the register defines, with its effort badge and its rank.
 
@@ -209,17 +220,18 @@ def register(text, source, repo_url, ranks):
     badge is the register's own claim, and an empty cell would read as *no
     risk* rather than as *not written down*.
     """
-    parts = re.split(r"^##\s+(E\d+)\s+(.+?)\s*$", text, flags=re.MULTILINE)
+    parts = re.split(r"^##\s+(E\d+\b.*?)\s*$", text, flags=re.MULTILINE)
     rows = []
-    for identifier, title, body in zip(parts[1::3], parts[2::3], parts[3::3]):
+    for heading, body in zip(parts[1::2], parts[2::2]):
+        identifier = heading.split()[0]
         effort = EFFORT.search(body)
         if not effort:
             raise ValueError(f"{source}: {identifier} states no '**Effort.**' risk and gain")
-        anchor = "-".join([identifier.lower()] + re.sub(r"[^\w\s-]", "", title.lower()).split())
+        anchor = slug(heading)
         rank = ranks.get(identifier)
         rows.append([
             f'<a href="{resolve(repo_url, source, "directions.md#" + anchor)}">'
-            f"{html.escape(identifier)} {html.escape(title)}</a>",
+            f"{html.escape(heading)}</a>",
             markup(effort.group(1), repo_url, source),
             html.escape(str(rank)) if rank else '<span class="state state-open">unranked</span>',
         ])

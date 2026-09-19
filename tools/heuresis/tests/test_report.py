@@ -161,6 +161,17 @@ The maintainer's, kept separate.
 | ✅ No base action | `demo` | R1 | 0 / 0 | nothing to do |
 """
 
+DIRECTIONS = """# demo directions
+
+## R1 — A direction: with a subtitle
+
+**Effort.** 🟢 Low Risk / 🟢 High Gain — because it is small.
+
+## R2 — Another direction
+
+**Effort.** 🔴 High Risk / 🟡 Medium Gain — because it is not.
+"""
+
 PULL_REQUESTS = """
 ## Pull requests to cvc5 main
 
@@ -183,6 +194,7 @@ class BuildTests(unittest.TestCase):
         (self.root / "reports/data/gapset-arm-vs-ref-010126.txt").write_text(GAPSET)
         (self.root / "docs/progress.md").write_text(PROGRESS + PULL_REQUESTS)
         (self.root / "docs/todo.md").write_text(TODO)
+        (self.root / "docs/directions.md").write_text(DIRECTIONS)
         self.real, report.ROOT = report.ROOT, self.root
         self.real_here, report.HERE = report.HERE, self.root / "reports"
         self.addCleanup(setattr, report, "HERE", self.real_here)
@@ -341,6 +353,54 @@ class QueueTests(unittest.TestCase):
         self.assertEqual(table.count("<tr>"), shown + 1, "the header row plus one per direction")
         for row in ranked[:shown]:
             self.assertIn(report.render_cell(row[1]), page)
+
+    def test_the_register_publishes_every_direction_with_a_resolving_anchor(self):
+        """The rankings carry ten each; the register must show the rest too."""
+        self.build()
+        page = (self.out / "queue.html").read_text()
+        source = (ROOT / "docs/directions.md").read_text()
+        headings = re.findall(r"^##\s+(.+?)\s*$", source, re.MULTILINE)
+        slugs = {report.slug(h) for h in headings}
+        used = set(re.findall(r"directions\.md#([a-z0-9-]+)", page))
+        self.assertEqual(len(used), len(re.findall(r"^## R\d+\b", source, re.MULTILINE)))
+        self.assertEqual(used - slugs, set(), "an anchor the register does not define")
+        self.assertEqual(used & set(re.findall(r"directions\.md#([a-z0-9-]+)", self.todo())),
+                         set(re.findall(r"directions\.md#([a-z0-9-]+)", self.todo())),
+                         "the generated anchors disagree with the ones the queue writes by hand")
+
+    def test_an_em_dash_heading_keeps_both_hyphens_in_its_anchor(self):
+        """Collapsing the spaces would produce a link resolving nowhere."""
+        self.assertEqual(report.slug("R9 — Deleting instantiation lemmas: garbage collection"),
+                         "r9--deleting-instantiation-lemmas-garbage-collection")
+        self.assertEqual(report.slug("E1 Unrewriting"), "e1-unrewriting")
+
+    def test_the_two_ranks_stay_in_their_own_columns(self):
+        self.build()
+        page = (self.out / "queue.html").read_text()
+        self.assertIn("<th class=\"rank\">Agent rank</th>", page)
+        self.assertIn("<th class=\"rank\">Maintainer rank</th>", page)
+        sections = report.sections(self.todo(), REPO, "tools/heuresis/docs/todo.md")
+        agent = report.ranking(sections, "AI-agent priorities")
+        maintainer = report.ranking(sections, "Human-maintainer priorities")
+        self.assertNotEqual(agent, maintainer, "the fixture no longer distinguishes them")
+        self.assertIn(f"<strong>{len(agent)}</strong>", page, "the ranked tile")
+
+    def test_the_counts_mirror_the_register_and_the_ranking(self):
+        self.build()
+        page = (self.out / "queue.html").read_text()
+        source = (ROOT / "docs/directions.md").read_text()
+        total = len(re.findall(r"^## R\d+\b", source, re.MULTILINE))
+        self.assertIn(f"<strong>{total}</strong>", page)
+        self.assertIn(f"of {total}, by the agent", page)
+
+    def test_a_direction_that_states_no_effort_is_refused(self):
+        source = (ROOT / "docs/directions.md").read_text()
+        start = source.index("## R1 ")
+        end = source.index("**The hypothesis.**", start)
+        with self.assertRaises(ValueError) as refusal:
+            report.register(source[:start] + source[start:end].split("**Effort.**")[0] + source[end:],
+                            "docs/directions.md", REPO, {}, {})
+        self.assertIn("R1", str(refusal.exception))
 
     def test_a_section_that_loses_its_table_is_refused(self):
         original = report.ROOT

@@ -23,8 +23,19 @@ usual address.
 | --- | --- |
 | the index | the [front page](../README.md)'s research-project table, and each project's report description |
 | [`heuresis/`](../tools/heuresis/reports/build) | the gap lists retained beside the builder in [`reports/data/`](../tools/heuresis/reports/data/README.md), the ledger entries that cite them, the protocol and history tables of [`progress.md`](../tools/heuresis/docs/progress.md), and the head of the ranking in [`todo.md`](../tools/heuresis/docs/todo.md) |
-| `heuresis/queue.html` | every section of [`todo.md`](../tools/heuresis/docs/todo.md), and the pull-request record in `progress.md` |
+| `heuresis/queue.html` | every section of [`todo.md`](../tools/heuresis/docs/todo.md), the whole register in [`directions.md`](../tools/heuresis/docs/directions.md), and the pull-request record in `progress.md` |
 | [`elaphros/`](../tools/elaphros/reports/build) | the ranked queue and planning work in [`todo.md`](../tools/elaphros/docs/todo.md), the whole register in [`directions.md`](../tools/elaphros/docs/directions.md), the record in [`progress.md`](../tools/elaphros/docs/progress.md), the evidence index in [`ledger/README.md`](../tools/elaphros/docs/ledger/README.md), and the snapshots in [`reports/data/`](../tools/elaphros/reports/data/README.md) |
+
+**The two research projects answer the same two questions the same way.** How
+many research directions the project has written down, and how many of them its
+queue has ranked — read from `directions.md` and `todo.md`, counted at build
+time, shown as the first two figures on the page and again as a register listing
+every direction with its effort and its rank. The projects diverge after that,
+because what they have to report diverges: heuresis has measurements, fork
+branches and an upstream record; elaphros has planning items and retained
+snapshots. **What is mirrored is the part a reader compares across projects**,
+and what is not is the part where a shared shape would flatten a real
+difference.
 
 **A project with nothing measured still has something to publish.** What a
 research project produces before its first measurement is its *reasoning*:

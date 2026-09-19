@@ -34,6 +34,10 @@ DEFAULT_URL = "https://ajreynol.github.io/tachyon/heuresis"
 # The gap list names its arms: gapset-<cvc5 arm>-vs-<reference>[-<date>].txt
 NAME = re.compile(r"^gapset-(?P<arm>.+?)-vs-(?P<reference>.+?)\.txt$")
 TITLE = re.compile(r"^#\s*(\d{4}-\d{2}-\d{2})\s*[—-]\s*(.+?)\s*$")
+# Each direction states its own risk and gain before it argues for itself.
+# The badge is the claim the register makes at a glance, so the page carries
+# it rather than a summary somebody here wrote.
+EFFORT = re.compile(r"^\*\*Effort\.\*\*\s*(.+?)\s*(?:—|--)", re.MULTILINE | re.DOTALL)
 LINK = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 
 
@@ -342,6 +346,63 @@ def landed(path):
     return count
 
 
+def slug(heading):
+    """A heading's anchor, the way the renderer makes one.
+
+    Runs of spaces are *not* collapsed: these headings separate the identifier
+    from the title with an em dash, which is dropped, leaving two spaces and so
+    a double hyphen in the anchor. Collapsing them produces a link that resolves
+    nowhere, and nothing would catch it because these anchors are generated.
+    """
+    return re.sub(r"[^\w\s-]", "", heading.lower()).replace(" ", "-")
+
+
+def plain(value):
+    return re.sub(r"<[^>]+>", "", render_cell(value)).strip()
+
+
+def ranking(found, heading):
+    """{direction: rank} from one of the two ranking tables in docs/todo.md."""
+    out = {}
+    for row in named(found, heading):
+        match = re.search(r"\b(R\d+)\b", plain(row[1]))
+        if not match:
+            raise ValueError(f"docs/todo.md: a '{heading}' row names no research direction")
+        out[match.group(1)] = plain(row[0])
+    return out
+
+
+def register(text, source, repo_url, agent, maintainer):
+    """Every direction the register defines, with its effort and both ranks.
+
+    The rankings publish ten each; this publishes all of them, so what was left
+    out is as visible as what was chosen. The two ranks stay in their own
+    columns for the reason the whole project keeps them apart: one is this
+    project's, the other is the maintainer's, and a single merged column would
+    quietly attribute each to nobody. A direction that states no effort is
+    refused rather than shown blank -- the badge is the register's own claim,
+    and an empty cell reads as *no risk* rather than as *not written down*.
+    """
+    parts = re.split(r"^##\s+(R\d+\b.*?)\s*$", text, flags=re.MULTILINE)
+    rows = []
+    for heading, body in zip(parts[1::2], parts[2::2]):
+        identifier = heading.split()[0]
+        effort = EFFORT.search(body)
+        if not effort:
+            raise ValueError(f"{source}: {identifier} states no '**Effort.**' risk and gain")
+        href = resolve(repo_url, source, "directions.md#" + slug(heading))
+        unranked = '<span class="muted">&mdash;</span>'
+        rows.append([
+            '<a href="{}">{}</a>'.format(html.escape(href), html.escape(heading)),
+            markup(effort.group(1), repo_url, source),
+            html.escape(agent.get(identifier, "")) or unranked,
+            html.escape(maintainer.get(identifier, "")) or unranked,
+        ])
+    if not rows:
+        raise ValueError(f"{source}: no '## R<n>' directions to publish")
+    return rows
+
+
 def named(found, heading):
     for item in found:
         if item["heading"] == heading:
@@ -372,13 +433,15 @@ def next_steps(found, repo_url, limit=5):
             len(ranked), min(limit, len(ranked)))
 
 
-def queue_page(found, data, canonical, title, description, merged):
+def queue_page(found, data, canonical, title, description, merged, directions):
     goals = named(found, "Short-term goals")
     closed = sum(1 for row in goals if "\u2705" in render_cell(row[0]))
-    tiles = [("short-term goals open", f"{len(goals) - closed} of {len(goals)}",
+    ranked = len(named(found, "AI-agent priorities"))
+    tiles = [("research directions", len(directions), "read from cvc5 and z3 source"),
+             ("ranked in the queue", ranked,
+              f"of {len(directions)}, by the agent"),
+             ("short-term goals open", f"{len(goals) - closed} of {len(goals)}",
               "each closed by a ledger entry, not a judgement"),
-             ("research directions ranked", len(named(found, "AI-agent priorities")),
-              "by the agent, independently of the maintainer"),
              ("fork branches assessed", len(named(found, "Branch maintenance")),
               "against current upstream main"),
              ("pull requests to cvc5", merged,
@@ -403,6 +466,19 @@ def queue_page(found, data, canonical, title, description, merged):
                     "Everything here is a plan or an assessment. The "
                     '<a href="index.html">gap report</a> is where the measurements are.',
         "__SECTIONS__": "\n\n".join(render_section(item) for item in found),
+        "__REGISTER_NOTE__": html.escape(
+            f"All {len(directions)} directions, ranked or not. Each ranking above carries ten, so most "
+            "of the register sits below both of them: a direction with no rank is one neither list has "
+            "reached, not one that has been ruled out. Risk and gain are the register's own qualitative "
+            "priors, argued in the entry rather than measured."),
+        "__REGISTER__": ("<table><thead><tr><th class=\"wrap\">Direction</th><th>Risk / gain</th>"
+                         "<th class=\"rank\">Agent rank</th><th class=\"rank\">Maintainer rank</th>"
+                         "</tr></thead><tbody>"
+                         + "".join("<tr><td class=\"wrap\">{}</td><td>{}</td>"
+                                   "<td class=\"rank\">{}</td><td class=\"rank\">{}</td></tr>".format(*row)
+                                   for row in directions)
+                         + "</tbody></table>"),
+        "__REGISTER_URL__": html.escape(blob(data["repo"], "tools/heuresis/docs/directions.md")),
         "__LIMITS__": "<strong>A rank is not a result.</strong> The agent ranking is this project's own "
                       "assessment and is deliberately kept separate from the maintainer's, which is theirs "
                       "alone; neither is a commitment that any of this work will be done, and neither orders "
@@ -521,13 +597,17 @@ def build(out, base_url, repo_url, site_href="../index.html"):
                    "experiment behind each list.")
     (out / "index.html").write_text(page(data, f"{base_url}/", title, description), encoding="utf-8")
 
+    directions = register(
+        (ROOT / "docs/directions.md").read_text(), "tools/heuresis/docs/directions.md", repo_url,
+        ranking(queue_sections, "AI-agent priorities"),
+        ranking(queue_sections, "Human-maintainer priorities"))
     (out / "queue.html").write_text(
         queue_page(queue_sections, data, f"{base_url}/queue.html",
                    "Heuresis — the queue, and why that order",
                    "What heuresis is working on: short-term goals, the agent's ranking of research "
                    "directions, the maintainer's separate ranking, and which fork branches are worth "
                    "maintaining.",
-                   landed(ROOT / "docs/progress.md")),
+                   landed(ROOT / "docs/progress.md"), directions),
         encoding="utf-8")
 
     summary = latest["summary"]
