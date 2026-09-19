@@ -6,6 +6,7 @@ shared tools and how to maintain them. Each research project under
 
 | document | purpose |
 | --- | --- |
+| [github-issues-rewrites.md](github-issues-rewrites.md) | Metagraphe's cvc5 issue survey, ranked rewrite candidates, RARE drafts, and implementation handoff. |
 | [job-launcher.md](job-launcher.md) | Configure experiments, deploy host scripts, launch jobs and retrieve results. |
 | [stats-profiler.md](stats-profiler.md) | Interpret statistics, configure timers and export offline reports and PDFs. |
 | [site.md](site.md) | Build and deploy the published report site, and add a project report to it. |

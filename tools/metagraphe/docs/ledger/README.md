@@ -1,8 +1,11 @@
 # The ledger
 
-**No experiments or source audits recorded yet.** Each entry records work
-actually performed. Search proposals belong in the
+Each entry records work actually performed. Search proposals belong in the
 [candidate register](../directions.md).
+
+| date | work | scope |
+| --- | --- | --- |
+| 2026-09-19 | [GitHub issue survey](2026-09-19-github-issues.md) | Open-issue screening, targeted source audit, and RARE syntax validation; no solver experiment. |
 
 ## An entry
 

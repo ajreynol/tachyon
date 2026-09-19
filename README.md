@@ -19,6 +19,13 @@ this repository's discovery work.
 | [heuresis](tools/heuresis/README.md) | What do quantified benchmarks where z3 is much faster reveal about cvc5? |
 | [metagraphe](tools/metagraphe/README.md) | Which useful string and bit-vector rewrites is cvc5 missing? |
 
+Metagraphe's first investigation is the
+[cvc5 GitHub issue survey](docs/github-issues-rewrites.md): ranked rewrite
+candidates, RARE drafts, existing coverage, and the checks needed before
+implementation. Refresh it with
+[`prompts/metagraphe_read_github`](prompts/metagraphe_read_github)
+(`--show-prompt` previews the task; `--help` lists the launch options).
+
 Each project owns its charter, priorities and evidence. Its README records the
 current findings and links to its investigation; the shared tools supply the
 measurements. Research lives under [`tools/`](tools), with a charter, a queue

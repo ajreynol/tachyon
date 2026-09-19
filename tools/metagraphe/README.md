@@ -104,13 +104,16 @@ they become necessary. Nothing outside it imports or runs it, and deleting
 `tools/metagraphe/` would leave the rest of the repository as functional as it
 was.
 
-**One named exception.** In one respect this project is **not an island**:
-tachyon's front page names and advertises it, which is a link inward that a
-reader meets before this page. That is the parent's choice, recorded here so it
-is a named exception rather than drift. What has been delivered so far is the
-charter, the search areas, and the evidence format — no baseline and no
-findings. The promotion decision is therefore open, and it is the human
-maintainer's.
+**Named exceptions.** This project is **not an island** in the following
+respects: tachyon's front page names and advertises it.
+The human-requested issue survey lives at
+[`docs/github-issues-rewrites.md`](../../docs/github-issues-rewrites.md), and its
+launcher lives at
+[`prompts/metagraphe_read_github`](../../prompts/metagraphe_read_github).
+These parent-level entry points are deliberate exceptions to keeping project
+material inside this directory. The survey supplies source-audited candidates;
+it does not establish a solver performance finding. The promotion decision
+remains the human maintainer's.
 
 The project inherits tachyon's [discovery purpose](../../README.md) and the
 measurement conventions of its shared [launcher](../../docs/job-launcher.md).
@@ -120,12 +123,15 @@ rewrite probes record their exact commands directly in the ledger.
 
 ## Status
 
-**Authorized by the human maintainer**, with strings and
-bit-vectors as the main focus. The charter,
-search areas, initial queue, and evidence format are in place. No cvc5 baseline
-has been pinned for this project, no experiments have run, and no missing
-rewrite has been established. The first task is the baseline and a small probe
-from each primary theory.
+**Authorized by the human maintainer**, with strings and bit-vectors as the
+main focus. The first investigation is the
+[GitHub issue survey](../../docs/github-issues-rewrites.md), requested on
+2026-09-19. It screens 144 open issues and records ten ranked candidate
+families, ten parser-checked RARE drafts, existing coverage, and semantic
+corrections to tempting rules. The [source audit](docs/ledger/2026-09-19-github-issues.md)
+pins upstream cvc5; no matching executable baseline, solver reproduction, or
+performance improvement has been established. The next task is to probe the
+highest-priority string/sequence and bit-vector candidates on a matching build.
 
 The human maintainer decides whether the project eventually graduates into its
 own repository, folds into the parent's work, or retires in place with an
