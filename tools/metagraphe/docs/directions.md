@@ -20,12 +20,16 @@ concrete candidates by evidence, likely usefulness, and the cost of resolving
 uncertainty. Source inspection, existing regression cases, benchmark terms,
 small-term enumeration, and other solvers can all suggest candidates.
 
-## Candidate register
+## Filed candidates
 
-The [GitHub issue survey](../../../docs/github-issues-rewrites.md) holds the
-initial candidates M-1 through M-10, their identities, conditions, validity
-arguments, source availability checks, and next experiments. The
-[dated audit](ledger/2026-09-19-github-issues.md) records what was actually checked.
+The [rewrite database](../rewrite_db/README.md) owns filed candidate identities,
+conditions, evidence, assessments, and later verdicts. The
+[GitHub issue survey](../../../docs/github-issues-rewrites.md) is the dated
+narrative behind the initial M-1 through M-10 families and the triage rows
+subsequently filed as M-11 through M-20. The
+[source audit](ledger/2026-09-19-github-issues.md) and
+[filing record](ledger/2026-09-19-rewrite-db.md) distinguish the original
+investigation from its migration to JSON.
 
 | IDs | search areas | investigation |
 | --- | --- | --- |
@@ -36,10 +40,10 @@ arguments, source availability checks, and next experiments. The
 | M-6, M-7 | Secondary arithmetic | Guarded division and modular identities motivated by issues. |
 | M-8 | S1, S2, S3 | Learned lengths and substring-encoded reversal; existing rules need context. |
 
-These remain candidates: usefulness is structurally motivated but unmeasured,
-and runtime availability is unchecked. The survey separately records
-already-covered and lower-confidence leads. Give subsequent candidates new
-`M-N` identifiers, preserving these IDs. Each record carries:
+This table is a search-area map, not a parallel status register. Use the
+database's `classification` to distinguish proposals, existing coverage, and
+excluded directions. Allocate subsequent IDs under its identity policy and
+preserve these IDs. Each filed record carries:
 
 - The search-area ID, origin, and proposed `lhs -> rhs`, including conditions,
   sorts, and width parameters.

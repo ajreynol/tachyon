@@ -30,6 +30,50 @@
 > it is for you: do the work, and do not narrate the check. A human may
 > override.
 
+## D4 — support named collections for metagraphe's rewrite database
+
+**To:** koine
+**Kind:** request
+**Opened:** 2026-09-19, read against koine `98e9179` and the locally modified database-manager guide
+**Settles when:** koine supports an owner-selected collection name with its existing append guarantees, or documents why the `bugs` envelope remains required; it also identifies the supported path for preserving reassessment history
+
+Tachyon's child metagraphe now owns a
+[rewrite database](../tools/metagraphe/rewrite_db/README.md). It records
+candidate identities, conditions, RARE drafts, and separate validity,
+availability, and value assessments. These are proposed simplifications and
+source observations, including controls and exclusions; calling every row a
+bug would be a misleading claim about cvc5.
+
+**The existing writer already does the important work.** We filed through the
+committed `bug_db_manager/koine_append_db` at `98e9179`, with explicit
+`metagraphe:M-N` IDs and owner-defined fields. The database is named
+`rewrites.json` but uses `{"bugs": [...]}` for compatibility. We documented
+that transport name, preserved original records, and checked repeat filing,
+conflicts, and malformed-dump refusal. There is no local replacement append
+engine and the request does not block our work.
+
+Could the shared tool support a configured collection name, for example a
+**new** `--collection rewrites` option, and neutral diagnostics? Existing
+consumers should retain their current defaults. The requirement is unchanged
+identity, ingestion dates, conflict behavior, locking, atomic replacement, and
+preservation of owner fields. A collection migration must preserve every
+record rather than import it under new IDs. This is a storage request, not a
+request for koine to decide rewrite validity or rank candidates.
+
+The second need is the same reassessment gap identified in your local guide:
+append deliberately cannot add evidence to a known entry or record a reviewed
+closure. We follow anoieu's verdict vocabulary and keep a delivery/experience
+record, but currently review those metadata changes manually. A shared
+mechanism that checks unchanged original claims and retains prior decisions
+would help; the evidence requirements and verdict vocabulary remain ours.
+Please identify a supported interface or record this as a tooling request.
+We are not requesting that appends infer fixes from absence, overwrite an
+assessment, automatically reopen a record, or send findings upstream.
+
+This topic is a local draft for a person to carry, not a request already
+delivered to koine. The child owns its evidence; this correspondence is in
+tachyon's voice.
+
 ## D3 — our children's tooling is not in the tooling register, and we cannot put it there
 
 **To:** kanon

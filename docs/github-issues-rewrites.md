@@ -12,6 +12,14 @@ build that revision, reproduce the reported runtimes, or establish that a new
 rule reaches the relevant term during solving. The RARE drafts below have
 semantic arguments; the validation section records the separate syntax check.
 
+**Filed on 2026-09-19.** The [rewrite database](../tools/metagraphe/rewrite_db/README.md)
+now holds the structured claims and owns subsequent assessments and verdicts.
+M-1 through M-10 retain their identities; the additional triage rows were
+filed as M-11 through M-20 in their table order. This document remains the
+dated source narrative, not a parallel current-status database. See the
+[filing ledger](../tools/metagraphe/docs/ledger/2026-09-19-rewrite-db.md) and
+[experience log](../tools/metagraphe/docs/experience.md).
+
 ## Coverage and how to repeat the survey
 
 The [open issue list](https://github.com/cvc5/cvc5/issues) was retrieved through
@@ -45,7 +53,8 @@ Run the reusable workflow from any working directory:
 ```
 
 The [prompt script](../prompts/metagraphe_read_github) launches the survey in
-tachyon and asks the agent to update this document and its links. It preserves
+tachyon and asks the agent to record dated survey updates and file new JSON
+records through the database workflow. It preserves
 the distinction between a source audit, a solver observation, and a proposed
 rule. It does not itself fetch GitHub data. To repeat the retrieval manually:
 

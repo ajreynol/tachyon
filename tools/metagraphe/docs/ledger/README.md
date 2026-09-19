@@ -6,6 +6,7 @@ Each entry records work actually performed. Search proposals belong in the
 | date | work | scope |
 | --- | --- | --- |
 | 2026-09-19 | [GitHub issue survey](2026-09-19-github-issues.md) | Open-issue screening, targeted source audit, and RARE syntax validation; no solver experiment. |
+| 2026-09-19 | [Initial rewrite database filing](2026-09-19-rewrite-db.md) | Migration of the survey to JSON through koine, local metadata checks, and reporting policy. |
 
 ## An entry
 

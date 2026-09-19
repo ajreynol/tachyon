@@ -2,7 +2,9 @@
 
 **Started 2026-09-16; updated 2026-09-19.** The human requested the initial
 [GitHub issue survey](../../../docs/github-issues-rewrites.md), now completed
-as a source audit and candidate writeup. This ordering is the AI agent's
+as a source audit and candidate writeup, and then requested the
+[rewrite database](../rewrite_db/README.md). The initial JSON filing and
+[experience log](experience.md) are in place. This ordering is the AI agent's
 assessment within the human's string and bit-vector focus. The executable
 baseline and experiments below remain open.
 
@@ -15,6 +17,7 @@ baseline and experiments below remain open.
 | 5 | Assess the strongest candidate's usefulness and write up the finding. | Evidence of simplification or measured impact, with remaining uncertainty and possible next experiments. |
 
 After an experiment, add its evidence to the [ledger](ledger/README.md),
-update the candidate register, and revise this queue. Build a helper only when
+file new observations through the database workflow, record reassessments
+without overwriting the original claims, and revise this queue. Build a helper only when
 the next experiment needs it. A human's independent decision to pursue a
 finding is not a prerequisite for further discovery.

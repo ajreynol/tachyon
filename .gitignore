@@ -11,6 +11,9 @@ __pycache__/
 # working space, never committed
 scratch/
 *.local.md
+# Koine's runtime lock and atomic-write staging files are not evidence.
+/tools/metagraphe/rewrite_db/*.json.lock
+/tools/metagraphe/rewrite_db/*.json.writing.*
 # Raw job output: these basename patterns also drive the retention check.
 # BEGIN raw job output
 results-*.txt

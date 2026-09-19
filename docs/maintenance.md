@@ -11,11 +11,17 @@ Solver implementations are maintained elsewhere. Keep experiments
 inside their research directory, personal settings in ignored `site.conf`,
 and transient output under ignored `scratch/`.
 
-**A research project keeps three directories and no others**: `docs/` for
+**A research project normally keeps three directories**: `docs/` for
 everything written, including its dated ledger; `reports/` for what it
 publishes, including the programs that build it and the data they read; and
 `tests/`. Anything else would be a directory the shared layout has no purpose
-for, which is the shape the ecosystem's tooling audit reports as unregistered. A person sets research scope
+for, which is the shape the ecosystem's tooling audit reports as unregistered.
+The human-requested exception for metagraphe is `rewrite_db/` for its curated
+rewrite records and reporting/update policy, with `scripts/` for its record
+validator. Its [database guide](../tools/metagraphe/rewrite_db/README.md) records
+the purpose and shared koine writer; its child test suite checks the retained
+records. This exception does not change the other projects' layout.
+A person sets research scope
 and owns the priorities recorded in their name; an agent's ranking is separate.
 Do not revise an experimental record to match a new result: add a correction
 entry and update the claims that cite it.
@@ -139,7 +145,10 @@ A human reviews what is published and decides what is carried to another
 project. That review does not cover every line of code, validate the internal
 design, or turn an agent's interpretation into a proved result. Findings about
 another project's code use anoieu's
-[reporting policy](https://github.com/ajreynol/anoieu/blob/main/docs/reports/reporting-policy.md).
+[reporting policy](https://github.com/ajreynol/anoieu/blob/main/bug_db/reporting-policy.md).
+Metagraphe's [local application](../tools/metagraphe/rewrite_db/reporting-policy.md)
+separates rewrite validity, availability, and value, and identifies which parts
+of its append and closure policy are mechanically checked.
 Questions and requests across tool boundaries use [discussion.md](discussion.md).
 Read other trees freely; answer only topics whose `To:` names tachyon and which
 the human instruction authorizes. Draft replies here; a person carries them.

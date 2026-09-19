@@ -97,8 +97,12 @@ meaning. **Metagraphe** is the working name.
 
 ## Working here
 
-The [documentation index](docs/README.md) leads to the search register and
-initial work queue. The [ledger](docs/ledger/README.md) records source audits and
+The [rewrite database](rewrite_db/README.md) owns filed candidate records and
+verdicts. Its [reporting policy](rewrite_db/reporting-policy.md) follows
+anoieu's distinction between a candidate, a carried finding, and an explicit
+closure. The [experience log](docs/experience.md) records actual exchanges with
+other projects. The [documentation index](docs/README.md) leads to the search
+map and work queue; the [ledger](docs/ledger/README.md) records source audits and
 experiments. Keep project code, cases, and results inside this directory as
 they become necessary. Nothing outside it imports or runs it, and deleting
 `tools/metagraphe/` would leave the rest of the repository as functional as it
@@ -111,7 +115,10 @@ The human-requested issue survey lives at
 launcher lives at
 [`prompts/metagraphe_read_github`](../../prompts/metagraphe_read_github).
 These parent-level entry points are deliberate exceptions to keeping project
-material inside this directory. The survey supplies source-audited candidates;
+material inside this directory. The human also requested `rewrite_db/` as a
+named exception to tachyon's usual child layout; `scripts/` holds its record
+validator and `tests/` checks the filing. The survey supplies source-audited
+candidates;
 it does not establish a solver performance finding. The promotion decision
 remains the human maintainer's.
 
@@ -129,8 +136,10 @@ main focus. The first investigation is the
 2026-09-19. It screens 144 open issues and records ten ranked candidate
 families, ten parser-checked RARE drafts, existing coverage, and semantic
 corrections to tempting rules. The [source audit](docs/ledger/2026-09-19-github-issues.md)
-pins upstream cvc5; no matching executable baseline, solver reproduction, or
-performance improvement has been established. The next task is to probe the
+pins upstream cvc5. The [initial database filing](docs/ledger/2026-09-19-rewrite-db.md)
+preserves the main candidates and the additional triage rows as JSON. No
+matching executable baseline, solver reproduction, or performance improvement
+has been established. The next task is to probe the
 highest-priority string/sequence and bit-vector candidates on a matching build.
 
 The human maintainer decides whether the project eventually graduates into its

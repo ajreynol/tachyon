@@ -11,8 +11,8 @@ usage() {
   cat <<'USAGE'
 usage: metagraphe_read_github [--claude|--codex] [--print] [--show-prompt]
 
-Survey cvc5 GitHub issues for rewrite opportunities and update
-docs/github-issues-rewrites.md in this tachyon checkout.
+Survey cvc5 GitHub issues for rewrite opportunities, record dated analysis,
+and file JSON in tools/metagraphe/rewrite_db/ in this tachyon checkout.
 
   --claude        use Claude (default)
   --codex         use Codex
@@ -39,13 +39,17 @@ PROMPT=$(cat <<'PROMPT_END'
 Work in this tachyon checkout on metagraphe's cvc5 rewrite investigation.
 
 Scan https://github.com/cvc5/cvc5/issues for issues that could be solved or
-materially improved by rewriting. Write or refresh docs/github-issues-rewrites.md
-and link it from the main README.md. Report the strongest findings to the user.
+materially improved by rewriting. Record dated updates to docs/github-issues-rewrites.md
+and file curated JSON records in tools/metagraphe/rewrite_db/rewrites.json
+through the documented koine append workflow. Keep the main README links current.
+Report the strongest findings to the user.
 The writeup will be used to prompt work on cvc5 and new RARE rewrites. Include
 candidate RARE declarations when there is enough evidence to state them safely.
 
 Read README.md, docs/maintenance.md, tools/metagraphe/README.md, the project's
-search register and queue, and the existing survey first. Respect existing
+search map and queue, tools/metagraphe/rewrite_db/README.md,
+tools/metagraphe/rewrite_db/reporting-policy.md,
+tools/metagraphe/docs/experience.md, and the existing survey first. Respect existing
 worktree changes. Keep investigation artifacts and downloaded inputs under
 ignored scratch/; retain conclusions, source links, small candidate terms and
 reproduction recipes rather than raw issue dumps or solver transcripts.
@@ -95,6 +99,27 @@ candidates to a cvc5 implementer. Include already-covered and rejected examples
 so later scans do not rediscover them. State the next discriminating test and
 remaining uncertainty for every substantive lead. Preserve stable IDs and
 prior evidence; add dated corrections when revising earlier conclusions.
+The existing survey is the historical narrative behind its original filing;
+preserve its original candidate sections and RARE drafts when adding new dated
+observations. The JSON database owns filed claims and verdicts.
+
+Filing and follow-up:
+- Reuse known family IDs rather than creating duplicates per issue. Allocate
+  new IDs above the highest ever used, including Git history. Preserve the
+  existing distinctions between candidate, existing-coverage, and excluded.
+- Prepare a curated producer JSON list in ignored scratch space. Validate it
+  with tools/metagraphe/scripts/check_rewrite_db.py --filing FILE, then use the
+  pinned koine writer described in tools/metagraphe/rewrite_db/README.md for
+  preview and append.
+  Never replace the database with the latest scan or silently edit old claims.
+- first_seen and last_seen are ingestion dates. Keep observation dates and
+  source revisions separate; an old input ingested again is not a new run.
+  Review conflicts and repeats of closed rows instead of treating them as fixes.
+- Reassessment, delivery, closure, and reopening are separate evidence-backed
+  decisions under the reporting policy, not operations of the append command.
+- Keep tools/metagraphe/docs/experience.md for actual exchanges with other
+  projects. Existing GitHub comments are source evidence; do not invent an
+  experience episode, delivery, acceptance, or fix for a local filing.
 Update metagraphe's index/register/queue/ledger links as needed so they reflect
 the survey without claiming a solver baseline or a fix that was not established.
 

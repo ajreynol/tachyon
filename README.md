@@ -19,10 +19,11 @@ this repository's discovery work.
 | [heuresis](tools/heuresis/README.md) | What do quantified benchmarks where z3 is much faster reveal about cvc5? |
 | [metagraphe](tools/metagraphe/README.md) | Which useful string and bit-vector rewrites is cvc5 missing? |
 
-Metagraphe's first investigation is the
-[cvc5 GitHub issue survey](docs/github-issues-rewrites.md): ranked rewrite
-candidates, RARE drafts, existing coverage, and the checks needed before
-implementation. Refresh it with
+Metagraphe's [rewrite database](tools/metagraphe/rewrite_db/README.md) holds
+the candidates, RARE drafts, and evidence from its first
+[cvc5 GitHub issue survey](docs/github-issues-rewrites.md). Its
+[experience log](tools/metagraphe/docs/experience.md) records subsequent
+exchanges with other projects. Continue the survey and file new candidates with
 [`prompts/metagraphe_read_github`](prompts/metagraphe_read_github)
 (`--show-prompt` previews the task; `--help` lists the launch options).
 
