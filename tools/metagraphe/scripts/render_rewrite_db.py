@@ -1,0 +1,178 @@
+#!/usr/bin/env python3
+"""Render rewrites.md from the validated JSON; --check detects a stale view."""
+import argparse
+from collections import Counter
+import html
+import json
+from pathlib import Path
+import re
+import sys
+from urllib.parse import quote, urlsplit
+
+from check_rewrite_db import DATABASE, validate
+
+
+OUTPUT = DATABASE.with_suffix(".md")
+COMMAND = "python3 tools/metagraphe/scripts/render_rewrite_db.py"
+
+
+def prose(value):
+    """Keep database text literal in Markdown, including inside table cells."""
+    value = html.escape(str(value), quote=False)
+    value = re.sub(r"([\\`*_{}\[\]()#+.!>~-])", r"\\\1", value)
+    return value.replace("|", "&#124;").replace("\n", "<br>")
+
+
+def block(value, language="text"):
+    fence = "`" * max(3, 1 + max((len(m) for m in re.findall(r"`+", value)), default=0))
+    return f"{fence}{language}\n{value}\n{fence}"
+
+
+def link(label, reference):
+    # All local evidence paths in JSON start at the repository root. The view
+    # lives three levels below it; preserve query strings and fragment anchors.
+    target = reference if urlsplit(reference).scheme else "../../../" + reference
+    return f"[{prose(label)}]({quote(target, safe='/:#?=&%+@;,$')})"
+
+
+def source_revision(revision):
+    return link(revision, "https://github.com/cvc5/cvc5/commit/" + revision)
+
+
+def disposition(row):
+    verdict = row.get("closed_verdict", "no closure recorded")
+    if "awaiting_landing" in row:
+        verdict += "; awaiting landing"
+    return verdict
+
+
+def render(document):
+    rows = sorted(validate(document), key=lambda row: int(row["candidate"].split("-")[1]))
+    counts = Counter(row["classification"] for row in rows)
+    closed = sum("closed_verdict" in row for row in rows)
+    pending = sum("awaiting_landing" in row for row in rows)
+    lines = [
+        "# Metagraphe rewrites", "",
+        "Generated from [rewrites.json](rewrites.json). **Do not edit this view by hand.**",
+        "See the [database guide](README.md) for filing and the",
+        "[reporting policy](reporting-policy.md) for reassessment and closure.", "",
+        f"Regenerate from tachyon's root with `{COMMAND}`; add `--check` to check freshness.", "",
+        f"**{len(rows)} records:** {counts['candidate']} candidates, "
+        f"{counts['existing-coverage']} existing-coverage controls, {counts['excluded']} exclusions.",
+        f"**{closed} explicit closure verdicts; {pending} fixes awaiting landing.**", "",
+        "A record is a candidate family, not a count of new rules or solved issues.",
+        "`argued` denotes a written validity argument, not a checked proof. RARE parser",
+        "acceptance does not establish correctness or solver performance. Classifications",
+        "and priorities are metagraphe's assessments; closure requires a separate verdict.",
+        "Issue states below are snapshots at review, not live GitHub status.", "",
+        "## Overview", "",
+        "| Record | Priority | Classification | Validity | RARE drafts | Closure | Issues |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for row in rows:
+        candidate = row["candidate"]
+        issues = ", ".join(link(f"#{issue['number']}", issue["url"])
+                           for issue in row["origin"]["issues"])
+        cells = [f"[{candidate}: {prose(row['description'])}](#{candidate.lower()})",
+                 str(row["priority"]) if row["priority"] else "—",
+                 prose(row["classification"]), prose(row["assessment"]["validity"]),
+                 str(len(row["proposal"]["rare_drafts"])), prose(disposition(row)), issues]
+        lines.append("| " + " | ".join(cells) + " |")
+
+    for row in rows:
+        proposal, checks, origin = row["proposal"], row["checks"], row["origin"]
+        lines += ["", f"## {row['candidate']}", "", f"**{prose(row['description'])}**", "",
+                  f"Classification: {prose(row['classification'])}. "
+                  f"Priority: {row['priority'] or 'not ranked'}. "
+                  f"Theories: {', '.join(prose(t) for t in row['theories'])}.", "",
+                  f"**Closure:** {prose(disposition(row))}.", ""]
+        if "closed_verdict" in row:
+            lines += [f"On {row['closed_on']}: {prose(row['closed_why'])}", "",
+                      "Evidence: " + ", ".join(link(f"closure {i}", ref) for i, ref
+                                               in enumerate(row["closed_evidence"], 1)) + ".", ""]
+            for field, label in (("closed_commit", "Fix commit"),
+                                 ("closed_checked_at", "Rechecked source")):
+                if field in row:
+                    lines += [f"{label}: {source_revision(row[field])}.", ""]
+            if "replacement_id" in row:
+                replacement = row["replacement_id"].split(":", 1)[1]
+                lines += [f"Replacement: [{replacement}](#{replacement.lower()}).", ""]
+            if "awaiting_landing" in row:
+                debt = row["awaiting_landing"]
+                lines += [f"**Awaiting landing:** {prose(debt['project'])}, "
+                          f"branch {prose(debt['branch'])}, {source_revision(debt['commit'])}.", ""]
+        lines += [f"**Application context:** {prose(proposal['application_context'])}", ""]
+        for i, rewrite in enumerate(proposal["rewrites"], 1):
+            variables = "; ".join(f"{prose(name)}: {prose(sort)}"
+                                  for name, sort in rewrite["variables"].items())
+            lines += [f"### Rewrite {i}", "", f"Notation: {prose(rewrite['notation'])}.", "",
+                      f"Variables: {variables or 'none'}.", "",
+                      block(f"{rewrite['lhs']}\n  ->\n{rewrite['rhs']}\n\nwhen: {rewrite['condition']}"), ""]
+        if not proposal["rewrites"]:
+            lines += ["No exact rewrite is filed.", ""]
+        if proposal["rare_drafts"]:
+            lines += ["### RARE drafts", ""]
+            for draft in proposal["rare_drafts"]:
+                lines += [block(draft, "lisp"), ""]
+        else:
+            lines += ["No RARE draft is filed.", ""]
+        lines += ["### Assessment and next step", ""]
+        for field in ("validity", "availability", "value"):
+            assessment = row["assessment"]
+            lines += [f"- **{field.title()}: {prose(assessment[field])}.** "
+                      + prose(assessment[field + "_reason"])]
+        lines += ["", f"**RARE syntax:** {prose(checks['rare_syntax'])}"
+                  + (" at " + source_revision(checks["rare_parser_revision"])
+                     if checks["rare_parser_revision"] else "") + ".", ""]
+        for field in ("solver", "performance"):
+            evidence = checks.get(field + "_evidence")
+            lines += [f"**{field.title()} check:** {prose(checks[field])}"
+                      + ("; " + link("evidence", evidence) if evidence else "") + ".", ""]
+        if row["cautions"]:
+            lines += ["**Cautions:**", ""] + ["- " + prose(c) for c in row["cautions"]] + [""]
+        lines += [f"**Next step:** {prose(row['next_step'])}", "",
+                  "### Evidence and follow-up", "",
+                  "Issues: " + ", ".join(link(f"#{i['number']}", i["url"])
+                                         + f" ({i['state_at_review']} at review)"
+                                         for i in origin["issues"]) + ".", "",
+                  f"Observed: {row['observed_on']} at cvc5 source {source_revision(row['found_at'])}.", "",
+                  f"Koine ingestion: first {row['first_seen']}; last {row['last_seen']}.", "",
+                  link("Survey", origin["survey"]) + f" (tachyon revision `{origin['survey_revision']}`); "
+                  + link("investigation ledger", origin["ledger"]) + ".", ""]
+        for field, label in (("references", "Supporting references"),
+                             ("source_references", "Source references")):
+            if origin[field]:
+                lines += [f"**{label}:**", ""]
+                lines += ["- " + link(ref, ref) for ref in origin[field]] + [""]
+        if row.get("carried"):
+            lines += ["**Recorded deliveries:**", ""]
+            lines += [f"- {event['on']} to {prose(event['to'])}: " + link("evidence", event["evidence"])
+                      for event in row["carried"]] + [""]
+        else:
+            lines += ["No delivery recorded.", ""]
+        lines += ["[Back to overview](#overview)"]
+    return "\n".join(lines) + "\n"
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--check", action="store_true", help="fail if the view is missing or stale; never write")
+    args = parser.parse_args(argv)
+    try:
+        expected = render(json.loads(DATABASE.read_text(encoding="utf-8")))
+        if args.check:
+            if not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8") != expected:
+                print(f"rewrite view is missing or stale; run: {COMMAND}", file=sys.stderr)
+                return 1
+            print("rewrite view is current")
+        else:
+            OUTPUT.write_text(expected, encoding="utf-8")
+            print(f"wrote {OUTPUT}")
+    except (OSError, ValueError) as exc:
+        print(f"rewrite view: {exc}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

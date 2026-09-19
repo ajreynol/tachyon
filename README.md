@@ -21,7 +21,9 @@ this repository's discovery work.
 
 Metagraphe's [rewrite database](tools/metagraphe/rewrite_db/README.md) holds
 the candidates, RARE drafts, and evidence from its first
-[cvc5 GitHub issue survey](docs/github-issues-rewrites.md). Its
+[cvc5 GitHub issue survey](docs/github-issues-rewrites.md). Browse the generated
+[rewrites.md](tools/metagraphe/rewrite_db/rewrites.md) for an overview and the
+individual rules. Its
 [experience log](tools/metagraphe/docs/experience.md) records subsequent
 exchanges with other projects. Continue the survey and file new candidates with
 [`prompts/metagraphe_read_github`](prompts/metagraphe_read_github)

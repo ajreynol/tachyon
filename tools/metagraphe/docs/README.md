@@ -5,6 +5,7 @@ criteria. These documents organize the investigation.
 
 | document | purpose |
 | --- | --- |
+| [rewrites.md](../rewrite_db/rewrites.md) | Generated overview, term schemas, RARE drafts, assessments, and evidence from the JSON. |
 | [Rewrite database](../rewrite_db/README.md) | Authoritative JSON filings, format, identity, and append commands. |
 | [Reporting policy](../rewrite_db/reporting-policy.md) | Evidence, reassessment, delivery, and closure requirements. |
 | [experience.md](experience.md) | Actual exchanges with the projects we investigate. |

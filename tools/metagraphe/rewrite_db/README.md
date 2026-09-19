@@ -6,6 +6,10 @@ source observations, not established solver fixes.** Validity, availability,
 and usefulness are separate assessments. Metagraphe owns those assessments;
 koine supplies the append mechanics.
 
+Browse [rewrites.md](rewrites.md) for a generated overview and each record's
+terms, side conditions, RARE drafts, assessments, and evidence. It includes
+existing coverage, exclusions, and any closed records as well as candidates.
+
 The initial filing lifts the [GitHub survey](../../../docs/github-issues-rewrites.md)
 into structured records. M-1 through M-10 retain their survey identities.
 M-11 through M-20 record the survey's additional triage rows, including two
@@ -80,6 +84,7 @@ python3 scratch/metagraphe-filing/koine_append_db.py \
 python3 scratch/metagraphe-filing/koine_append_db.py \
   scratch/metagraphe-filing/new.json tools/metagraphe/rewrite_db/rewrites.json
 python3 tools/metagraphe/scripts/check_rewrite_db.py
+python3 tools/metagraphe/scripts/render_rewrite_db.py
 python3 scripts/check.py
 ```
 
@@ -112,4 +117,20 @@ scan as a fix.
 references. CI runs it through the child test suite. It does not prove a
 rewrite, audit whether a commit has landed, or prevent a human from editing an
 old claim; preservation of historical content currently relies on reviewing
-the diff. No generated Markdown view is maintained yet.
+the diff.
+
+## Refresh the readable view
+
+After a filing or an evidence-backed metadata update, regenerate
+[rewrites.md](rewrites.md) from the JSON; do not edit it directly:
+
+```bash
+python3 tools/metagraphe/scripts/render_rewrite_db.py
+python3 tools/metagraphe/scripts/render_rewrite_db.py --check
+```
+
+Rendering validates the database first and only writes the Markdown view.
+`--check` fails for missing or stale output without changing files. The child
+test suite also checks freshness, so `python3 scripts/check.py` catches a view
+that was not regenerated. Rendering preserves the source observation dates;
+it does not refresh GitHub status or constitute a new investigation.

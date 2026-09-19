@@ -117,6 +117,9 @@ Filing and follow-up:
   Review conflicts and repeats of closed rows instead of treating them as fixes.
 - Reassessment, delivery, closure, and reopening are separate evidence-backed
   decisions under the reporting policy, not operations of the append command.
+- After filing or updating metadata, regenerate the readable view with
+  python3 tools/metagraphe/scripts/render_rewrite_db.py. Do not hand-edit
+  tools/metagraphe/rewrite_db/rewrites.md; repository checks enforce freshness.
 - Keep tools/metagraphe/docs/experience.md for actual exchanges with other
   projects. Existing GitHub comments are source evidence; do not invent an
   experience episode, delivery, acceptance, or fix for a local filing.

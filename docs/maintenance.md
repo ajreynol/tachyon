@@ -17,10 +17,12 @@ publishes, including the programs that build it and the data they read; and
 `tests/`. Anything else would be a directory the shared layout has no purpose
 for, which is the shape the ecosystem's tooling audit reports as unregistered.
 The human-requested exception for metagraphe is `rewrite_db/` for its curated
-rewrite records and reporting/update policy, with `scripts/` for its record
-validator. Its [database guide](../tools/metagraphe/rewrite_db/README.md) records
+rewrite records, generated Markdown view, and reporting/update policy, with
+`scripts/` for validation and rendering.
+Its [database guide](../tools/metagraphe/rewrite_db/README.md) records
 the purpose and shared koine writer; its child test suite checks the retained
-records. This exception does not change the other projects' layout.
+records and catches a stale view. This exception does not change the other
+projects' layout.
 A person sets research scope
 and owns the priorities recorded in their name; an agent's ranking is separate.
 Do not revise an experimental record to match a new result: add a correction

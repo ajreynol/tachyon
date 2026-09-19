@@ -98,7 +98,8 @@ meaning. **Metagraphe** is the working name.
 ## Working here
 
 The [rewrite database](rewrite_db/README.md) owns filed candidate records and
-verdicts. Its [reporting policy](rewrite_db/reporting-policy.md) follows
+verdicts; [rewrites.md](rewrite_db/rewrites.md) provides a generated view.
+Its [reporting policy](rewrite_db/reporting-policy.md) follows
 anoieu's distinction between a candidate, a carried finding, and an explicit
 closure. The [experience log](docs/experience.md) records actual exchanges with
 other projects. The [documentation index](docs/README.md) leads to the search
@@ -117,7 +118,8 @@ launcher lives at
 These parent-level entry points are deliberate exceptions to keeping project
 material inside this directory. The human also requested `rewrite_db/` as a
 named exception to tachyon's usual child layout; `scripts/` holds its record
-validator and `tests/` checks the filing. The survey supplies source-audited
+validator and Markdown renderer, and `tests/` checks the filing and view.
+The survey supplies source-audited
 candidates;
 it does not establish a solver performance finding. The promotion decision
 remains the human maintainer's.
