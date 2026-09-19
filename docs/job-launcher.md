@@ -96,7 +96,9 @@ and run. Derived configurations are written to ignored `configs/.gen/`.
 All launcher commands accept `$TACHYON_SITE` to select a site file, with
 `$SUBMIT_SITE` as a fallback and `job_launcher/site.conf` as the default.
 `checks` always validates against the tracked template and scans the default
-site file when present.
+site file when present. `-h` or `--help` as the first argument prints the
+command's own header comment and needs no site file: the reader asking what a
+command does is the one who has not configured it yet.
 
 ## Retrieve results
 
@@ -108,8 +110,8 @@ job_launcher/fetch -d scratch/results quant-091526-u-ss-stats
 `~/analysis/data/` and files or directories from `~/analysis/stats/`. It defaults
 to `DEFAULT_HOST` and ignored `scratch/results/`, needs only the site file,
 and never changes the host. Listing and copy failures return nonzero; no
-matching files is reported separately. Help and argument checks work before
-site setup. Repeated copies replace local files.
+matching files is reported separately. Its argument checks, like every
+command's help, run before site setup. Repeated copies replace local files.
 
 Fetched results, statistics (including `-processed.txt`) and error sidecars are
 raw job artifacts. Keep them under ignored `scratch/` or outside the checkout;

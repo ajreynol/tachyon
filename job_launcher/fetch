@@ -7,6 +7,13 @@
 #   Read-only on the host.  HOST defaults to DEFAULT_HOST from the site file.
 set -euo pipefail
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# The help text is this file's own header comment block, printed rather than
+# quoted, so it cannot drift from a hand-counted line range.  Answered before
+# the site file is read: a reader who has not configured one yet is exactly the
+# reader asking what this does.
+usage() { awk 'NR>1 { if (!/^#/) exit; print }' "$0"; }
+case "${1:-}" in -h|--help) usage; exit 0 ;; esac
 HOST=""; DEST=scratch/results
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -14,7 +21,7 @@ while [ $# -gt 0 ]; do
       [ $# -ge 2 ] && [ -n "$2" ] || { echo "fetch: $1 requires a value" >&2; exit 2; }
       case "$1" in -H|--host) HOST=$2 ;; *) DEST=$2 ;; esac
       shift ;;
-    -h|--help) sed -n '2,7p' "$0"; exit 0 ;;
+    -h|--help) usage; exit 0 ;;
     -*) echo "fetch: unknown flag $1" >&2; exit 2 ;;
     *) break ;;
   esac

@@ -86,26 +86,29 @@ It writes the ignored `site/` and contacts nothing. [site.md](site.md) describes
 what may be published and what the builders refuse; a pull request builds the
 site without deploying it.
 
-The separate [`anoieu / policy`](../.github/workflows/anoieu.yml) job runs the
-checker at the `ANOIEU_REV` in that workflow. To reproduce it with a checkout
-at that revision, set `ANOIEU_CHECKOUT` to its path and run:
+The separate [`anoieu / policy`](../.github/workflows/anoieu.yml) job calls
+anoieu's shared workflow at `main` and names **policy contract 1**. **This
+repository is on the contract form, not a checker pin**: the contract fixes the
+obligations and their severity, the implementation behind it moves on anoieu's
+schedule, and there is no `ANOIEU_REV` here to bump. The cost of that choice is
+that the job can turn red with nothing committed here, which within a contract
+means a violation already in the tree has started being reported. Reproduce it
+against a local anoieu checkout with:
 
 ```bash
-python3 "$ANOIEU_CHECKOUT/scripts/policy_check.py" --root .
+python3 /path/to/anoieu/scripts/policy_check.py --policy-version 1 --root .
 ```
 
-For a current local anoieu checkout, also run the same command with
-`--policy-version 1`. As read on 2026-09-17, anoieu offers that stable interface
-while kanon's adoption instructions still require a checker pin. Retain this
-workflow's pin until the shared workflow is published and the adoption guidance
-supports migration. A pin change requires green anoieu CI for the selected
-commit. The [live discussion](discussion.md) records tachyon's answer to the
-announcement. These conventions are reviewed against kanon's working tree on
-2026-09-17, based on `dc6f56942fbc567abea76c562565557e5e7c6e19` with local
-policy edits present; the checker pin identifies a separate artifact.
-The pinned checker reports an advisory asking for a discussion `Status` field;
-the current policy explicitly omits that field. Keep the current four-field
-format. Contract 1 accepts it, and the pinned advisory does not fail CI.
+Name the version explicitly; omitting it selects 1 today and would keep doing
+so after later contracts exist. Moving to a different contract is a deliberate
+change to that workflow, never a way to turn a build green.
+
+These conventions are reviewed against kanon `8437526` on 2026-09-19, whose
+adoption instructions accept the shared workflow and a checker pin alike and
+ask a repository to say which form it took; local edits in that tree concern a
+`licenses/` layout row and nothing read here. Contract 1 accepts this
+repository's four-field discussion format, which the shared policy defines and
+which omits a `Status` field.
 
 ## Findings and discussion
 

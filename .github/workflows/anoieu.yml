@@ -1,19 +1,24 @@
 name: anoieu
 
+# The policy check, run by anoieu's own shared workflow at `main`, naming the
+# mechanical contract this repository is held to rather than a checker commit.
+# Contract 1 fixes the obligations and their severity while the implementation
+# behind it stays free to change, so this build can turn red with nothing
+# committed here -- and within a contract that means a violation already in the
+# tree has started being reported, never a new requirement arriving.
+#
+# kanon's `docs/policy.md`, section `2. Run the check`, is the rule, and it
+# accepts a pinned checker commit instead. This repository takes the contract,
+# so there is nothing here to pin and nothing here to bump.
+# docs/maintenance.md says how to reproduce this job locally.
+
 on: [push, pull_request]
+
+permissions:
+  contents: read
 
 jobs:
   policy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: the policy, at the commit this repository pins
-        env:
-          # Moved by hand, and only to a commit where anoieu's own CI is green.
-          # kanon's scripts/bump_check.py decides that; it reads a remote, so it
-          # is run at the moment of adoption and never from here.
-          ANOIEU_REV: 442bb67
-        run: |
-          git clone --quiet https://github.com/ajreynol/anoieu /tmp/anoieu
-          git -C /tmp/anoieu checkout --quiet "$ANOIEU_REV"
-      - run: python3 /tmp/anoieu/scripts/policy_check.py --root .
+    uses: ajreynol/anoieu/.github/workflows/policy.yml@main
+    with:
+      policy-version: '1'

@@ -1,5 +1,11 @@
 # elaphros
 
+**A child research project of [tachyon](../../README.md)**, investigating what
+cvc5 pays to produce a proof. It reads whatever it likes and writes only inside
+this directory, and it is not part of what tachyon ships. Its charter is below;
+what governs the subject rather than this account is under
+[authority and working boundary](#authority-and-working-boundary).
+
 **Planning status, 2026-09-19.** The [branch survey](ledger/2026-09-18-branch-survey.md)
 screens all 809 public heads of `ajreynol/cvc5` and characterizes 49 selected
 branches against pinned upstream source, and the
@@ -156,6 +162,14 @@ code, patches, inputs and outputs stay under `tools/elaphros/`; experiments do
 not write the parent's launcher configs or launch log. Nothing outside this
 directory imports or runs it, and removing the directory leaves tachyon's
 behavior and CI unchanged.
+
+**One named exception.** In one respect this project is **not an island**:
+tachyon's front page names and advertises it, which is a link inward that a
+reader meets before this page. That is the parent's choice, recorded here so it
+is a named exception rather than drift. What has been delivered so far is the
+charter, a source survey and a planning queue — no corpus, no baseline and no
+measurement — so the promotion decision is open and it is the human
+maintainer's.
 
 **Status.** The human maintainer authorizes the proof-production performance
 question and a source survey to set priorities. The current instruction is

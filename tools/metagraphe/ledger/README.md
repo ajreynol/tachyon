@@ -24,6 +24,13 @@ Use `YYYY-MM-DD-<subject>.md` and record:
    availability, or usefulness, and what remains open. An inconclusive result
    is recorded as such.
 
-Store the minimal cases and raw results inside this project and link them from
-the entry. Keep evidence sufficient to recompute claimed numbers. A correction
-is a new entry naming the old one; preserve the original experimental record.
+Store the minimal cases — the terms, the queries, the generation recipe — inside
+this project and link them from the entry. **Raw solver output does not come with
+them.** The repository
+[retention policy](../../../docs/maintenance.md#result-retention) keeps stdout,
+result blocks, statistics dumps and backtraces on the execution host or under
+ignored `scratch/`, and `scripts/check_data_retention.py` rejects recognizable
+blocks in tracked text whichever project wrote them. Record the command, the
+rewritten term or status it produced, and where the raw artifact can be
+retrieved; that is what keeps a claimed number recomputable. A correction is a
+new entry naming the old one; preserve the original experimental record.

@@ -1,9 +1,16 @@
-# heuresis — discussion
+# heuresis — questions for cvc5
 
 Items this project wants to raise with cvc5 developers: defects, questions
 about intended behaviour, and design points that are not performance results.
 Each is written to be read by someone who works on cvc5 and has not read
 anything else in this repository, so each restates its own context.
+
+**This is a ledger, not a channel.** Nothing here is addressed to anybody and
+nothing here sends anything. A child project opens no correspondence of its
+own: what leaves this directory leaves in tachyon's voice, through the
+[reporting route](../../../docs/maintenance.md#findings-and-discussion) a
+person carries. The cross-repository channel is tachyon's
+[`docs/discussion.md`](../../../docs/discussion.md) and is not this file.
 
 Performance work lives in [`progress.md`](progress.md) and the
 [ledger](../ledger/); this file is for things worth a conversation upstream.

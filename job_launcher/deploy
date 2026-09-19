@@ -7,6 +7,13 @@
 #   site.conf is machine-local.  Nothing outside ~/bin/heuresis is touched.
 set -euo pipefail
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# The help text is this file's own header comment block, printed rather than
+# quoted, so it cannot drift from a hand-counted line range.  Answered before
+# the site file is read: a reader who has not configured one yet is exactly the
+# reader asking what this does.
+usage() { awk 'NR>1 { if (!/^#/) exit; print }' "$0"; }
+case "${1:-}" in -h|--help) usage; exit 0 ;; esac
 # shellcheck source=common.sh
 source "$HERE/common.sh"
 
@@ -15,7 +22,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     -n|--dry-run) DRY=1 ;;
     -H|--host) H=$2; shift ;;
-    -h|--help) sed -n '2,8p' "$0"; exit 0 ;;
+    -h|--help) usage; exit 0 ;;
     *) echo "deploy: unknown argument $1" >&2; exit 2 ;;
   esac
   shift

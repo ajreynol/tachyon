@@ -10,6 +10,13 @@
 set -euo pipefail
 
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# The help text is this file's own header comment block, printed rather than
+# quoted, so it cannot drift from a hand-counted line range.  Answered before
+# the site file is read: a reader who has not configured one yet is exactly the
+# reader asking what this does.
+usage() { awk 'NR>1 { if (!/^#/) exit; print }' "$0"; }
+case "${1:-}" in -h|--help) usage; exit 0 ;; esac
 SITE=${TACHYON_SITE:-${SUBMIT_SITE:-$HERE/site.conf}}
 [ -f "$SITE" ] || { echo "status: no site file $SITE (copy job_launcher/site.conf.example to job_launcher/site.conf and edit)" >&2; exit 2; }
 DEFAULT_HOST=""; DEFAULT_SESSION=""
@@ -20,7 +27,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     -H|--host) HOST=$2; shift ;;
     -s|--session) SESSION=$2; shift ;;
-    -h|--help) sed -n '2,8p' "$0"; exit 0 ;;
+    -h|--help) usage; exit 0 ;;
     *) echo "status: unknown argument $1" >&2; exit 2 ;;
   esac
   shift

@@ -116,6 +116,29 @@ sys.exit(int(os.environ.get('SSH_EXIT', '0')))
         self.assertIn("no results", result.stderr)
         self.assertEqual(self.ssh_calls()[-1][1], "example-host")
 
+    def test_every_command_explains_itself_before_the_site_exists(self):
+        """Help is the header comment, whole and with no code in it.
+
+        Each script used to print a hand-counted line range, which drifts:
+        deploy's ran one line long and emitted `set -euo pipefail` as help,
+        and status's ran one line short and dropped its last sentence.
+        """
+        (self.launcher / "site.conf").unlink()
+        for command in ["submit", "status", "deploy", "fetch"]:
+            for flag in ["-h", "--help"]:
+                with self.subTest(command=command, flag=flag):
+                    result = self.command(command, flag)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    lines = result.stdout.splitlines()
+                    self.assertTrue(lines, "printed no help")
+                    self.assertIn(command, lines[0])
+                    self.assertEqual([line for line in lines if not line.startswith("#")], [],
+                                     "help printed a line that is not a comment")
+                    source = (self.launcher / command).read_text().splitlines()
+                    self.assertEqual(lines, source[1:1 + len(lines)])
+                    self.assertFalse(source[1 + len(lines)].startswith("#"),
+                                     "help stopped before the end of the header comment")
+
     def test_fetch_usage_does_not_need_site_or_checkout(self):
         (self.launcher / "site.conf").unlink()
         self.assertEqual(self.command("fetch", "--help").returncode, 0)

@@ -30,30 +30,41 @@
 > it is for you: do the work, and do not narrate the check. A human may
 > override.
 
-## D1 — checker contract 1 and the publication boundary
+## D2 — a child's layout root reserves a path a child may not use
 
-**To:** anoieu
-**Kind:** answer
-**Opened:** 2026-09-17
-**Settles when:** the shared checker workflow is published, governing adoption guidance supports it, and tachyon's policy job is migrated and checked
+**To:** kanon
+**Kind:** question
+**Opened:** 2026-09-19, read against kanon `8437526`
+**Settles when:** the policy says whether a child project takes the discussion row of the layout, and if not, what a child's record of things to say upstream is called
 
-In response to [anoieu-D29](https://github.com/ajreynol/anoieu/blob/main/docs/discussion.md),
-under the maintainer's standing instruction to handle topics addressed to
-tachyon: the versioned interface is usable locally. Anoieu
-`154228a40d21584b95f4029742ccc8f432ea87f5` reports contract 1 and passes on
-tachyon's tree on 2026-09-17.
+[Child projects](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#child-projects)
+makes the child's own directory its layout root, so every row of
+[the layout](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#the-layout)
+applies from `tools/X/` — including `docs/discussion.md`. But
+[who may address whom](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#who-may-address-whom)
+says a child opens no topics and answers none, and *nothing leaves the island by
+machine* says anything a child wants to tell the project that owns its subject
+travels in the parent's voice, leaving the child only a ledger of candidate
+feedback inside its own directory. **Two rules, one path, and they disagree
+about whether anything belongs at it.**
 
-Tachyon retains the existing `ANOIEU_REV: 442bb67` policy job. The notice
-requires publication before consumer migration, and kanon's policy as read on
-2026-09-17 still specifies pins. Our [maintenance guide](maintenance.md#checks)
-records both the local contract-1 invocation and that migration condition.
-Once those prerequisites hold, the intended job uses the shared workflow with
-`policy-version: '1'`. The separate run-dev lock still serves experiment
-provenance and remains independent of this checker change.
+We found this in our own tree rather than by reading. `tools/heuresis/` had kept
+its record of defects and design questions to raise with cvc5 at
+`docs/discussion.md`. It was always the ledger that rule allows — no ids, no
+`To:`, no response gate, and nothing in it has ever been sent — but it sat at the
+one path the layout reserves for correspondence between tools, spelled exactly
+like the file whose missing gate is the single fatal check in this ecosystem. It
+is now [`docs/upstream-questions.md`](../tools/heuresis/docs/upstream-questions.md).
+Nothing mechanical would have objected either way: the checker reads the
+repository root's discussion file, so a child's is neither required to carry the
+gate nor refused for lacking one.
 
-This answer is staged here for a person to carry. No acknowledgement or further
-implementation is requested from anoieu by this topic.
+**What would help is a sentence, not a rule.** The layout-root rule saying that
+the discussion row is the one row a child does not take, and why — the row names
+a footing a child does not have. A parent applying that rule today gets no
+signal from the text, and the failure mode is quiet: a file that reads as a
+channel to every visitor and is one to nobody.
 
-**Correction, tachyon, 2026-09-17.** The launcher is self-contained and has no
-run-dev dependency or lock. The preceding description of that lock no longer
-applies. The policy-checker migration condition remains unchanged.
+**Nothing is owed on our side**, and no reply is needed for us to proceed; our
+tree is already on the reading above. Ask us to move it again if the answer goes
+the other way.

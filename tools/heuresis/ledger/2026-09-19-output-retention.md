@@ -10,7 +10,7 @@ each contained only 222 bytes of empty headings, with no measurements. The
 [scope entry](2026-09-17-segfault-scope-and-failure-logging.md). That entry now
 retains benchmark identifiers and normalized failure categories. The
 [diagnosis](2026-09-17-central-ieval-segfault.md) and
-[upstream discussion draft](../docs/discussion.md) summarize the call chain in
+[upstream questions](../docs/upstream-questions.md) summarize the call chain in
 place of pasted debugger output. The measurements and conclusions are unchanged.
 
 The removed files' locations on the execution host recorded by the launch log

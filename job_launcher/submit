@@ -81,6 +81,13 @@ set -euo pipefail
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 LOG=$HERE/log.txt
 
+# The help text is this file's own header comment block, printed rather than
+# quoted, so it cannot drift from a hand-counted line range.  Answered before
+# the site file is read: a reader who has not configured one yet is exactly the
+# reader asking what this does.
+usage() { awk 'NR>1 { if (!/^#/) exit; print }' "$0"; }
+case "${1:-}" in -h|--help) usage; exit 0 ;; esac
+
 # Site-specific settings (hosts, repo/build paths, naming tables) live in ONE
 # place: site.conf next to this script (or $TACHYON_SITE / $SUBMIT_SITE).
 # See site.conf.example.
@@ -103,7 +110,7 @@ while [ $# -gt 0 ]; do
     -k|--kill) KILL=1 ;;
     --baseline) BASELINE=1 ;;
     -x|--exec) EXECCONF=$2; shift ;;
-    -h|--help) sed -n '2,77p' "$0"; exit 0 ;;
+    -h|--help) usage; exit 0 ;;
     -*) echo "submit: unknown flag $1" >&2; exit 2 ;;
     *) CONFS+=("$1") ;;
   esac

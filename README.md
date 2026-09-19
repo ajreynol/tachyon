@@ -24,6 +24,7 @@ this repository; the [site guide](docs/site.md) describes what may go there.
 
 | project | question |
 | --- | --- |
+| [elaphros](tools/elaphros/README.md) | What does producing a proof cost cvc5, and where does that cost go? |
 | [heuresis](tools/heuresis/README.md) | What do quantified benchmarks where z3 is much faster reveal about cvc5? |
 | [metagraphe](tools/metagraphe/README.md) | Which useful string and bit-vector rewrites is cvc5 missing? |
 

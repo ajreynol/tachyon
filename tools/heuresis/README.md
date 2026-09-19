@@ -290,23 +290,35 @@ list. [Local tests](tests/) cover these boundaries without running a solver.
 [baseline ledger](ledger/2026-09-14-baseline.md). Comparisons use the
 [nine-option Verus z3 baseline](ledger/2026-09-15-z3-full-verus-options.md)
 and [explicit CaDiCaL](ledger/2026-09-15-sat-and-instance-order.md).
-The latest recorded measurements are dated 2026-09-16:
+The latest recorded measurements are dated 2026-09-17, on `main@a07d513075`
+— the cvc5 1.4.0 release ([ledger](ledger/2026-09-17-cvc5-1-4-0-release.md)):
 
 > **the gap** — PAR2 ratio **1.52** (cvc5 `--no-cbqi
 > --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off` over
-> z3 4.15.4 with the nine recorded Verus options, 30 s); gap set **796** of
-> 6124, comprising 461 cvc5-unsolved cases where z3 solves and 335 cases both
-> solve but cvc5 is at least 10× slower. This best measured configuration was
-> reproduced on `main@d7d03b082c` and lowers PAR2 13.6% versus the
-> same-revision fixed control ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)).
+> z3 4.15.4 with the nine recorded Verus options, 30 s); gap set **786** of
+> 6124. The same configuration measured 35532.7 and a gap of 784 one revision
+> earlier ([ledger](ledger/2026-09-17-self-contained-launcher-and-current-main.md)),
+> so the release moved this number by a tenth of a percent — inside the noise
+> band. It lowers PAR2 13.6% versus the fixed control at the same revision
+> (41191.8, in the same entry).
 > The z3 baseline itself has 310 unknowns, so the ratio is not all cvc5
-> progress.
+> progress, and **no gain so far is code**: every one comes from passing
+> options that already exist ([progress.md](docs/progress.md)).
 >
 > **the attributed fraction** — **0**. Whole-set statistics now identify
 > promising mechanisms, but the per-benchmark attribution table does not yet
 > exist.
 
-The fresh explicit-CaDiCaL control is ratio 1.76 with a gap of 1071. Central
+The published [report](https://ajreynol.github.io/tachyon/heuresis/) is built
+from the retained gap lists rather than from this table, and the newest of those
+is the 2026-09-16 `best` list — 789 benchmarks, 460 cvc5-unsolved and 329 both
+solved with cvc5 at least 10× slower
+([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
+The 2026-09-17 runs retained no gap list, so the report does not move with the
+rows above.
+
+The fresh explicit-CaDiCaL control is ratio 1.76 with a gap of 1071
+([ledger](ledger/2026-09-16-entailment-filtering.md)). Central
 equality alone cuts PAR2 9.6%, evaluator-off alone cuts it 3.1%, and together
 they cut it 13.4% ([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
 The first whole-set statistics run also shows that the earlier 1122-case gap,
