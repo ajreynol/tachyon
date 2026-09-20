@@ -28,6 +28,11 @@ individual rules. Its
 exchanges with other projects. Continue the survey and file new candidates with
 [`prompts/metagraphe_read_github`](prompts/metagraphe_read_github)
 (`--show-prompt` previews the task; `--help` lists the launch options).
+For a benchmark-driven string assessment, generate a configurable prompt with
+[`prompts/metagraphe_compare_solvers`](prompts/metagraphe_compare_solvers).
+It defaults to `ajr-cvc5` versus `z3noodler` and only prints the prompt;
+the [usage guide](tools/metagraphe/docs/benchmark-prompt.md) covers paths,
+solver arguments and sampling limits.
 
 Each project owns its charter, priorities and evidence. Its README records the
 current findings and links to its investigation; the shared tools supply the

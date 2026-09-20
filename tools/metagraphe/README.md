@@ -132,6 +132,10 @@ The human-requested issue survey lives at
 [`docs/github-issues-rewrites.md`](../../docs/github-issues-rewrites.md), and its
 launcher lives at
 [`prompts/metagraphe_read_github`](../../prompts/metagraphe_read_github).
+The human-requested benchmark assessment prompt generator is
+[`prompts/metagraphe_compare_solvers`](../../prompts/metagraphe_compare_solvers);
+its [guide](docs/benchmark-prompt.md) describes configurable corpus and solver
+paths. Generating that prompt starts no benchmark run.
 These parent-level entry points are deliberate exceptions to keeping project
 material inside this directory. The human also requested `rewrite_db/` as a
 named exception to tachyon's usual child layout; `scripts/` holds its record
