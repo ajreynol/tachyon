@@ -50,6 +50,8 @@ nested case maps.
 | M-16 | S3 | Inverse case conversion. |
 | M-18 | B3 | Quotient simplification under explicit no-overflow premises. |
 | M-21, M-22 | S3 | Regular-expression shapes from the [string benchmark comparison](ledger/2026-09-20-string-benchmark-comparison.md). |
+| M-23, M-24 | S3 | Bounded repetition: fixed-length `re.loop` membership, and star or plus of a loop. |
+| M-25 | S2, S3 | Degenerate patterns in `str.replace_re_all`. |
 
 This table is a search-area map, not a parallel status register. Use the
 database for candidate proposals and the ledger for existing coverage and

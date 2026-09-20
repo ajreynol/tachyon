@@ -1327,6 +1327,303 @@
         "strings",
         "regular-expressions"
       ]
+    },
+    {
+      "id": "metagraphe:M-23",
+      "tool": "metagraphe",
+      "description": "Fixed-length loop membership as a star membership with a length",
+      "first_seen": "2026-09-20",
+      "last_seen": "2026-09-20",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "If L(R) is nonempty and all of its words have length m, then every member of L(R)* of length N*m decomposes into exactly N of them, so membership in R{N} is membership in R* together with the length equation; the bounded form is the same argument over a range of block counts. Z3-Noodler returned unsat for (distinct lhs rhs) on 28 exact instantiations (7 bodies including re.allchar, re.range, a constant, the empty-string regex, a mixed-arm union and an empty-language re.inter, at N in {0,1,3,7}) and on 12 bounded instantiations; cvc5 agreed wherever it did not time out.",
+        "availability": "source-gap-candidate",
+        "availability_reason": "At 40a4bb7e43adf97534c29a52ed079c4efd687644 rewriteLoopRegExp always eliminates re.loop through rewriteViaReLoopElim, so --preprocess-only -o post-asserts turns ((_ re.loop 40 40) (re.range \"a\" \"z\")) into a 40-fold concatenation and ((_ re.loop 0 40) R) into a 41-way disjunction. The re.allchar body is the one case that already collapses to a length equation, and only because the unrolled concatenation then matches RE_CONCAT_PURE_ALLCHAR; an re.range body does not. An implementation of the bounded form already exists off the default branch, as Rewrite::RE_IN_LOOP_FIXED_LEN in SequencesRewriter::rewriteMembership on ajreynol/CVC4 branch reLoopImprove at f1fde0d583038f213c8534da4ae828fb8e9bc34a, which also makes loop elimination lazy. That branch is unmerged; the rule is absent from the recorded baseline and from the binary used here.",
+        "value": "measured",
+        "value_reason": "Measured, and negative for cvc5. The rule's shape - a membership whose whole regular expression is a fixed-length loop - occurs in 12 of the 84,411 QF_SLIA inputs, all in 20230329-denghang, and cvc5 already answers all 12 in about 0.1 s. In a focused probe where the loop is the only structure, rewriting by hand made cvc5 slower, not faster: 0.020 s to 0.496 s at loop{60,60} and 0.050 s to 21.25 s at loop{200,200}, medians over three repetitions at a 60 s limit. Z3-Noodler moved the other way on the same pair, 0.481 s to 0.011 s at loop{200,200}. cvc5 handles the unrolled concatenation better than a star membership with a length equation, so the elimination of re.loop is a simplification for an automaton-based backend and a pessimisation for this one. The 1,556 remaining fixed-length loops in that family sit inside concatenations, where the rule does not apply at all."
+      },
+      "candidate": "M-23",
+      "cautions": [
+        "The nonemptiness premise is load-bearing. Read 'every word of L(R) has length m' vacuously and the rule is unsound: for R = (re.inter (str.to_re \"\") re.none) with m = 0 and N = 1 the left side is false while the right side is true.",
+        "cvc5's syntactic getFixedLengthForRegexp cannot assign length 0 to an empty language, so an implementation built on it is not exposed to that counterexample; the written rule still needs the premise.",
+        "The rule only matches when the loop is the entire regular expression of a membership. Across all 84,411 QF_SLIA inputs that shape occurs in 12 files, all in 20230329-denghang; the other 1,556 fixed-length loops in that family sit inside a concatenation, where it does not apply.",
+        "A more general form for a loop nested in a concatenation is not proposed here and is the open part of this family."
+      ],
+      "checks": {
+        "rare_syntax": "passed",
+        "solver": "recorded",
+        "solver_evidence": "tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md",
+        "performance": "recorded",
+        "performance_evidence": "tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md",
+        "rare_parser_revision": "40a4bb7e43adf97534c29a52ed079c4efd687644"
+      },
+      "classification": "candidate",
+      "found_at": "40a4bb7e43adf97534c29a52ed079c4efd687644",
+      "next_step": "Compare against RE_IN_LOOP_FIXED_LEN on reLoopImprove using the 12 inputs where the shape occurs, then decide whether the version worth having is the nested-in-concatenation one, since the top-level shape is rare in this corpus.",
+      "observed_on": "2026-09-20",
+      "origin": {
+        "kind": "benchmark-comparison",
+        "corpus": "SMT-LIB 2026 non-incremental QF_SLIA (84,411 inputs, 14 families); 200-input stratified sample plus a structural scan of the whole directory",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md",
+        "issues": [],
+        "references": [
+          "tools/metagraphe/docs/cvc5-vs-z3noodler.md"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences_rewriter.cpp",
+          "https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites",
+          "https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/regexp_entail.cpp",
+          "https://github.com/ajreynol/CVC4/commit/f1fde0d583038f213c8534da4ae828fb8e9bc34a"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": 2,
+      "proposal": {
+        "orientation": {
+          "kind": "lexicographic",
+          "operators": [
+            "re.loop"
+          ],
+          "reason": "Eliminate the bounded repetition: cvc5 expands re.loop into a concatenation or a disjunction of concatenations whose size is the bound, so one re.loop is worth many nodes. The right-hand side grows from 4 to 11 nodes (17 for the bounded form) and moves the repetition count into a single arithmetic constraint on str.len; that growth is accepted under the operator-first ordering."
+        },
+        "rewrites": [
+          {
+            "variables": {
+              "x": "String",
+              "R": "RegLan",
+              "N": "Int, a numeral bound",
+              "m": "Int, the common length of every word of L(R)"
+            },
+            "lhs": "(str.in_re x ((_ re.loop N N) R))",
+            "rhs": "(and (str.in_re x (re.* R)) (= (str.len x) (* N m)))",
+            "condition": "L(R) is nonempty, every word of L(R) has length m, and N >= 0",
+            "notation": "SMT-LIB term schema; N and m are concrete numerals at rewrite time"
+          },
+          {
+            "variables": {
+              "x": "String",
+              "R": "RegLan",
+              "L": "Int, a numeral lower bound",
+              "U": "Int, a numeral upper bound",
+              "m": "Int, the common length of every word of L(R)"
+            },
+            "lhs": "(str.in_re x ((_ re.loop L U) R))",
+            "rhs": "(and (str.in_re x (re.* R)) (<= (* L m) (str.len x)) (<= (str.len x) (* U m)))",
+            "condition": "L(R) is nonempty, every word of L(R) has length m, and 0 <= L <= U",
+            "notation": "SMT-LIB term schema; the bounded form, which subsumes the exact one"
+          }
+        ],
+        "rare_drafts": [
+          "(define-cond-rule metagraphe-re-in-loop-range-exact\n  ((x String) (a String) (b String) (n Int))\n  (>= n 0)\n  (str.in_re x (re.loop n n (re.range a b)))\n  (and (str.in_re x (re.* (re.range a b))) (= (str.len x) n)))",
+          "(define-cond-rule metagraphe-re-in-loop-range\n  ((x String) (a String) (b String) (n Int) (m Int))\n  (>= m n)\n  (str.in_re x (re.loop n m (re.range a b)))\n  (and (str.in_re x (re.* (re.range a b))) (<= n (str.len x)) (<= (str.len x) m)))"
+        ],
+        "application_context": "Local term rewriting on STRING_IN_REGEXP whose regular expression is exactly a REGEXP_LOOP, beside rewriteLoopRegExp and rewriteMembership. The fixed length is what RegExpEntail::getFixedLengthForRegexp already computes. RARE cannot state 'R has fixed length m', so the filed drafts instantiate R to (re.range a b), the m = 1 shape the benchmarks actually use; the general rule needs a C++ side condition."
+      },
+      "schema_version": 1,
+      "theories": [
+        "strings",
+        "regular-expressions"
+      ]
+    },
+    {
+      "id": "metagraphe:M-24",
+      "tool": "metagraphe",
+      "description": "Star or plus of a bounded repetition",
+      "first_seen": "2026-09-20",
+      "last_seen": "2026-09-20",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "R{L,U} contains R when L <= 1 <= U and is contained in R*, so starring it gives exactly R*; for the plus, R{1,U}+ = R+ and R{0,U}+ = R* because the body admits the empty word. Z3-Noodler returned unsat for (distinct lhs rhs) on 9 star instantiations with L <= 1 <= U and on 6 plus instantiations, and returned sat for L = 2, which is the counterexample that fixes the side condition; cvc5 agreed wherever it did not time out.",
+        "availability": "source-gap-candidate",
+        "availability_reason": "At 40a4bb7e43adf97534c29a52ed079c4efd687644, --preprocess-only -o post-asserts leaves (re.* ((_ re.loop 1 3) (str.to_re \"ab\"))) as (re.* (re.union (str.to_re \"ab\") (str.to_re \"abab\") (str.to_re \"ababab\"))) and (re.+ ((_ re.loop 1 3) R)) in the matching unsimplified form, while it correctly leaves the L = 2 case alone. rewriteStarRegExp handles a nested star, an empty or re.none body and unions containing re.allchar or epsilon, and the RARE file has re-loop-star for the dual direction only. The reLoopImprove branch does not touch rewriteStarRegExp.",
+        "value": "measured",
+        "value_reason": "No benefit measured, and no occurrence found. The star-of-loop shape does not appear anywhere in the 84,411-input QF_SLIA directory. In a focused probe, applying the rewrite by hand moved cvc5 from a 0.073 s median to 0.113 s over three repetitions, and left Z3-Noodler unchanged at about 0.021 s. The case for the rule is that it removes a bounded repetition and two term nodes and closes an obvious hole beside the existing re-loop-star rule, not a runtime gain."
+      },
+      "candidate": "M-24",
+      "cautions": [
+        "This is the bounded-repetition sibling of M-21's neighbour M-22, which covers (re.* (re.+ r)); M-22 remains the record for the unbounded case and is not changed by this filing.",
+        "At the recorded baseline the left-hand side is unreachable: re.loop is eliminated before the enclosing star is rewritten, so the rule only pays off under a lazier loop policy. That is an applicability question, not a validity one.",
+        "The side condition L <= 1 is necessary: for L = 2 the two sides differ, confirmed by both solvers.",
+        "The star-of-loop shape was not found anywhere in the 84,411-input QF_SLIA directory; the motivation is the analogy with M-22 and the fuzzer-generated nestings it does cover."
+      ],
+      "checks": {
+        "rare_syntax": "passed",
+        "solver": "recorded",
+        "solver_evidence": "tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md",
+        "performance": "recorded",
+        "performance_evidence": "tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md",
+        "rare_parser_revision": "40a4bb7e43adf97534c29a52ed079c4efd687644"
+      },
+      "classification": "candidate",
+      "found_at": "40a4bb7e43adf97534c29a52ed079c4efd687644",
+      "next_step": "Decide whether to state the rule on the post-elimination union-of-powers shape, which is what the baseline actually produces, or to leave it to the lazy loop policy on reLoopImprove; then look for the shape in a regex-heavy corpus outside QF_SLIA.",
+      "observed_on": "2026-09-20",
+      "origin": {
+        "kind": "benchmark-comparison",
+        "corpus": "SMT-LIB 2026 non-incremental QF_SLIA (84,411 inputs, 14 families); 200-input stratified sample plus a structural scan of the whole directory",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md",
+        "issues": [],
+        "references": [
+          "tools/metagraphe/docs/cvc5-vs-z3noodler.md"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences_rewriter.cpp",
+          "https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites",
+          "https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/regexp_entail.cpp",
+          "https://github.com/ajreynol/CVC4/commit/f1fde0d583038f213c8534da4ae828fb8e9bc34a"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": 3,
+      "proposal": {
+        "orientation": {
+          "kind": "lexicographic",
+          "operators": [
+            "re.loop",
+            "re.*",
+            "re.++"
+          ],
+          "reason": "Remove the bounded repetition first, since expanding it multiplies the body; then the star, then concatenation. Every schema removes one re.loop and shrinks the term from 3 nodes to 2, so nothing grows."
+        },
+        "rewrites": [
+          {
+            "variables": {
+              "R": "RegLan",
+              "L": "Int, a numeral lower bound",
+              "U": "Int, a numeral upper bound"
+            },
+            "lhs": "(re.* ((_ re.loop L U) R))",
+            "rhs": "(re.* R)",
+            "condition": "L <= 1 and U >= 1",
+            "notation": "SMT-LIB term schema"
+          },
+          {
+            "variables": {
+              "R": "RegLan",
+              "U": "Int, a numeral upper bound"
+            },
+            "lhs": "(re.+ ((_ re.loop 1 U) R))",
+            "rhs": "(re.+ R)",
+            "condition": "U >= 1",
+            "notation": "SMT-LIB term schema"
+          },
+          {
+            "variables": {
+              "R": "RegLan",
+              "U": "Int, a numeral upper bound"
+            },
+            "lhs": "(re.+ ((_ re.loop 0 U) R))",
+            "rhs": "(re.* R)",
+            "condition": "U >= 1; the body admits the empty string, so the plus becomes a star",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [
+          "(define-cond-rule metagraphe-re-star-loop\n  ((n Int) (m Int) (r RegLan))\n  (and (<= n 1) (>= m 1))\n  (re.* (re.loop n m r))\n  (re.* r))",
+          "(define-cond-rule metagraphe-re-plus-loop\n  ((n Int) (m Int) (r RegLan))\n  (and (= n 1) (>= m 1))\n  (re.+ (re.loop n m r))\n  (re.+ r))",
+          "(define-cond-rule metagraphe-re-plus-loop-nullable\n  ((n Int) (m Int) (r RegLan))\n  (and (= n 0) (>= m 1))\n  (re.+ (re.loop n m r))\n  (re.* r))"
+        ],
+        "application_context": "Local term rewriting on REGEXP_STAR and REGEXP_PLUS, beside rewriteStarRegExp and the existing re-loop-star rule, which handles the dual (re.loop n m (re.* r)) -> (re.* r). Reachability depends on the loop policy: at the recorded baseline re.loop is eliminated bottom-up before the surrounding star is rewritten, so the left-hand side never survives; under the lazy elimination on reLoopImprove a loop with a large bound does survive and the rule can match."
+      },
+      "schema_version": 1,
+      "theories": [
+        "strings",
+        "regular-expressions"
+      ]
+    },
+    {
+      "id": "metagraphe:M-25",
+      "tool": "metagraphe",
+      "description": "Degenerate patterns in regular-expression replace-all",
+      "first_seen": "2026-09-20",
+      "last_seen": "2026-09-20",
+      "assessment": {
+        "validity": "argued",
+        "validity_reason": "SMT-LIB defines str.replace_re_all as replacing, left to right, each shortest non-empty match. If every one-character string is in L(R) then the shortest non-empty match at each position is exactly one character, so replacing with the empty string deletes the whole input. If L(R) holds only the empty string there is no non-empty match at all and the input is returned. Z3-Noodler returned unsat for the first schema with R = re.allchar, (re.* re.allchar), (re.+ re.allchar) and (re.union re.allchar (str.to_re \"ab\")), and sat for R = (re.range \"a\" \"z\"), which fixes the side condition. The second schema is argued from the specification only: Z3-Noodler answered unknown and cvc5 timed out.",
+        "availability": "source-gap-candidate",
+        "availability_reason": "At 40a4bb7e43adf97534c29a52ed079c4efd687644, --preprocess-only -o post-asserts rewrites (str.replace_re_all x re.none t) to x but leaves (str.replace_re_all x (re.* re.allchar) \"\"), (str.replace_re_all x re.allchar \"\"), (str.replace_re_all x (re.+ re.allchar) \"\") and (str.replace_re_all x (str.to_re \"\") t) unchanged. Asked to prove the first of those equal to the empty string on its own, cvc5 timed out at 30 s while Z3-Noodler answered unsat immediately.",
+        "value": "measured",
+        "value_reason": "The strongest measured effect in this investigation. 20230403-webapp/lan-rep-all/lan_replace_all44.smt2 is a 1,325-byte input on which cvc5 times out at 60 s in all three repetitions while Z3-Noodler answers unsat in 0.022 s. Replacing (str.replace_re_all sigmaStar_048 (re.* re.allchar) \"\") by \"\" - the first schema, nothing else changed - makes cvc5 answer unsat in 0.004 s, three times out of three. The pattern comes from a taint-analysis generator, so a whole sub-family of 20230403-webapp/lan-rep-all is likely affected; that sub-family has not been measured. As always this is an effect on a rewritten input, not a measurement of cvc5 carrying the rule."
+      },
+      "candidate": "M-25",
+      "cautions": [
+        "The condition on the first schema is that R accepts every single character, not that R is (re.* re.allchar): with R = (re.range \"a\" \"z\") the two sides differ, confirmed by Z3-Noodler.",
+        "The second schema rests on the specification's 'shortest non-empty match' wording alone; no solver decided it here.",
+        "For a non-empty replacement the result is the replacement repeated once per character, which is not a term, so only the empty-replacement case is proposed.",
+        "The empty-string-pattern schema overlaps the existing str-replace-re-all-none rule in spirit but not in condition: re.none is the empty language, (str.to_re \"\") is the language holding the empty word."
+      ],
+      "checks": {
+        "rare_syntax": "passed",
+        "solver": "recorded",
+        "solver_evidence": "tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md",
+        "performance": "recorded",
+        "performance_evidence": "tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md",
+        "rare_parser_revision": "40a4bb7e43adf97534c29a52ed079c4efd687644"
+      },
+      "classification": "candidate",
+      "found_at": "40a4bb7e43adf97534c29a52ed079c4efd687644",
+      "next_step": "Implement the two schemas beside str-replace-re-all-none and re-check 20230403-webapp/lan-rep-all, then ask whether the same degenerate-pattern reasoning is missing for str.replace_re and str.indexof_re.",
+      "observed_on": "2026-09-20",
+      "origin": {
+        "kind": "benchmark-comparison",
+        "corpus": "SMT-LIB 2026 non-incremental QF_SLIA (84,411 inputs, 14 families); 200-input stratified sample plus a structural scan of the whole directory",
+        "ledger": "tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md",
+        "issues": [],
+        "references": [
+          "tools/metagraphe/docs/cvc5-vs-z3noodler.md"
+        ],
+        "source_references": [
+          "https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences_rewriter.cpp",
+          "https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites",
+          "https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/regexp_entail.cpp",
+          "https://github.com/ajreynol/CVC4/commit/f1fde0d583038f213c8534da4ae828fb8e9bc34a"
+        ]
+      },
+      "owner": "cvc5",
+      "priority": 1,
+      "proposal": {
+        "orientation": {
+          "kind": "lexicographic",
+          "operators": [
+            "str.replace_re_all"
+          ],
+          "reason": "Eliminate the replace-all outright. It is an extended function: cvc5 reduces it with a witness and a recursive definition, so removing one occurrence removes that whole reduction. Both schemas also shrink the term, from 4 or 5 nodes to 1."
+        },
+        "rewrites": [
+          {
+            "variables": {
+              "x": "String",
+              "R": "RegLan"
+            },
+            "lhs": "(str.replace_re_all x R \"\")",
+            "rhs": "\"\"",
+            "condition": "every one-character string is in L(R)",
+            "notation": "SMT-LIB term schema"
+          },
+          {
+            "variables": {
+              "x": "String",
+              "R": "RegLan",
+              "t": "String"
+            },
+            "lhs": "(str.replace_re_all x R t)",
+            "rhs": "x",
+            "condition": "L(R) is contained in the set holding only the empty string",
+            "notation": "SMT-LIB term schema"
+          }
+        ],
+        "rare_drafts": [
+          "(define-rule metagraphe-str-replace-re-all-sigma-star\n  ((x String))\n  (str.replace_re_all x (re.* re.allchar) \"\")\n  \"\")",
+          "(define-rule metagraphe-str-replace-re-all-allchar\n  ((x String))\n  (str.replace_re_all x re.allchar \"\")\n  \"\")",
+          "(define-rule metagraphe-str-replace-re-all-emp-re\n  ((x String) (t String))\n  (str.replace_re_all x (str.to_re \"\") t)\n  x)"
+        ],
+        "application_context": "Local term rewriting on STRING_REPLACE_RE_ALL, beside the existing str-replace-re-all-none rule. The first schema needs a check that R accepts every single character, for which RegExpEntail already has inclusion machinery; the filed drafts cover the re.allchar and (re.* re.allchar) shapes that appear in the benchmarks."
+      },
+      "schema_version": 1,
+      "theories": [
+        "strings",
+        "regular-expressions"
+      ]
     }
   ]
 }

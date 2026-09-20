@@ -30,8 +30,8 @@ exchanges with other projects. Continue the survey and file new candidates with
 (`--show-prompt` previews the task; `--help` lists the launch options).
 Launch a benchmark-driven string assessment with
 [`prompts/metagraphe_compare_solvers`](prompts/metagraphe_compare_solvers).
-It defaults to Claude investigating `ajr-cvc5` versus `z3noodler`; use `--codex`
-to choose Codex or `--show-prompt` to preview without launching.
+It launches an agent to investigate `ajr-cvc5` versus `z3noodler`; use `--help`
+for agent selection or `--show-prompt` to preview without launching.
 The [usage guide](tools/metagraphe/docs/benchmark-prompt.md) covers paths and limits.
 
 Each project owns its charter, priorities and evidence. Its README records the

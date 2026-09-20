@@ -1,21 +1,21 @@
 # String benchmark assessment launcher
 
 [`prompts/metagraphe_compare_solvers`](../../../prompts/metagraphe_compare_solvers)
-launches Claude or Codex in this checkout to find string benchmarks where cvc5
+launches an agent in this checkout to find string benchmarks where cvc5
 trails an external solver and investigate useful rewrites.
 
 ```bash
-prompts/metagraphe_compare_solvers                 # Claude (default)
-prompts/metagraphe_compare_solvers --codex         # Codex
-prompts/metagraphe_compare_solvers --codex --print # non-interactive
-prompts/metagraphe_compare_solvers --show-prompt   # preview; launches nothing
+prompts/metagraphe_compare_solvers               # default agent
+prompts/metagraphe_compare_solvers --help        # agent selection and options
+prompts/metagraphe_compare_solvers --print       # non-interactive
+prompts/metagraphe_compare_solvers --show-prompt # preview; launches nothing
 ```
 
 The defaults are `~/benchmarks/smt-lib-2026/`, `~/bin/ajr-cvc5` and
 `~/bin/z3noodler`. To change them:
 
 ```bash
-prompts/metagraphe_compare_solvers --claude \
+prompts/metagraphe_compare_solvers \
   --benchmarks-dir /path/to/smt-lib \
   --cvc5-binary /path/to/cvc5 \
   --external-binary /path/to/external-solver
@@ -37,5 +37,5 @@ other `--logic` values vacuous.
 
 Requires Python 3.9+ and the selected agent on PATH. `--show-prompt` requires
 neither an agent nor existing corpus/solver paths and overrides launch options.
-`--print` uses `claude -p` or `codex exec`; it runs the assessment, whereas
+`--print` runs the assessment non-interactively with the selected agent, whereas
 `--show-prompt` only displays its instructions.

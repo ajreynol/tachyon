@@ -6,7 +6,7 @@ See the [database guide](README.md) for filing and the
 
 Regenerate from tachyon's root with `python3 tools/metagraphe/scripts/render_rewrite_db.py`; add `--check` to check freshness.
 
-**16 candidate families; 21 proposed rewrites; 14 RARE drafts.**
+**19 candidate families; 28 proposed rewrites; 22 RARE drafts.**
 **0 explicit closure verdicts; 0 fixes awaiting landing.**
 
 A record is a candidate family, not a count of new rules or solved issues.
@@ -42,6 +42,9 @@ the precedence and rationale; these are candidate orderings, not measured runtim
 | [M-18: BV quotient with no\-overflow conditions](#m-18) | 3 | argued | 0 | no closure recorded | [\#9417](https://github.com/cvc5/cvc5/issues/9417) |
 | [M-21: Containment disjunction from a character\-union membership](#m-21) | 1 | argued | 1 | no closure recorded | — |
 | [M-22: Idempotent nesting of regular\-expression star and plus](#m-22) | 1 | argued | 3 | no closure recorded | — |
+| [M-23: Fixed\-length loop membership as a star membership with a length](#m-23) | 2 | argued | 2 | no closure recorded | — |
+| [M-24: Star or plus of a bounded repetition](#m-24) | 3 | argued | 3 | no closure recorded | — |
+| [M-25: Degenerate patterns in regular\-expression replace\-all](#m-25) | 1 | argued | 3 | no closure recorded | — |
 
 ## M-1
 
@@ -1383,6 +1386,373 @@ Corpus: SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 
 
 - [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences\_rewriter\.cpp](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences_rewriter.cpp)
 - [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites)
+
+No delivery recorded.
+
+[Back to overview](#overview)
+
+## M-23
+
+**Fixed\-length loop membership as a star membership with a length**
+
+Priority: 2. Theories: strings, regular\-expressions.
+
+**Closure:** no closure recorded.
+
+**Application context:** Local term rewriting on STRING\_IN\_REGEXP whose regular expression is exactly a REGEXP\_LOOP, beside rewriteLoopRegExp and rewriteMembership\. The fixed length is what RegExpEntail::getFixedLengthForRegexp already computes\. RARE cannot state 'R has fixed length m', so the filed drafts instantiate R to \(re\.range a b\), the m = 1 shape the benchmarks actually use; the general rule needs a C\+\+ side condition\.
+
+**Orientation order:** re\.loop count > term size. Eliminate the bounded repetition: cvc5 expands re\.loop into a concatenation or a disjunction of concatenations whose size is the bound, so one re\.loop is worth many nodes\. The right\-hand side grows from 4 to 11 nodes \(17 for the bounded form\) and moves the repetition count into a single arithmetic constraint on str\.len; that growth is accepted under the operator\-first ordering\.
+
+### Rewrite 1
+
+Notation: SMT\-LIB term schema; N and m are concrete numerals at rewrite time.
+
+Variables: x: String; R: RegLan; N: Int, a numeral bound; m: Int, the common length of every word of L\(R\).
+
+```text
+(str.in_re x ((_ re.loop N N) R))
+  ->
+(and (str.in_re x (re.* R)) (= (str.len x) (* N m)))
+
+when: L(R) is nonempty, every word of L(R) has length m, and N >= 0
+```
+
+Structural size: **4 -> 11** term nodes.
+
+Lexicographic cost: **(1, 4) -> (0, 11)**.
+
+### Rewrite 2
+
+Notation: SMT\-LIB term schema; the bounded form, which subsumes the exact one.
+
+Variables: x: String; R: RegLan; L: Int, a numeral lower bound; U: Int, a numeral upper bound; m: Int, the common length of every word of L\(R\).
+
+```text
+(str.in_re x ((_ re.loop L U) R))
+  ->
+(and (str.in_re x (re.* R)) (<= (* L m) (str.len x)) (<= (str.len x) (* U m)))
+
+when: L(R) is nonempty, every word of L(R) has length m, and 0 <= L <= U
+```
+
+Structural size: **4 -> 17** term nodes.
+
+Lexicographic cost: **(1, 4) -> (0, 17)**.
+
+### RARE drafts
+
+```lisp
+(define-cond-rule metagraphe-re-in-loop-range-exact
+  ((x String) (a String) (b String) (n Int))
+  (>= n 0)
+  (str.in_re x (re.loop n n (re.range a b)))
+  (and (str.in_re x (re.* (re.range a b))) (= (str.len x) n)))
+```
+
+```lisp
+(define-cond-rule metagraphe-re-in-loop-range
+  ((x String) (a String) (b String) (n Int) (m Int))
+  (>= m n)
+  (str.in_re x (re.loop n m (re.range a b)))
+  (and (str.in_re x (re.* (re.range a b))) (<= n (str.len x)) (<= (str.len x) m)))
+```
+
+### Assessment and next step
+
+- **Validity: argued.** If L\(R\) is nonempty and all of its words have length m, then every member of L\(R\)\* of length N\*m decomposes into exactly N of them, so membership in R\{N\} is membership in R\* together with the length equation; the bounded form is the same argument over a range of block counts\. Z3\-Noodler returned unsat for \(distinct lhs rhs\) on 28 exact instantiations \(7 bodies including re\.allchar, re\.range, a constant, the empty\-string regex, a mixed\-arm union and an empty\-language re\.inter, at N in \{0,1,3,7\}\) and on 12 bounded instantiations; cvc5 agreed wherever it did not time out\.
+- **Availability: source\-gap\-candidate.** At 40a4bb7e43adf97534c29a52ed079c4efd687644 rewriteLoopRegExp always eliminates re\.loop through rewriteViaReLoopElim, so \-\-preprocess\-only \-o post\-asserts turns \(\(\_ re\.loop 40 40\) \(re\.range "a" "z"\)\) into a 40\-fold concatenation and \(\(\_ re\.loop 0 40\) R\) into a 41\-way disjunction\. The re\.allchar body is the one case that already collapses to a length equation, and only because the unrolled concatenation then matches RE\_CONCAT\_PURE\_ALLCHAR; an re\.range body does not\. An implementation of the bounded form already exists off the default branch, as Rewrite::RE\_IN\_LOOP\_FIXED\_LEN in SequencesRewriter::rewriteMembership on ajreynol/CVC4 branch reLoopImprove at f1fde0d583038f213c8534da4ae828fb8e9bc34a, which also makes loop elimination lazy\. That branch is unmerged; the rule is absent from the recorded baseline and from the binary used here\.
+- **Value: measured.** Measured, and negative for cvc5\. The rule's shape \- a membership whose whole regular expression is a fixed\-length loop \- occurs in 12 of the 84,411 QF\_SLIA inputs, all in 20230329\-denghang, and cvc5 already answers all 12 in about 0\.1 s\. In a focused probe where the loop is the only structure, rewriting by hand made cvc5 slower, not faster: 0\.020 s to 0\.496 s at loop\{60,60\} and 0\.050 s to 21\.25 s at loop\{200,200\}, medians over three repetitions at a 60 s limit\. Z3\-Noodler moved the other way on the same pair, 0\.481 s to 0\.011 s at loop\{200,200\}\. cvc5 handles the unrolled concatenation better than a star membership with a length equation, so the elimination of re\.loop is a simplification for an automaton\-based backend and a pessimisation for this one\. The 1,556 remaining fixed\-length loops in that family sit inside concatenations, where the rule does not apply at all\.
+
+**RARE syntax:** passed at [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+**Solver check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md).
+
+**Performance check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md).
+
+**Cautions:**
+
+- The nonemptiness premise is load\-bearing\. Read 'every word of L\(R\) has length m' vacuously and the rule is unsound: for R = \(re\.inter \(str\.to\_re ""\) re\.none\) with m = 0 and N = 1 the left side is false while the right side is true\.
+- cvc5's syntactic getFixedLengthForRegexp cannot assign length 0 to an empty language, so an implementation built on it is not exposed to that counterexample; the written rule still needs the premise\.
+- The rule only matches when the loop is the entire regular expression of a membership\. Across all 84,411 QF\_SLIA inputs that shape occurs in 12 files, all in 20230329\-denghang; the other 1,556 fixed\-length loops in that family sit inside a concatenation, where it does not apply\.
+- A more general form for a loop nested in a concatenation is not proposed here and is the open part of this family\.
+
+**Next step:** Compare against RE\_IN\_LOOP\_FIXED\_LEN on reLoopImprove using the 12 inputs where the shape occurs, then decide whether the version worth having is the nested\-in\-concatenation one, since the top\-level shape is rare in this corpus\.
+
+### Evidence and follow-up
+
+No source issue: this candidate comes from a benchmark comparison over SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample plus a structural scan of the whole directory.
+
+Observed: 2026-09-20 at cvc5 source [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+Koine ingestion: first 2026-09-20; last 2026-09-20.
+
+Corpus: SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample plus a structural scan of the whole directory; [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md).
+
+**Supporting references:**
+
+- [tools/metagraphe/docs/cvc5\-vs\-z3noodler\.md](../../../tools/metagraphe/docs/cvc5-vs-z3noodler.md)
+
+**Source references:**
+
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences\_rewriter\.cpp](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences_rewriter.cpp)
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites)
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/regexp\_entail\.cpp](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/regexp_entail.cpp)
+- [https://github\.com/ajreynol/CVC4/commit/f1fde0d583038f213c8534da4ae828fb8e9bc34a](https://github.com/ajreynol/CVC4/commit/f1fde0d583038f213c8534da4ae828fb8e9bc34a)
+
+No delivery recorded.
+
+[Back to overview](#overview)
+
+## M-24
+
+**Star or plus of a bounded repetition**
+
+Priority: 3. Theories: strings, regular\-expressions.
+
+**Closure:** no closure recorded.
+
+**Application context:** Local term rewriting on REGEXP\_STAR and REGEXP\_PLUS, beside rewriteStarRegExp and the existing re\-loop\-star rule, which handles the dual \(re\.loop n m \(re\.\* r\)\) \-&gt; \(re\.\* r\)\. Reachability depends on the loop policy: at the recorded baseline re\.loop is eliminated bottom\-up before the surrounding star is rewritten, so the left\-hand side never survives; under the lazy elimination on reLoopImprove a loop with a large bound does survive and the rule can match\.
+
+**Orientation order:** re\.loop count > re\.\* count > re\.\+\+ count > term size. Remove the bounded repetition first, since expanding it multiplies the body; then the star, then concatenation\. Every schema removes one re\.loop and shrinks the term from 3 nodes to 2, so nothing grows\.
+
+### Rewrite 1
+
+Notation: SMT\-LIB term schema.
+
+Variables: R: RegLan; L: Int, a numeral lower bound; U: Int, a numeral upper bound.
+
+```text
+(re.* ((_ re.loop L U) R))
+  ->
+(re.* R)
+
+when: L <= 1 and U >= 1
+```
+
+Structural size: **3 -> 2** term nodes.
+
+Lexicographic cost: **(1, 1, 0, 3) -> (0, 1, 0, 2)**.
+
+### Rewrite 2
+
+Notation: SMT\-LIB term schema.
+
+Variables: R: RegLan; U: Int, a numeral upper bound.
+
+```text
+(re.+ ((_ re.loop 1 U) R))
+  ->
+(re.+ R)
+
+when: U >= 1
+```
+
+Structural size: **3 -> 2** term nodes.
+
+Lexicographic cost: **(1, 0, 0, 3) -> (0, 0, 0, 2)**.
+
+### Rewrite 3
+
+Notation: SMT\-LIB term schema.
+
+Variables: R: RegLan; U: Int, a numeral upper bound.
+
+```text
+(re.+ ((_ re.loop 0 U) R))
+  ->
+(re.* R)
+
+when: U >= 1; the body admits the empty string, so the plus becomes a star
+```
+
+Structural size: **3 -> 2** term nodes.
+
+Lexicographic cost: **(1, 0, 0, 3) -> (0, 1, 0, 2)**.
+
+### RARE drafts
+
+```lisp
+(define-cond-rule metagraphe-re-star-loop
+  ((n Int) (m Int) (r RegLan))
+  (and (<= n 1) (>= m 1))
+  (re.* (re.loop n m r))
+  (re.* r))
+```
+
+```lisp
+(define-cond-rule metagraphe-re-plus-loop
+  ((n Int) (m Int) (r RegLan))
+  (and (= n 1) (>= m 1))
+  (re.+ (re.loop n m r))
+  (re.+ r))
+```
+
+```lisp
+(define-cond-rule metagraphe-re-plus-loop-nullable
+  ((n Int) (m Int) (r RegLan))
+  (and (= n 0) (>= m 1))
+  (re.+ (re.loop n m r))
+  (re.* r))
+```
+
+### Assessment and next step
+
+- **Validity: argued.** R\{L,U\} contains R when L &lt;= 1 &lt;= U and is contained in R\*, so starring it gives exactly R\*; for the plus, R\{1,U\}\+ = R\+ and R\{0,U\}\+ = R\* because the body admits the empty word\. Z3\-Noodler returned unsat for \(distinct lhs rhs\) on 9 star instantiations with L &lt;= 1 &lt;= U and on 6 plus instantiations, and returned sat for L = 2, which is the counterexample that fixes the side condition; cvc5 agreed wherever it did not time out\.
+- **Availability: source\-gap\-candidate.** At 40a4bb7e43adf97534c29a52ed079c4efd687644, \-\-preprocess\-only \-o post\-asserts leaves \(re\.\* \(\(\_ re\.loop 1 3\) \(str\.to\_re "ab"\)\)\) as \(re\.\* \(re\.union \(str\.to\_re "ab"\) \(str\.to\_re "abab"\) \(str\.to\_re "ababab"\)\)\) and \(re\.\+ \(\(\_ re\.loop 1 3\) R\)\) in the matching unsimplified form, while it correctly leaves the L = 2 case alone\. rewriteStarRegExp handles a nested star, an empty or re\.none body and unions containing re\.allchar or epsilon, and the RARE file has re\-loop\-star for the dual direction only\. The reLoopImprove branch does not touch rewriteStarRegExp\.
+- **Value: measured.** No benefit measured, and no occurrence found\. The star\-of\-loop shape does not appear anywhere in the 84,411\-input QF\_SLIA directory\. In a focused probe, applying the rewrite by hand moved cvc5 from a 0\.073 s median to 0\.113 s over three repetitions, and left Z3\-Noodler unchanged at about 0\.021 s\. The case for the rule is that it removes a bounded repetition and two term nodes and closes an obvious hole beside the existing re\-loop\-star rule, not a runtime gain\.
+
+**RARE syntax:** passed at [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+**Solver check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md).
+
+**Performance check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md).
+
+**Cautions:**
+
+- This is the bounded\-repetition sibling of M\-21's neighbour M\-22, which covers \(re\.\* \(re\.\+ r\)\); M\-22 remains the record for the unbounded case and is not changed by this filing\.
+- At the recorded baseline the left\-hand side is unreachable: re\.loop is eliminated before the enclosing star is rewritten, so the rule only pays off under a lazier loop policy\. That is an applicability question, not a validity one\.
+- The side condition L &lt;= 1 is necessary: for L = 2 the two sides differ, confirmed by both solvers\.
+- The star\-of\-loop shape was not found anywhere in the 84,411\-input QF\_SLIA directory; the motivation is the analogy with M\-22 and the fuzzer\-generated nestings it does cover\.
+
+**Next step:** Decide whether to state the rule on the post\-elimination union\-of\-powers shape, which is what the baseline actually produces, or to leave it to the lazy loop policy on reLoopImprove; then look for the shape in a regex\-heavy corpus outside QF\_SLIA\.
+
+### Evidence and follow-up
+
+No source issue: this candidate comes from a benchmark comparison over SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample plus a structural scan of the whole directory.
+
+Observed: 2026-09-20 at cvc5 source [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+Koine ingestion: first 2026-09-20; last 2026-09-20.
+
+Corpus: SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample plus a structural scan of the whole directory; [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md).
+
+**Supporting references:**
+
+- [tools/metagraphe/docs/cvc5\-vs\-z3noodler\.md](../../../tools/metagraphe/docs/cvc5-vs-z3noodler.md)
+
+**Source references:**
+
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences\_rewriter\.cpp](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences_rewriter.cpp)
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites)
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/regexp\_entail\.cpp](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/regexp_entail.cpp)
+- [https://github\.com/ajreynol/CVC4/commit/f1fde0d583038f213c8534da4ae828fb8e9bc34a](https://github.com/ajreynol/CVC4/commit/f1fde0d583038f213c8534da4ae828fb8e9bc34a)
+
+No delivery recorded.
+
+[Back to overview](#overview)
+
+## M-25
+
+**Degenerate patterns in regular\-expression replace\-all**
+
+Priority: 1. Theories: strings, regular\-expressions.
+
+**Closure:** no closure recorded.
+
+**Application context:** Local term rewriting on STRING\_REPLACE\_RE\_ALL, beside the existing str\-replace\-re\-all\-none rule\. The first schema needs a check that R accepts every single character, for which RegExpEntail already has inclusion machinery; the filed drafts cover the re\.allchar and \(re\.\* re\.allchar\) shapes that appear in the benchmarks\.
+
+**Orientation order:** str\.replace\_re\_all count > term size. Eliminate the replace\-all outright\. It is an extended function: cvc5 reduces it with a witness and a recursive definition, so removing one occurrence removes that whole reduction\. Both schemas also shrink the term, from 4 or 5 nodes to 1\.
+
+### Rewrite 1
+
+Notation: SMT\-LIB term schema.
+
+Variables: x: String; R: RegLan.
+
+```text
+(str.replace_re_all x R "")
+  ->
+""
+
+when: every one-character string is in L(R)
+```
+
+Structural size: **4 -> 1** term nodes.
+
+Lexicographic cost: **(1, 4) -> (0, 1)**.
+
+### Rewrite 2
+
+Notation: SMT\-LIB term schema.
+
+Variables: x: String; R: RegLan; t: String.
+
+```text
+(str.replace_re_all x R t)
+  ->
+x
+
+when: L(R) is contained in the set holding only the empty string
+```
+
+Structural size: **4 -> 1** term nodes.
+
+Lexicographic cost: **(1, 4) -> (0, 1)**.
+
+### RARE drafts
+
+```lisp
+(define-rule metagraphe-str-replace-re-all-sigma-star
+  ((x String))
+  (str.replace_re_all x (re.* re.allchar) "")
+  "")
+```
+
+```lisp
+(define-rule metagraphe-str-replace-re-all-allchar
+  ((x String))
+  (str.replace_re_all x re.allchar "")
+  "")
+```
+
+```lisp
+(define-rule metagraphe-str-replace-re-all-emp-re
+  ((x String) (t String))
+  (str.replace_re_all x (str.to_re "") t)
+  x)
+```
+
+### Assessment and next step
+
+- **Validity: argued.** SMT\-LIB defines str\.replace\_re\_all as replacing, left to right, each shortest non\-empty match\. If every one\-character string is in L\(R\) then the shortest non\-empty match at each position is exactly one character, so replacing with the empty string deletes the whole input\. If L\(R\) holds only the empty string there is no non\-empty match at all and the input is returned\. Z3\-Noodler returned unsat for the first schema with R = re\.allchar, \(re\.\* re\.allchar\), \(re\.\+ re\.allchar\) and \(re\.union re\.allchar \(str\.to\_re "ab"\)\), and sat for R = \(re\.range "a" "z"\), which fixes the side condition\. The second schema is argued from the specification only: Z3\-Noodler answered unknown and cvc5 timed out\.
+- **Availability: source\-gap\-candidate.** At 40a4bb7e43adf97534c29a52ed079c4efd687644, \-\-preprocess\-only \-o post\-asserts rewrites \(str\.replace\_re\_all x re\.none t\) to x but leaves \(str\.replace\_re\_all x \(re\.\* re\.allchar\) ""\), \(str\.replace\_re\_all x re\.allchar ""\), \(str\.replace\_re\_all x \(re\.\+ re\.allchar\) ""\) and \(str\.replace\_re\_all x \(str\.to\_re ""\) t\) unchanged\. Asked to prove the first of those equal to the empty string on its own, cvc5 timed out at 30 s while Z3\-Noodler answered unsat immediately\.
+- **Value: measured.** The strongest measured effect in this investigation\. 20230403\-webapp/lan\-rep\-all/lan\_replace\_all44\.smt2 is a 1,325\-byte input on which cvc5 times out at 60 s in all three repetitions while Z3\-Noodler answers unsat in 0\.022 s\. Replacing \(str\.replace\_re\_all sigmaStar\_048 \(re\.\* re\.allchar\) ""\) by "" \- the first schema, nothing else changed \- makes cvc5 answer unsat in 0\.004 s, three times out of three\. The pattern comes from a taint\-analysis generator, so a whole sub\-family of 20230403\-webapp/lan\-rep\-all is likely affected; that sub\-family has not been measured\. As always this is an effect on a rewritten input, not a measurement of cvc5 carrying the rule\.
+
+**RARE syntax:** passed at [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+**Solver check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md).
+
+**Performance check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md).
+
+**Cautions:**
+
+- The condition on the first schema is that R accepts every single character, not that R is \(re\.\* re\.allchar\): with R = \(re\.range "a" "z"\) the two sides differ, confirmed by Z3\-Noodler\.
+- The second schema rests on the specification's 'shortest non\-empty match' wording alone; no solver decided it here\.
+- For a non\-empty replacement the result is the replacement repeated once per character, which is not a term, so only the empty\-replacement case is proposed\.
+- The empty\-string\-pattern schema overlaps the existing str\-replace\-re\-all\-none rule in spirit but not in condition: re\.none is the empty language, \(str\.to\_re ""\) is the language holding the empty word\.
+
+**Next step:** Implement the two schemas beside str\-replace\-re\-all\-none and re\-check 20230403\-webapp/lan\-rep\-all, then ask whether the same degenerate\-pattern reasoning is missing for str\.replace\_re and str\.indexof\_re\.
+
+### Evidence and follow-up
+
+No source issue: this candidate comes from a benchmark comparison over SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample plus a structural scan of the whole directory.
+
+Observed: 2026-09-20 at cvc5 source [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+Koine ingestion: first 2026-09-20; last 2026-09-20.
+
+Corpus: SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample plus a structural scan of the whole directory; [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-20-regex-loop-candidates.md).
+
+**Supporting references:**
+
+- [tools/metagraphe/docs/cvc5\-vs\-z3noodler\.md](../../../tools/metagraphe/docs/cvc5-vs-z3noodler.md)
+
+**Source references:**
+
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences\_rewriter\.cpp](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences_rewriter.cpp)
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites)
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/regexp\_entail\.cpp](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/regexp_entail.cpp)
+- [https://github\.com/ajreynol/CVC4/commit/f1fde0d583038f213c8534da4ae828fb8e9bc34a](https://github.com/ajreynol/CVC4/commit/f1fde0d583038f213c8534da4ae828fb8e9bc34a)
 
 No delivery recorded.
 

@@ -135,7 +135,8 @@ launcher lives at
 The human-requested benchmark assessment launcher is
 [`prompts/metagraphe_compare_solvers`](../../prompts/metagraphe_compare_solvers);
 its [guide](docs/benchmark-prompt.md) describes configurable corpus and solver
-paths. It invokes Claude or Codex; `--show-prompt` previews without launching.
+paths. It invokes an agent; `--help` lists agent selection options and
+`--show-prompt` previews without launching.
 These parent-level entry points are deliberate exceptions to keeping project
 material inside this directory. The human also requested `rewrite_db/` as a
 named exception to tachyon's usual child layout; `scripts/` holds its record
@@ -173,9 +174,13 @@ M-21 and M-22, whose absence was reproduced on that build. Their validity is
 argued and instantiation-checked; **neither showed a runtime improvement on the
 benchmark that motivated it**, and only M-22 showed one in a focused probe. Four
 further confirmed gaps are recorded there as strategy or preprocessing
-observations rather than rewrite candidates. The next task is to implement and
-measure M-22 and M-21, and to probe the issue-derived candidates on this same
-build.
+observations rather than rewrite candidates. A follow-up request then checked
+the maintainer's own `re.loop` identity against an unmerged `reLoopImprove`
+branch and probed for siblings, filing M-23 to M-25 and the
+[study list](docs/cvc5-vs-z3noodler.md) of ten inputs worth attacking. **M-25,
+a degenerate `str.replace_re_all` pattern, is the first candidate here with a
+positive measured effect**: turning a repeatable 30 s timeout into 4 ms on a
+1.3 kB input. The next task is to implement and measure it across its family.
 
 The human maintainer decides whether the project eventually graduates into its
 own repository, folds into the parent's work, or retires in place with an
