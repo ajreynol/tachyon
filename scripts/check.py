@@ -20,7 +20,10 @@ def main():
     result = subprocess.run([str(ROOT / "job_launcher/checks")], cwd=ROOT)
     if result.returncode:
         return result.returncode
-    suites += [str(path.relative_to(ROOT)) for path in sorted((ROOT / "tools").glob("*/tests")) if path.is_dir()]
+    # A child with a tests directory and nothing in it is not a failure, and
+    # `unittest discover` finding no test exits 5 from Python 3.12 on.
+    suites += [str(path.relative_to(ROOT)) for path in sorted((ROOT / "tools").glob("*/tests"))
+               if path.is_dir() and any(path.glob("test_*.py"))]
     for path in suites:
         print(f"check: {path}", flush=True)
         # Separate discovery processes let isolated children use their own module names.

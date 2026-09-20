@@ -5,7 +5,7 @@ phase is source analysis and priority setting; experiments are not running.
 Documents are maintained by hand. Dated source inventories are generated
 snapshots, described in the data index.
 
-[`report`](../reports/build) publishes the queue at
+[`reports/build`](../reports/build) publishes the queue at
 <https://ajreynol.github.io/tachyon/elaphros/> from [todo.md](todo.md),
 [directions.md](directions.md), [progress.md](progress.md) and the
 [ledger index](ledger/README.md). It counts what those documents say rather

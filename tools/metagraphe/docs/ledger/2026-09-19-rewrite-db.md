@@ -85,7 +85,16 @@ parser/proof statuses, missing evidence, duplicate identities, and invalid
 closure/debt combinations. It does not enforce historical immutability under
 manual edits, prove an identity, or establish that a fix landed.
 
-A [local request for koine](../../../../docs/discussion.md#d4--support-named-collections-for-metagraphes-rewrite-database)
+A local request for koine, opened in tachyon's discussion file on this date,
 asks for named collections and a history-preserving reassessment interface.
 The current `bugs` envelope is a documented compatibility choice. Nothing was
 sent to another repository; no upstream issue or change was opened.
+
+**Follow-up, 2026-09-20.** Koine answered both halves, and the topic is closed
+and removed. The collection name is `--records`, taken by the migration in the
+[koine upgrade](2026-09-19-koine-upgrade.md), so this entry's envelope sentence
+describes the state on 2026-09-19 and not the file today; the reassessment
+writer is priced and not built. What that settles is in the
+[database guide](../../rewrite_db/README.md#format-and-identity) and the
+[reporting policy](../../rewrite_db/reporting-policy.md#closure), and the
+exchange itself is [episode E1](../experience.md).

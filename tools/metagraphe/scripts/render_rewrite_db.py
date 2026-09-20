@@ -48,12 +48,14 @@ def disposition(row):
 def render(document):
     rows = sorted(validate(document), key=lambda row: int(row["candidate"].split("-")[1]))
     rewrites = sum(len(row["proposal"]["rewrites"]) for row in rows)
-    drafts = sum(len(row["proposal"]["rare_drafts"]) for row in rows)
+    drafts = sum(len(row["proposal"].get("rare_drafts", [])) for row in rows)
     closed = sum("closed_verdict" in row for row in rows)
     pending = sum("awaiting_landing" in row for row in rows)
     lines = [
         "# Metagraphe rewrites", "",
-        "Generated from [rewrites.json](rewrites.json). **Do not edit this view by hand.**",
+        "Generated from [rewrites.json](rewrites.json) by",
+        "[`render_rewrite_db.py`](../scripts/render_rewrite_db.py), and **rewritten whole** on",
+        "every run: anything typed in here is lost at the next one, so edit the JSON instead.",
         "See the [database guide](README.md) for filing and the",
         "[reporting policy](reporting-policy.md) for reassessment and closure.", "",
         f"Regenerate from tachyon's root with `{COMMAND}`; add `--check` to check freshness.", "",
@@ -81,7 +83,7 @@ def render(document):
         cells = [f"[{candidate}: {prose(row['description'])}](#{candidate.lower()})",
                  str(row["priority"]) if row["priority"] else "—",
                  prose(row["assessment"]["validity"]),
-                 str(len(row["proposal"]["rare_drafts"])), prose(disposition(row)), issues]
+                 str(len(row["proposal"].get("rare_drafts", []))), prose(disposition(row)), issues]
         lines.append("| " + " | ".join(cells) + " |")
 
     for row in rows:
@@ -125,7 +127,7 @@ def render(document):
                 costs = [orientation_cost(expression_tree(rewrite[side]), proposal["orientation"])
                          for side in ("lhs", "rhs")]
                 lines += [f"Lexicographic cost: **{costs[0]} -> {costs[1]}**.", ""]
-        if proposal["rare_drafts"]:
+        if proposal.get("rare_drafts"):
             lines += ["### RARE drafts", ""]
             for draft in proposal["rare_drafts"]:
                 lines += [block(draft, "lisp"), ""]
@@ -136,14 +138,14 @@ def render(document):
             assessment = row["assessment"]
             lines += [f"- **{field.title()}: {prose(assessment[field])}.** "
                       + prose(assessment[field + "_reason"])]
+        parser_revision = checks.get("rare_parser_revision")
         lines += ["", f"**RARE syntax:** {prose(checks['rare_syntax'])}"
-                  + (" at " + source_revision(checks["rare_parser_revision"])
-                     if checks["rare_parser_revision"] else "") + ".", ""]
+                  + (" at " + source_revision(parser_revision) if parser_revision else "") + ".", ""]
         for field in ("solver", "performance"):
             evidence = checks.get(field + "_evidence")
             lines += [f"**{field.title()} check:** {prose(checks[field])}"
                       + ("; " + link("evidence", evidence) if evidence else "") + ".", ""]
-        if row["cautions"]:
+        if row.get("cautions"):
             lines += ["**Cautions:**", ""] + ["- " + prose(c) for c in row["cautions"]] + [""]
         if origin["issues"]:
             found = "Source issues: " + ", ".join(link(f"#{i['number']}", i["url"])
@@ -172,7 +174,7 @@ def render(document):
                       for event in row["reassessments"]] + [""]
         for field, label in (("references", "Supporting references"),
                              ("source_references", "Source references")):
-            if origin[field]:
+            if origin.get(field):
                 lines += [f"**{label}:**", ""]
                 lines += ["- " + link(ref, ref) for ref in origin[field]] + [""]
         if row.get("carried"):

@@ -51,7 +51,7 @@ direction has one row. Where genuinely independent starting choices are
 useful, a continuation row leaves the first three columns blank.
 
 Each direction comes from [`directions.md`](directions.md). After completing a
-step, record the evidence in [`../ledger/`](ledger), rerank the ten
+step, record the evidence in [`ledger/`](ledger), rerank the ten
 directions, and replace or refine that direction's possible first steps.
 
 The ranking now incorporates the first whole-set attribution statistics and

@@ -139,7 +139,7 @@ class BuildTests(unittest.TestCase):
         for project in site.projects(ROOT / "README.md", "https://example.invalid/repo"):
             with self.subTest(project=project["name"]):
                 self.assertIn(f">{project['name']}</a>", page)
-        self.assertIn("charter and search register only", page)
+        self.assertIn("no report here; its records are in the repository", page)
 
     def test_the_links_the_site_writes_resolve(self):
         self.build()
@@ -179,7 +179,7 @@ class BuildTests(unittest.TestCase):
     def test_every_published_project_carries_the_shared_figures_on_its_card(self):
         """The index is read across projects, so the comparable pair must be on it.
 
-        Both research projects keep a register of directions and a queue that
+        Both publishing projects keep a register of directions and a queue that
         ranks part of it. Those two figures are the ones a reader compares
         between cards, so each published report puts them in its `headline`
         rather than only on its own page -- which is where they were, and why

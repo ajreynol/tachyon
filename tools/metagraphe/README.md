@@ -113,7 +113,11 @@ meaning. **Metagraphe** is the working name.
 
 ## Working here
 
-The [local agent guidance](AGENTS.md) records the standing rewrite convention.
+The standing rewrite convention is the one above, under
+[what counts as a finding](#what-counts-as-a-finding): every candidate is
+written `LHS -> RHS`, complex to simpler, and a change to an existing direction
+preserves the previous record in the ledger, reassesses the claims that depend
+on the direction, regenerates the view and runs the repository checks.
 The [rewrite database](rewrite_db/README.md) owns filed candidate records and
 verdicts; [rewrites.md](rewrite_db/rewrites.md) provides a generated view.
 Its [reporting policy](rewrite_db/reporting-policy.md) follows

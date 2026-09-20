@@ -19,7 +19,7 @@ hypotheses; no experiments, performance results or validated optimizations are
 delivered.
 
 The queue is published at
-**<https://ajreynol.github.io/tachyon/elaphros/>**, built by [`report`](reports/build)
+**<https://ajreynol.github.io/tachyon/elaphros/>**, built by [`reports/build`](reports/build)
 from the documents below and refusing to state a figure they do not.
 Start at the [documentation index](docs/README.md) for the register and evidence.
 
@@ -171,10 +171,10 @@ from the site and leaves everything else in tachyon as it was.
 both the parent's choice and both written down here so they are named exceptions
 rather than drift. Tachyon's front page names and advertises it, which is a link
 inward that a reader meets before this page. And the parent's site builder runs
-[`report`](reports/build) when that file exists, as it runs the tests in
+[`reports/build`](reports/build) when that file exists, as it runs the tests in
 [`tests/`](tests), to publish this project's queue at
 <https://ajreynol.github.io/tachyon/elaphros/>; it reads nothing here itself,
-and a project without a `report` is listed and not published
+and a project without a builder is listed and not published
 ([site.md](../../docs/site.md)).
 
 What has been delivered so far is the charter, a source survey, a pipeline audit

@@ -19,20 +19,23 @@ claim about cvc5 that a row in the ledger does not back: a hypothesis is a
 hypothesis until it has been run against the set, however good the branch
 looks.
 
-**An independent child project, with two named exceptions.** Heuresis keeps its
+**An independent child project, with three named exceptions.** Heuresis keeps its
 own notes and ledger in [`docs/`](docs), everything it publishes in
 [`reports/`](reports), and uses the shared
 [`job_launcher/`](../../job_launcher) for experiments. No code outside this directory imports it, and deleting
 `tools/heuresis/` would leave the launcher and the profiler exactly as they are.
-In two respects it is **not an island**, both the parent's choice and both
+In three respects it is **not an island**, each the parent's choice and each
 written down here so that they are named exceptions rather than drift. Tachyon's
 front page names and advertises it, which is a link inward that a reader meets
-before this page — it is advertised in Eunoia listings. And the parent's site
+before this page — it is advertised in Eunoia listings. The parent's site
 builder runs [`reports/build`](reports/build) when that file exists, as it runs
 the tests in [`tests/`](tests), to publish this project's evidence at
 <https://ajreynol.github.io/tachyon/heuresis/>; it reads nothing here itself,
 and a project without one is listed and not published
-([site.md](../../docs/site.md)).
+([site.md](../../docs/site.md)). And the parent's own index suite,
+[`tests/test_site.py`](../../tests/test_site.py), names this project: it is the
+one whose report the index must call a **measurement**, so deleting this
+directory fails that suite rather than quietly changing what the index claims.
 
 **What it has delivered, and who decides what comes next.** The set is named and
 fixed, the gap is measured ([2026-09-14](docs/ledger/2026-09-14-baseline.md)), and the

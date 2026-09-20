@@ -20,8 +20,10 @@ this repository's discovery work.
 | [metagraphe](tools/metagraphe/README.md) | Which useful string and bit-vector rewrites is cvc5 missing? |
 
 Metagraphe's [rewrite database](tools/metagraphe/rewrite_db/README.md) holds
-the candidates, RARE drafts, and evidence from its first
-[cvc5 GitHub issue survey](docs/github-issues-rewrites.md). Browse the generated
+the candidates, RARE drafts, and evidence from two kinds of source: its first
+[cvc5 GitHub issue survey](docs/github-issues-rewrites.md), and the benchmark
+comparisons that followed, which produced the first candidate whose effect was
+measured rather than argued. Browse the generated
 [rewrites.md](tools/metagraphe/rewrite_db/rewrites.md) for an overview and the
 individual rules. Its
 [experience log](tools/metagraphe/docs/experience.md) records subsequent
@@ -88,6 +90,9 @@ measurement.
 This repository is part of the **Eunoia ecosystem** and follows its shared
 repository policy, kept by [kanon](https://github.com/ajreynol/kanon) in
 [`docs/policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md).
+CI takes the contract form of the shared check and names **policy contract 1**.
+
+**Human maintainers:** [the current list in policy.md](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#human-maintainers).
 
 **Written by AI agents, under light human supervision.** A human directs the
 work, reads what is published and decides what is filed; nobody vets the

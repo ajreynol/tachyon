@@ -108,9 +108,11 @@ def rows(project_list, published):
     cells = []
     for project in project_list:
         report = published.get(project["name"])
+        # A project without a builder still has a charter and records; saying
+        # which ones they are is the project's own page's job, not this row's.
         state = (f'<a href="{esc(report["path"])}">the report</a>, '
                  f'{esc(report["dated"])} {esc(report["updated"])}'
-                 if report else "charter and search register only")
+                 if report else "no report here; its records are in the repository")
         cells.append(f'<tr><td><a href="{esc(project["href"])}">{esc(project["name"])}</a></td>'
                      f'<td>{esc(project["question"])}</td><td>{state}</td></tr>')
     return "\n".join(cells)

@@ -21,6 +21,10 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p 'test_site.py'
           for suite in tools/*/tests; do
+            # A project that publishes nothing has no builder suite, which is
+            # not a failure -- but `unittest discover` finding no test exits 5
+            # from Python 3.12 on, so ask before running rather than after.
+            [ -f "$suite/test_report.py" ] || continue
             python3 -m unittest discover -s "$suite" -p 'test_report.py'
           done
       - name: build the site from the recorded evidence

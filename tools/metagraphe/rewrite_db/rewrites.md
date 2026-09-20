@@ -1,6 +1,8 @@
 # Metagraphe rewrites
 
-Generated from [rewrites.json](rewrites.json). **Do not edit this view by hand.**
+Generated from [rewrites.json](rewrites.json) by
+[`render_rewrite_db.py`](../scripts/render_rewrite_db.py), and **rewritten whole** on
+every run: anything typed in here is lost at the next one, so edit the JSON instead.
 See the [database guide](README.md) for filing and the
 [reporting policy](reporting-policy.md) for reassessment and closure.
 

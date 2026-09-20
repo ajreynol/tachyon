@@ -178,9 +178,13 @@ def validate(document, root=ROOT, filing=False):
                 require("survey" not in origin and "survey_revision" not in origin,
                         "a benchmark comparison cites its corpus and ledger, not an issue survey")
                 require(nonempty(origin.get("corpus")), "benchmark origin must name its corpus")
+            # The guide describes these as supplied when there is something to
+            # supply, so absence is an empty list here rather than a rejected
+            # filing the renderer would then read as present.
             for field in ("references", "source_references"):
-                require(strings(origin.get(field), empty=True), "invalid origin " + field)
-                for item in origin[field]:
+                links = origin.get(field, [])
+                require(strings(links, empty=True), "invalid origin " + field)
+                for item in links:
                     reference(item, root)
             issues = origin.get("issues")
             require(isinstance(issues, list), "origin issues must be a list")
@@ -210,7 +214,7 @@ def validate(document, root=ROOT, filing=False):
                         "variables must name their sorts")
                 check_orientation(expression_tree(rewrite["lhs"]), expression_tree(rewrite["rhs"]),
                                   proposal.get("orientation"))
-            drafts = proposal.get("rare_drafts")
+            drafts = proposal.get("rare_drafts", [])
             require(strings(drafts, empty=True), "rare_drafts must be a string list")
             require(all(re.match(r"\(define-(?:cond-)?rule\*?\s", d) for d in drafts),
                     "RARE draft must be a declaration")

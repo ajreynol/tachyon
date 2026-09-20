@@ -24,9 +24,11 @@ dated source narrative, not a parallel current-status database. See the
 concrete candidate rewrites. M-8, M-11, M-15, M-17, M-19, and M-20 are now
 [historical triage](../tools/metagraphe/docs/ledger/2026-09-19-rewrite-candidate-scope.md),
 with their complete records preserved outside the database. M-12 remains for
-its explicit `abs`-elimination candidate, with availability unchecked. The
-[generated view](../tools/metagraphe/rewrite_db/rewrites.md) lists the current
-14 families. Existing-rule and issue-only notes below retain the survey's
+its explicit `abs`-elimination candidate, with availability unchecked. That
+correction left 14 families from this survey in the database; later benchmark
+work has filed more under its own origin, so the
+[generated view](../tools/metagraphe/rewrite_db/rewrites.md) is the count rather
+than this page. Existing-rule and issue-only notes below retain the survey's
 history; they are not candidate reports or requests to fix the rewriter.
 
 **Orientation clarification, 2026-09-19.** Use `LHS -> RHS`, complex -> simpler,

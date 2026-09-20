@@ -1,5 +1,5 @@
 """Check pin enforcement and the boundary between local policy and shared tools."""
-from contextlib import redirect_stderr
+from contextlib import redirect_stderr, redirect_stdout
 import importlib.util
 import io
 import json
@@ -59,7 +59,7 @@ class KoineAdapterTests(unittest.TestCase):
         lock.write_text(pin + "\n")
         output = self.root / "result"
         with patch.object(adapter, "LOCK", lock):
-            self.assertEqual(adapter.run_pinned(repo, "koine_check_db", [str(output)]), 0)
+            self.assertEqual(adapter.run_pinned(repo, "koine_check_db", [str(output)]), (0, ""))
             self.assertEqual(output.read_text(), "pinned")
             lock.write_text("0" * 40)
             with self.assertRaises(ValueError):
@@ -68,21 +68,65 @@ class KoineAdapterTests(unittest.TestCase):
 
     def test_dry_run_and_upstream_failure_do_not_refresh_the_view(self):
         before = self.db.read_bytes()
-        with patch.object(adapter, "run_pinned", return_value=0) as run:
+        with patch.object(adapter, "run_pinned", return_value=(0, "")) as run:
             self.assertEqual(adapter.main(["append", str(self.filing), "--dry-run"]), 0)
             self.assertEqual(run.call_args.args[1], "koine_append_db")
             self.assertEqual(run.call_args.args[2],
                              [str(self.filing), str(self.db), "--records", "rewrites", "--dry-run"])
         self.assertEqual(self.view.read_text(), "old view\n")
         self.assertEqual(self.db.read_bytes(), before)
-        with patch.object(adapter, "run_pinned", return_value=3):
+        with patch.object(adapter, "run_pinned", return_value=(3, "")):
             self.assertEqual(adapter.main(["append", str(self.filing)]), 3)
         self.assertEqual(self.view.read_text(), "old view\n")
 
     def test_successful_append_refreshes_from_the_validated_database(self):
-        with patch.object(adapter, "run_pinned", return_value=0):
+        with patch.object(adapter, "run_pinned", return_value=(0, "")):
             self.assertEqual(adapter.main(["append", str(self.filing)]), 0)
         self.assertEqual(self.view.read_text(), adapter.render(json.loads(self.db.read_text())))
+
+    def test_koine_conflict_lines_are_kept_rather_than_lost_with_the_run(self):
+        """Koine prints a disagreement once, on stderr; a run that drops it loses it."""
+        conflict = ("-- conflict: metagraphe:M-1 `description` is kept as 'first', "
+                    "and this run said 'second'\n-- reopen candidate: metagraphe:M-2 was closed\n"
+                    "-- 0 new rewrite(s), 1 already known\n")
+        beside = self.filing.with_name(self.filing.name + ".conflicts.txt")
+        with patch.object(adapter, "run_pinned", return_value=(0, conflict)), \
+             redirect_stdout(io.StringIO()):
+            self.assertEqual(adapter.main(["append", str(self.filing), "--dry-run"]), 0)
+            self.assertFalse(beside.exists(), "a preview keeps nothing")
+            self.assertEqual(adapter.main(["append", str(self.filing)]), 0)
+        self.assertEqual(beside.read_text().splitlines(),
+                         ["-- conflict: metagraphe:M-1 `description` is kept as 'first', "
+                          "and this run said 'second'",
+                          "-- reopen candidate: metagraphe:M-2 was closed"])
+        chosen = self.root / "elsewhere.txt"
+        with patch.object(adapter, "run_pinned", return_value=(0, conflict)), \
+             redirect_stdout(io.StringIO()):
+            self.assertEqual(adapter.main(["append", str(self.filing), "--conflicts", str(chosen)]), 0)
+        self.assertIn("-- conflict:", chosen.read_text())
+
+    def test_a_quiet_run_writes_no_conflict_file(self):
+        with patch.object(adapter, "run_pinned", return_value=(0, "-- 1 new rewrite(s)\n")):
+            self.assertEqual(adapter.main(["append", str(self.filing)]), 0)
+        self.assertFalse(self.filing.with_name(self.filing.name + ".conflicts.txt").exists())
+
+    def test_an_unwritable_conflict_file_does_not_fail_a_written_append(self):
+        error = io.StringIO()
+        with patch.object(adapter, "run_pinned", return_value=(0, "-- conflict: metagraphe:M-1 x")), \
+             redirect_stderr(error):
+            self.assertEqual(adapter.main(["append", str(self.filing),
+                                           "--conflicts", str(self.root / "absent/dir/file.txt")]), 0)
+        self.assertIn("the conflict lines were not kept", error.getvalue())
+        self.assertEqual(self.view.read_text(), adapter.render(json.loads(self.db.read_text())))
+
+    def test_a_stale_view_after_a_written_append_is_reported_not_retried(self):
+        error = io.StringIO()
+        with patch.object(adapter, "run_pinned", return_value=(0, "")), \
+             patch.object(adapter, "render", side_effect=ValueError("unrenderable record")), \
+             redirect_stderr(error):
+            self.assertEqual(adapter.main(["append", str(self.filing)]), 1)
+        self.assertIn("appended, but the view is stale", error.getvalue())
+        self.assertEqual(self.view.read_text(), "old view\n")
 
     def test_invalid_filing_and_duplicate_database_never_reach_koine(self):
         self.filing.write_text('[{"id": "metagraphe:M-99"}]')
@@ -97,7 +141,7 @@ class KoineAdapterTests(unittest.TestCase):
 
     def test_closure_flags_are_scoped_and_amendment_is_explicit(self):
         before = self.db.read_bytes()
-        with patch.object(adapter, "run_pinned", return_value=0) as run:
+        with patch.object(adapter, "run_pinned", return_value=(0, "")) as run:
             self.assertEqual(adapter.main(["check-closure"]), 0)
             self.assertEqual(run.call_args.args[1:], ("koine_check_db", [str(self.db),
                              "--against", "HEAD", "--also", "awaiting_landing",

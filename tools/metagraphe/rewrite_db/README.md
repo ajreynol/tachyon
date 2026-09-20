@@ -30,10 +30,15 @@ projects. Neither prose file maintains a second current status table.
 ## Format and identity
 
 The top-level key is **`rewrites`**. Koine reads and preserves that name and
-reports entries as rewrites. Explicit `metagraphe:M-N` IDs identify records;
-no `bug` field or compatibility envelope is needed. The
+reports entries as rewrites, taking the singular from the key so a run over this
+file counts rewrites rather than bugs. Explicit `metagraphe:M-N` IDs identify
+records; no `bug` field or compatibility envelope is needed. The
 [upgrade ledger](../docs/ledger/2026-09-19-koine-upgrade.md) records the migration
 from `bugs`, preserving every record, ID, date, assessment, and history event.
+The owner-selected name arrived as **`--records`** rather than the
+`--collection` we proposed, and koine's reason — three consumers had just pinned
+the revision it landed in, and a synonym is not worth a pin move — is one we
+accepted rather than one we are waiting on.
 
 | field | contract |
 | --- | --- |
@@ -128,6 +133,15 @@ conflicts**. Additional fields on a repeat are not merged either. Repeat
 sightings of entries carrying `closed_*` are reported as reopen candidates;
 koine preserves the verdict and does not reopen them.
 
+**Those reports exist for the length of the run, so the adapter keeps them.**
+Koine prints one line per disagreement on stderr and writes it nowhere; a launcher
+that discards the stream loses the only copy of what a later run said. After a
+written append, `koine_db.py` echoes the stream and retains its conflict and
+reopen lines beside the filing as `<input>.conflicts.txt`, or wherever
+`--conflicts PATH` names. A preview keeps nothing, because nothing was written.
+Those lines are the raw material for a reassessment, not the reassessment: what
+becomes a record is the dated ledger entry a person reviews.
+
 The pin is [`e4e4e2e`](https://github.com/ajreynol/koine/commit/e4e4e2e760197429ff182826ed9b7a90fea11633).
 Its append and closure-check suites and metagraphe's integration cases were
 run locally; see the upgrade ledger. The
@@ -156,7 +170,11 @@ requirements; koine does not know that vocabulary.
 The baseline must contain the same collection envelope. Scope migrations such
 as the candidate-only correction change membership and are not closures. The `bugs` ->
 `rewrites` migration is a separate reviewed change and correctly fails a
-closure-only comparison to a pre-migration commit. Ordinary filings and
+closure-only comparison to a pre-migration commit. Koine has since built
+`koine_check_db --renamed`, which reports an envelope rename as a migration and
+still compares every record, order, membership and field exactly; it is above
+the pinned revision here, and nothing in this tree needs it, because every
+baseline after the migration carries the same envelope. Ordinary filings and
 reassessments also have their own workflow; this is not a general CI diff gate.
 
 ## Reassessment is a separate operation
@@ -164,9 +182,14 @@ reassessments also have their own workflow; this is not a general CI diff gate.
 An append does not revise an assessment, record a delivery, close a record,
 or reopen it. For those operations, retain the original observation and add
 dated evidence to the ledger; review the proposed metadata diff under the
-[reporting policy](reporting-policy.md). Koine supplies a closure diff checker,
-but still has no history-preserving reassessment or closure writer. Do not
-work around its conflict protection by changing
+[reporting policy](reporting-policy.md). Koine supplies a closure diff checker
+and a closure *session*, and deliberately nothing that writes a verdict or a
+correction: asked for a history-preserving reassessment writer by two consumers
+independently, it answered that the shape worth building keeps the original
+claim immutable and appends a correction beside it, priced as a new program and
+a new maintenance obligation rather than a flag, and not promised. Until there
+is one, a changed claim is a dated ledger entry and a reviewed metadata diff.
+Do not work around its conflict protection by changing
 IDs, replacing the database wholesale, or treating an absent entry in a later
 scan as a fix.
 

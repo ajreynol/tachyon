@@ -15,7 +15,7 @@ TASK = """
 Find string benchmarks where cvc5 loses to the external solver, then investigate
 whether missing rewrites could help. Use the configuration below.
 
-Follow tools/metagraphe/AGENTS.md, its README and rewrite_db/README.md, and
+Follow tools/metagraphe/README.md, its rewrite_db/README.md and
 docs/maintenance.md. Respect existing changes.
 
 1. Record binary versions/hashes and commands; verify the external string backend

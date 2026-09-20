@@ -26,6 +26,25 @@ class RewriteViewTests(unittest.TestCase):
         self.assertEqual(view.OUTPUT.read_text(), view.render(self.document),
                          "Regenerate with: " + view.COMMAND)
 
+    def test_optional_record_fields_may_be_absent_from_both_programs(self):
+        """The guide supplies these when there is something to supply.
+
+        The validator accepted a record without them while the view read them
+        directly, so a legitimate filing validated and then crashed the render
+        that follows a written append.
+        """
+        row = copy.deepcopy(next(r for r in self.document["rewrites"]
+                                 if r["checks"]["rare_syntax"] == "not-run"))
+        del row["checks"]["rare_parser_revision"]
+        row["proposal"].pop("rare_drafts", None)
+        for field in ("references", "source_references"):
+            row["origin"].pop(field, None)
+        result = view.render({"rewrites": [row]})
+        self.assertIn("**RARE syntax:** not\\-run.", result)
+        self.assertIn("No RARE draft is filed.", result)
+        self.assertNotIn("Supporting references", result)
+        self.assertNotIn("Source references", result)
+
     def test_view_explains_permitted_growth_with_the_operator_order(self):
         result = view.render({"rewrites": [self.document["rewrites"][0]]})
         self.assertIn("**6 -> 7** term nodes", result)

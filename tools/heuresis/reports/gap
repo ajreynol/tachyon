@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """gap -- the standard reading of a baseline: per-run counts, and the gap set.
 
-    tools/heuresis/gap [--factor 10] [--timeout 30] [--floor 1.0]
-                       [--gapset FILE] [--md] LABEL=RESULTS ...
+    tools/heuresis/reports/gap [--factor 10] [--timeout 30] [--floor 1.0]
+                               [--gapset FILE] [--md] LABEL=RESULTS ...
 
 The first LABEL=RESULTS is the reference (z3); every other run is compared
 against it.  RESULTS is a results file as the drivers write it: for

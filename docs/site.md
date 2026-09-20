@@ -26,13 +26,14 @@ usual address.
 | `heuresis/queue.html` | every section of [`todo.md`](../tools/heuresis/docs/todo.md), the whole register in [`directions.md`](../tools/heuresis/docs/directions.md), and the pull-request record in `progress.md` |
 | [`elaphros/`](../tools/elaphros/reports/build) | the ranked queue and planning work in [`todo.md`](../tools/elaphros/docs/todo.md), the whole register in [`directions.md`](../tools/elaphros/docs/directions.md), the record in [`progress.md`](../tools/elaphros/docs/progress.md), the evidence index in [`ledger/README.md`](../tools/elaphros/docs/ledger/README.md), and the snapshots in [`reports/data/`](../tools/elaphros/reports/data/README.md) |
 
-**The two research projects answer the same two questions the same way.** How
+**The two projects that publish answer the same two questions the same way.**
+Heuresis and elaphros each report how
 many research directions the project has written down, and how many of them its
 queue has ranked — read from `directions.md` and `todo.md`, counted at build
 time, carried in each report's `headline` so both appear on the index card, and
 shown again on the project's own page as a register listing every direction with
 its effort and its rank. **The index is the place that pair earns its keep**,
-because it is the only page where the two projects are read side by side. The projects diverge after that,
+because it is the only page where two projects are read side by side. They diverge after that,
 because what they have to report diverges: heuresis has measurements, fork
 branches and an upstream record; elaphros has planning items and retained
 snapshots. **What is mirrored is the part a reader compares across projects**,
@@ -97,7 +98,9 @@ audit.
 
 Anything else it prints goes to stderr. A project without such a file is listed
 on the index and not published; deleting a project directory removes its report
-and leaves the rest of the site as it was.
+and leaves the rest of the site as it was. Metagraphe is the project in that
+state today: what it has recorded is a database and the view generated beside
+it, so the index lists the project and links to its charter.
 
 **A project may write more pages than the one it names.** `href` is the page
 the index card links to; anything else it writes under `--out` is its own, and
@@ -112,8 +115,11 @@ computed from. Written records stay in `docs/`, where the project's own
 documentation index names them. The split is *what we recorded* against *what we
 publish*, and it is also what keeps the ecosystem's
 [tooling audit](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/audits/tooling_audit.py)
-able to describe a child project in one row: every other directory a child keeps
-is one the shared layout already has a purpose for.
+able to describe a publishing child in one row: every other directory it keeps
+is one the shared layout already has a purpose for. A child that keeps something
+else earns a row of its own — metagraphe's `rewrite_db/` is recorded as a
+database rather than a webpage, and its `scripts/` are the commands that read
+and write it.
 
 The page templates — [`scripts/site.html`](../scripts/site.html) for the index,
 [`tools/heuresis/reports/report.html`](../tools/heuresis/reports/report.html) and

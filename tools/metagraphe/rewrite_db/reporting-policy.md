@@ -117,10 +117,15 @@ Use the [closure check](README.md#check-a-closure) to verify the scope of a
 closure-only edit against a committed baseline, naming an intentional amendment
 explicitly with `--amended`. Koine now checks preservation of the existing
 claims in that workflow; verdicts and evidence remain metagraphe's decisions.
-The [shared tooling request](../../../docs/discussion.md#d4--support-named-collections-for-metagraphes-rewrite-database)
-also asks for history-preserving reassessment mechanics. That writer is still
-unavailable: changes to assessments or their history remain separately reviewed
-metadata changes, not append or closure operations.
+**History-preserving reassessment mechanics were asked for and are not built.**
+Koine answered on 2026-09-19 that the version worth building keeps the original
+claim, its date and its evidence immutable and appends a correction beside them,
+that this changes what a record is rather than adding a flag, and that it is
+priced and not promised. Until there is such a writer, a changed claim or a
+changed assessment is a dated ledger entry and a separately reviewed metadata
+change, never an append or a closure — and koine's per-record conflict lines,
+which the [filing command](README.md#file-new-records) now keeps, are the
+evidence of what a later run said.
 
 ## What is enforced here
 

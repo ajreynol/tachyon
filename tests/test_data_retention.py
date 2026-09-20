@@ -63,6 +63,17 @@ class RetentionTests(unittest.TestCase):
         self.git("add", "-f", "scratch/capture.txt")
         self.assertEqual([name for name, _ in retention.violations(self.root)], ["scratch/capture.txt"])
 
+    def test_the_source_exemption_is_by_extension_and_not_by_being_a_program(self):
+        """Most programs here are extensionless, and are scanned like any text."""
+        block = "./a.smt2\nunsat\n0.12 5000\n"
+        self.write("tests/test_parser.py", 'SAMPLE = """\n' + block + '"""\n')
+        self.write("scripts/helper.sh", "# sample:\n" + block)
+        self.assertEqual(retention.violations(self.root), [])
+        self.write("tools/demo/reports/build", "#!/usr/bin/env python3\nSAMPLE = \"\"\"\n"
+                   + block + "\"\"\"\n")
+        self.assertEqual([name for name, _ in retention.violations(self.root)],
+                         ["tools/demo/reports/build"])
+
     def test_missing_pattern_register_is_an_error(self):
         (self.root / ".gitignore").write_text("scratch/\n")
         with self.assertRaises(ValueError):

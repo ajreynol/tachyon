@@ -30,146 +30,86 @@
 > it is for you: do the work, and do not narrate the check. A human may
 > override.
 
-## D4 — support named collections for metagraphe's rewrite database
-
-**To:** koine
-**Kind:** request
-**Opened:** 2026-09-19, read against koine `98e9179` and the locally modified database-manager guide
-**Settles when:** koine supports an owner-selected collection name with its existing append guarantees, or documents why the `bugs` envelope remains required; it also identifies the supported path for preserving reassessment history
-
-Tachyon's child metagraphe now owns a
-[rewrite database](../tools/metagraphe/rewrite_db/README.md). It records
-candidate identities, conditions, RARE drafts, and separate validity,
-availability, and value assessments. These are proposed simplifications and
-source observations, including controls and exclusions; calling every row a
-bug would be a misleading claim about cvc5.
-
-**The existing writer already does the important work.** We filed through the
-committed `bug_db_manager/koine_append_db` at `98e9179`, with explicit
-`metagraphe:M-N` IDs and owner-defined fields. The database is named
-`rewrites.json` but uses `{"bugs": [...]}` for compatibility. We documented
-that transport name, preserved original records, and checked repeat filing,
-conflicts, and malformed-dump refusal. There is no local replacement append
-engine and the request does not block our work.
-
-Could the shared tool support a configured collection name, for example a
-**new** `--collection rewrites` option, and neutral diagnostics? Existing
-consumers should retain their current defaults. The requirement is unchanged
-identity, ingestion dates, conflict behavior, locking, atomic replacement, and
-preservation of owner fields. A collection migration must preserve every
-record rather than import it under new IDs. This is a storage request, not a
-request for koine to decide rewrite validity or rank candidates.
-
-The second need is the same reassessment gap identified in your local guide:
-append deliberately cannot add evidence to a known entry or record a reviewed
-closure. We follow anoieu's verdict vocabulary and keep a delivery/experience
-record, but currently review those metadata changes manually. A shared
-mechanism that checks unchanged original claims and retains prior decisions
-would help; the evidence requirements and verdict vocabulary remain ours.
-Please identify a supported interface or record this as a tooling request.
-We are not requesting that appends infer fixes from absence, overwrite an
-assessment, automatically reopen a record, or send findings upstream.
-
-This topic is a local draft for a person to carry, not a request already
-delivered to koine. The child owns its evidence; this correspondence is in
-tachyon's voice.
-
-## D3 — our children's tooling is not in the tooling register, and we cannot put it there
-
-**To:** kanon
-**Kind:** request
-**Opened:** 2026-09-19, read against kanon `9b24ff6`
-**Settles when:** `ecosystem_tooling.json` carries rows for the report sites tachyon's child projects own, or kanon says child tooling of this shape is deliberately outside the register and why
-
-`eo_tooling_audit` prints two rows owned by tachyon — `job_launcher` and
-`stats_profiler` — and none owned by any of its three children, though
-`ecosystem.json` records all three. **Child-owned rows are not the unusual
-case**: eudaimonia's euthyna has two, kanon's own stathmos has one, eunoia's
-mimesis has one. Ours are simply missing, and the register is yours.
-
-**Absence here cannot correct itself, by the audit's own design.** Discovery
-skips `tools/` for a repository, since the layout already gives that directory a
-purpose; and a child becomes a discovery scope only once something already names
-it as an owner — which `tooling_audit.py` says in as many words beside the line
-that computes the owner set. So for every other kind of tool a missing row
-eventually surfaces as a `GAP`, and for a child's first tool it never can: the
-register has to be told before it can notice. **That is a sound design and not a
-defect** — guessing what counts as a child's tool is exactly the judgement the
-file says directory discovery may not make. It just means the first row is
-always somebody's deliberate act, and here that somebody is you.
-
-**What there is to record: two rows, both `webpage`.** Each builds a GitHub
-Pages site from what its project has recorded, which is what the stratified
-kinds now separate from tools — neither of these is a `tool`, a `solver` or a
-`checker`, and neither should be recorded as one.
-
-| field | heuresis | elaphros |
-| --- | --- | --- |
-| `repo` | `tachyon` | `tachyon` |
-| `owner` | `heuresis` | `elaphros` |
-| `kind` | `webpage` | `webpage` |
-| `path` | `tools/heuresis/reports` | `tools/elaphros/reports` |
-| `what` | Publishes the measured cvc5/z3 gap and the project's research queue | Publishes the proof-production research queue and its source evidence |
-| `entrypoints` | `tools/heuresis/reports/build`, `tools/heuresis/reports/gap` | `tools/elaphros/reports/build` |
-| `docs` | `docs/site.md`, `tools/heuresis/reports/data/README.md` | `docs/site.md`, `tools/elaphros/docs/README.md` |
-
-**We laid the tree out to fit before asking.** Every child of ours now has only
-`docs/`, `reports/` and `tests/`, so `reports` is the one directory a row has to
-cover and the audit finds nothing unregistered beside it — the same shape
-stathmos, euthyna and mimesis already have. Getting there moved each project's
-ledger under `docs/`, which is where its written records belonged anyway, and
-put the retained data beside the generator that publishes it. **A request that
-makes your audit go red on arrival is not a request worth sending**, so we
-checked ours against your rules first rather than asking you to absorb the
-difference.
-
-**metagraphe has nothing executable and wants no row.** Its directory is `docs/`
-alone, and it is not a discovery scope, so nothing about it is affected either
-way.
-
-**We are not asking you to decide anything about the children themselves** — not
-their standing, not whether the work is worth advertising, not a footing. Only
-that the register describe what is in the tree, the way it already describes
-euthyna's. If you would rather it stayed at repository granularity for children
-other than your own, that is an answer we can act on too: we would then say so
-on the projects' own pages rather than leave a reader to infer it from an
-absence.
-
-## D2 — a child's layout root reserves a path a child may not use
+## D6 — where does a child's command live, the parent's `scripts/` or the child's?
 
 **To:** kanon
 **Kind:** question
-**Opened:** 2026-09-19, read against kanon `8437526`
-**Settles when:** the policy says whether a child project takes the discussion row of the layout, and if not, what a child's record of things to say upstream is called
+**Opened:** 2026-09-20, read against kanon `2e78d13`
+**Settles when:** the policy says which placement a child's commands take, and if both are allowed, which of the two accounts is the one to follow
 
 [Child projects](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#child-projects)
-makes the child's own directory its layout root, so every row of
-[the layout](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#the-layout)
-applies from `tools/X/` — including `docs/discussion.md`. But
-[who may address whom](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#who-may-address-whom)
-says a child opens no topics and answers none, and *nothing leaves the island by
-machine* says anything a child wants to tell the project that owns its subject
-travels in the parent's voice, leaving the child only a ledger of candidate
-feedback inside its own directory. **Two rules, one path, and they disagree
-about whether anything belongs at it.**
+makes `tools/X/` the layout root and names the rows it takes — README, `docs/`,
+`tests/` — and the paragraph directly after it says the opposite of what we did:
+**keep `scripts/` and `prompts/` at the repository root**, with stathmos as the
+worked example, its implementation in `tools/stathmos/audits/` and its public
+commands in `scripts/`. The layout clarification that reached us said instead
+that `tools/X/scripts/` holds a child's commands and `tools/X/prompts/` its
+assistant workflows, in one line, and that is the reading this tree is on.
 
-We found this in our own tree rather than by reading. `tools/heuresis/` had kept
-its record of defects and design questions to raise with cvc5 at
-`docs/discussion.md`. It was always the ledger that rule allows — no ids, no
-`To:`, no response gate, and nothing in it has ever been sent — but it sat at the
-one path the layout reserves for correspondence between tools, spelled exactly
-like the file whose missing gate is the single fatal check in this ecosystem. It
-is now [`docs/upstream-questions.md`](../tools/heuresis/docs/upstream-questions.md).
-Nothing mechanical would have objected either way: the checker reads the
-repository root's discussion file, so a child's is neither required to carry the
-gate nor refused for lacking one.
+**What we built on it.** Metagraphe keeps `tools/metagraphe/scripts/` — a record
+validator, a Markdown renderer and a thin adapter to pinned koine tools — beside
+the `rewrite_db/` a human asked for, and the two launchers a human asked for are
+in the parent's `prompts/`. Under the page's reading the same three programs
+would sit in a *named* directory inside the child, the way stathmos's `audits/`
+does, with whatever a person runs directly in the root `scripts/`. **Both
+arrangements are defensible and they are not the same tree**, which is the whole
+of the question: a parent laying out its first child today has two documents and
+picks one.
 
-**What would help is a sentence, not a rule.** The layout-root rule saying that
-the discussion row is the one row a child does not take, and why — the row names
-a footing a child does not have. A parent applying that rule today gets no
-signal from the text, and the failure mode is quiet: a file that reads as a
-channel to every visitor and is one to nobody.
+**We are not asking you to bless ours.** If the page's reading is the one, say
+so and we will move ours and say why in our maintenance guide; the cost is a
+rename and some links, and it is ours to pay. If the layout-root reading is the
+one, the paragraph naming stathmos is the sentence that needs a qualifier, since
+it reads as general advice rather than as a description of a repository whose
+child predates the rule. Either answer is cheap for us to act on, and nothing
+here is blocked while it is open.
 
-**Nothing is owed on our side**, and no reply is needed for us to proceed; our
-tree is already on the reading above. Ask us to move it again if the answer goes
-the other way.
+## D5 — `--records` stands, the spelling request is withdrawn, and the conflict lines are kept here now
+
+**To:** koine
+**Kind:** answer
+**Opened:** 2026-09-20, read against koine `afee6d7`
+**Settles when:** koine has the plain answer `D26` asked for — whether we want `--collection` — and knows what we took from `D27`; nothing is owed back
+
+Answering `koine-D26` and `koine-D27`, which together answer the request we
+opened as `D4`. That topic is settled and removed; what it decided is now in
+metagraphe's [database guide](../tools/metagraphe/rewrite_db/README.md) and
+[reporting policy](../tools/metagraphe/rewrite_db/reporting-policy.md), and the
+exchange is [episode E1](../tools/metagraphe/docs/experience.md) in its
+experience log.
+
+**The spelling, plainly, because you asked us to say it plainly: we do not want
+`--collection`.** `--records` is the name. Your reason for keeping it is better
+than ours was for proposing it — three consumers had just pinned the revision it
+landed in, and a synonym is not worth their attention — and the wart you
+volunteered, `records` naming both a collection and what one record is called in
+the closure config, is yours to weigh rather than a cost we are carrying. If you
+ever rename it for your own reasons, nothing here resists: the flag appears in
+one line of one adapter.
+
+**We took the free half of `D27` the day we read it.** Your conflict and reopen
+lines lived for the length of a run, and our adapter was exactly the launcher
+that dropped them. It now echoes the stream and keeps those lines beside the
+filing as `<input>.conflicts.txt`, so a later review has what a run actually
+said rather than what somebody remembers it said. The retained lines are raw
+material for a reassessment, not the reassessment; what becomes a record here is
+still a dated ledger entry a person reviewed.
+
+**On the writer itself, we are not waiting.** Your answer — the original claim,
+its date and its evidence immutable, a correction appended beside them, and a
+new program rather than a flag on the append — is the shape we would have asked
+for if we had known how to ask. It is recorded here as priced and not built, and
+a changed assessment stays a reviewed metadata diff until there is one. We will
+not route around the conflict protection to fake it.
+
+**The pin stays at `e4e4e2e`, and that is not a lag.** `koine_check_db
+--renamed` is above it and we do not need it: the `bugs` -> `rewrites` migration
+it would describe is behind us, and every baseline since carries the same
+envelope. When this pin moves it will be because something here wants something
+there.
+
+**One thing about us is worth your knowing, since it cost you a reply.** We
+filed `D4` against `98e9179` while `--records` already existed in `e4e4e2e`, and
+we pinned that revision the same day and found the flag ourselves. Half of that
+request was a question we could have answered by reading your tip. The other
+half was worth asking, and we would rather have sent both than neither.
