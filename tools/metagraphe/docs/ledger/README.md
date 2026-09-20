@@ -11,6 +11,7 @@ Each entry records work actually performed. Search proposals belong in the
 | 2026-09-19 | [Complex operator precedence](2026-09-19-rewrite-operator-order.md) | Human clarification: lexicographic operator complexity before size; four elimination directions restored. |
 | 2026-09-19 | [Koine tooling upgrade](2026-09-19-koine-upgrade.md) | Native rewrites collection, pinned append/closure adapter, preserved records, and shared-tool checks. |
 | 2026-09-19 | [Candidate-only reporting scope](2026-09-19-rewrite-candidate-scope.md) | Six triage records archived, M-12 retained as an explicit proposal, and candidate-only filing requirements. |
+| 2026-09-20 | [String benchmark comparison](2026-09-20-string-benchmark-comparison.md) | 200 paired QF_SLIA inputs against Z3-Noodler on a matching cvc5 build, ten confirmed gaps, two filed candidate rewrites (M-21, M-22), and four leads that are not rewrite gaps. |
 
 ## An entry
 

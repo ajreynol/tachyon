@@ -164,10 +164,18 @@ pins upstream cvc5. The [initial database filing](docs/ledger/2026-09-19-rewrite
 preserved the main candidates and additional triage rows as JSON. The later
 [scope correction](docs/ledger/2026-09-19-rewrite-candidate-scope.md) keeps 14
 concrete candidate families in the database and retains six triage records in
-the historical ledger. No
-matching executable baseline, solver reproduction, or performance improvement
-has been established. The next task is to probe the
-highest-priority string/sequence and bit-vector candidates on a matching build.
+the historical ledger. The
+[string benchmark comparison](docs/ledger/2026-09-20-string-benchmark-comparison.md)
+of 2026-09-20 then supplied the first **matching executable baseline**: a cvc5
+build identifying the source commit it was built from, a 200-input QF_SLIA
+sample paired against Z3-Noodler, ten confirmed gaps, and two new candidates,
+M-21 and M-22, whose absence was reproduced on that build. Their validity is
+argued and instantiation-checked; **neither showed a runtime improvement on the
+benchmark that motivated it**, and only M-22 showed one in a focused probe. Four
+further confirmed gaps are recorded there as strategy or preprocessing
+observations rather than rewrite candidates. The next task is to implement and
+measure M-22 and M-21, and to probe the issue-derived candidates on this same
+build.
 
 The human maintainer decides whether the project eventually graduates into its
 own repository, folds into the parent's work, or retires in place with an

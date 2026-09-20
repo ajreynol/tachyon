@@ -79,6 +79,18 @@ class RewriteViewTests(unittest.TestCase):
         self.assertIn("**Solver check:** recorded; [evidence]", result)
         self.assertIn("**Performance check:** recorded; [evidence]", result)
 
+    def test_benchmark_origin_renders_its_corpus_instead_of_issues(self):
+        row = copy.deepcopy(self.document["rewrites"][0])
+        ledger = row["origin"]["ledger"]
+        row["origin"] = {"kind": "benchmark-comparison", "ledger": ledger, "issues": [],
+                         "corpus": "SMT-LIB QF_SLIA sample", "references": [],
+                         "source_references": []}
+        result = view.render({"rewrites": [row]})
+        self.assertIn("No source issue: this candidate comes from a benchmark comparison", result)
+        self.assertIn("Corpus: SMT\\-LIB QF\\_SLIA sample; [investigation ledger]", result)
+        self.assertNotIn("[Survey]", result)
+        self.assertIn("| — |", result)
+
     def test_markdown_text_links_and_code_do_not_break_the_view(self):
         row = self.document["rewrites"][0]
         row["description"] = "Literal | [title]\n<script>"

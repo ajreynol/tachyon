@@ -6,7 +6,7 @@ See the [database guide](README.md) for filing and the
 
 Regenerate from tachyon's root with `python3 tools/metagraphe/scripts/render_rewrite_db.py`; add `--check` to check freshness.
 
-**14 candidate families; 16 proposed rewrites; 10 RARE drafts.**
+**16 candidate families; 21 proposed rewrites; 14 RARE drafts.**
 **0 explicit closure verdicts; 0 fixes awaiting landing.**
 
 A record is a candidate family, not a count of new rules or solved issues.
@@ -40,6 +40,8 @@ the precedence and rationale; these are candidate orderings, not measured runtim
 | [M-14: Sequence prefix forces index zero](#m-14) | 3 | argued | 0 | no closure recorded | [\#11156](https://github.com/cvc5/cvc5/issues/11156) |
 | [M-16: Inverse case conversion](#m-16) | 3 | unchecked | 0 | no closure recorded | [\#11970](https://github.com/cvc5/cvc5/issues/11970) |
 | [M-18: BV quotient with no\-overflow conditions](#m-18) | 3 | argued | 0 | no closure recorded | [\#9417](https://github.com/cvc5/cvc5/issues/9417) |
+| [M-21: Containment disjunction from a character\-union membership](#m-21) | 1 | argued | 1 | no closure recorded | — |
+| [M-22: Idempotent nesting of regular\-expression star and plus](#m-22) | 1 | argued | 3 | no closure recorded | — |
 
 ## M-1
 
@@ -1154,6 +1156,233 @@ Koine ingestion: first 2026-09-19; last 2026-09-19.
 **Supporting references:**
 
 - [https://github\.com/cvc5/cvc5/issues/9417](https://github.com/cvc5/cvc5/issues/9417)
+
+No delivery recorded.
+
+[Back to overview](#overview)
+
+## M-21
+
+**Containment disjunction from a character\-union membership**
+
+Priority: 1. Theories: strings, regular\-expressions, sequences.
+
+**Closure:** no closure recorded.
+
+**Application context:** Local term rewriting on STRING\_IN\_REGEXP, beside Rewrite::RE\_CONCAT\_TO\_CONTAINS in SequencesRewriter::rewriteMembership\. cvc5's REGEXP\_UNION is n\-ary and flattened, and the motivating benchmarks use five arms, so the rule that actually fires has to be n\-ary\. Ordinary RARE cannot map str\.to\_re over a :list parameter, so the n\-ary form would be a C\+\+ rule; the filed draft is the two\-arm instance\.
+
+**Orientation order:** str\.in\_re count > re\.\* count > re\.\+\+ count > re\.union count > str\.to\_re count > term size. Eliminate the regular\-expression membership first: str\.in\_re drives unfolding and automaton work, while str\.contains is handled by the string rewriter and the extended\-function reductions\. All five regular expression operators disappear\. Size falls for up to seven union arms and grows beyond that, because the right\-hand side repeats x once per arm; that growth is accepted under the operator\-first ordering\.
+
+### Rewrite 1
+
+Notation: SMT\-LIB term schema; two\-arm instance of the n\-ary union.
+
+Variables: x: String or \(Seq T\); s1: same sort as x; s2: same sort as x.
+
+```text
+(str.in_re x (re.++ (re.* re.allchar) (re.union (str.to_re s1) (str.to_re s2)) (re.* re.allchar)))
+  ->
+(or (str.contains x s1) (str.contains x s2))
+
+when: none; every union argument must be (str.to_re t) and every other concatenation argument must be (re.* re.allchar)
+```
+
+Structural size: **12 -> 7** term nodes.
+
+Lexicographic cost: **(1, 2, 1, 1, 2, 12) -> (0, 0, 0, 0, 0, 7)**.
+
+### Rewrite 2
+
+Notation: SMT\-LIB term schema; three\-arm instance showing the n\-ary shape.
+
+Variables: x: String or \(Seq T\); s1: same sort as x; s2: same sort as x; s3: same sort as x.
+
+```text
+(str.in_re x (re.++ (re.* re.allchar) (re.union (str.to_re s1) (str.to_re s2) (str.to_re s3)) (re.* re.allchar)))
+  ->
+(or (str.contains x s1) (str.contains x s2) (str.contains x s3))
+
+when: none; same restriction on the union and concatenation arguments
+```
+
+Structural size: **14 -> 10** term nodes.
+
+Lexicographic cost: **(1, 2, 1, 1, 3, 14) -> (0, 0, 0, 0, 0, 10)**.
+
+### RARE drafts
+
+```lisp
+(define-rule metagraphe-re-ctn-union-two
+  ((x ?Seq) (s ?Seq) (t ?Seq))
+  (str.in_re x (re.++ (re.* re.allchar) (re.union (str.to_re s) (str.to_re t)) (re.* re.allchar)))
+  (or (str.contains x s) (str.contains x t)))
+```
+
+### Assessment and next step
+
+- **Validity: argued.** Concatenation distributes over union, so the left\-hand language is the union of Sigma\* \{si\} Sigma\*, and membership in Sigma\* \{si\} Sigma\* is the SMT\-LIB definition of str\.contains\(x, si\)\. No side condition is needed: an empty si makes both sides true, and the argument is alphabet\-independent, so it covers sequences\. Z3\-Noodler returned unsat for \(distinct lhs rhs\) on all nine constant instantiations tried and cvc5 agreed on six, timing out on three; with symbolic needles both solvers left the question open\.
+- **Availability: source\-gap\-candidate.** At 40a4bb7e43adf97534c29a52ed079c4efd687644, \-\-preprocess\-only \-o post\-asserts rewrites x in \(re\.\+\+ Sigma\* \(str\.to\_re "&lt;"\) Sigma\*\) to \(str\.contains x "&lt;"\) but returns the union form unchanged, under the default configuration and under \-\-re\-elim=on and \-\-re\-elim=agg\. rewriteMembership's REGEXP\_CONCAT branch accepts at most one STRING\_TO\_REGEXP child and rejects any other child, so a REGEXP\_UNION aborts the match; RE\_IN\_ANDOR only distributes a union that is the whole regular expression\.
+- **Value: measured.** No speedup was measured\. Applying the rewrite by hand to 20230329\-denghang/instance51087\.smt2 moved cvc5 from a 10\.12 s median to 11\.09 s over three repetitions at a 60 s limit, and a focused probe containing nothing but this pattern ran in about 0\.006 s with and without the rewrite at length bounds 200, 1000 and 4000\. cvc5 already handles these memberships cheaply; the cost on the motivating input is the 31\-way re\.loop expansion beside them\. The case for the rule is the elimination of a regular\-expression membership and five regular\-expression operators, and the pattern's occurrence in 998 of the 84,411 QF\_SLIA inputs, not a runtime gain\. Whether an in\-solver implementation pays for its matching cost is untested\.
+
+**RARE syntax:** passed at [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+**Solver check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-string-benchmark-comparison.md).
+
+**Performance check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-string-benchmark-comparison.md).
+
+**Cautions:**
+
+- The filed RARE draft is the two\-arm instance; the five\-arm unions in the motivating benchmarks need an n\-ary rule that ordinary RARE cannot express\.
+- Sound only when every union argument is \(str\.to\_re t\) and every remaining concatenation argument is \(re\.\* re\.allchar\); one other arm leaves a str\.in\_re on the right and loses the elimination\.
+- From eight union arms on, the right\-hand side has more term nodes than the left, because x is repeated once per arm\.
+- The schematic equivalence with symbolic needles was not decided: cvc5 timed out and Z3\-Noodler answered unknown\.
+- A fixed\-point peeling variant parses but re\-introduces str\.in\_re at each step, so it is the wrong orientation and is not filed\.
+
+**Next step:** Implement the n\-ary form beside RE\_CONCAT\_TO\_CONTAINS and measure it on the 14 sampled 20230329\-denghang inputs, separating its effect from the re\.loop elimination that dominates instance51087; then look for the pattern in QF\_S and QF\_SNIA, which this sample did not cover\.
+
+### Evidence and follow-up
+
+No source issue: this candidate comes from a benchmark comparison over SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample, seed metagraphe\-2026\-09\-20.
+
+Observed: 2026-09-20 at cvc5 source [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+Koine ingestion: first 2026-09-20; last 2026-09-20.
+
+Corpus: SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample, seed metagraphe\-2026\-09\-20; [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-20-string-benchmark-comparison.md).
+
+**Source references:**
+
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences\_rewriter\.cpp](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences_rewriter.cpp)
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites)
+
+No delivery recorded.
+
+[Back to overview](#overview)
+
+## M-22
+
+**Idempotent nesting of regular\-expression star and plus**
+
+Priority: 1. Theories: strings, regular\-expressions.
+
+**Closure:** no closure recorded.
+
+**Application context:** Local term rewriting on REGEXP\_STAR, beside Rewrite::RE\_STAR\_NESTED\_STAR in SequencesRewriter::rewriteStarRegExp and the re\-star\-star RARE rule\. re\-plus\-elim runs first, so the core rule has to match \(re\.\* \(re\.\+\+ r \(re\.\* r\)\)\)\. The \(r\+\)\+ case then closes through the existing re\-concat\-star\-repeat rule, which collapses the resulting \(re\.\+\+ r \(re\.\* r\) \(re\.\* r\)\)\.
+
+**Orientation order:** re\.\* count > re\.\+\+ count > term size. Remove a star before removing a concatenation: each surviving re\.\* is a separate unfolding obligation for the regular\-expression solver, and the nested body duplicates the whole of r\. Both counts and the term size fall, so no growth has to be accepted here\.
+
+### Rewrite 1
+
+Notation: SMT\-LIB term schema, stated on the form cvc5 produces after re\-plus\-elim.
+
+Variables: r: RegLan.
+
+```text
+(re.* (re.++ r (re.* r)))
+  ->
+(re.* r)
+
+when: none
+```
+
+Structural size: **5 -> 2** term nodes.
+
+Lexicographic cost: **(2, 1, 5) -> (1, 0, 2)**.
+
+### Rewrite 2
+
+Notation: SMT\-LIB term schema, surface form before re\-plus\-elim.
+
+Variables: r: RegLan.
+
+```text
+(re.* (re.+ r))
+  ->
+(re.* r)
+
+when: none
+```
+
+Structural size: **3 -> 2** term nodes.
+
+Lexicographic cost: **(1, 0, 3) -> (1, 0, 2)**.
+
+### Rewrite 3
+
+Notation: SMT\-LIB term schema, surface form before re\-plus\-elim.
+
+Variables: r: RegLan.
+
+```text
+(re.+ (re.+ r))
+  ->
+(re.+ r)
+
+when: none
+```
+
+Structural size: **3 -> 2** term nodes.
+
+Lexicographic cost: **(0, 0, 3) -> (0, 0, 2)**.
+
+### RARE drafts
+
+```lisp
+(define-rule metagraphe-re-star-plus-elim
+  ((r RegLan))
+  (re.* (re.++ r (re.* r)))
+  (re.* r))
+```
+
+```lisp
+(define-rule metagraphe-re-star-plus
+  ((r RegLan))
+  (re.* (re.+ r))
+  (re.* r))
+```
+
+```lisp
+(define-rule metagraphe-re-plus-plus
+  ((r RegLan))
+  (re.+ (re.+ r))
+  (re.+ r))
+```
+
+### Assessment and next step
+
+- **Validity: argued.** L\(\(R R\*\)\*\) = \(L\(R\) L\(R\)\*\)\* = \(L\(R\)\+\)\* = L\(R\)\*\. One inclusion holds because L\(R\)\+ is contained in L\(R\)\*; the other because every nonempty member of L\(R\)\* is a concatenation of at least one R\-word\. No side condition, and the empty, re\.none, nullable and starred bodies are all covered\. Z3\-Noodler returned unsat for \(distinct lhs rhs\) on all ten concrete r tried, and cvc5 agreed on the four it did not time out on\. cvc5 rejects regular\-expression variables, so no schematic solver check was possible\.
+- **Availability: source\-gap\-candidate.** At 40a4bb7e43adf97534c29a52ed079c4efd687644, \-\-preprocess\-only \-o post\-asserts reduces \(re\.\* \(re\.\* r\)\) and \(re\.\+ \(re\.\* r\)\) to \(re\.\* r\) but leaves \(re\.\* \(re\.\+ r\)\) as \(re\.\* \(re\.\+\+ r \(re\.\* r\)\)\) and \(re\.\+ \(re\.\+ r\)\) as \(re\.\+\+ r \(re\.\* r\) \(re\.\* \(re\.\+\+ r \(re\.\* r\)\)\)\)\. rewriteStarRegExp handles a nested star, an empty or re\.none body and unions containing re\.allchar or epsilon, but no body of the form \(re\.\+\+ r \(re\.\* r\)\)\.
+- **Value: measured.** Mixed, and negative where it matters most\. On the two stringfuzz inputs that motivated it, applying the rewrite by hand changed nothing: regex\-lengths\-00426\-14 stayed a 60 s timeout and variants/2f407694 moved from a 30\.99 s median to 31\.20 s\. In a focused probe containing only the nesting, cvc5 went from a 60 s timeout to a 0\.409 s median at a length\-100 bound and to 22\.17 s at 400, and still timed out at 1000; all medians are over three repetitions\. The pattern occurs 88,572 times in 4,192 of the 84,411 QF\_SLIA inputs, almost all fuzzer\-generated\. The scratch\-input effect is not evidence that an in\-solver rule would behave the same: matching cost and interaction with re\-concat\-star\-swap and re\-concat\-star\-repeat are untested\.
+
+**RARE syntax:** passed at [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+**Solver check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-string-benchmark-comparison.md).
+
+**Performance check:** recorded; [evidence](../../../tools/metagraphe/docs/ledger/2026-09-20-string-benchmark-comparison.md).
+
+**Cautions:**
+
+- cvc5 eliminates re\.\+ before this could match, so only the first schema is the rule that has to fire; the two surface identities describe the same equality before that elimination\.
+- The \(r\+\)\+ case is not closed by this rule alone: it leaves \(re\.\+\+ r \(re\.\* r\) \(re\.\* r\)\) and depends on the existing re\-concat\-star\-repeat rule\.
+- Checked for ten concrete r only; the general identity rests on the written language argument, because cvc5 rejects RegLan variables\.
+- Nested star and plus are a fuzzer\-generated shape here; occurrence outside 20230327\-stringfuzz\-lu was not established\.
+
+**Next step:** Implement \(re\.\* \(re\.\+\+ r \(re\.\* r\)\)\) \-&gt; \(re\.\* r\) in rewriteStarRegExp, check that it does not re\-enter the concat\-star normalisation loop with re\-concat\-star\-swap and re\-concat\-star\-repeat, and measure it on the 20230327\-stringfuzz\-lu inputs that carry the pattern\.
+
+### Evidence and follow-up
+
+No source issue: this candidate comes from a benchmark comparison over SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample, seed metagraphe\-2026\-09\-20.
+
+Observed: 2026-09-20 at cvc5 source [40a4bb7e43adf97534c29a52ed079c4efd687644](https://github.com/cvc5/cvc5/commit/40a4bb7e43adf97534c29a52ed079c4efd687644).
+
+Koine ingestion: first 2026-09-20; last 2026-09-20.
+
+Corpus: SMT\-LIB 2026 non\-incremental QF\_SLIA \(84,411 inputs, 14 families\); 200\-input stratified sample, seed metagraphe\-2026\-09\-20; [investigation ledger](../../../tools/metagraphe/docs/ledger/2026-09-20-string-benchmark-comparison.md).
+
+**Source references:**
+
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences\_rewriter\.cpp](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/sequences_rewriter.cpp)
+- [https://github\.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites](https://github.com/cvc5/cvc5/blob/40a4bb7e43adf97534c29a52ed079c4efd687644/src/theory/strings/rewrites)
 
 No delivery recorded.
 

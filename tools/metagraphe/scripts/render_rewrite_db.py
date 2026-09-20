@@ -77,7 +77,7 @@ def render(document):
     for row in rows:
         candidate = row["candidate"]
         issues = ", ".join(link(f"#{issue['number']}", issue["url"])
-                           for issue in row["origin"]["issues"])
+                           for issue in row["origin"]["issues"]) or "—"
         cells = [f"[{candidate}: {prose(row['description'])}](#{candidate.lower()})",
                  str(row["priority"]) if row["priority"] else "—",
                  prose(row["assessment"]["validity"]),
@@ -145,15 +145,25 @@ def render(document):
                       + ("; " + link("evidence", evidence) if evidence else "") + ".", ""]
         if row["cautions"]:
             lines += ["**Cautions:**", ""] + ["- " + prose(c) for c in row["cautions"]] + [""]
+        if origin["issues"]:
+            found = "Source issues: " + ", ".join(link(f"#{i['number']}", i["url"])
+                                                  + f" ({i['state_at_review']} at review)"
+                                                  for i in origin["issues"]) + "."
+        else:
+            found = ("No source issue: this candidate comes from a benchmark comparison "
+                     f"over {prose(origin['corpus'])}.")
+        if origin.get("survey"):
+            provenance = (link("Survey", origin["survey"])
+                          + f" (tachyon revision `{origin['survey_revision']}`); "
+                          + link("investigation ledger", origin["ledger"]) + ".")
+        else:
+            provenance = ("Corpus: " + prose(origin["corpus"]) + "; "
+                          + link("investigation ledger", origin["ledger"]) + ".")
         lines += [f"**Next step:** {prose(row['next_step'])}", "",
-                  "### Evidence and follow-up", "",
-                  "Source issues: " + ", ".join(link(f"#{i['number']}", i["url"])
-                                         + f" ({i['state_at_review']} at review)"
-                                         for i in origin["issues"]) + ".", "",
+                  "### Evidence and follow-up", "", found, "",
                   f"Observed: {row['observed_on']} at cvc5 source {source_revision(row['found_at'])}.", "",
                   f"Koine ingestion: first {row['first_seen']}; last {row['last_seen']}.", "",
-                  link("Survey", origin["survey"]) + f" (tachyon revision `{origin['survey_revision']}`); "
-                  + link("investigation ledger", origin["ledger"]) + ".", ""]
+                  provenance, ""]
         if row.get("reassessments"):
             lines += ["**Dated reassessments:**", ""]
             lines += [f"- {event['on']}: {prose(event['reason'])} "

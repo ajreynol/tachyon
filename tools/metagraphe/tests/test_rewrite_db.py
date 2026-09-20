@@ -71,6 +71,25 @@ class RewriteDatabaseTests(unittest.TestCase):
                    closed_evidence=[row["origin"]["ledger"]])
         contract.validate([row], filing=True)
 
+    def test_benchmark_origin_needs_a_corpus_and_stays_free_of_a_survey(self):
+        row = copy.deepcopy(self.by_id["M-1"])
+        ledger = row["origin"]["ledger"]
+        row["origin"] = {"kind": "benchmark-comparison", "ledger": ledger, "issues": [],
+                         "corpus": "SMT-LIB QF_SLIA sample", "references": [],
+                         "source_references": []}
+        contract.validate({"rewrites": [row]})
+        missing = copy.deepcopy(row)
+        del missing["origin"]["corpus"]
+        with self.assertRaisesRegex(ValueError, "must name its corpus"):
+            contract.validate({"rewrites": [missing]})
+        surveyed = copy.deepcopy(row)
+        surveyed["origin"]["survey"] = "docs/github-issues-rewrites.md"
+        with self.assertRaisesRegex(ValueError, "not an issue survey"):
+            contract.validate({"rewrites": [surveyed]})
+        # An issue survey still has to cite at least one issue.
+        self.rejected(lambda r: r["origin"].update(issues=[]))
+        self.rejected(lambda r: r["origin"].update(kind="benchmark-probe"))
+
     def test_known_semantic_conditions_survive_filing(self):
         first = self.by_id["M-1"]["proposal"]["rewrites"][0]
         self.assertIn("(str.contains s u)", first["rhs"])

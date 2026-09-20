@@ -31,7 +31,12 @@ subsequently filed as M-11 through M-20. The
 rows to the ledger, leaving only concrete candidate rewrites in the database. The
 [source audit](ledger/2026-09-19-github-issues.md) and
 [filing record](ledger/2026-09-19-rewrite-db.md) distinguish the original
-investigation from its migration to JSON.
+investigation from its migration to JSON. M-21 and M-22 instead come from the
+[string benchmark comparison](ledger/2026-09-20-string-benchmark-comparison.md),
+which also records four confirmed gaps that are **not** rewrite candidates:
+quadratic word equations, `re.loop` unrolling, regular-expression containment
+expressed through concatenation with otherwise-unconstrained variables, and
+nested case maps.
 
 | IDs | search areas | investigation |
 | --- | --- | --- |
@@ -44,6 +49,7 @@ investigation from its migration to JSON.
 | M-13, M-14 | S2 | Nested replacement emptiness and prefix/index identities. |
 | M-16 | S3 | Inverse case conversion. |
 | M-18 | B3 | Quotient simplification under explicit no-overflow premises. |
+| M-21, M-22 | S3 | Regular-expression shapes from the [string benchmark comparison](ledger/2026-09-20-string-benchmark-comparison.md). |
 
 This table is a search-area map, not a parallel status register. Use the
 database for candidate proposals and the ledger for existing coverage and

@@ -13,7 +13,8 @@ provide motivation; rewriter bugs, known-rule context/reachability work, and
 leads without a concrete rule belong in the survey or ledger.
 
 The initial filing lifts the [GitHub survey](../../../docs/github-issues-rewrites.md)
-into structured records. The [scope correction](../docs/ledger/2026-09-19-rewrite-candidate-scope.md)
+into structured records. Later records may instead come from a benchmark
+comparison; those cite their corpus and ledger entry and carry no source issue. The [scope correction](../docs/ledger/2026-09-19-rewrite-candidate-scope.md)
 retains 14 candidate families and archives six triage rows with their original
 IDs and evidence. M-12 is retained for its concrete `abs`-elimination proposal;
 its availability remains unchecked. A record groups a candidate
@@ -40,7 +41,7 @@ from `bugs`, preserving every record, ID, date, assessment, and history event.
 | `schema_version`, `tool`, `owner` | Record format version (`1`), producer (`metagraphe`), and subject owner (`cvc5`). |
 | `description`, `classification`, `priority`, `theories` | Proposed rewrite/title; classification must be `candidate`; agent-assigned priority 1–3; affected theories. |
 | `found_at`, `observed_on` | Full cvc5 **source** commit and observation date. They do not identify a matching executable or imply a solver run. |
-| `origin` | Issue URLs and state at review, local survey/ledger references, the tachyon commit containing that survey, and supporting external/source links. File references are relative to tachyon's root. |
+| `origin` | How the candidate was found. `kind` is `github-issue-survey` (issue URLs and state at review, the local survey and the tachyon commit containing it) or `benchmark-comparison` (a `corpus` string naming the sampled benchmark set, an empty `issues` list, and no survey). Both cite a `ledger` entry and may add supporting external/source links. File references are relative to tachyon's root. |
 | `proposal.rewrites` | At least one term schema with variables/sorts, `lhs`, `rhs`, conditions, and notation. An issue or lead without an exact rule cannot be filed. |
 | `proposal.rare_drafts`, `application_context` | Literal RARE declarations, if available, and the facts/stage needed to apply the proposal. |
 | `proposal.orientation` (optional) | `{kind: "lexicographic", operators: [...], reason: "..."}` declares complex operators in descending priority, followed by structural term size. Applies to all schemas and ordinary RARE drafts in that family. |

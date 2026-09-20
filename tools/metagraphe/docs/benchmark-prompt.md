@@ -30,6 +30,10 @@ The prompt defaults to 200 paired inputs with 10-second screening limits and
 up to ten gaps confirmed three times with 60-second limits. Use `--help` to
 adjust these bounds. The launched agent performs the experiments and records
 findings under Metagraphe's existing evidence and rewrite database policies.
+The first run is recorded in the
+[2026-09-20 comparison](ledger/2026-09-20-string-benchmark-comparison.md);
+note that pointing `--benchmarks-dir` at a single logic's directory makes the
+other `--logic` values vacuous.
 
 Requires Python 3.9+ and the selected agent on PATH. `--show-prompt` requires
 neither an agent nor existing corpus/solver paths and overrides launch options.

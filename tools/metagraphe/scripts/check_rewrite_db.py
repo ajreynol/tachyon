@@ -16,6 +16,9 @@ VERDICTS = {"accepted and fixed", "fixed and landed", "declined", "intentional",
 AVAILABILITY = {"source-gap-candidate", "existing-rule-needs-context", "unchecked",
                 "existing-rule-reachability-unchecked", "existing-conditional-support",
                 "not-applicable"}
+# How a candidate was found. An issue survey cites the survey and its issues; a
+# benchmark comparison cites the corpus it sampled and has no source issue.
+ORIGIN_KINDS = {"github-issue-survey", "benchmark-comparison"}
 
 
 def require(condition, message):
@@ -165,16 +168,23 @@ def validate(document, root=ROOT, filing=False):
                         "observation and ingestion dates are out of order")
 
             origin = object_at(row, "origin")
-            require(origin.get("kind") == "github-issue-survey", "unsupported origin kind")
-            require(revision(origin.get("survey_revision")), "missing survey revision")
-            for field in ("survey", "ledger"):
-                reference(origin.get(field), root)
+            kind = origin.get("kind")
+            require(kind in ORIGIN_KINDS, "unsupported origin kind")
+            reference(origin.get("ledger"), root)
+            if kind == "github-issue-survey":
+                require(revision(origin.get("survey_revision")), "missing survey revision")
+                reference(origin.get("survey"), root)
+            else:
+                require("survey" not in origin and "survey_revision" not in origin,
+                        "a benchmark comparison cites its corpus and ledger, not an issue survey")
+                require(nonempty(origin.get("corpus")), "benchmark origin must name its corpus")
             for field in ("references", "source_references"):
                 require(strings(origin.get(field), empty=True), "invalid origin " + field)
                 for item in origin[field]:
                     reference(item, root)
             issues = origin.get("issues")
-            require(isinstance(issues, list) and issues, "missing origin issues")
+            require(isinstance(issues, list), "origin issues must be a list")
+            require(bool(issues) or kind == "benchmark-comparison", "missing origin issues")
             numbers = set()
             for issue in issues:
                 require(isinstance(issue, dict), "issue must be an object")
