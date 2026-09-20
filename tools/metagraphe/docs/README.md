@@ -10,7 +10,7 @@ criteria. These documents organize the investigation.
 | [Reporting policy](../rewrite_db/reporting-policy.md) | Evidence, reassessment, delivery, and closure requirements. |
 | [experience.md](experience.md) | Actual exchanges with the projects we investigate. |
 | [GitHub issue survey](../../../docs/github-issues-rewrites.md) | Initial issue-driven investigation, source audit, and RARE candidates. |
-| [benchmark-prompt.md](benchmark-prompt.md) | Generate a configurable string benchmark comparison and rewrite-assessment prompt; starts no jobs. |
+| [benchmark-prompt.md](benchmark-prompt.md) | Launch the string benchmark rewrite assessment with Claude or Codex, or preview its prompt. |
 | [directions.md](directions.md) | Search areas and pointers into the rewrite database. |
 | [todo.md](todo.md) | The next experiments, in priority order. |
 | [ledger](ledger/README.md) | Recorded source audits, reproduction commands, and experimental evidence. |
