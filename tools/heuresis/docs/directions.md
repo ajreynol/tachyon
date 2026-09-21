@@ -13,7 +13,8 @@ and inform future work.
 **Twenty-seven directions, R1–R23 and R25–R28, each with an argued risk/gain
 estimate, the same four inventories — the cvc5 flags that test it today,
 what has been tried, what z3 and others do, and the papers — and, last, the
-table of [proposals](#proposals) that direction owns.** Written
+table of [proposals](#proposals) that direction owns — twenty-five of the
+twenty-seven name a branch, and two of those carry measured numbers.** Written
 2026-09-15 from the performance notes
 summarised in [`../notes.md`](notes.md) (the `h-N` rows referenced below),
 from cvc5 `main` at
@@ -168,6 +169,14 @@ that is the first thing asked of a proposed change and because a count does
 not move with the timeout's arithmetic. The ledger entry behind the cell has
 the ratio.
 
+**A row with no numbers is a branch that is not current with `main`.** Nothing
+is measured until it is rebased: a stale branch's old line counts and old
+results describe a cvc5 that no longer exists. Rebasing every branch named in
+these tables — the *active* branches, the ones a proposal depends on — is the
+pass that fills these columns. That list is generated from the tables and kept
+outside the repository (`rebase-to-master-ajr.txt`, untracked), so it cannot go
+stale in the record.
+
 **Recording a proposal does not send it anywhere.** Filing an issue or opening
 a pull request is a person's act, and out of scope for this project. When a
 proposal lands in cvc5 `main` it becomes a row in
@@ -304,7 +313,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | — | — |
 
 ## R2 — Incremental E-matching: match what changed, not everything
 
@@ -388,7 +397,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:eagerInst3`](https://github.com/ajreynol/cvc5/tree/eagerInst3) | — | — |
 
 ## R3 — Worst-case E-matching: failure caching and early pruning
 
@@ -445,7 +454,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) | — | — |
 
 ## R4 — Instantiation budgeting: how many instances per round, and which
 
@@ -515,7 +524,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:termOrigin`](https://github.com/ajreynol/cvc5/tree/termOrigin) | — | — |
 
 ## R5 — Trigger selection: strict user patterns, multi-triggers, and what strictness disables
 
@@ -597,7 +606,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:multiTriggerSingleBase`](https://github.com/ajreynol/cvc5/tree/multiTriggerSingleBase) | — | — |
 
 ## R6 — Conflict-based instantiation: off for this domain, and why that is right or wrong
 
@@ -661,7 +670,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | — | — |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
 
@@ -719,7 +728,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | +165/−43, 8 files, at `main@d7d03b082c` | **−1** vs `central`, 5615 of 6124 ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
@@ -780,7 +789,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| *(none yet — no fork branch fits; the next step is an option A/B)* |  |  |
 
 ## R28 — Eager conflict-based instantiation: find a useful instance before full effort
 
@@ -858,7 +867,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi) | — | — |
 
 ---
 
@@ -960,7 +969,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause) | — | — |
 
 ## R10 — Where instance lemmas sit in the decision order: local, deferred, gated
 
@@ -1026,7 +1035,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | — | — |
 
 ## R11 — Decision heuristic versus relevancy: what the SAT solver is made to decide on
 
@@ -1092,7 +1101,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ai-jhConflictFirst`](https://github.com/ajreynol/cvc5/tree/ai-jhConflictFirst) | — | — |
 
 ## R12 — Lemma inprocessing and conflict minimisation
 
@@ -1142,7 +1151,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:subConflict`](https://github.com/ajreynol/cvc5/tree/subConflict) | — | — |
 
 ## R13 — The SAT backend: CaDiCaL, MiniSat, restarts, units
 
@@ -1218,7 +1227,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:cadicalPortfolio`](https://github.com/ajreynol/cvc5/tree/cadicalPortfolio) | — | — |
 
 ---
 
@@ -1285,7 +1294,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:mbtc25`](https://github.com/ajreynol/cvc5/tree/mbtc25) | — | — |
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
 
@@ -1363,7 +1372,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | +9/−3, 1 file, at `main@d7d03b082c` | **+2** vs `best`, 5625 of 6124 ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
 
 ## R16 — Datatypes: when to split, on what, and whether to have them at all
 
@@ -1445,7 +1454,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | — | — |
 
 ## R17 — Linear integer arithmetic: branch and bound, cuts, and the Diophantine solver
 
@@ -1524,7 +1533,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | — | — |
 
 ## R18 — Nonlinear arithmetic: off, light, or lazy
 
@@ -1585,7 +1594,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| *(none yet — no fork branch fits; the next step is an option A/B)* |  |  |
 
 ## R19 — Bit-vectors inside quantified problems
 
@@ -1650,7 +1659,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:bitblastLc`](https://github.com/ajreynol/cvc5/tree/bitblastLc) | — | — |
 
 ---
 
@@ -1728,7 +1737,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ufEagerDistinct`](https://github.com/ajreynol/cvc5/tree/ufEagerDistinct) | — | — |
 
 ## R21 — Quantifier preprocessing: what is done to a quantifier before it is ever matched
 
@@ -1792,7 +1801,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:quantRew-1006`](https://github.com/ajreynol/cvc5/tree/quantRew-1006) | — | — |
 
 ## R22 — Preregistration: which literals the theories are told about
 
@@ -1832,7 +1841,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | — | — |
 
 ## R23 — Term-database relevance: which ground terms E-matching may use
 
@@ -1880,7 +1889,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:tdbOldIndex`](https://github.com/ajreynol/cvc5/tree/tdbOldIndex) | — | — |
 
 ---
 
@@ -1927,7 +1936,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/cvc5/tree/lowLevelOptMore) | — | — |
 
 ## R26 — Attribution instrumentation: the tools goal 2 needs
 
@@ -2023,7 +2032,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | — | — |
 
 ## R27 — SMT-LIB parser throughput: pay less before solving
 
@@ -2088,7 +2097,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on `quant-07-25` |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | — | — |
 
 ---
 

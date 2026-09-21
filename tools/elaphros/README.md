@@ -135,9 +135,10 @@ for a branch, and ± benchmarks solved on the corpus. The
 [register's own section](docs/directions.md#proposals) defines them and what to
 do with a change that touches two directions.
 
-**All sixteen tables are empty, and cannot yet be otherwise.** The third column
-names a corpus this project does not have: goal 1 fixes it, and until then
-there is no baseline to subtract. Goal 1 also settles what those three columns
+**Twelve of the sixteen tables name a branch, and not one carries a number.**
+Every branch named is behind upstream main, and the third column names a corpus
+this project does not have: goal 1 fixes it, and until then there is no
+baseline to subtract. Goal 1 also settles what those three columns
 are missing here — added seconds, the time ratio, proof size, checker time and
 the validation outcome, which [an overhead
 claim](#what-an-overhead-claim-means) requires and a solved count does not

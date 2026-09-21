@@ -40,9 +40,12 @@ measurements below remain future work; the current phase is planning only.
 
 **Proposals.** Each direction closes with the table of
 [proposals](#proposals) it owns — changes to cvc5 someone could carry
-upstream. All sixteen are empty, and cannot yet be otherwise: with no corpus,
-no baseline and no measurement, this project has nothing to propose and no
-number to propose it with.
+upstream. Twelve of the sixteen name a branch; E13–E16 name none, because no
+branch stands behind them. **No row carries a number, and none can yet:** every
+branch named is behind the pinned upstream main of the survey, by 63 to 816
+commits, and this project has no corpus, no baseline and no measurement to
+subtract one from. Naming a branch here asserts that it is the best merge
+candidate the survey found for that mechanism, nothing more.
 
 ## The map
 
@@ -110,6 +113,13 @@ Whether those become further columns or stay in the ledger entry each cell
 cites is a decision for the pass that fixes the corpus, not one to invent
 here.
 
+**A row with no numbers is a branch that is not current with `main`.** Nothing
+is measured until it is rebased, and rebasing every branch named in these
+tables — the *active* branches, the ones a proposal depends on — is the pass
+that has to come before any of these columns can be filled. That list is
+generated from these tables and kept outside the repository
+(`rebase-to-master-ajr.txt`, untracked), so it cannot go stale in the record.
+
 **Recording a proposal does not send it anywhere.** Publishing a finding,
 filing an issue and opening a pull request stay a person's act, carried
 through tachyon's reporting process; a proposal is this project saying what it
@@ -161,7 +171,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:unrewrite2`][unrewrite2] | — | — |
 
 ## E2 Smaller macro obligations
 
@@ -201,7 +211,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:reduceTransform`][reduceTransform] | — | — |
 
 ## E3 Compact term conversion
 
@@ -246,7 +256,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:pfrConvert2`][pfrConvert2] | — | — |
 
 ## E4 Rewrite dependencies
 
@@ -282,7 +292,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:rewriteDep`][rewriteDep] | — | — |
 
 ## E5 Proof DAG simplification and sharing
 
@@ -328,7 +338,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] | — | — |
 
 ## E6 Recorded rewrite provenance
 
@@ -365,7 +375,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:rdbExec`][rdbExec] | — | — |
 
 ## E7 Reconstruction cache and search policy
 
@@ -405,7 +415,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:rareOptEval`][rareOptEval] | — | — |
 
 ## E8 Resolution construction and internal checking
 
@@ -443,7 +453,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:chainMResOpt`][chainMResOpt] | — | — |
 
 ## E9 Definitions and proof output
 
@@ -480,7 +490,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:pf-defineFun-printerOnly`][defineFunPrinter] | — | — |
 
 ## E10 Lazy bookkeeping and theory reconstruction
 
@@ -523,7 +533,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:stratifiedStrIpc`][stratifiedStrIpc] | — | — |
 
 ## E11 Incremental output and reuse
 
@@ -560,7 +570,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ai-pfIncremental`][aiPfIncremental] | — | — |
 
 ## E12 Proof-induced search changes
 
@@ -600,7 +610,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| [`ajreynol:ai-macroPf`][aiMacroPf] | — | — |
 
 ## E13 Proof-work accounting
 
@@ -653,7 +663,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| *(none yet — no branch behind this direction)* |  |  |
 
 ## E14 Proof node representation and allocation
 
@@ -698,7 +708,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| *(none yet — no branch behind this direction)* |  |  |
 
 ## E15 Streaming proof emission
 
@@ -741,7 +751,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| *(none yet — no branch behind this direction)* |  |  |
 
 ## E16 Traversal fusion
 
@@ -784,7 +794,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | ± LOC | ± solved on the corpus |
 | --- | ---: | ---: |
-| *(none yet)* | | |
+| *(none yet — no branch behind this direction)* |  |  |
 
 ## Attribution before an experiment queue
 

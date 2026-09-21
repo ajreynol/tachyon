@@ -195,11 +195,11 @@ reproducible crash on current main with a backtrace and a two-flag bisection.
 Not a performance change, so it will not move a row, but it is the first
 upstream-reportable defect this project has produced.
 
-**Standing candidates**, from the ledger, none yet proposed upstream. These
-are proposals in the register's sense, and each belongs in exactly one research
-direction's [proposals table](directions.md#proposals) — the eager pair budget
-under one of R1 or R28, not both. Those tables are empty today; filling them
-from this list is the next bookkeeping step.
+**Standing candidates**, from the ledger, none yet proposed upstream. The
+[proposals tables](directions.md#proposals) now name a branch for twenty-five
+of the twenty-seven directions, but every candidate below is an **option**
+proposal or a change no branch yet implements, so none of them is in a table
+yet — and the eager pair budget would go under one of R1 or R28, not both:
 
 - **A cumulative eager pair budget** (R1/R28, short-term goal S8). The strongest
   candidate: rescues and slowdowns separate cleanly on cumulative pairs
