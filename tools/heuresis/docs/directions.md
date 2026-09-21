@@ -10,9 +10,10 @@ independently at their discretion; discovery continues without waiting for
 that follow-up. The possible implementations below help investigate candidates
 and inform future work.
 
-**Twenty-seven directions, R1–R23 and R25–R28, each with an argued risk/gain estimate
-and the same four inventories: the cvc5 flags that test it today,
-what has been tried, what z3 and others do, and the papers.** Written
+**Twenty-seven directions, R1–R23 and R25–R28, each with an argued risk/gain
+estimate, the same four inventories — the cvc5 flags that test it today,
+what has been tried, what z3 and others do, and the papers — and, last, the
+table of [proposals](#proposals) that direction owns.** Written
 2026-09-15 from the performance notes
 summarised in [`../notes.md`](notes.md) (the `h-N` rows referenced below),
 from cvc5 `main` at
@@ -122,6 +123,57 @@ number proves that a branch is good, current, or reviewable as one patch.
 | R25 | [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/cvc5/tree/lowLevelOptMore): 11 ahead, 2019-12-16; 3 files, +105/−33 | old, compact constant-factor work | Treat it as profiling history; reproduce the hotspot on current main before porting code. |
 | R26 | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats): 29 ahead, 2026-01-29; 19 files, +532/−15 | E-matching debug statistics plus an `AnalyzeEE` module | Inventory which counters remain absent on main and port only those required by the attribution table. |
 | R27 | [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt): 2 ahead, 2026-03-12; 7 files, +228/−144 | stack reservation, `from_chars`, static `string_view` token tables, and less argument-vector movement | Measure parse-only wall time, allocations, and bytes/s before and after on large generated inputs. |
+
+## Proposals
+
+**A proposal is a change to cvc5 that a person could carry upstream**, named
+precisely enough that they would not have to reconstruct it. Exactly two
+things qualify:
+
+1. **A default-option change** — a cvc5 option whose *default* this project
+   proposes to change. The option already exists; the proposal is the default.
+   Passing it on a command line is a configuration, and
+   [`progress.md`](progress.md) tracks those.
+2. **A development branch** — a branch of the fork proposed for merge into
+   cvc5 `main`, named by its tip and measured against its merge base.
+
+Nothing else is one. A counter patch, an instrument, a job config, a one-off
+A/B, a hypothesis, a branch worth reading: each can produce a proposal and
+none is a proposal. The branches in the archaeology table above are candidates
+in exactly that sense. An empty table is the normal state, and a direction
+that never fills one has still done its job if it produced a finding.
+
+**Each proposal has exactly one direction.** It appears in that direction's
+table and nowhere else in this document; the union of the tables is the whole
+register, and there is no global copy of it to fall out of date. A direction
+that shares the mechanism links to the owning row rather than repeating it. A
+branch that changes two mechanisms is either split into two branches, one per
+mechanism, or owned by the direction whose mechanism it principally changes.
+The same row in two tables is a bookkeeping error; a branch nobody can assign
+to one direction is evidence that it bundles more than a reviewer should be
+asked to take in one piece.
+
+**The columns.**
+
+| column | what goes in it |
+| --- | --- |
+| **proposal** | The branch as `ajreynol:NAME`, linked, for a branch; the option and the change of default — `--ee-mode`, `distributed` → `central` — for the other kind. One row per proposal. |
+| **± LOC** | For a branch, `+A/−B`: the three-dot source diff from merge base to tip over `src/` and the regression list, the convention the archaeology table above uses, naming the `main` revision it was taken against. Rebase first, then measure. It estimates how much there is to review, not how good it is. For a default-option change, `—`: the change is the default value. |
+| **± solved on `quant-07-25`** | Benchmarks solved on the whole set at the fixed 30 s timeout, minus the baseline's; positive is more solved. The baseline is the configuration the proposal would change, and the cell names it: `default` for a change of default, because that is what cvc5 does out of the box, and the tracked configuration a branch is meant to improve — `best` today — for a branch. `—` until measured; a measured loss is written in as a loss and the row stays. |
+
+Every figure in the last two columns cites the [ledger](ledger) entry that
+carries it, as every figure in this project does. PAR2 remains
+[`progress.md`](progress.md)'s measure; this column counts benchmarks because
+that is the first thing asked of a proposed change and because a count does
+not move with the timeout's arithmetic. The ledger entry behind the cell has
+the ratio.
+
+**Recording a proposal does not send it anywhere.** Filing an issue or opening
+a pull request is a person's act, and out of scope for this project. When a
+proposal lands in cvc5 `main` it becomes a row in
+[`progress.md`](progress.md#pull-requests-to-cvc5-main), which is the record of
+fact; the proposal row stays here, linked to it, so the direction keeps its
+history.
 
 ---
 
@@ -247,6 +299,13 @@ clause-lifetime, and memory. The notes report that eager attempts drowned
 without deletion, but `--inst-local` is not deletion (R9); a genuine lifetime
 experiment must follow if the eager signal is positive.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R2 — Incremental E-matching: match what changed, not everything
 
 **Effort.** 🔴 High Risk / 🟢 High Gain — persistent indices and merge notifications
@@ -324,6 +383,13 @@ therefore positive. Add the still-missing counter for matches found versus
 matches rediscovered; that ratio decides whether incrementality, rather than
 matching work that was genuinely new, is the target.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R3 — Worst-case E-matching: failure caching and early pruning
 
 **Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the change is localized to matcher
@@ -373,6 +439,13 @@ CAV 2015. No paper on cvc5's instantiation evaluator exists; [PR
 
 **What would settle it.** The distribution of E-matching time per round on the
 gap set: a heavy tail on few benchmarks is R3, a uniform cost is R2.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R4 — Instantiation budgeting: how many instances per round, and which
 
@@ -436,6 +509,13 @@ selection, a budget of a different kind).
 set versus z3's `smt.qi.profile` counts on the same benchmarks. If cvc5 makes
 an order of magnitude more instances to reach the same refutation, R4 (with
 R9) is the direction; if the counts are similar, the cost is elsewhere.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R5 — Trigger selection: strict user patterns, multi-triggers, and what strictness disables
 
@@ -512,6 +592,13 @@ have no user pattern (and so get auto-triggers), how many multi-triggers
 there are, and an A/B of `trust` vs `strict` alone (the baseline measured
 `strict` and `--no-cbqi` together).
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R6 — Conflict-based instantiation: off for this domain, and why that is right or wrong
 
 **Effort.** 🟢 Low Risk / 🟡 Medium Gain — the engine, modes, and off switch
@@ -569,6 +656,13 @@ Keep QCF off on this corpus. Do not rebase `ai-cbqi-0423` solely for a global
 speedup; inspect pattern coverage only if explaining the rare useful QCF
 instances becomes a target.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R7 — Entailment filtering of instances: what ieval buys and costs
 
 **Effort.** 🟢 Low Risk / 🟡 Medium Gain — existing modes bracket the experiment and
@@ -619,6 +713,13 @@ neutral against evaluator-on (+0.09% PAR2, one net lost solve) and 3.91% worse
 than evaluator-off. Do not upstream it from timing evidence. If revisited,
 record evaluator pushes, early rejections, completed matches, time, and memory
 in a fresh focused port.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
@@ -673,6 +774,13 @@ Back*](https://ceur-ws.org/Vol-4008/SMT_paper10.pdf), SMT 2025.
 **What would settle it.** `-o inst-strategy` on the gap set to see whether
 cegqi ever fires; an A/B of `--no-cegqi` and of `--enum-inst` on the current
 cvc5-unsolved gap slice.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R28 — Eager conflict-based instantiation: find a useful instance before full effort
 
@@ -744,6 +852,13 @@ and counters. Compare it with ordinary E-matching on the 796-case current gap,
 recording full rounds, eager candidates, accepted conflicts/units, clauses,
 and memory. Mine old
 `eagerCbqi` for design and tests; do not rebase all 204 commits.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ---
 
@@ -840,6 +955,13 @@ high-variance `--inst-local` result above tests its scoped-cache/justification
 approximation, not deletion; classify its helped cases before trying
 `--inst-defer`. A true GC still needs the notification plumbing first.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R10 — Where instance lemmas sit in the decision order: local, deferred, gated
 
 **Effort.** 🟡 Medium Risk / 🟢 High Gain — existing flags and branches keep the
@@ -898,6 +1020,13 @@ PAR2 1.2% and the gap from 1122 to 1332; `--jh-rlv-order` raises PAR2 7.2%,
 loses 66 net solves, but reduces time on the cases it still solves. These are
 negative as global policies but heterogeneous. Classify their wins and losses
 with `sat::decisions` before building or rebasing `--inst-defer`.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R11 — Decision heuristic versus relevancy: what the SAT solver is made to decide on
 
@@ -958,6 +1087,13 @@ on the set are two cheap runs; [`ajreynol:preregRlv`](https://github.com/ajreyno
 matters is how many theory facts and matched terms the run touches, not the
 decision count.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R12 — Lemma inprocessing and conflict minimisation
 
 **Effort.** 🟢 Low Risk / 🟡 Medium Gain — mainline switches already expose the
@@ -1000,6 +1136,13 @@ on cvc5's inprocessing.
 
 **What would settle it.** Two runs: `--lemma-inprocess=light` and
 `--conflict-process=min`, with the average lemma size before and after.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R13 — The SAT backend: CaDiCaL, MiniSat, restarts, units
 
@@ -1070,6 +1213,13 @@ current main now declares it the default, so incremental mode cannot silently
 select MiniSat. Classify its 55 rescues and its 116 at-least-2× regressions
 before designing a narrower SAT-policy experiment.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ---
 
 # Group C — the ground engine
@@ -1129,6 +1279,13 @@ SMT*](https://disi.unitn.it/rseba/papers/lpar06_dtc.pdf), LPAR 2006.
 **What would settle it.** Add a counter for care pairs/splits and record it on
 the gap set; current main exposes per-theory `computeCareGraphTime` timers but
 not that count. Then build the PR branch.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
 
@@ -1200,6 +1357,13 @@ count skipped `propagateSharedEquality` calls and callback time, then test a
 second corpus if the avoided work is material. Mine the larger
 [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3)
 selectively: its first replayed commit conflicts on current main.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R16 — Datatypes: when to split, on what, and whether to have them at all
 
@@ -1276,6 +1440,13 @@ eligible/suppressed split counters or reproduce the two-commit
 [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant)
 logic as a narrowly instrumented current-main patch and check completeness.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R17 — Linear integer arithmetic: branch and bound, cuts, and the Diophantine solver
 
 **Effort.** 🔴 High Risk / 🟡 Medium Gain — integer reasoning is correctness-critical
@@ -1348,6 +1519,13 @@ counters narrow R17 to roughly one quarter of the gap rather than supporting
 a global policy. Classify that slice before running `--no-dio-solver` or
 building [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc).
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R18 — Nonlinear arithmetic: off, light, or lazy
 
 **Effort.** 🟢 Low Risk / 🔴 Low Gain — an existing flag matches Verus's policy and
@@ -1401,6 +1579,13 @@ Solver*](https://doi.org/10.1007/978-3-031-10769-6_7), IJCAR 2022.
 the path, and the path carries the logic); then `--nl-ext=none` and
 `--nl-ext=light` on the NIA subset. If cvc5 answers unsat as often with
 nonlinear off, the extension was pure cost here.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R19 — Bit-vectors inside quantified problems
 
@@ -1459,6 +1644,13 @@ Abstractions*](https://doi.org/10.1007/978-3-031-65627-9_9), CAV 2024.
 **What would settle it.** The gap set by logic first: if the UFBVDTNIA share
 of the gap is proportional to its share of the set, bit-vectors are not a
 direction. Then `--theoryof-mode=term` on that subset.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ---
 
@@ -1531,6 +1723,13 @@ Z3*](https://z3prover.github.io/papers/programmingz3.html), 2019.
 gap set (`--stats`); then `--simplification=none`, `--no-static-learning`,
 `--ite-simp` as runs.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R21 — Quantifier preprocessing: what is done to a quantifier before it is ever matched
 
 **Effort.** 🔴 High Risk / 🟡 Medium Gain — rewrites must preserve binders, annotations,
@@ -1588,6 +1787,13 @@ and Pit-Claudel CAV
 --prenex-quant=none --ite-lift-quant=none --cond-var-split-quant=off` against
 `strict`: if they match, the rewriting was the effect of `strict`.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R22 — Preregistration: which literals the theories are told about
 
 **Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the long-lived branch demonstrates bounded
@@ -1620,6 +1826,13 @@ MSR-TR-2007-140.
 
 **What would settle it.** `--preregister-mode=lazy` on the set, today. Then the
 branch.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R23 — Term-database relevance: which ground terms E-matching may use
 
@@ -1662,6 +1875,13 @@ matching).
 default on the set (three runs), with `QuantifiersEngine::Num_Quantifiers`,
 term-database size and instance counts.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ---
 
 # Group E — cross-cutting
@@ -1701,6 +1921,13 @@ by expr id above a threshold.
 **What would settle it.** callgrind on the ten worst solved-but-slow
 benchmarks, at row 1 of the latency table. If one function dominates, this is
 the direction for those ten.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## R26 — Attribution instrumentation: the tools goal 2 needs
 
@@ -1791,6 +2018,13 @@ new-versus-rediscovered E-match, persistent-clause, and instance-clause
 conflict-use counters. Inspect `qdebugStats` and port only what supplies those
 gaps.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## R27 — SMT-LIB parser throughput: pay less before solving
 
 **Effort.** 🟡 Medium Risk / 🟡 Medium Gain — lexer and term-construction changes are
@@ -1848,6 +2082,13 @@ before rebasing
 R27 leaves the active top ten pending that cheaper measurement; if it returns,
 a profile should identify lexing, symbol lookup, API term construction, or
 command execution as the actual target.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on `quant-07-25` |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ---
 

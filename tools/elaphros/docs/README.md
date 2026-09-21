@@ -16,7 +16,7 @@ reflected on the page at the next build or stops it.
 | document | purpose |
 | --- | --- |
 | [notes.md](notes.md) | Stable hypothesis register, separating source evidence from expected effects. |
-| [directions.md](directions.md) | Research mechanisms, current controls, branch readiness and discriminating questions. |
+| [directions.md](directions.md) | Research mechanisms, current controls, branch readiness, discriminating questions, and the proposals each direction owns. |
 | [todo.md](todo.md) | Agent priorities, maintainer guidance and the planning queue. |
 | [progress.md](progress.md) | What is established and which measurements remain absent. |
 | [ledger/README.md](ledger/README.md) | Evidence conventions and dated records. |

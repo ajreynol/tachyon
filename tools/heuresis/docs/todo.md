@@ -18,6 +18,12 @@ A human may independently pursue it at their discretion. Continue discovery
 without waiting for that decision; implementation suggestions serve as possible
 experiments or starting points for later work.
 
+**Proposals are not ranked here.** When a goal produces a named change to cvc5
+— a default to change, or a branch to merge — it is recorded as a
+[proposal](../README.md#proposals) in its research direction's table, once,
+and the rows below link to it rather than restate it. This queue ranks
+directions and short-term goals; the register holds the proposals.
+
 ## Short-term goals
 
 **The actionable layer.** The two ranked tables below order *research

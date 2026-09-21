@@ -18,6 +18,7 @@
 | What fraction is attributed? | Unknown; no profiles or phase measurements. |
 | Which branches build and produce validated proofs? | Not established here. |
 | Which optimizations improve time or memory? | None established. |
+| What changes to cvc5 are proposed? | None. Every direction's [proposals table](../README.md#proposals) is empty, and a proposal needs a corpus, a baseline and a validated measurement, none of which exists. |
 
 All inventory counts come from the [source survey](ledger/2026-09-18-branch-survey.md),
 and the pipeline observations from the

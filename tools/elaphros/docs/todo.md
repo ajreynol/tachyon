@@ -17,6 +17,13 @@ The [progress record](progress.md) names what is still unknown.
 No ordered human ranking, fixed corpus or target overhead has been supplied.
 This section records the guidance without converting it into invented ranks.
 
+**Proposals are not ranked here.** A named change to cvc5 — a default to
+change, or a branch to merge — is recorded as a
+[proposal](../README.md#proposals) in its research direction's table, once,
+and referred to from here rather than restated. This queue ranks directions and
+planning steps. Nothing qualifies yet: proposing a change requires the corpus
+and baseline goal 1 fixes.
+
 ## Agent research priorities
 
 The main recommendation is to lead with **avoiding unnecessary elaboration**.

@@ -174,6 +174,33 @@ and its supporting ledger entries. A fix, a complete decomposition of the gap,
 and a human commitment to pursue the result are unnecessary. The purpose is to
 give a human a solid starting point whenever they choose to use it.
 
+## Proposals
+
+**A proposal is a change to cvc5 that a person could carry upstream.** Exactly
+two things qualify: a **default-option change** — a cvc5 option whose
+*default* this project proposes to change — or a **development branch** of
+cvc5 proposed for merge into `main`. An option passed on a command line is a
+configuration, not a proposal; so is a counter patch, an instrument, or a
+one-off A/B. Those produce proposals; they are not proposals.
+
+**Each proposal belongs to exactly one research direction**, and is listed in
+that direction's table at the end of its entry in
+[`docs/directions.md`](docs/directions.md) and nowhere else. The union of those
+tables is the register; there is no second, global list to drift out of date.
+Three columns: the branch or the option, ± LOC for a branch, and ± benchmarks
+solved on `quant-07-25`. The
+[register's own section](docs/directions.md#proposals) defines them, the
+baselines they are measured against, and what to do with a change that touches
+two directions.
+
+**Recording a proposal does not send it anywhere.** Filing and opening pull
+requests stay a person's act, as out of scope above says. A proposal is this
+project saying what it would file and attaching the evidence; when one lands,
+it becomes a row in
+[`progress.md`](docs/progress.md#pull-requests-to-cvc5-main). Proposals are
+also not the point: a finding is the primary result, and a direction that
+produces a good question and an empty table has done its job.
+
 ## The set
 
 **`quant-07-25`**, the quantifier benchmark tree on the benchmark host, named

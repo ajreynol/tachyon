@@ -116,6 +116,34 @@ what cannot be reproduced from this checkout alone. A single run is not an
 independent replication, and no measurement here establishes a claim about
 all cvc5 workloads.
 
+## Proposals
+
+**A proposal is a change to cvc5 that a person could carry upstream.** Exactly
+two things qualify: a **default-option change** — a cvc5 option whose *default*
+this project proposes to change — or a **development branch** of cvc5 proposed
+for merge into `main`. A probe, a counter, an experimental patch written to
+answer a question: each can produce a proposal and none is one. Neither is a
+change that buys its saving by weakening the proof requirement, for the reason
+[out of scope](#the-charter) gives.
+
+**Each proposal belongs to exactly one research direction**, listed in that
+direction's table at the end of its entry in
+[`docs/directions.md`](docs/directions.md) and nowhere else, so the union of
+those tables is the register and no global copy exists to drift out of date.
+Three columns, the same three heuresis uses: the branch or the option, ± LOC
+for a branch, and ± benchmarks solved on the corpus. The
+[register's own section](docs/directions.md#proposals) defines them and what to
+do with a change that touches two directions.
+
+**All sixteen tables are empty, and cannot yet be otherwise.** The third column
+names a corpus this project does not have: goal 1 fixes it, and until then
+there is no baseline to subtract. Goal 1 also settles what those three columns
+are missing here — added seconds, the time ratio, proof size, checker time and
+the validation outcome, which [an overhead
+claim](#what-an-overhead-claim-means) requires and a solved count does not
+carry. Recording a proposal stays separate from filing one, which is a person's
+act through tachyon's reporting process.
+
 ## On the name
 
 **Elaphros** transliterates Greek **ἐλαφρός**, "light in weight"

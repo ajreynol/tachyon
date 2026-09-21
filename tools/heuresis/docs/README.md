@@ -8,7 +8,7 @@ versions behave identically.
 | document | purpose |
 | --- | --- |
 | [notes.md](notes.md) | The source notes' hypothesis register, with inherited claims distinguished from measurements here. |
-| [directions.md](directions.md) | Research directions, source audits and the evidence supporting each candidate. |
+| [directions.md](directions.md) | Research directions, source audits, the evidence supporting each candidate, and the proposals each direction owns. |
 | [todo.md](todo.md) | Active experiments and separate agent and human priority rankings. |
 | [progress.md](progress.md) | Current investigation progress and outstanding work. |
 | [upstream-questions.md](upstream-questions.md) | Defects and design questions this project would raise with cvc5, held for a person to carry. |

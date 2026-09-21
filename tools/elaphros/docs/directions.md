@@ -38,6 +38,12 @@ count the proposed optimization's own cost. High potential gain does not
 justify a broad rebase before the relevant cost is established. All proposed
 measurements below remain future work; the current phase is planning only.
 
+**Proposals.** Each direction closes with the table of
+[proposals](#proposals) it owns — changes to cvc5 someone could carry
+upstream. All sixteen are empty, and cannot yet be otherwise: with no corpus,
+no baseline and no measurement, this project has nothing to propose and no
+number to propose it with.
+
 ## The map
 
 | part of the problem | directions | distinguishing question |
@@ -53,6 +59,62 @@ a large obligation to small local ones. **Compact conversion** changes how a
 necessary equality derivation is represented. **Dependency minimization** avoids
 justifying child rewrites irrelevant to the final result. A combined branch
 cannot tell us which mechanism matters.
+
+## Proposals
+
+**A proposal is a change to cvc5 that a person could carry upstream**, named
+precisely enough that they would not have to reconstruct it. Exactly two
+things qualify:
+
+1. **A default-option change** — a cvc5 option whose *default* this project
+   proposes to change. The option already exists; the proposal is the default.
+   Passing it on a command line is a configuration, not a proposal.
+2. **A development branch** — a branch of the fork proposed for merge into
+   cvc5 `main`, named by its tip and measured against its merge base.
+
+Nothing else is one. A probe, a counter, an instrument, an experimental patch
+written to answer a question: each can produce a proposal and none is a
+proposal. Neither is a branch that is merely interesting — the forty-nine
+branches the [survey](ledger/2026-09-18-branch-survey.md) characterizes are
+candidates in exactly that sense. And a change that buys its saving by
+weakening the proof requirement is not a proposal at all, for the reason the
+[charter](../README.md#the-charter) gives: an unchecked or incomplete proof is
+not a cheaper proof.
+
+**Each proposal has exactly one direction.** It appears in that direction's
+table and nowhere else in this document; the union of the tables is the whole
+register, and there is no global copy of it to fall out of date. A direction
+that shares the mechanism links to the owning row rather than repeating it. A
+branch that changes two mechanisms is either split into two branches, one per
+mechanism, or owned by the direction whose mechanism it principally changes —
+which is the same discipline the directions already ask for, that changes with
+distinct mechanisms be kept separate. The same row in two tables is a
+bookkeeping error.
+
+**The columns.**
+
+| column | what goes in it |
+| --- | --- |
+| **proposal** | The branch as `ajreynol:NAME`, linked, for a branch; the option and the change of default for the other kind. One row per proposal. |
+| **± LOC** | For a branch, `+A/−B`: the source diff from its merge base to its tip, in the convention the [survey](ledger/2026-09-18-branch-survey.md) uses for pinned tips, naming the upstream revision it was taken against. Rebase first, then measure. It estimates how much there is to review, not how good it is. For a default-option change, `—`: the change is the default value. |
+| **± solved on the corpus** | Benchmarks solved, minus the baseline's, on the corpus and under the resource limits [goal 1](../README.md#the-charter) fixes, with proofs produced and checked in both arms. Positive is more solved. `—` until measured; a measured loss is written in as a loss and the row stays. |
+
+**The third column has no corpus yet**, and so can hold nothing. When goal 1
+fixes one, its name replaces *the corpus* in every header here, as heuresis's
+headers name `quant-07-25`. Goal 1 also settles what these three columns are
+missing for a proof-production result: an overhead claim needs added seconds
+and the time ratio, and a proposal is not assessable without the proof size,
+the checker time and the validation outcome
+([what an overhead claim means](../README.md#what-an-overhead-claim-means)).
+Whether those become further columns or stay in the ledger entry each cell
+cites is a decision for the pass that fixes the corpus, not one to invent
+here.
+
+**Recording a proposal does not send it anywhere.** Publishing a finding,
+filing an issue and opening a pull request stay a person's act, carried
+through tachyon's reporting process; a proposal is this project saying what it
+would file, with the evidence attached. [`progress.md`](progress.md) records
+whether any proposal exists at all.
 
 ## E1 Unrewriting
 
@@ -94,6 +156,13 @@ placement only after their proof obligations are understood. Later compare
 exclusive work saved with analysis/replay cost; if only output or checker cost
 falls, retain that narrower result and lower the production-time expectation.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## E2 Smaller macro obligations
 
 **Effort.** 🟡 Medium Risk / 🟢 High Gain — local decomposition could avoid
@@ -126,6 +195,13 @@ checks, and expansion work saved under identical output requirements.
 and preserve the ordinary expansion fallback for each. Promote the cases whose
 avoided expansion outweighs failed decomposition and extra checking; reduce
 priority if large macros mostly change throughout or already share their work.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## E3 Compact term conversion
 
@@ -165,6 +241,13 @@ separate proposals, with an expanded-proof fallback. Lower the production-time
 expectation if the ordinary conversion still dominates; record any size or
 checking benefit separately.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## E4 Rewrite dependencies
 
 **Effort.** 🔴 High Risk / 🟢 High Gain — avoiding irrelevant child proofs
@@ -193,6 +276,13 @@ for this experiment: E4 acts inside individual rewrite obligations.
 falling back when minimization is inconclusive. Expand only if avoided
 reconstruction exceeds probing and translation costs; few removable
 dependencies or expensive unsuccessful probes would lower this priority.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## E5 Proof DAG simplification and sharing
 
@@ -233,6 +323,13 @@ Broaden only when exclusive expansions avoided exceed traversal/allocation
 costs. A smaller final DAG with unchanged temporary work weakens the expected
 production gain.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## E6 Recorded rewrite provenance
 
 **Effort.** 🔴 High Risk / 🟢 High Gain — recorded rule identities could
@@ -262,6 +359,13 @@ rules and separate execution, recording and reconstruction changes in the
 recording costs and leaves no new proof holes. Frequent fallback or benefits
 explained by ordinary solver changes reduce this direction's priority.
 Discovering new rewrite rules remains Metagraphe's question.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## E7 Reconstruction cache and search policy
 
@@ -296,6 +400,13 @@ gain estimate if repeated evaluation or failed attempts dominate. Low reuse,
 memory growth or additional unresolved proof obligations would lower it,
 regardless of the patch's small size.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## E8 Resolution construction and internal checking
 
 **Effort.** 🟡 Medium Risk / 🟡 Medium Gain — a recent one-file change could
@@ -327,6 +438,13 @@ validation costs. Long, frequently checked chains would raise the gain
 estimate; short or rarely exercised chains would lower it. External checker
 optimization remains outside Elaphros's scope.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## E9 Definitions and proof output
 
 **Effort.** 🔴 High Risk / 🟡 Medium Gain — preserving definitions could
@@ -356,6 +474,13 @@ files do not establish faster production or identical proof obligations.
 alternatives under one input/definition contract. Promote the direction if
 definition expansion or serialization dominates. If the benefit is only fewer
 bytes, report it as such and avoid predicting lower construction time.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## E10 Lazy bookkeeping and theory reconstruction
 
@@ -393,6 +518,13 @@ retention or repeated construction is material; deprioritize a broad rebase if
 main already provides the needed behavior or fresh objects merely increase
 allocations. Strings variants need an actual strings workload.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## E11 Incremental output and reuse
 
 **Effort.** 🔴 High Risk / 🟢 High Gain — real incremental clients could
@@ -422,6 +554,13 @@ reuse across queries, including push/pop, resets and every required refutation.
 Promote if shared declarations and repeated setup dominate session cost.
 Keep this deferred for unrelated single-query workloads, and count retained
 state against any time saved.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## E12 Proof-induced search changes
 
@@ -455,6 +594,13 @@ mode always forces a particular SAT solver.
 state where matching is impossible. Close this prerequisite with an explicit
 comparison design, then revisit it when revisions or proof settings change.
 It does not expand into general solver tuning.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## E13 Proof-work accounting
 
@@ -502,6 +648,13 @@ proof, and lost solving capability (E12). Do not let the instrument grow into
 general profiling infrastructure before an experiment needs it, and do not
 report a phase attribution whose scopes overlap.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## E14 Proof node representation and allocation
 
 **Effort.** 🔴 High Risk / 🟡 Medium Gain — mutability is load-bearing in the
@@ -540,6 +693,13 @@ Reduce priority if merging already captures the available sharing, or if the
 mutation sites make an immutable layer equivalent to rewriting the
 postprocessor.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## E15 Streaming proof emission
 
 **Effort.** 🔴 High Risk / 🟡 Medium Gain — peak memory could fall if the
@@ -576,6 +736,13 @@ different mechanisms and should not be bundled into one measurement. Reduce
 priority if the postprocessed proof must be complete for the chosen format
 anyway.
 
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
+
 ## E16 Traversal fusion
 
 **Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the passes are identifiable and
@@ -611,6 +778,13 @@ fuse a single pair whose combination demonstrably preserves the current order
 of effects, keeping the separate passes available for comparison. Deprioritize
 if visits are few or per-node work is dominated by the updater's own
 elaboration.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | ± LOC | ± solved on the corpus |
+| --- | ---: | ---: |
+| *(none yet)* | | |
 
 ## Attribution before an experiment queue
 
