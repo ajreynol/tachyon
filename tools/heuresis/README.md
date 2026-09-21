@@ -187,8 +187,9 @@ one-off A/B. Those produce proposals; they are not proposals.
 that direction's table at the end of its entry in
 [`docs/directions.md`](docs/directions.md) and nowhere else. The union of those
 tables is the register; there is no second, global list to drift out of date.
-Three columns: the branch or the option, ± LOC for a branch, and ± benchmarks
-solved on `quant-07-25`. The
+Four columns: the branch or the option; the upstream revision the branch is
+rebased to, which is what says whether the other two can be filled at all;
+± LOC for a branch; and ± benchmarks solved on `quant-07-25`. The
 [register's own section](docs/directions.md#proposals) defines them, the
 baselines they are measured against, and what to do with a change that touches
 two directions.

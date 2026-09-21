@@ -42,8 +42,8 @@ measurements below remain future work; the current phase is planning only.
 [proposals](#proposals) it owns — changes to cvc5 someone could carry
 upstream. Twelve of the sixteen name a branch; E13–E16 name none, because no
 branch stands behind them. **No row carries a number, and none can yet:** every
-branch named is behind the pinned upstream main of the survey, by 63 to 816
-commits, and this project has no corpus, no baseline and no measurement to
+branch named is behind the fork's `master`, by 70 to 823 commits on
+2026-09-21, and this project has no corpus, no baseline and no measurement to
 subtract one from. Naming a branch here asserts that it is the best merge
 candidate the survey found for that mechanism, nothing more.
 
@@ -99,6 +99,7 @@ bookkeeping error.
 | column | what goes in it |
 | --- | --- |
 | **proposal** | The branch as `ajreynol:NAME`, linked, for a branch; the option and the change of default for the other kind. One row per proposal. |
+| **rebased to** | The upstream revision the branch currently sits on: its merge base with cvc5 `main`, which the fork's `master` tracks, and how far behind that leaves it. **`master`** when the branch contains master's tip and nothing separates them. A branch that is behind cannot be built, measured or reviewed as it stands, so its other two columns stay empty until it is rebased. Checked against the live fork, with the date of the check in the section below. |
 | **± LOC** | For a branch, `+A/−B`: the source diff from its merge base to its tip, in the convention the [survey](ledger/2026-09-18-branch-survey.md) uses for pinned tips, naming the upstream revision it was taken against. Rebase first, then measure. It estimates how much there is to review, not how good it is. For a default-option change, `—`: the change is the default value. |
 | **± solved on the corpus** | Benchmarks solved, minus the baseline's, on the corpus and under the resource limits [goal 1](../README.md#the-charter) fixes, with proofs produced and checked in both arms. Positive is more solved. `—` until measured; a measured loss is written in as a loss and the row stays. |
 
@@ -113,12 +114,21 @@ Whether those become further columns or stay in the ledger entry each cell
 cites is a decision for the pass that fixes the corpus, not one to invent
 here.
 
-**A row with no numbers is a branch that is not current with `main`.** Nothing
-is measured until it is rebased, and rebasing every branch named in these
-tables — the *active* branches, the ones a proposal depends on — is the pass
-that has to come before any of these columns can be filled. That list is
+**A row with no numbers is a branch that is not current with `master`.**
+Nothing is measured until it is rebased, and rebasing every branch named in
+these tables — the *active* branches, the ones a proposal depends on — is the
+pass that has to come before any of these columns can be filled. That list is
 generated from these tables and kept outside the repository
 (`rebase-to-master-ajr.txt`, untracked), so it cannot go stale in the record.
+
+**Checked 2026-09-21 against the live fork**, with `ajreynol/cvc5` `master` at
+[`90def769`](https://github.com/cvc5/cvc5/commit/90def7690b7ba98b5337f2838f2ad28cb37e6147),
+which is exactly cvc5 `main`'s tip: **not one of the twelve branches named here
+is on it.** They run from 70 behind (`unrewrite2`) to 823 (`rewriteDep`), and
+no branch in the fork has moved since this project's
+[2026-09-18 head snapshot](../reports/data/2026-09-18-ajreynol-cvc5-heads.tsv)
+except `master` itself and one unrelated branch, so any rebase done since then
+has not been pushed here.
 
 **Recording a proposal does not send it anywhere.** Publishing a finding,
 filing an issue and opening a pull request stay a person's act, carried
@@ -169,9 +179,9 @@ falls, retain that narrower result and lower the production-time expectation.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:unrewrite2`][unrewrite2] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:unrewrite2`][unrewrite2] | `f89d769` (2026-08-19), **70 behind** | — | — |
 
 ## E2 Smaller macro obligations
 
@@ -209,9 +219,9 @@ priority if large macros mostly change throughout or already share their work.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:reduceTransform`][reduceTransform] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:reduceTransform`][reduceTransform] | `5572531` (2025-06-20), **683 behind** | — | — |
 
 ## E3 Compact term conversion
 
@@ -254,9 +264,9 @@ checking benefit separately.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:pfrConvert2`][pfrConvert2] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:pfrConvert2`][pfrConvert2] | `ef56238` (2026-01-28), **409 behind** | — | — |
 
 ## E4 Rewrite dependencies
 
@@ -290,9 +300,9 @@ dependencies or expensive unsuccessful probes would lower this priority.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:rewriteDep`][rewriteDep] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:rewriteDep`][rewriteDep] | `59a6c1d` (2025-04-14), **823 behind** | — | — |
 
 ## E5 Proof DAG simplification and sharing
 
@@ -336,9 +346,9 @@ production gain.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] | `13e624a` (2025-08-20), **631 behind** | — | — |
 
 ## E6 Recorded rewrite provenance
 
@@ -373,9 +383,9 @@ Discovering new rewrite rules remains Metagraphe's question.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:rdbExec`][rdbExec] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:rdbExec`][rdbExec] | `5cc03f4` (2026-08-12), **92 behind** | — | — |
 
 ## E7 Reconstruction cache and search policy
 
@@ -413,9 +423,9 @@ regardless of the patch's small size.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:rareOptEval`][rareOptEval] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:rareOptEval`][rareOptEval] | `2ae4ede` (2025-08-25), **616 behind** | — | — |
 
 ## E8 Resolution construction and internal checking
 
@@ -451,9 +461,9 @@ optimization remains outside Elaphros's scope.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:chainMResOpt`][chainMResOpt] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:chainMResOpt`][chainMResOpt] | `9730515` (2026-07-05), **117 behind** | — | — |
 
 ## E9 Definitions and proof output
 
@@ -488,9 +498,9 @@ bytes, report it as such and avoid predicting lower construction time.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:pf-defineFun-printerOnly`][defineFunPrinter] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:pf-defineFun-printerOnly`][defineFunPrinter] | `242ff48` (2026-08-17), **74 behind** | — | — |
 
 ## E10 Lazy bookkeeping and theory reconstruction
 
@@ -531,9 +541,9 @@ allocations. Strings variants need an actual strings workload.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:stratifiedStrIpc`][stratifiedStrIpc] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:stratifiedStrIpc`][stratifiedStrIpc] | `d8635c8` (2025-12-16), **451 behind** | — | — |
 
 ## E11 Incremental output and reuse
 
@@ -568,9 +578,9 @@ state against any time saved.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:ai-pfIncremental`][aiPfIncremental] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:ai-pfIncremental`][aiPfIncremental] | `5a72641` (2026-03-27), **280 behind** | — | — |
 
 ## E12 Proof-induced search changes
 
@@ -608,9 +618,9 @@ It does not expand into general solver tuning.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| [`ajreynol:ai-macroPf`][aiMacroPf] | — | — |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| [`ajreynol:ai-macroPf`][aiMacroPf] | `7f138fe` (2026-04-23), **230 behind** | — | — |
 
 ## E13 Proof-work accounting
 
@@ -661,9 +671,9 @@ report a phase attribution whose scopes overlap.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| *(none yet — no branch behind this direction)* |  |  |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| *(none yet — no branch behind this direction)* |  |  |  |
 
 ## E14 Proof node representation and allocation
 
@@ -706,9 +716,9 @@ postprocessor.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| *(none yet — no branch behind this direction)* |  |  |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| *(none yet — no branch behind this direction)* |  |  |  |
 
 ## E15 Streaming proof emission
 
@@ -749,9 +759,9 @@ anyway.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| *(none yet — no branch behind this direction)* |  |  |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| *(none yet — no branch behind this direction)* |  |  |  |
 
 ## E16 Traversal fusion
 
@@ -792,9 +802,9 @@ elaboration.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | ± LOC | ± solved on the corpus |
-| --- | ---: | ---: |
-| *(none yet — no branch behind this direction)* |  |  |
+| proposal | rebased to | ± LOC | ± solved on the corpus |
+| --- | --- | ---: | ---: |
+| *(none yet — no branch behind this direction)* |  |  |  |
 
 ## Attribution before an experiment queue
 

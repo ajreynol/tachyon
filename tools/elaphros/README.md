@@ -130,14 +130,16 @@ change that buys its saving by weakening the proof requirement, for the reason
 direction's table at the end of its entry in
 [`docs/directions.md`](docs/directions.md) and nowhere else, so the union of
 those tables is the register and no global copy exists to drift out of date.
-Three columns, the same three heuresis uses: the branch or the option, ± LOC
-for a branch, and ± benchmarks solved on the corpus. The
+Four columns, the same four heuresis uses: the branch or the option; the
+upstream revision the branch is rebased to; ± LOC for a branch; and
+± benchmarks solved on the corpus. The
 [register's own section](docs/directions.md#proposals) defines them and what to
 do with a change that touches two directions.
 
 **Twelve of the sixteen tables name a branch, and not one carries a number.**
-Every branch named is behind upstream main, and the third column names a corpus
-this project does not have: goal 1 fixes it, and until then there is no
+Every branch named is behind upstream main — by 70 to 823 commits, checked
+against the live fork on 2026-09-21 — and the last column names a corpus this
+project does not have: goal 1 fixes it, and until then there is no
 baseline to subtract. Goal 1 also settles what those three columns
 are missing here — added seconds, the time ratio, proof size, checker time and
 the validation outcome, which [an overhead
