@@ -349,10 +349,13 @@ The latest recorded measurements are dated 2026-09-17, on `main@a07d513075`
 > exist.
 
 The published [report](https://ajreynol.github.io/tachyon/heuresis/) is built
-from the retained gap lists rather than from this table, and the newest of those
-is the 2026-09-16 `best` list — 789 benchmarks, 460 cvc5-unsolved and 329 both
+from the retained gap lists rather than from this table. The newest lists are
+from 2026-09-16, including the `best` list — 789 benchmarks, 460 cvc5-unsolved and 329 both
 solved with cvc5 at least 10× slower
 ([ledger](docs/ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)).
+The report also includes that day's repeated current-main combined control
+and eager-module-off control; their [retention notes](reports/data/README.md)
+record the move into the report's data directory.
 The 2026-09-17 runs retained no gap list, so the report does not move with the
 rows above.
 

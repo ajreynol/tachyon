@@ -100,3 +100,28 @@ The third requested branch was not testable: the published
 tip remained `d9a13309dc1`, **138 commits behind / 5 ahead** current main when
 rechecked after the other jobs. A rebased tip may exist locally, but it must be
 pushed before dev1 can build it.
+
+## Retention update — 2026-09-21
+
+The previously local-only
+[`gapset-u-ssc-current-ee-central-ieval-off-vs-z3-full-091626.txt`](../../reports/data/gapset-u-ssc-current-ee-central-ieval-off-vs-z3-full-091626.txt)
+was committed on 2026-09-21 under the obsolete `ledger/data/` path. It now lives
+in `reports/data/`, unchanged, to support the recorded 796-case comparison and
+the published report. No experiment was rerun. The launch log records this arm:
+
+```text
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091626-u-ssc-current-ee-central-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
+# cvc5: git d7d03b082c on branch master
+```
+
+The reference is the [full-option z3 run](2026-09-15-z3-full-verus-options.md).
+After retrieving the two raw artifacts into `scratch/results/`, regenerate the
+derived list from the repository root with the recorded 30 s timeout, factor
+10 and 1 s floor:
+
+```bash
+tools/heuresis/reports/gap --timeout 30 --factor 10 --floor 1 \
+  --gapset scratch/results/gapset-u-ssc-current-ee-central-ieval-off-vs-z3-full-091626.txt \
+  z3=scratch/results/results-z3_solve.sh-quant-091526-z3-4.15.4.txt \
+  cvc5=scratch/results/results-cvc5_solve.sh-quant-091626-u-ssc-current-ee-central-ieval-off.txt
+```

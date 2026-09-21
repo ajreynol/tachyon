@@ -1,3 +1,6 @@
 # Raw output, including processed text and error logs, is ignored repository-wide.
 # Keep new derived benchmark lists local until deliberately retained as evidence.
 gapset-*.txt
+# Retained controls restored on 2026-09-21; see their experiment ledger entries.
+!gapset-u-ssc-current-ee-central-ieval-off-vs-z3-full-091626.txt
+!gapset-u-ssc-eager-off-vs-z3-full-091626.txt
