@@ -204,7 +204,7 @@ it becomes a row in
 [`progress.md`](docs/progress.md#pull-requests-to-cvc5-main). Proposals are
 also not the point: a finding is the primary result, and a direction that
 produces a good question and an empty table has done its job. As of 2026-09-22
-the tables name **seventy-two branches**, twenty-five of them on cvc5
+the tables name **seventy-two branches**, fifty-two of them carrying cvc5
 `main@c2cc3caf` and ready to measure
 ([the running list](docs/active-dev-branches.md)).
 

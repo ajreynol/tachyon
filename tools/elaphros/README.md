@@ -138,8 +138,8 @@ do with a change that touches two directions.
 
 **Twelve of the sixteen tables name branches — twenty-three in all — and not
 one carries a number.** A direction may own several, because competing designs
-for one mechanism compete in the same table. Twelve are on cvc5 `main@c2cc3caf`; the rest are 77 to 4379
-commits behind it, read on 2026-09-22, and the last column names a corpus this
+for one mechanism compete in the same table. Eighteen carry cvc5 `main@c2cc3caf`; the other five are 548 to
+4379 commits behind it, read on 2026-09-22, and the last column names a corpus this
 project does not have: goal 1 fixes it, and until then there is no
 baseline to subtract. Goal 1 also settles what those three columns
 are missing here — added seconds, the time ratio, proof size, checker time and
