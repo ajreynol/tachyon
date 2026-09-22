@@ -42,8 +42,8 @@ measurements below remain future work; the current phase is planning only.
 [proposals](#proposals) it owns — changes to cvc5 someone could carry
 upstream. Twelve of the sixteen name a branch; E13–E16 name none, because no
 branch stands behind them. **No row carries a number, and none can yet:** every
-branch named is behind the fork's `master`, by 70 to 823 commits on
-2026-09-21, and this project has no corpus, no baseline and no measurement to
+one of the twenty-three branches named is behind the fork's `master`, by 73 to
+4379 commits on 2026-09-21, and this project has no corpus, no baseline and no measurement to
 subtract one from. Naming a branch here asserts that it is the best merge
 candidate the survey found for that mechanism, nothing more.
 
@@ -94,6 +94,18 @@ which is the same discipline the directions already ask for, that changes with
 distinct mechanisms be kept separate. The same row in two tables is a
 bookkeeping error.
 
+**A direction owns as many proposals as it has candidates.** One row per
+proposal, not one per direction: eager instantiation has three generations of
+branch behind it and they are not one idea, so each stands or falls on its own
+row. Competing designs for the same mechanism are the normal case, and the
+table is where they compete. What does *not* earn a row: an ancestor of a
+branch already listed, since the tip of a lineage stands for it; a branch whose
+option or mechanism has reached `main`, since there is nothing left to merge;
+and one this register records as broken, superseded, or a skeleton. A branch
+whose mechanism nobody has read stays in **Tried** — naming it here would
+assert a candidacy that has not been checked. Rows are ordered by distance from
+`master`, so the cheapest to make real is on top.
+
 **The columns.**
 
 | column | what goes in it |
@@ -122,13 +134,12 @@ generated from these tables and kept outside the repository
 (`rebase-to-master-ajr.txt`, untracked), so it cannot go stale in the record.
 
 **Checked 2026-09-21 against the live fork**, with `ajreynol/cvc5` `master` at
-[`90def769`](https://github.com/cvc5/cvc5/commit/90def7690b7ba98b5337f2838f2ad28cb37e6147),
-which is exactly cvc5 `main`'s tip: **not one of the twelve branches named here
-is on it.** They run from 70 behind (`unrewrite2`) to 823 (`rewriteDep`), and
-no branch in the fork has moved since this project's
-[2026-09-18 head snapshot](../reports/data/2026-09-18-ajreynol-cvc5-heads.tsv)
-except `master` itself and one unrelated branch, so any rebase done since then
-has not been pushed here.
+[`c2cc3caf`](https://github.com/cvc5/cvc5/commit/c2cc3caf78414931b0feaed26a05c4426ed96098),
+which is cvc5 `main`'s tip: **not one of the twenty-three branches named here is
+on it.** They run from 73 behind (`unrewrite2`) to 4379
+(`theoryEngineLazyProofs`, based in 2021), with four inside 100. The fork moves
+while this is read — four heads changed in the hour of the check — so
+re-derive this column before acting on it.
 
 **Recording a proposal does not send it anywhere.** Publishing a finding,
 filing an issue and opening a pull request stay a person's act, carried
@@ -181,7 +192,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:unrewrite2`][unrewrite2] | `f89d769` (2026-08-19), **70 behind** | — | — |
+| [`ajreynol:unrewrite2`][unrewrite2] | `f89d769` (2026-08-19), **73 behind** | — | — |
 
 ## E2 Smaller macro obligations
 
@@ -221,7 +232,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:reduceTransform`][reduceTransform] | `5572531` (2025-06-20), **683 behind** | — | — |
+| [`ajreynol:reduceTransform`][reduceTransform] | `5572531` (2025-06-20), **686 behind** | — | — |
 
 ## E3 Compact term conversion
 
@@ -266,7 +277,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:pfrConvert2`][pfrConvert2] | `ef56238` (2026-01-28), **409 behind** | — | — |
+| [`ajreynol:pfrConvert2`][pfrConvert2] | `ef56238` (2026-01-28), **412 behind** | — | — |
+| [`ajreynol:pfrConvert`][pfrConvert] | `f53fc5f` (2023-10-24), **2213 behind** | — | — |
 
 ## E4 Rewrite dependencies
 
@@ -302,7 +314,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:rewriteDep`][rewriteDep] | `59a6c1d` (2025-04-14), **823 behind** | — | — |
+| [`ajreynol:rewriteDep`][rewriteDep] | `59a6c1d` (2025-04-14), **826 behind** | — | — |
 
 ## E5 Proof DAG simplification and sharing
 
@@ -348,7 +360,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] | `13e624a` (2025-08-20), **631 behind** | — | — |
+| [`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] | `13e624a` (2025-08-20), **634 behind** | — | — |
+| [`ajreynol:pfTrustId`][pfTrustId] | `91201c4` (2025-06-17), **700 behind** | — | — |
 
 ## E6 Recorded rewrite provenance
 
@@ -385,7 +398,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:rdbExec`][rdbExec] | `5cc03f4` (2026-08-12), **92 behind** | — | — |
+| [`ajreynol:rdbExec`][rdbExec] | `5cc03f4` (2026-08-12), **95 behind** | — | — |
 
 ## E7 Reconstruction cache and search policy
 
@@ -425,7 +438,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:rareOptEval`][rareOptEval] | `2ae4ede` (2025-08-25), **616 behind** | — | — |
+| [`ajreynol:rareNoEvalPremise`][rareNoEvalPremise] | `cbcaf6e` (2025-10-16), **548 behind** | — | — |
+| [`ajreynol:rareOptEval`][rareOptEval] | `2ae4ede` (2025-08-25), **619 behind** | — | — |
+| [`ajreynol:rpcAlwaysPre`][rpcAlwaysPre] | `2ae4ede` (2025-08-25), **619 behind** | — | — |
+| [`ajreynol:smtPpBasicRewriteOnly`][smtPpBasicRewriteOnly] | `df7773a` (2024-11-26), **1194 behind** | — | — |
 
 ## E8 Resolution construction and internal checking
 
@@ -463,7 +479,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:chainMResOpt`][chainMResOpt] | `9730515` (2026-07-05), **117 behind** | — | — |
+| [`ajreynol:chainMResOpt`][chainMResOpt] | `9730515` (2026-07-05), **120 behind** | — | — |
+| [`ajreynol:pfrDev`][pfrDev] | `ef1f617` (2024-07-03), **1536 behind** | — | — |
 
 ## E9 Definitions and proof output
 
@@ -500,7 +517,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:pf-defineFun-printerOnly`][defineFunPrinter] | `242ff48` (2026-08-17), **74 behind** | — | — |
+| [`ajreynol:pf-defineFun`][defineFun] | `242ff48` (2026-08-17), **77 behind** | — | — |
+| [`ajreynol:pf-defineFun-printerOnly`][defineFunPrinter] | `242ff48` (2026-08-17), **77 behind** | — | — |
 
 ## E10 Lazy bookkeeping and theory reconstruction
 
@@ -543,7 +561,11 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:stratifiedStrIpc`][stratifiedStrIpc] | `d8635c8` (2025-12-16), **451 behind** | — | — |
+| [`ajreynol:stratifiedStrIpc`][stratifiedStrIpc] | `d8635c8` (2025-12-16), **454 behind** | — | — |
+| [`ajreynol:stringsIpcRefactor`][stringsIpcRefactor] | `8cfac8f` (2024-12-13), **1149 behind** | — | — |
+| [`ajreynol:stringsIpcAgg2`][stringsIpcAgg2] | `989b077` (2024-08-12), **1376 behind** | — | — |
+| [`ajreynol:stringsIpcAgg`][stringsIpcAgg] | `6aee1e1` (2024-04-24), **1790 behind** | — | — |
+| [`ajreynol:theoryEngineLazyProofs`][theoryEngineLazyProofs] | `a06b10c` (2021-10-22), **4379 behind** | — | — |
 
 ## E11 Incremental output and reuse
 
@@ -580,7 +602,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-pfIncremental`][aiPfIncremental] | `5a72641` (2026-03-27), **280 behind** | — | — |
+| [`ajreynol:ai-pfIncremental`][aiPfIncremental] | `5a72641` (2026-03-27), **283 behind** | — | — |
 
 ## E12 Proof-induced search changes
 
@@ -620,7 +642,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-macroPf`][aiMacroPf] | `7f138fe` (2026-04-23), **230 behind** | — | — |
+| [`ajreynol:ai-macroPf`][aiMacroPf] | `7f138fe` (2026-04-23), **233 behind** | — | — |
 
 ## E13 Proof-work accounting
 

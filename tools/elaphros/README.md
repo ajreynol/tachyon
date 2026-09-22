@@ -136,9 +136,11 @@ upstream revision the branch is rebased to; ± LOC for a branch; and
 [register's own section](docs/directions.md#proposals) defines them and what to
 do with a change that touches two directions.
 
-**Twelve of the sixteen tables name a branch, and not one carries a number.**
-Every branch named is behind upstream main — by 70 to 823 commits, checked
-against the live fork on 2026-09-21 — and the last column names a corpus this
+**Twelve of the sixteen tables name branches — twenty-three in all — and not
+one carries a number.** A direction may own several, because competing designs
+for one mechanism compete in the same table. Every branch named is behind
+upstream main, by 73 to 4379 commits checked against the live fork on
+2026-09-21, and the last column names a corpus this
 project does not have: goal 1 fixes it, and until then there is no
 baseline to subtract. Goal 1 also settles what those three columns
 are missing here — added seconds, the time ratio, proof size, checker time and

@@ -196,8 +196,8 @@ Not a performance change, so it will not move a row, but it is the first
 upstream-reportable defect this project has produced.
 
 **Standing candidates**, from the ledger, none yet proposed upstream. The
-[proposals tables](directions.md#proposals) now name a branch for twenty-five
-of the twenty-seven directions, but every candidate below is an **option**
+[proposals tables](directions.md#proposals) now name seventy-two branches
+across twenty-five of the twenty-seven directions, but every candidate below is an **option**
 proposal or a change no branch yet implements, so none of them is in a table
 yet — and the eager pair budget would go under one of R1 or R28, not both:
 

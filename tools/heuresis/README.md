@@ -185,7 +185,10 @@ one-off A/B. Those produce proposals; they are not proposals.
 
 **Each proposal belongs to exactly one research direction**, and is listed in
 that direction's table at the end of its entry in
-[`docs/directions.md`](docs/directions.md) and nowhere else. The union of those
+[`docs/directions.md`](docs/directions.md) and nowhere else. A direction may own
+many: competing designs for one mechanism are separate proposals and compete in
+the same table. Eager instantiation has three generations of branch behind it,
+and they are three rows. The union of those
 tables is the register; there is no second, global list to drift out of date.
 Four columns: the branch or the option; the upstream revision the branch is
 rebased to, which is what says whether the other two can be filled at all;
@@ -200,7 +203,8 @@ project saying what it would file and attaching the evidence; when one lands,
 it becomes a row in
 [`progress.md`](docs/progress.md#pull-requests-to-cvc5-main). Proposals are
 also not the point: a finding is the primary result, and a direction that
-produces a good question and an empty table has done its job.
+produces a good question and an empty table has done its job. As of 2026-09-21
+the tables name **seventy-two branches**, one of them on `master`.
 
 ## The set
 

@@ -13,8 +13,9 @@ and inform future work.
 **Twenty-seven directions, R1–R23 and R25–R28, each with an argued risk/gain
 estimate, the same four inventories — the cvc5 flags that test it today,
 what has been tried, what z3 and others do, and the papers — and, last, the
-table of [proposals](#proposals) that direction owns — twenty-five of the
-twenty-seven name a branch, and two of those carry measured numbers.** Written
+table of [proposals](#proposals) that direction owns — seventy-two branches
+across twenty-five of the twenty-seven directions, of which two carry measured
+numbers and one is on `master`.** Written
 2026-09-15 from the performance notes
 summarised in [`../notes.md`](notes.md) (the `h-N` rows referenced below),
 from cvc5 `main` at
@@ -154,6 +155,18 @@ The same row in two tables is a bookkeeping error; a branch nobody can assign
 to one direction is evidence that it bundles more than a reviewer should be
 asked to take in one piece.
 
+**A direction owns as many proposals as it has candidates.** One row per
+proposal, not one per direction: eager instantiation has three generations of
+branch behind it and they are not one idea, so each stands or falls on its own
+row. Competing designs for the same mechanism are the normal case, and the
+table is where they compete. What does *not* earn a row: an ancestor of a
+branch already listed, since the tip of a lineage stands for it; a branch whose
+option or mechanism has reached `main`, since there is nothing left to merge;
+and one this register records as broken, superseded, or a skeleton. A branch
+whose mechanism nobody has read stays in **Tried** — naming it here would
+assert a candidacy that has not been checked. Rows are ordered by distance from
+`master`, so the cheapest to make real is on top.
+
 **The columns.**
 
 | column | what goes in it |
@@ -179,15 +192,17 @@ kept outside the repository (`rebase-to-master-ajr.txt`, untracked), so it
 cannot go stale in the record.
 
 **Checked 2026-09-21 against the live fork**, with `ajreynol/cvc5` `master` at
-[`90def769`](https://github.com/cvc5/cvc5/commit/90def7690b7ba98b5337f2838f2ad28cb37e6147),
-which is exactly cvc5 `main`'s tip: **not one of the twenty-five branches named
-here is on it.** The nearest are `claude-eagerInst` and `qdebugStats`, 11 behind
-on a 2026-09-16 base, then `ai-eecNoShare` and `ievalTravTrie` at 12; the rest
-run from 141 to 7126 behind. No branch in the fork has moved since the
-[2026-09-18 head snapshot](../../elaphros/reports/data/2026-09-18-ajreynol-cvc5-heads.tsv)
-except `master` itself and one unrelated branch, so any rebase done since then
-has not been pushed here. The **rebased to** column is therefore a measurement
-like the others, not a plan: it says where each branch actually sits today.
+[`c2cc3caf`](https://github.com/cvc5/cvc5/commit/c2cc3caf78414931b0feaed26a05c4426ed96098),
+which is cvc5 `main`'s tip: of the **seventy-two branches** named across
+twenty-five directions, **one is on master** —
+[`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) (R22),
+rebased and force-pushed during that check. Three more are within 15
+(`claude-eagerInst` and `qdebugStats` at 14, `ai-eecNoShare` and `ievalTravTrie`
+at 15); the rest run to 9371 behind for `bvBbExtf`, whose base is from 2017.
+The fork moves while this is read — four heads changed in the hour of the check,
+`master` among them — so **re-derive this column before acting on it**. It is a
+measurement like the others, not a plan: it says where each branch sat at the
+moment named.
 
 **Recording a proposal does not send it anywhere.** Filing an issue or opening
 a pull request is a person's act, and out of scope for this project. When a
@@ -325,7 +340,11 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | `95050cf` (2026-09-16), **11 behind** | — | — |
+| [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | `95050cf` (2026-09-16), **14 behind** | — | — |
+| [`ajreynol:eagerInst3`](https://github.com/ajreynol/cvc5/tree/eagerInst3) | `01be634` (2026-04-14), **250 behind** | — | — |
+| [`ajreynol:ai-extEagerInst3-1`](https://github.com/ajreynol/cvc5/tree/ai-extEagerInst3-1) | `01be634` (2026-04-14), **250 behind** | — | — |
+| [`ajreynol:eagerQM`](https://github.com/ajreynol/cvc5/tree/eagerQM) | `aca9908` (2025-08-28), **617 behind** | — | — |
+| [`ajreynol:instFullPreempt`](https://github.com/ajreynol/cvc5/tree/instFullPreempt) | `0a48958` (2024-08-12), **1377 behind** | — | — |
 
 ## R2 — Incremental E-matching: match what changed, not everything
 
@@ -409,7 +428,12 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:eagerInst3`](https://github.com/ajreynol/cvc5/tree/eagerInst3) | `01be634` (2026-04-14), **247 behind** | — | — |
+| [`ajreynol:ai-emFilter`](https://github.com/ajreynol/cvc5/tree/ai-emFilter) | `5509c56` (2026-04-23), **230 behind** | — | — |
+| [`ajreynol:ai-imgDirect`](https://github.com/ajreynol/cvc5/tree/ai-imgDirect) | `c2c4dd4` (2026-03-12), **327 behind** | — | — |
+| [`ajreynol:ai-quantOpt-1`](https://github.com/ajreynol/cvc5/tree/ai-quantOpt-1) | `57561fa` (2026-03-12), **329 behind** | — | — |
+| [`ajreynol:emExp`](https://github.com/ajreynol/cvc5/tree/emExp) | `310f487` (2025-11-11), **516 behind** | — | — |
+| [`ajreynol:imTrivial`](https://github.com/ajreynol/cvc5/tree/imTrivial) | `aeb5547` (2025-10-29), **531 behind** | — | — |
+| [`ajreynol:imSimpleInc2`](https://github.com/ajreynol/cvc5/tree/imSimpleInc2) | `aeb5547` (2025-10-29), **531 behind** | — | — |
 
 ## R3 — Worst-case E-matching: failure caching and early pruning
 
@@ -466,7 +490,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) | `8c86597` (2026-06-09), **150 behind** | — | — |
+| [`ajreynol:ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) | `8c86597` (2026-06-09), **153 behind** | — | — |
+| [`ajreynol:emFailMasks`](https://github.com/ajreynol/cvc5/tree/emFailMasks) | `2e555b3` (2022-04-20), **3319 behind** | — | — |
+| [`ajreynol:cacheEntCheck`](https://github.com/ajreynol/cvc5/tree/cacheEntCheck) | `b446953` (2021-10-15), **4433 behind** | — | — |
 
 ## R4 — Instantiation budgeting: how many instances per round, and which
 
@@ -536,7 +562,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:termOrigin`](https://github.com/ajreynol/cvc5/tree/termOrigin) | `03ccb55` (2025-04-08), **839 behind** | — | — |
+| [`ajreynol:instLastCallDelay`](https://github.com/ajreynol/cvc5/tree/instLastCallDelay) | `5c6b53b` (2026-03-29), **282 behind** | — | — |
+| [`ajreynol:termOrigin`](https://github.com/ajreynol/cvc5/tree/termOrigin) | `03ccb55` (2025-04-08), **842 behind** | — | — |
+| [`ajreynol:carryInst`](https://github.com/ajreynol/cvc5/tree/carryInst) | `54490c6` (2021-07-28), **4805 behind** | — | — |
+| [`ajreynol:dtInstMode`](https://github.com/ajreynol/cvc5/tree/dtInstMode) | `9e481fa` (2020-10-10), **6100 behind** | — | — |
 
 ## R5 — Trigger selection: strict user patterns, multi-triggers, and what strictness disables
 
@@ -618,7 +647,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:multiTriggerSingleBase`](https://github.com/ajreynol/cvc5/tree/multiTriggerSingleBase) | `8b0a628` (2024-09-10), **1342 behind** | — | — |
+| [`ajreynol:multiTriggerSingleBase`](https://github.com/ajreynol/cvc5/tree/multiTriggerSingleBase) | `8b0a628` (2024-09-10), **1345 behind** | — | — |
+| [`ajreynol:nestedTriggers`](https://github.com/ajreynol/cvc5/tree/nestedTriggers) | `5ef7a7f` (2023-11-11), **2193 behind** | — | — |
+| [`ajreynol:simpleTriggerMore`](https://github.com/ajreynol/cvc5/tree/simpleTriggerMore) | `4c2037d` (2023-11-02), **2202 behind** | — | — |
+| [`ajreynol:gttOpt`](https://github.com/ajreynol/cvc5/tree/gttOpt) | `2c4025e` (2021-01-27), **5720 behind** | — | — |
 
 ## R6 — Conflict-based instantiation: off for this domain, and why that is right or wrong
 
@@ -682,7 +714,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | `7f138fe` (2026-04-23), **230 behind** | — | — |
+| [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | `7f138fe` (2026-04-23), **233 behind** | — | — |
+| [`ajreynol:refactorQcf`](https://github.com/ajreynol/cvc5/tree/refactorQcf) | `51d731e` (2022-01-26), **3875 behind** | — | — |
+| [`ajreynol:qcfClean`](https://github.com/ajreynol/cvc5/tree/qcfClean) | `b3c6975` (2021-03-25), **5405 behind** | — | — |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
 
@@ -740,7 +774,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | `d7d03b0` (2026-09-16), **12 behind** | +165/−43, 8 files, at `main@d7d03b082c` | **−1** vs `central`, 5615 of 6124 ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | `d7d03b0` (2026-09-16), **15 behind** | +165/−43, 8 files, at `main@d7d03b082c` | **−1** vs `central`, 5615 of 6124 ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| [`ajreynol:emStratify`](https://github.com/ajreynol/cvc5/tree/emStratify) | `78e58a5` (2023-11-01), **2205 behind** | — | — |
+| [`ajreynol:fmfIeval`](https://github.com/ajreynol/cvc5/tree/fmfIeval) | `6df8e7a` (2022-08-28), **3002 behind** | — | — |
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
@@ -879,7 +915,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi) | `f1f33a2` (2024-10-08), **1278 behind** | — | — |
+| [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi) | `f1f33a2` (2024-10-08), **1281 behind** | — | — |
 
 ---
 
@@ -981,7 +1017,11 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause) | `bfe648c` (2025-01-21), **1075 behind** | — | — |
+| [`ajreynol:notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause) | `bfe648c` (2025-01-21), **1078 behind** | — | — |
+| [`ajreynol:isActiveLemma`](https://github.com/ajreynol/cvc5/tree/isActiveLemma) | `51aa806` (2023-08-18), **2368 behind** | — | — |
+| [`ajreynol:smtLazyAssert`](https://github.com/ajreynol/cvc5/tree/smtLazyAssert) | `1c41fda` (2022-08-03), **3039 behind** | — | — |
+| [`ajreynol:virtualLemma`](https://github.com/ajreynol/cvc5/tree/virtualLemma) | `8fe459b` (2021-10-19), **4424 behind** | — | — |
+| [`ajreynol:virtualClauseDel`](https://github.com/ajreynol/cvc5/tree/virtualClauseDel) | `55ce505` (2021-10-13), **4444 behind** | — | — |
 
 ## R10 — Where instance lemmas sit in the decision order: local, deferred, gated
 
@@ -1047,7 +1087,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | `2465dac` (2026-06-14), **142 behind** | — | — |
+| [`ajreynol:ai-jhRlvInst`](https://github.com/ajreynol/cvc5/tree/ai-jhRlvInst) | `09668f2` (2026-06-17), **140 behind** | — | — |
+| [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | `2465dac` (2026-06-14), **145 behind** | — | — |
+| [`ajreynol:claudeDev-dts-idef`](https://github.com/ajreynol/cvc5/tree/claudeDev-dts-idef) | `8c86597` (2026-06-09), **153 behind** | — | — |
+| [`ajreynol:ai-jhConflictFirst`](https://github.com/ajreynol/cvc5/tree/ai-jhConflictFirst) | `6024d13` (2026-04-29), **217 behind** | — | — |
 
 ## R11 — Decision heuristic versus relevancy: what the SAT solver is made to decide on
 
@@ -1113,7 +1156,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-jhConflictFirst`](https://github.com/ajreynol/cvc5/tree/ai-jhConflictFirst) | `6024d13` (2026-04-29), **214 behind** | — | — |
+| [`ajreynol:jhRandom`](https://github.com/ajreynol/cvc5/tree/jhRandom) | `f888519` (2026-06-29), **126 behind** | — | — |
 
 ## R12 — Lemma inprocessing and conflict minimisation
 
@@ -1163,7 +1206,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:subConflict`](https://github.com/ajreynol/cvc5/tree/subConflict) | `01f5c03` (2024-01-25), **2080 behind** | — | — |
+| [`ajreynol:subConflict`](https://github.com/ajreynol/cvc5/tree/subConflict) | `01f5c03` (2024-01-25), **2083 behind** | — | — |
 
 ## R13 — The SAT backend: CaDiCaL, MiniSat, restarts, units
 
@@ -1239,7 +1282,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:cadicalPortfolio`](https://github.com/ajreynol/cvc5/tree/cadicalPortfolio) | `a2b5a9c` (2026-05-25), **172 behind** | — | — |
+| [`ajreynol:cadicalPortfolio`](https://github.com/ajreynol/cvc5/tree/cadicalPortfolio) | `a2b5a9c` (2026-05-25), **175 behind** | — | — |
 
 ---
 
@@ -1306,7 +1349,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:mbtc25`](https://github.com/ajreynol/cvc5/tree/mbtc25) | `8017930` (2026-01-13), **426 behind** | — | — |
+| [`ajreynol:mbtc25`](https://github.com/ajreynol/cvc5/tree/mbtc25) | `8017930` (2026-01-13), **429 behind** | — | — |
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
 
@@ -1384,7 +1427,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | `d7d03b0` (2026-09-16), **12 behind** | +9/−3, 1 file, at `main@d7d03b082c` | **+2** vs `best`, 5625 of 6124 ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | `d7d03b0` (2026-09-16), **15 behind** | +9/−3, 1 file, at `main@d7d03b082c` | **+2** vs `best`, 5625 of 6124 ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | `f4f9779` (2026-05-14), **193 behind** | — | — |
+| [`ajreynol:cdno`](https://github.com/ajreynol/cvc5/tree/cdno) | `d509acd` (2025-09-09), **602 behind** | — | — |
 
 ## R16 — Datatypes: when to split, on what, and whether to have them at all
 
@@ -1466,7 +1511,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | `8c86597` (2026-06-09), **150 behind** | — | — |
+| [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | `8c86597` (2026-06-09), **153 behind** | — | — |
+| [`ajreynol:oneConsInst`](https://github.com/ajreynol/cvc5/tree/oneConsInst) | `1120e3d` (2025-11-05), **524 behind** | — | — |
+| [`ajreynol:dtElim`](https://github.com/ajreynol/cvc5/tree/dtElim) | `aeb5547` (2025-10-29), **531 behind** | — | — |
+| [`ajreynol:dtLazyInst3`](https://github.com/ajreynol/cvc5/tree/dtLazyInst3) | `9fe8509` (2022-05-16), **3207 behind** | — | — |
 
 ## R17 — Linear integer arithmetic: branch and bound, cuts, and the Diophantine solver
 
@@ -1545,7 +1593,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | `b9230e6` (2026-06-15), **141 behind** | — | — |
+| [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | `b9230e6` (2026-06-15), **144 behind** | — | — |
+| [`ajreynol:deferBlock`](https://github.com/ajreynol/cvc5/tree/deferBlock) | `2ae4ede` (2025-08-25), **619 behind** | — | — |
+| [`ajreynol:linearSolverSub`](https://github.com/ajreynol/cvc5/tree/linearSolverSub) | `9a741c0` (2024-08-24), **1356 behind** | — | — |
 
 ## R18 — Nonlinear arithmetic: off, light, or lazy
 
@@ -1671,7 +1721,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:bitblastLc`](https://github.com/ajreynol/cvc5/tree/bitblastLc) | `4ddcbcb` (2025-06-11), **703 behind** | — | — |
+| [`ajreynol:bvToIntQuant-031126`](https://github.com/ajreynol/cvc5/tree/bvToIntQuant-031126) | `6fa07bf` (2026-03-11), **333 behind** | — | — |
+| [`ajreynol:bitblastLc`](https://github.com/ajreynol/cvc5/tree/bitblastLc) | `4ddcbcb` (2025-06-11), **706 behind** | — | — |
+| [`ajreynol:ufConvRlv`](https://github.com/ajreynol/cvc5/tree/ufConvRlv) | `2f859d8` (2023-01-23), **2719 behind** | — | — |
+| [`ajreynol:bvBbExtf`](https://github.com/ajreynol/cvc5/tree/bvBbExtf) | `be7662b` (2016-12-08), **9371 behind** | — | — |
 
 ---
 
@@ -1749,7 +1802,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ufEagerDistinct`](https://github.com/ajreynol/cvc5/tree/ufEagerDistinct) | `7985839` (2026-01-09), **434 behind** | — | — |
+| [`ajreynol:simplifyRecFun`](https://github.com/ajreynol/cvc5/tree/simplifyRecFun) | `398316d` (2026-02-20), **374 behind** | — | — |
+| [`ajreynol:ufEagerDistinct`](https://github.com/ajreynol/cvc5/tree/ufEagerDistinct) | `7985839` (2026-01-09), **437 behind** | — | — |
+| [`ajreynol:eagerElimDefs`](https://github.com/ajreynol/cvc5/tree/eagerElimDefs) | `9e7ee41` (2024-10-04), **1286 behind** | — | — |
 
 ## R21 — Quantifier preprocessing: what is done to a quantifier before it is ever matched
 
@@ -1785,9 +1840,10 @@ quantifiers); [`ajreynol:quantRew-1006`](https://github.com/ajreynol/cvc5/tree/q
 [`ajreynol:quantTheoryRewrites`](https://github.com/ajreynol/cvc5/tree/quantTheoryRewrites);
 [`ajreynol:alphaEqVarShadow`](https://github.com/ajreynol/cvc5/tree/alphaEqVarShadow),
 [`ajreynol:ai-fixAlphaEq`](https://github.com/ajreynol/cvc5/tree/ai-fixAlphaEq),
-[`ajreynol:ai-fixAlphaEq-2`](https://github.com/ajreynol/cvc5/tree/ai-fixAlphaEq-2),
-and [`ajreynol:ai-fixAlphaEq-v3`](https://github.com/ajreynol/cvc5/tree/ai-fixAlphaEq-v3)
-(alpha-equivalence and proofs). No miniscoping branch.
+and [`ajreynol:ai-fixAlphaEq-2`](https://github.com/ajreynol/cvc5/tree/ai-fixAlphaEq-2)
+(alpha-equivalence and proofs; an `ai-fixAlphaEq-v3` cited in the 2026-09-15
+audit does not exist in the fork and did not on 2026-09-18 either, checked
+2026-09-21). No miniscoping branch.
 
 **Elsewhere `(code)`.** z3: pattern inference returns early on an annotated
 quantifier and Verus sets `pi.enabled=false` anyway; `smt.pull_nested_quantifiers`
@@ -1813,7 +1869,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:quantRew-1006`](https://github.com/ajreynol/cvc5/tree/quantRew-1006) | `36bfe4c` (2021-10-06), **4487 behind** | — | — |
+| [`ajreynol:ai-fixAlphaEq-2`](https://github.com/ajreynol/cvc5/tree/ai-fixAlphaEq-2) | `f172d88` (2026-04-17), **243 behind** | — | — |
+| [`ajreynol:p657`](https://github.com/ajreynol/cvc5/tree/p657) | `43c1d0f` (2023-08-23), **2353 behind** | — | — |
+| [`ajreynol:quantRew-1006`](https://github.com/ajreynol/cvc5/tree/quantRew-1006) | `36bfe4c` (2021-10-06), **4490 behind** | — | — |
 
 ## R22 — Preregistration: which literals the theories are told about
 
@@ -1853,7 +1911,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | `8cce56a` (2026-04-22), **232 behind** | — | — |
+| [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | `master` | — | — |
 
 ## R23 — Term-database relevance: which ground terms E-matching may use
 
@@ -1901,7 +1959,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:tdbOldIndex`](https://github.com/ajreynol/cvc5/tree/tdbOldIndex) | `7849f09` (2020-01-30), **7086 behind** | — | — |
+| [`ajreynol:tdbOldIndex`](https://github.com/ajreynol/cvc5/tree/tdbOldIndex) | `7849f09` (2020-01-29), **7089 behind** | — | — |
 
 ---
 
@@ -1948,7 +2006,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/cvc5/tree/lowLevelOptMore) | `e1074c8` (2019-12-16), **7126 behind** | — | — |
+| [`ajreynol:tdbLLOpts`](https://github.com/ajreynol/cvc5/tree/tdbLLOpts) | `8b0a628` (2024-09-10), **1345 behind** | — | — |
+| [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/cvc5/tree/lowLevelOptMore) | `e1074c8` (2019-12-16), **7129 behind** | — | — |
+| [`ajreynol:optTdbTNode`](https://github.com/ajreynol/cvc5/tree/optTdbTNode) | `a6bd02c` (2019-03-26), **7581 behind** | — | — |
+| [`ajreynol:perfDataStructures`](https://github.com/ajreynol/cvc5/tree/perfDataStructures) | `047e75b` (2018-08-07), **8174 behind** | — | — |
 
 ## R26 — Attribution instrumentation: the tools goal 2 needs
 
@@ -2044,7 +2105,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | `95050cf` (2026-09-16), **11 behind** | — | — |
+| [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | `95050cf` (2026-09-16), **14 behind** | — | — |
+| [`ajreynol:debugDumpLemmas`](https://github.com/ajreynol/cvc5/tree/debugDumpLemmas) | `f7db8fa` (2025-09-03), **612 behind** | — | — |
+| [`ajreynol:trackInferId`](https://github.com/ajreynol/cvc5/tree/trackInferId) | `58a68cf` (2024-04-17), **1823 behind** | — | — |
 
 ## R27 — SMT-LIB parser throughput: pay less before solving
 
@@ -2109,7 +2172,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | `1e7c37e` (2026-03-12), **328 behind** | — | — |
+| [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | `1e7c37e` (2026-03-12), **331 behind** | — | — |
 
 ---
 
