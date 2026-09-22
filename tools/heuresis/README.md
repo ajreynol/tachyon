@@ -203,8 +203,10 @@ project saying what it would file and attaching the evidence; when one lands,
 it becomes a row in
 [`progress.md`](docs/progress.md#pull-requests-to-cvc5-main). Proposals are
 also not the point: a finding is the primary result, and a direction that
-produces a good question and an empty table has done its job. As of 2026-09-21
-the tables name **seventy-two branches**, one of them on `master`.
+produces a good question and an empty table has done its job. As of 2026-09-22
+the tables name **seventy-two branches**, twenty-five of them rebased onto
+`master` and ready to measure
+([the running list](docs/active-dev-branches.md)).
 
 ## The set
 

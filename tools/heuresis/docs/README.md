@@ -9,6 +9,7 @@ versions behave identically.
 | --- | --- |
 | [notes.md](notes.md) | The source notes' hypothesis register, with inherited claims distinguished from measurements here. |
 | [directions.md](directions.md) | Research directions, source audits, the evidence supporting each candidate, and the proposals each direction owns. |
+| [active-dev-branches.md](active-dev-branches.md) | Every fork branch a proposal names, where it sits against the fork's `master`, and how to run a rebase pass over them. |
 | [todo.md](todo.md) | Active experiments and separate agent and human priority rankings. |
 | [progress.md](progress.md) | Current investigation progress and outstanding work. |
 | [upstream-questions.md](upstream-questions.md) | Defects and design questions this project would raise with cvc5, held for a person to carry. |
