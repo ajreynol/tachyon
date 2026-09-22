@@ -42,7 +42,7 @@ measurements below remain future work; the current phase is planning only.
 [proposals](#proposals) it owns — changes to cvc5 someone could carry
 upstream. Twelve of the sixteen name a branch; E13–E16 name none, because no
 branch stands behind them. **No `± solved` cell carries a number, and none can
-yet:** eighteen of the twenty-three branches named now carry `c2cc3caf` and a
+yet:** eighteen of the twenty-four branches named now carry `c2cc3caf` and a
 line count (two of them an empty one, for the reason below), and this project has no corpus, no baseline and no measurement to
 subtract one from. Naming a branch here asserts that it is the best merge
 candidate the survey found for that mechanism, nothing more.
@@ -154,8 +154,8 @@ procedure a pass should follow, in
 
 **Read 2026-09-22, after two update passes**, against the pin both targeted,
 cvc5 [`c2cc3caf`](https://github.com/cvc5/cvc5/commit/c2cc3caf78414931b0feaed26a05c4426ed96098):
-**eighteen of the twenty-three branches named here carry it** and their `± LOC`
-is filled from that tip. The other five carry commits 548 to 4379 behind the
+**eighteen of the twenty-four branches named here carry it** and their `± LOC`
+is filled from that tip. The other six carry commits 548 to 4379 behind the
 pin, the oldest from 2021. **Two of the eighteen are empty** —
 [`ajreynol:smtPpBasicRewriteOnly`][smtPpBasicRewriteOnly] (E7) and
 [`ajreynol:stringsIpcAgg2`][stringsIpcAgg2] (E10) had their changes dropped when
@@ -441,6 +441,17 @@ to `PRE_DSL`, but **inherits `ajreynol:proofDisable`'s diagnostic switches**.
 attempt to ordinary rewriting instead of extended rewriting.
 [`ajreynol:rareNoEvalPremise`][rareNoEvalPremise] changes the reconstruction of evaluation
 premises and several theory rewrites; it is not merely a cache option.
+[`ajreynol:rareEncodeSubcall`][rareEncodeSubcall], open upstream as
+[cvc5/cvc5#11715](https://github.com/cvc5/cvc5/pull/11715), removes a whole
+failed search: `prove` now runs the stratified search once, on the
+unconverted equality, with the encoding conversion (e.g. BV constants to
+`@bv`) offered as an on-demand `ENCODE` step inside the strategy, instead of a
+full search on the original followed by a second full search on the converted
+form. A goal such as `(bvslt x #b0000) = false` then succeeds at depth 2
+rather than after an exhaustive failure. Pinned main at `c2cc3caf` still has
+the two-pass form. The branch is not among the survey's 49; its tip
+`a625bd5a23` (2025-05-21) and merge base `85fa7800ce` are pinned here: 3 src
+files, +42/−39, all in `src/rewriter/`.
 
 **Controls and next evidence.** Main declares
 `--proof-rewrite-rcons-rec-limit=5` and
@@ -466,6 +477,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | [`ajreynol:rpcAlwaysPre`][rpcAlwaysPre] | **`c2cc3ca`** (2026-09-21), merged in | +60/−1, 6 src files | — |
 | [`ajreynol:smtPpBasicRewriteOnly`][smtPpBasicRewriteOnly] | **`c2cc3ca`** (2026-09-21), merged in | **+0/−0 — the merge dropped +3/−12** | — |
 | [`ajreynol:rareNoEvalPremise`][rareNoEvalPremise] | `cbcaf6e` (2025-10-16), 548 behind `c2cc3caf` | — | — |
+| [`ajreynol:rareEncodeSubcall`][rareEncodeSubcall] | `85fa780` (2025-05-20), 753 behind `c2cc3caf` | — | — |
 
 ## E8 Resolution construction and internal checking
 
@@ -916,6 +928,7 @@ than interpreting the switch name as a timer boundary.
 [rpcAlwaysPre]: https://github.com/ajreynol/cvc5/tree/rpcAlwaysPre
 [smtPpBasicRewriteOnly]: https://github.com/ajreynol/cvc5/tree/smtPpBasicRewriteOnly
 [rareNoEvalPremise]: https://github.com/ajreynol/cvc5/tree/rareNoEvalPremise
+[rareEncodeSubcall]: https://github.com/ajreynol/cvc5/tree/rareEncodeSubcall
 [chainMResOpt]: https://github.com/ajreynol/cvc5/tree/chainMResOpt
 [pfrDev]: https://github.com/ajreynol/cvc5/tree/pfrDev
 [defineFun]: https://github.com/ajreynol/cvc5/tree/pf-defineFun

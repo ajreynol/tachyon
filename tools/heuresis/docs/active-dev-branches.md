@@ -17,7 +17,7 @@ state, because those are different commits on different days: a file that said
 distance measured against it. The same rule governs [`progress.md`](progress.md):
 *the exact cvc5 `main` revision, not "current main"*.
 
-**Elaphros keeps its own.** The 23 active branches of the sibling project are in
+**Elaphros keeps its own.** The 24 active branches of the sibling project are in
 [its register](../../elaphros/docs/directions.md#proposals) and are not listed
 here; the two projects do not write in each other's directories.
 
