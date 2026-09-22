@@ -47,7 +47,7 @@ means the host scripts are now ours to change.
 | S8 | Add a cumulative eager pair budget, after which the module stands down and lazy instantiation proceeds | nothing — a bounded patch to `eager_inst.cpp` | the option is run on the set. **Success criterion:** eager-plus-budget must beat `best` (35532.7 PAR2), not merely beat unbudgeted eager — halving a 19% loss would be a real result that still moves nothing in `progress.md` |
 | S5 | Count persistent instance clauses and how often one is used in a conflict | nothing; a counter patch | both are measured on the gap set. S1 measured the drowning, so R9's premise is evidence |
 | S4 | Count the shared-equality propagations that central mode and `ai-eecNoShare` skip, and the callback time they cost | nothing; a counter patch | the count and callback time are measured, so R15's signal has a mechanism as well as a size |
-| S3 | Make the mainline new-versus-rediscovered instantiation count a registered statistic | the updated [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) being pushed; the public ref is still `9f3e4ae6a1` | `--stats` reports unique versus total instantiations on current main. Still **the only path to R2** |
+| S3 | Make the mainline new-versus-rediscovered instantiation count a registered statistic | nothing — **unblocked 2026-09-22**: [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) is published at `ea71e3e7`, carrying `c2cc3caf` with 31 commits of its own | `--stats` reports unique versus total instantiations on `main@c2cc3caf`. Still **the only path to R2** |
 | **S9** | Explain why the control answers `unknown` on 7 benchmarks that `--eager-inst` proves | nothing — no longer waits on S8 | it is known whether one incompleteness is responsible or several. **Promoted:** these 7 have survived 30 s, 120 s and 300 s unchanged, so unlike the rest of the rescue set they are not a timeout artefact and no longer can be |
 
 ## AI-agent priorities
@@ -115,11 +115,11 @@ maintainer supplies it.
 
 ## Branch maintenance
 
-**Concrete request to the maintainer:** please push the updated
-[`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats).
-The public ref is still `9f3e4ae6a1`, unchanged from the previous audit, so
-the update is not yet visible to the execution host, and short-term goal S3
-stays blocked.
+**Closed 2026-09-22.** The request was to push the updated
+[`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats),
+whose public ref had sat at `9f3e4ae6a1` since the previous audit. It is now
+published at `ea71e3e7`, carrying `main@c2cc3caf` with 31 commits of its own,
+so it is visible to the execution host and S3 is unblocked.
 The previous request is closed: the rebased
 [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
 tip was pushed, and it has since built and passed `make regress`. The fork's
@@ -141,7 +141,7 @@ overwriting it silently.
 | --- | --- | --- | ---: | --- |
 | ✅ No base action | [`ajreynol:master`](https://github.com/ajreynol/cvc5/tree/master) | all | 0 / 0 | The fork base already equals current upstream main, and tracked it across the one commit main advanced. |
 | 🟡 Keep; do not upstream as a default | [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | R1, R28 | 0 / 6 | **Tested 2026-09-16.** Built, regression-clean at `995b23bcfa`, and with the module off it is main to within 2 solves and 0 benchmarks ≥2× either way — an unusually clean control. `--eager-inst` costs 19.46% PAR2, so no default follows; but it rescues 29 otherwise-unsolved gap cases, so keep the branch as the substrate for S2, S6, S7 and the R28 acceptance layer. |
-| 🔵 Please push updated tip | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | R26, R2 | 398 / 29 | The maintainer reports an update, but the public ref is unchanged at `9f3e4ae6a1`. Blocks S3. When it lands, port only the missing counters — in particular the `#inst unique/total` figure, which today is a `Trace("ajr-temp-stats")` line and not a registered statistic. |
+| ✅ Pushed 2026-09-22 | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | R26, R2 | 31 own commits on `c2cc3caf` | Published at `ea71e3e7`, so S3 is unblocked. Port only the missing counters — in particular the `#inst unique/total` figure, which was a `Trace("ajr-temp-stats")` line and not a registered statistic. |
 | 🟡 Instrument before upstreaming | [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | R15 | 1 / 2 | Behind only because main advanced; the 2026-09-16 result stands. Regression-clean; the effective one-file patch adds two net solves and changes PAR2 −0.20%, within observed noise. Count skipped propagation work first (S4). |
 | ⚪ Do not upstream from this result | [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | R7 | 1 / 3 | Behind only because main advanced; the result stands — one net solve and 0.09% PAR2 worse than evaluator-on, 3.91% worse than evaluator-off. Any retry should be a focused port with counters. *(The preceding audit recorded “0 / 320 history commits” for this branch; today's symmetric difference is 3 ahead, 2 of them non-merge. The discrepancy is in the counting, not in the branch, and is left visible.)* |
 | 🟠 Mine; do not rebase wholesale | [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi) | R28 | 1267 / 204 | Its first replayed commit conflicts in equality and quantifier-engine files; retain its conflict/unit modes as design evidence for the acceptance layer now going on top of `claude-eagerInst`. |

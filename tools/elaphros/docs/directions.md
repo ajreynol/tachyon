@@ -42,8 +42,8 @@ measurements below remain future work; the current phase is planning only.
 [proposals](#proposals) it owns — changes to cvc5 someone could carry
 upstream. Twelve of the sixteen name a branch; E13–E16 name none, because no
 branch stands behind them. **No `± solved` cell carries a number, and none can
-yet:** twelve of the twenty-three branches named are now rebased onto the fork's
-`master` and carry a line count, and this project has no corpus, no baseline and no measurement to
+yet:** twelve of the twenty-three branches named now contain `c2cc3caf` and carry a
+line count, and this project has no corpus, no baseline and no measurement to
 subtract one from. Naming a branch here asserts that it is the best merge
 candidate the survey found for that mechanism, nothing more.
 
@@ -111,7 +111,7 @@ assert a candidacy that has not been checked. Rows are ordered by distance from
 | column | what goes in it |
 | --- | --- |
 | **proposal** | The branch as `ajreynol:NAME`, linked, for a branch; the option and the change of default for the other kind. One row per proposal. |
-| **rebased to** | The upstream revision the branch currently contains: its merge base with the fork's `master`, and how far behind that leaves it. **`master`** when nothing separates them, with *merged in* where the branch got there by merging `master` rather than by a rebase — which is enough to build and measure, but leaves a history a maintainer will ask to be linearised before review. A branch that is behind cannot be built, measured or reviewed as it stands, so its other columns stay empty. Checked against the live fork, with the date of the check below. |
+| **rebased to** | The newest cvc5 `main` commit the branch contains, by sha and date — **never a branch name**, for the reason below. *merged in* marks a branch that got there by merging rather than by a rebase, which is enough to build and measure but leaves a history a maintainer will ask to be linearised before review. A branch behind the pin carries its own base and its distance from that pin, and cannot be built, measured or reviewed as it stands, so its other columns stay empty. |
 | **± LOC** | For a branch, `+A/−B`: the source diff from its merge base to its tip, in the convention the [survey](ledger/2026-09-18-branch-survey.md) uses for pinned tips, naming the upstream revision it was taken against. Rebase first, then measure. It estimates how much there is to review, not how good it is. For a default-option change, `—`: the change is the default value. |
 | **± solved on the corpus** | Benchmarks solved, minus the baseline's, on the corpus and under the resource limits [goal 1](../README.md#the-charter) fixes, with proofs produced and checked in both arms. Positive is more solved. `—` until measured; a measured loss is written in as a loss and the row stays. |
 
@@ -126,7 +126,15 @@ Whether those become further columns or stay in the ledger entry each cell
 cites is a decision for the pass that fixes the corpus, not one to invent
 here.
 
-**Every branch now on `master` got there by a merge, not a rebase.** All twelve
+**No cell here names a moving reference.** `master` and `main` are different
+commits on different days, so a row that says *rebased to master* says nothing a
+week later, and two rows written a week apart would claim the same thing about
+different code. Every cell names a sha and that commit's date, exactly as
+[`progress.md`](progress.md) requires of a history row — *the exact cvc5 `main`
+revision, not "current main"*. Distances are given against a named pin for the
+same reason.
+
+**Every branch that carries the pin got there by a merge, not a rebase.** All twelve
 of this project's are `Merge branch 'master' into …` tips, as are the
 twenty-five of heuresis's in the same pass, each adding one commit to its
 branch. Nothing is wrong with that here: the branch contains
@@ -136,7 +144,7 @@ merge does not give is the linear patch series an upstream review expects, so
 a proposal that reaches a pull request will have to be linearised then. The
 column says which happened.
 
-**A row with no numbers is a branch that is not current with `master`.**
+**A row with no numbers is a branch that does not carry the pin.**
 Nothing is measured until it is rebased, and rebasing every branch named in
 these tables — the *active* branches, the ones a proposal depends on — is the
 pass that has to come before any of these columns can be filled. That list is
@@ -146,8 +154,8 @@ generated from these tables and kept outside the repository
 **Derived 2026-09-22 from the live fork**, with `ajreynol/cvc5` `master` at
 [`c2cc3caf`](https://github.com/ajreynol/cvc5/commit/c2cc3caf78414931b0feaed26a05c4426ed96098),
 itself 3 commits behind cvc5 `main`: **twelve of the twenty-three branches named
-here are on master**, rebased in a pass that ran between 2026-09-21 and
-2026-09-22, and their `± LOC` is filled from the rebased tip. The other eleven
+here contain `c2cc3caf`**, brought up to date in a pass that ran between
+2026-09-21 and 2026-09-22, and their `± LOC` is filled from that tip. The other eleven
 run from 77 behind (`pf-defineFun`, whose sibling `pf-defineFun-printerOnly` was
 rebased) to 4379 (`theoryEngineLazyProofs`, based in 2021). The fork moves while this is read, so re-derive before acting on it. A
 rebase is not a measurement: with no corpus, `± solved` stays empty regardless.
@@ -203,7 +211,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:unrewrite2`][unrewrite2] | **`master`**, merged in | +1082/−0, 10 src files | — |
+| [`ajreynol:unrewrite2`][unrewrite2] | **`c2cc3ca`** (2026-09-21), merged in | +1082/−0, 10 src files | — |
 
 ## E2 Smaller macro obligations
 
@@ -243,7 +251,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:reduceTransform`][reduceTransform] | **`master`**, merged in | +324/−1, 2 src files | — |
+| [`ajreynol:reduceTransform`][reduceTransform] | **`c2cc3ca`** (2026-09-21), merged in | +324/−1, 2 src files | — |
 
 ## E3 Compact term conversion
 
@@ -288,8 +296,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:pfrConvert2`][pfrConvert2] | **`master`**, merged in | +272/−20, 7 src files (2 other) | — |
-| [`ajreynol:pfrConvert`][pfrConvert] | `f53fc5f` (2023-10-24), **2213 behind** | — | — |
+| [`ajreynol:pfrConvert2`][pfrConvert2] | **`c2cc3ca`** (2026-09-21), merged in | +272/−20, 7 src files (2 other) | — |
+| [`ajreynol:pfrConvert`][pfrConvert] | `f53fc5f` (2023-10-24), 2213 behind `c2cc3caf` | — | — |
 
 ## E4 Rewrite dependencies
 
@@ -325,7 +333,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:rewriteDep`][rewriteDep] | **`master`**, merged in | +225/−32, 6 src files | — |
+| [`ajreynol:rewriteDep`][rewriteDep] | **`c2cc3ca`** (2026-09-21), merged in | +225/−32, 6 src files | — |
 
 ## E5 Proof DAG simplification and sharing
 
@@ -371,8 +379,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] | **`master`**, merged in | +522/−1, 3 src files (1 other) | — |
-| [`ajreynol:pfTrustId`][pfTrustId] | `91201c4` (2025-06-17), **700 behind** | — | — |
+| [`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] | **`c2cc3ca`** (2026-09-21), merged in | +522/−1, 3 src files (1 other) | — |
+| [`ajreynol:pfTrustId`][pfTrustId] | `91201c4` (2025-06-17), 700 behind `c2cc3caf` | — | — |
 
 ## E6 Recorded rewrite provenance
 
@@ -409,7 +417,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:rdbExec`][rdbExec] | **`master`**, merged in | +2561/−49, 29 src files (5 other) | — |
+| [`ajreynol:rdbExec`][rdbExec] | **`c2cc3ca`** (2026-09-21), merged in | +2561/−49, 29 src files (5 other) | — |
 
 ## E7 Reconstruction cache and search policy
 
@@ -449,10 +457,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:rareOptEval`][rareOptEval] | **`master`**, merged in | +1/−2, 1 src files | — |
-| [`ajreynol:rareNoEvalPremise`][rareNoEvalPremise] | `cbcaf6e` (2025-10-16), **548 behind** | — | — |
-| [`ajreynol:rpcAlwaysPre`][rpcAlwaysPre] | `2ae4ede` (2025-08-25), **619 behind** | — | — |
-| [`ajreynol:smtPpBasicRewriteOnly`][smtPpBasicRewriteOnly] | `df7773a` (2024-11-26), **1194 behind** | — | — |
+| [`ajreynol:rareOptEval`][rareOptEval] | **`c2cc3ca`** (2026-09-21), merged in | +1/−2, 1 src files | — |
+| [`ajreynol:rareNoEvalPremise`][rareNoEvalPremise] | `cbcaf6e` (2025-10-16), 548 behind `c2cc3caf` | — | — |
+| [`ajreynol:rpcAlwaysPre`][rpcAlwaysPre] | `2ae4ede` (2025-08-25), 619 behind `c2cc3caf` | — | — |
+| [`ajreynol:smtPpBasicRewriteOnly`][smtPpBasicRewriteOnly] | `df7773a` (2024-11-26), 1194 behind `c2cc3caf` | — | — |
 
 ## E8 Resolution construction and internal checking
 
@@ -490,8 +498,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:chainMResOpt`][chainMResOpt] | **`master`**, merged in | +62/−55, 1 src files | — |
-| [`ajreynol:pfrDev`][pfrDev] | `ef1f617` (2024-07-03), **1536 behind** | — | — |
+| [`ajreynol:chainMResOpt`][chainMResOpt] | **`c2cc3ca`** (2026-09-21), merged in | +62/−55, 1 src files | — |
+| [`ajreynol:pfrDev`][pfrDev] | `ef1f617` (2024-07-03), 1536 behind `c2cc3caf` | — | — |
 
 ## E9 Definitions and proof output
 
@@ -528,8 +536,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:pf-defineFun-printerOnly`][defineFunPrinter] | **`master`**, merged in | +876/−25, 11 src files (7 other) | — |
-| [`ajreynol:pf-defineFun`][defineFun] | `242ff48` (2026-08-17), **77 behind** | — | — |
+| [`ajreynol:pf-defineFun-printerOnly`][defineFunPrinter] | **`c2cc3ca`** (2026-09-21), merged in | +876/−25, 11 src files (7 other) | — |
+| [`ajreynol:pf-defineFun`][defineFun] | `242ff48` (2026-08-17), 77 behind `c2cc3caf` | — | — |
 
 ## E10 Lazy bookkeeping and theory reconstruction
 
@@ -572,11 +580,11 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:stratifiedStrIpc`][stratifiedStrIpc] | **`master`**, merged in | +58/−7, 1 src files | — |
-| [`ajreynol:stringsIpcRefactor`][stringsIpcRefactor] | `8cfac8f` (2024-12-13), **1149 behind** | — | — |
-| [`ajreynol:stringsIpcAgg2`][stringsIpcAgg2] | `989b077` (2024-08-12), **1376 behind** | — | — |
-| [`ajreynol:stringsIpcAgg`][stringsIpcAgg] | `6aee1e1` (2024-04-24), **1790 behind** | — | — |
-| [`ajreynol:theoryEngineLazyProofs`][theoryEngineLazyProofs] | `a06b10c` (2021-10-22), **4379 behind** | — | — |
+| [`ajreynol:stratifiedStrIpc`][stratifiedStrIpc] | **`c2cc3ca`** (2026-09-21), merged in | +58/−7, 1 src files | — |
+| [`ajreynol:stringsIpcRefactor`][stringsIpcRefactor] | `8cfac8f` (2024-12-13), 1149 behind `c2cc3caf` | — | — |
+| [`ajreynol:stringsIpcAgg2`][stringsIpcAgg2] | `989b077` (2024-08-12), 1376 behind `c2cc3caf` | — | — |
+| [`ajreynol:stringsIpcAgg`][stringsIpcAgg] | `6aee1e1` (2024-04-24), 1790 behind `c2cc3caf` | — | — |
+| [`ajreynol:theoryEngineLazyProofs`][theoryEngineLazyProofs] | `a06b10c` (2021-10-22), 4379 behind `c2cc3caf` | — | — |
 
 ## E11 Incremental output and reuse
 
@@ -613,7 +621,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-pfIncremental`][aiPfIncremental] | **`master`**, merged in | +365/−23, 7 src files (4 other) | — |
+| [`ajreynol:ai-pfIncremental`][aiPfIncremental] | **`c2cc3ca`** (2026-09-21), merged in | +365/−23, 7 src files (4 other) | — |
 
 ## E12 Proof-induced search changes
 
@@ -653,7 +661,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | rebased to | ± LOC | ± solved on the corpus |
 | --- | --- | ---: | ---: |
-| [`ajreynol:ai-macroPf`][aiMacroPf] | **`master`**, merged in | +118/−45, 5 src files (3 other) | — |
+| [`ajreynol:ai-macroPf`][aiMacroPf] | **`c2cc3ca`** (2026-09-21), merged in | +118/−45, 5 src files (3 other) | — |
 
 ## E13 Proof-work accounting
 
