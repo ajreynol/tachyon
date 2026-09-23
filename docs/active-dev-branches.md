@@ -11,10 +11,15 @@ table. Those registers are authoritative and this file is derived from them,
 from the fork, and from a build on the benchmark host. It is **not** a place to
 add a branch: a branch earns a row here by first earning a proposal row there.
 
-| project | register | proposals | in this file |
+| project | register | branch proposals | in this file |
 | --- | --- | ---: | --- |
 | heuresis | [`directions.md`](../tools/heuresis/docs/directions.md#proposals) | 65 | quantifier-performance branches |
 | elaphros | [`directions.md`](../tools/elaphros/docs/directions.md#proposals) | 23 | proof-production branches |
+
+**Branches only.** A proposal can also be a change to the default of an option
+that already exists on `main`; heuresis records 18 of those. They have no
+branch to update and nothing to build, so they live in their register and not
+here.
 
 A project that starts keeping proposals adds its rows here; nothing in this file
 governs a project, and removing a project's rows changes no claim it makes.

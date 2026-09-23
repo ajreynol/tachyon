@@ -204,8 +204,10 @@ it becomes a row in
 [`progress.md`](docs/progress.md#pull-requests-to-cvc5-main). Proposals are
 also not the point: a finding is the primary result, and a direction that
 produces a good question and an empty table has done its job. As of 2026-09-22
-the tables name **sixty-five branches**, fifty-two of them within six commits
-of cvc5 `main@10bd5cb3`, all compiling there and ready to measure
+the tables name **eighty-three proposals**: eighteen changes to the default of
+an option that already exists on `main`, seven of them already measured, and
+sixty-five branches, fifty-two of which are within six commits of cvc5
+`main@10bd5cb3`, all compiling there and ready to measure
 ([the shared running list](../../docs/active-dev-branches.md)).
 
 ## The set
