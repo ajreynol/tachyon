@@ -503,7 +503,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--inst-max-rounds`, `-1`, unbounded → a finite budget | `--inst-max-rounds=50` | — |
-| [`ajreynol:dtInstMode`](../../../docs/active-dev-branches.md#dtInstMode) | `--dt-inst-internal` | — |
+| [`ajreynol:dtInstMode`](../../../docs/active-dev-branches.md#dtInstMode) | `--no-dt-inst-internal` | — |
 | [`ajreynol:instLastCallDelay`](../../../docs/active-dev-branches.md#instLastCallDelay) | *(none — the branch changes behaviour directly)* | — |
 | [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=1` | — |
 | [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=3` | — |
@@ -1229,7 +1229,14 @@ select MiniSat. Classify its 55 rescues and its 116 at-least-2× regressions
 before designing a narrower SAT-policy experiment.
 
 **Proposals.** This direction's own; a proposal is listed here and in no
-other direction. Columns and rules: [Proposals](#proposals).
+other direction. Columns and rules: [Proposals](#proposals). **The one branch
+here cannot move this set**: a 2026-09-23 reading of
+[`ajreynol:cadicalPortfolio`](../../../docs/active-dev-branches.md#cadicalPortfolio)
+shows it makes CaDiCaL the `--sat-solver` default only for logics that are
+*not* quantified and not strings, so on `quant-07-25` it is inert by
+construction. Run it to confirm the no-op if you like, but R13 needs a
+different proposal — restart and phase policy under instantiation, which
+nothing on the fork touches.
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
@@ -2324,10 +2331,13 @@ history row — *the exact cvc5 `main` revision, not "current main"*.
 **Every branch here reached the pin by a merge, not a rebase.** Each current tip
 is a `Merge branch 'master' into …` commit, which is enough to build and
 measure but is not the linear series an upstream review will ask for;
-linearising is deferred, not avoided. Five branches came out of such a merge
-with no changes of their own left and lost their rows here, which is why the
-[shared list](../../../docs/active-dev-branches.md) records a source diff per
-branch and why the update procedure checks it.
+linearising is deferred, not avoided. Five branches have no changes of
+their own left against the pin and lost their rows here — not because a merge
+destroyed them, as this register first recorded, but because four had their
+mechanism land upstream and one was superseded by a more general upstream
+change. The [shared list](../../../docs/active-dev-branches.md) carries the
+reading; the diff is still checked after every update, because an empty one has
+to be explained either way.
 
 **An empty `± solved` cell means the run has not happened.** This register no
 longer carries how current a branch is, how large it is, or whether it

@@ -17,7 +17,7 @@ add a branch: a branch earns a row here by first earning a proposal row there.
 | elaphros | [`directions.md`](../tools/elaphros/docs/directions.md#proposals) | 20 | proof-production branches |
 
 **Branches only.** A proposal can also be a change to the default of an option
-that already exists on `main`; heuresis records 22 of those. They have no
+that already exists on `main`; heuresis records 23 of those. They have no
 branch to update and nothing to build, so they live in their register and not
 here.
 
@@ -55,16 +55,26 @@ is enough to build and measure, and `± LOC` is a three-dot diff against the pin
 so it still reports only the branch's own changes. It is not the linear series
 an upstream review will ask for.
 
-### Updates that emptied a branch
+### Five branches whose own diff is empty, and why
 
-Five branches came through an update with **no changes of their own left**: the
-merge resolved in favour of upstream, and the branch's source diff against the
-pin became nothing. They are retired in their registers rather than shown here
-as healthy rows, and each retirement names the commit that still holds the lost
-work. `p657` is the newest, emptied by the 2026-09-23 pass; the other four were
-emptied earlier and a later pass merged again on top, which carried the
-emptiness forward rather than repairing it. **This is why the procedure below
-checks the source diff after every update** rather than trusting a clean merge.
+Five branches carry **no changes of their own** against the pin: their
+`diff --stat $PIN...BRANCH -- src/` is nothing. They compile perfectly in that
+state, which is why the check below reports the diff rather than trusting a
+clean build.
+
+**The first reading of this was wrong, and the correction matters.** The obvious
+explanation — a merge resolving in favour of upstream and destroying the work —
+is not what happened. On four of the five the branch's mechanism is **already in
+the pin**: the contribution landed upstream, and an empty own-diff is exactly
+what that looks like. The fifth, `bvToIntQuant-031126`, was **superseded** rather
+than taken: the pin collects range constraints per uninterpreted-function symbol
+through `IntBlaster::addQuantifiedRangeConstraint`, which subsumes the branch's
+coarser constraint, and its remaining novelty — extending the quantified path to
+`EXISTS` — is unreachable while `int_blaster.cpp` asserts the node is a `FORALL`.
+Restoring it as it stands would regress generality.
+
+All five are retired in their registers. **Nothing was lost**, and their
+pre-update tips are recorded beside the fork should anyone want to look again.
 
 ## The compile check
 
@@ -167,24 +177,24 @@ git --git-dir=fork.git diff --stat $PIN...BRANCH -- src/ # empty means content w
 | <a id="ai-prepared13"></a>[`ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) | Caches match failures that are invariant modulo the equality engine | heuresis | [R3](../tools/heuresis/docs/directions.md#r3--worst-case-e-matching-failure-caching-and-early-pruning) | 15 | +290/−6 over 4 src files | ✅ 37s |
 | <a id="termOrigin"></a>[`termOrigin`](https://github.com/ajreynol/cvc5/tree/termOrigin) | `--inst-nested-max-level` and a lemma-origin DAG — cvc5's nearest thing to z3's generation | heuresis | [R4](../tools/heuresis/docs/directions.md#r4--instantiation-budgeting-how-many-instances-per-round-and-which) | 19 | +478/−11 over 19 src files | ✅ 53s |
 | <a id="instLastCallDelay"></a>[`instLastCallDelay`](https://github.com/ajreynol/cvc5/tree/instLastCallDelay) | Skips the last-call check while the valuation still needs one | heuresis | [R4](../tools/heuresis/docs/directions.md#r4--instantiation-budgeting-how-many-instances-per-round-and-which) | 5 | +5/−4 over 1 src files | ✅ 49s |
-| <a id="dtInstMode"></a>[`dtInstMode`](https://github.com/ajreynol/cvc5/tree/dtInstMode) | *(not characterised)* | heuresis | [R4](../tools/heuresis/docs/directions.md#r4--instantiation-budgeting-how-many-instances-per-round-and-which) | 6 | +14/−1 over 2 src files | ✅ 15s |
+| <a id="dtInstMode"></a>[`dtInstMode`](https://github.com/ajreynol/cvc5/tree/dtInstMode) | `--dt-inst-internal`: send datatype instantiate inferences as lemmas, bypassing `dtPoliteOptimize` | heuresis | [R4](../tools/heuresis/docs/directions.md#r4--instantiation-budgeting-how-many-instances-per-round-and-which) | 6 | +14/−1 over 2 src files | ✅ 15s |
 | <a id="multiTriggerSingleBase"></a>[`multiTriggerSingleBase`](https://github.com/ajreynol/cvc5/tree/multiTriggerSingleBase) | Uses a single trigger as the base for multi-triggers | heuresis | [R5](../tools/heuresis/docs/directions.md#r5--trigger-selection-strict-user-patterns-multi-triggers-and-what-strictness-disables) | 5 | +44/−0 over 3 src files | ✅ 22s |
 | <a id="nestedTriggers"></a>[`nestedTriggers`](https://github.com/ajreynol/cvc5/tree/nestedTriggers) | `--nested-triggers`: triggers from terms in nested quantifiers | heuresis | [R5](../tools/heuresis/docs/directions.md#r5--trigger-selection-strict-user-patterns-multi-triggers-and-what-strictness-disables) | 6 | +39/−22 over 4 src files | ✅ 15s |
-| <a id="simpleTriggerMore"></a>[`simpleTriggerMore`](https://github.com/ajreynol/cvc5/tree/simpleTriggerMore) | *(not characterised)* | heuresis | [R5](../tools/heuresis/docs/directions.md#r5--trigger-selection-strict-user-patterns-multi-triggers-and-what-strictness-disables) | 7 | +48/−33 over 2 src files | ✅ 5s |
+| <a id="simpleTriggerMore"></a>[`simpleTriggerMore`](https://github.com/ajreynol/cvc5/tree/simpleTriggerMore) | Caches the term-arg trie so a simple trigger can be reset onto a candidate equivalence class | heuresis | [R5](../tools/heuresis/docs/directions.md#r5--trigger-selection-strict-user-patterns-multi-triggers-and-what-strictness-disables) | 7 | +48/−33 over 2 src files | ✅ 5s |
 | <a id="gttOpt"></a>[`gttOpt`](https://github.com/ajreynol/cvc5/tree/gttOpt) | `--gt-trigger-reg`: registers ground subterms of triggers | heuresis | [R5](../tools/heuresis/docs/directions.md#r5--trigger-selection-strict-user-patterns-multi-triggers-and-what-strictness-disables) | 6 | +9/−1 over 2 src files | ✅ 43s |
 | <a id="ai-cbqi-0423"></a>[`ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | Reworks QCF where flattened UF encodings force an exhaustive search | heuresis | [R6](../tools/heuresis/docs/directions.md#r6--conflict-based-instantiation-off-for-this-domain-and-why-that-is-right-or-wrong) | 8 | +136/−87 over 1 src files | ✅ 45s |
 | <a id="ievalTravTrie"></a>[`ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | Evaluator walks term tries as assignments arrive, rejecting infeasible matches earlier | heuresis | [R7](../tools/heuresis/docs/directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 7 | +166/−43 over 8 src files | ✅ 16s |
 | <a id="emStratify"></a>[`emStratify`](https://github.com/ajreynol/cvc5/tree/emStratify) | `--e-matching-stratify-ieval` | heuresis | [R7](../tools/heuresis/docs/directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 19 | +180/−27 over 16 src files | ✅ 45s |
 | <a id="notifySatClause"></a>[`notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause) | The SAT deletion callback a real instantiation-lemma GC would need | heuresis | [R9](../tools/heuresis/docs/directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 8 | +49/−10 over 6 src files | ✅ 45s |
 | <a id="virtualClauseDel"></a>[`virtualClauseDel`](https://github.com/ajreynol/cvc5/tree/virtualClauseDel) | The first deletion design: instantiation lemmas as virtual clauses | heuresis | [R9](../tools/heuresis/docs/directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 18 | +25/−5 over 9 src files | ✅ 46s |
-| <a id="smtLazyAssert"></a>[`smtLazyAssert`](https://github.com/ajreynol/cvc5/tree/smtLazyAssert) | *(not characterised)* | heuresis | [R9](../tools/heuresis/docs/directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 23 | +377/−16 over 15 src files | ✅ 91s |
+| <a id="smtLazyAssert"></a>[`smtLazyAssert`](https://github.com/ajreynol/cvc5/tree/smtLazyAssert) | `--smt-lazy-assert`: assert the input incrementally under model guidance, with an and-elim pass | heuresis | [R9](../tools/heuresis/docs/directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 23 | +377/−16 over 15 src files | ✅ 91s |
 | <a id="ai-instDefer"></a>[`ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | `--inst-defer`: records instantiations globally, treats them as local in the heuristic | heuresis | [R10](../tools/heuresis/docs/directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 6 | +116/−32 over 11 src files | ✅ 82s |
 | <a id="ai-jhRlvInst"></a>[`ai-jhRlvInst`](https://github.com/ajreynol/cvc5/tree/ai-jhRlvInst) | `--jh-rlv-inst`: activates an instantiation lemma when its quantifier is asserted | heuresis | [R10](../tools/heuresis/docs/directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 7 | +327/−18 over 9 src files | ✅ 49s |
 | <a id="ai-jhConflictFirst"></a>[`ai-jhConflictFirst`](https://github.com/ajreynol/cvc5/tree/ai-jhConflictFirst) | `--jh-conflict-first`: prioritises conflict clauses over theory lemmas | heuresis | [R10](../tools/heuresis/docs/directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 6 | +90/−36 over 9 src files | ✅ 17s |
 | <a id="claudeDev-dts-idef"></a>[`claudeDev-dts-idef`](https://github.com/ajreynol/cvc5/tree/claudeDev-dts-idef) | `--inst-defer` and `--dt-split-relevant` together | heuresis | [R10](../tools/heuresis/docs/directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 7 | +177/−40 over 13 src files | ✅ 48s |
 | <a id="jhRandom"></a>[`jhRandom`](https://github.com/ajreynol/cvc5/tree/jhRandom) | `--jh-rand`: randomised assertion and branch order | heuresis | [R11](../tools/heuresis/docs/directions.md#r11--decision-heuristic-versus-relevancy-what-the-sat-solver-is-made-to-decide-on) | 7 | +262/−20 over 7 src files | ✅ 50s |
 | <a id="subConflict"></a>[`subConflict`](https://github.com/ajreynol/cvc5/tree/subConflict) | `--sub-conflict-find`: a subsolver that looks for conflicts | heuresis | [R12](../tools/heuresis/docs/directions.md#r12--lemma-inprocessing-and-conflict-minimisation) | 13 | +328/−1 over 12 src files | ✅ 48s |
-| <a id="cadicalPortfolio"></a>[`cadicalPortfolio`](https://github.com/ajreynol/cvc5/tree/cadicalPortfolio) | *(not characterised)* | heuresis | [R13](../tools/heuresis/docs/directions.md#r13--the-sat-backend-cadical-minisat-restarts-units) | 6 | +50/−0 over 1 src files | ✅ 48s |
+| <a id="cadicalPortfolio"></a>[`cadicalPortfolio`](https://github.com/ajreynol/cvc5/tree/cadicalPortfolio) | Makes CaDiCaL the `--sat-solver` default for non-quantified, non-string logics | heuresis | [R13](../tools/heuresis/docs/directions.md#r13--the-sat-backend-cadical-minisat-restarts-units) | 6 | +50/−0 over 1 src files | ✅ 48s |
 | <a id="mbtc25"></a>[`mbtc25`](https://github.com/ajreynol/cvc5/tree/mbtc25) | `--tc-mode=model-based`: model-based theory combination; upstream PR #12095 open | heuresis | [R14](../tools/heuresis/docs/directions.md#r14--theory-combination-care-graph-or-model-based) | 35 | +367/−82 over 15 src files | ✅ 44s |
 | <a id="ai-eecNoShare"></a>[`ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | Skips `propagateSharedEquality` for theories the central engine already explains | heuresis | [R15](../tools/heuresis/docs/directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 6 | +9/−3 over 1 src files | ✅ 43s |
 | <a id="dtMergeNotify-v3"></a>[`dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | Datatypes under the central equality engine without `notifyFact` | heuresis | [R15](../tools/heuresis/docs/directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 35 | +377/−73 over 10 src files | ✅ 12s |
@@ -204,7 +214,7 @@ git --git-dir=fork.git diff --stat $PIN...BRANCH -- src/ # empty means content w
 | <a id="preregRlv"></a>[`preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | `--preregister-mode=rlv`: preregisters only literals relevance can use; PR #9503 open | heuresis | [R22](../tools/heuresis/docs/directions.md#r22--preregistration-which-literals-the-theories-are-told-about) | 159 | +833/−13 over 9 src files | ✅ 11s |
 | <a id="tdbOldIndex"></a>[`tdbOldIndex`](https://github.com/ajreynol/cvc5/tree/tdbOldIndex) | `--tdb-old-index`: prefers old terms in term-database indices | heuresis | [R23](../tools/heuresis/docs/directions.md#r23--term-database-relevance-which-ground-terms-e-matching-may-use) | 9 | +61/−7 over 5 src files | ✅ 50s |
 | <a id="lowLevelOptMore"></a>[`lowLevelOptMore`](https://github.com/ajreynol/cvc5/tree/lowLevelOptMore) | Compact constant-factor work from 2019 | heuresis | [R25](../tools/heuresis/docs/directions.md#r25--low-level-engineering-the-constant-factors) | 15 | +72/−8 over 2 src files | ✅ 48s |
-| <a id="tdbLLOpts"></a>[`tdbLLOpts`](https://github.com/ajreynol/cvc5/tree/tdbLLOpts) | *(not characterised)* | heuresis | [R25](../tools/heuresis/docs/directions.md#r25--low-level-engineering-the-constant-factors) | 6 | +38/−34 over 2 src files | ✅ 10s |
+| <a id="tdbLLOpts"></a>[`tdbLLOpts`](https://github.com/ajreynol/cvc5/tree/tdbLLOpts) | Signature refactor only: passes the quantifier by const reference through the duplicate tries | heuresis | [R25](../tools/heuresis/docs/directions.md#r25--low-level-engineering-the-constant-factors) | 6 | +38/−34 over 2 src files | ✅ 10s |
 | <a id="qdebugStats"></a>[`qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | E-matching debug statistics and an `AnalyzeEE` module | heuresis | [R26](../tools/heuresis/docs/directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 34 | +536/−15 over 19 src files | ✅ 24s |
 | <a id="debugDumpLemmas"></a>[`debugDumpLemmas`](https://github.com/ajreynol/cvc5/tree/debugDumpLemmas) | `--re-check-lemmas` | heuresis | [R26](../tools/heuresis/docs/directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 9 | +50/−0 over 5 src files | ✅ 48s |
 | <a id="trackInferId"></a>[`trackInferId`](https://github.com/ajreynol/cvc5/tree/trackInferId) | `--track-lemma-inference-ids` | heuresis | [R26](../tools/heuresis/docs/directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 5 | +22/−3 over 3 src files | ✅ 44s |

@@ -884,10 +884,13 @@ carries. This is the rule heuresis's progress record already applies to a histor
 **Every branch here reached the pin by a merge, not a rebase.** Each current tip
 is a `Merge branch 'master' into …` commit, which is enough to build and
 measure but is not the linear series an upstream review will ask for;
-linearising is deferred, not avoided. Five branches across the two projects came out of such a merge
-with no changes of their own left and lost their rows here, which is why the
-[shared list](../../../docs/active-dev-branches.md) records a source diff per
-branch and why the update procedure checks it.
+linearising is deferred, not avoided. Five branches have no changes of
+their own left against the pin and lost their rows here — not because a merge
+destroyed them, as this register first recorded, but because four had their
+mechanism land upstream and one was superseded by a more general upstream
+change. The [shared list](../../../docs/active-dev-branches.md) carries the
+reading; the diff is still checked after every update, because an empty one has
+to be explained either way.
 
 **Every `± solved` cell is empty and will stay so until goal 1 fixes a corpus.** This register no
 longer carries how current a branch is, how large it is, or whether it
