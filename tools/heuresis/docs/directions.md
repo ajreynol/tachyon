@@ -2160,30 +2160,6 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ---
 
-# What to run next
-
-The live order is [`todo.md`](todo.md), which is deliberately updated as
-evidence arrives. The host sweeps have completed the explicit-CaDiCaL,
-instance-order, quantifier-control, datatype, equality-engine, evaluator, QCF,
-corrected-z3, and whole-set-statistics runs. The next experiments supported by
-those measurements are:
-
-| run | direction | measured trigger |
-| --- | --- | --- |
-| skipped shared-equality propagation count/time, then a second corpus | R15 | current central mode cuts PAR2 10.3%, while `ai-eecNoShare` itself moves it only −0.20% |
-| evaluator pushes, early trie rejections, and evaluator time | R7 | `ievalTravTrie` is neutral and evaluator-off remains 3.9% better |
-| [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst), now carrying `c2cc3caf` | R1, R28 | use its pacing as the substrate for conflict/unit acceptance; the published ref was 138 behind at the 2026-09-16 audit and was brought up to date on 2026-09-22 |
-| `--parse-only` | R27 | needed to interpret the low but non-parser-specific `processAssertionsTime` |
-
-In parallel, add or selectively port the new-versus-rediscovered E-match
-counter (R2) and the persistent-clause/conflict-use counters (R9). Do not
-build every historical branch: the evidence-sensitive rebase decision for
-each maintained fork branch is in `todo.md`, “Branch maintenance.” The
-expensive combined design remains R1 + R2 + R9 — eager, incremental,
-forgetting — and the attribution still has to earn it.
-
----
-
 # Maintaining this page
 
 **Every research direction is written the same way**, and a new one is expected
@@ -2296,7 +2272,7 @@ history row — *the exact cvc5 `main` revision, not "current main"*.
 is a `Merge branch 'master' into …` commit, which is enough to build and
 measure but is not the linear series an upstream review will ask for;
 linearising is deferred, not avoided. Five branches came out of such a merge
-with no changes of their own left and are retired below, which is why the
+with no changes of their own left and lost their rows here, which is why the
 [shared list](../../../docs/active-dev-branches.md) records a source diff per
 branch and why the update procedure checks it.
 
@@ -2314,37 +2290,18 @@ which `ajreynol/cvc5` `master` pointed at: of the **seventy-nine proposals**
 named across twenty-seven directions — fifty-seven branches and twenty-two
 option-default changes — **every branch is now within one commit of the pin**,
 because master itself moved on after the pass. There is no long tail left: the
-branches that could not be carried forward are retired below, and the ones that
-were are current. `± LOC` is read at the pin; the build column is being
+branches that could not be carried forward have lost their rows, and the ones
+that were carried are current. `± LOC` is read at the pin; the build column is being
 re-measured at these new tips.
 
-**Fifteen proposals retired**, most recently on 2026-09-23. A proposal
-leaves the register when its branch cannot be brought onto a current commit —
-and the reason is the finding, because it says what upstream did to the ground
-the branch stood on. 3 of them are a different failure: an update
-resolved in favour of upstream and left the branch with no changes of its own,
-so the row described nothing. The rows are gone from the direction tables above;
-the *questions* are not retired with them, and a fresh implementation of any of
-these mechanisms would be a new proposal. Where the lost work still exists, the
-commit that holds it is named.
-
-| branch | direction | verdict | why |
-| --- | --- | --- | --- |
-| [`ajreynol:cacheEntCheck`](https://github.com/ajreynol/cvc5/tree/cacheEntCheck) | R3 | **UNSOUND IF MERGED** | 11 of 19 hunks are in `entailment_check.cpp`, where the two sides took contradictory designs: master threads the substitution through the recursion, the branch memoises on the node alone. Merging would leave a cache keyed on `n` guarding a substitution-dependent result. **The idea survives the branch** — master's no-substitution `getEntailedTerm(TNode n)` is exactly where memoising is sound, which is a small, self-contained reimplementation. |
-| [`ajreynol:emFailMasks`](https://github.com/ajreynol/cvc5/tree/emFailMasks) | R3 | **NEEDS PORT** | Attempted and not completed: it threads a new `isFeasibleInstantiation` through three call sites where master refactored `sendInstantiation`, and adds an `mkRep` parameter master replaced with `processInstantiationRep`. Master also has a per-enumerator version of the idea already. **The branch's own contribution — global fail masks in `Instantiate::d_failMasks` — is still a real proposal**, but landing it means porting onto master's interfaces deliberately. |
-| [`ajreynol:carryInst`](https://github.com/ajreynol/cvc5/tree/carryInst) | R4 | **TARGETS DELETED CODE** | Merging resurrects `smt_engine.cpp` (2075 lines), deleted when `SmtEngine` became `SolverEngine` — the same trap as `perfDataStructures`. Its hook, `UnsatCoreManager::getRelevantInstantiations`, was replaced by `getRelevantQuantTermVectors` with a different signature. |
-| [`ajreynol:refactorQcf`](https://github.com/ajreynol/cvc5/tree/refactorQcf) | R6 | **REWRITTEN UPSTREAM** | 79 substantive conflict hunks, all inside `quant_conflict_find.{cpp,h}`, which master has rewritten. A merge would be a rewrite of the branch against a different design. |
-| [`ajreynol:qcfClean`](https://github.com/ajreynol/cvc5/tree/qcfClean) | R6 | **REWRITTEN UPSTREAM** | 60 substantive conflict hunks in the same two rewritten files. Same verdict as `refactorQcf`. |
-| [`ajreynol:fmfIeval`](https://github.com/ajreynol/cvc5/tree/fmfIeval) | R7 | **NO CHANGES LEFT** | An update resolved in favour of upstream and dropped the branch's own work; its source diff against the pin is now empty. The 5 src files, +40/−22 it carried are still at `61156a62b2`. |
-| [`ajreynol:virtualLemma`](https://github.com/ajreynol/cvc5/tree/virtualLemma) | R9 | **TARGETS DELETED CODE** | 40 substantive hunks across 13 files, two of which master has deleted: `decision_engine_old.cpp` and `decision_engine_old.h`. The decision-engine surface the branch attaches to no longer exists. |
-| [`ajreynol:isActiveLemma`](https://github.com/ajreynol/cvc5/tree/isActiveLemma) | R9 | **DIVERGENT REWRITE** | Both sides rewrote `RelevanceManager` independently, 7 of 15 hunks in `relevance_manager.cpp` alone, and hunks 6 and 7 contradict each other: the two designs disagree on what *relevant* is keyed on. It also renames the upstream `relevanceFilter` option, which master still uses in five files. Reconciling means choosing one design, not merging two. |
-| [`ajreynol:linearSolverSub`](https://github.com/ajreynol/cvc5/tree/linearSolverSub) | R17 | **NEEDS REIMPLEMENTATION** | Dropped by the author, and independently a signature migration rather than a merge: master changed `LinearSolver`'s interface — `propagate()` lost its `Effort` argument, `ppAssert` returns `bool`, `ppStaticLearn` takes `std::vector<TrustNode>` — while the branch adds a 376-line implementation of the old signatures. Porting means migrating the base, `LinearSolverLegacy`, `LinearSolverSub` and the call sites together. |
-| [`ajreynol:bvBbExtf`](https://github.com/ajreynol/cvc5/tree/bvBbExtf) | R19 | **TARGETS DELETED CODE** | The oldest active branch, on a 2016 commit. Master rewrote `TheoryBV` around a single `d_internal` solver, and every attachment point is gone: `getExtTheory`, `doExtfInferences`, `doExtfReductions`, the `bvAlgExtf` and `bvLazyReduceExtf` options, `d_subtheories` and `EagerBitblastSolver` are absent from `src/` entirely. |
-| [`ajreynol:bvToIntQuant-031126`](https://github.com/ajreynol/cvc5/tree/bvToIntQuant-031126) | R19 | **NO CHANGES LEFT** | Emptied the same way; 1 src file, +60/−16 still at `163e60360b`. |
-| [`ajreynol:ai-fixAlphaEq-2`](https://github.com/ajreynol/cvc5/tree/ai-fixAlphaEq-2) | R21 | **AUTHOR-DROPPED** | Dropped on the author's instruction; not assessed further. The branch is left untouched on the fork. |
-| [`ajreynol:p657`](https://github.com/ajreynol/cvc5/tree/p657) | R21 | **NO CHANGES LEFT** | Brought to the pin in the 2026-09-23 pass and emptied by it; the 3 src files, +32/−6 it carried are still at `678b7b4f01`. |
-| [`ajreynol:optTdbTNode`](https://github.com/ajreynol/cvc5/tree/optTdbTNode) | R25 | **SUPERSEDED** | Its entire content is `Node` → `TNode` on `TermDb::d_op_map` and `d_type_map` to avoid reference counting. Master replaced both with context-dependent `CDHashMap<Node, std::shared_ptr<DbList>>`, so all 25 hunks target structures that no longer exist, and master's own `DbList` rewrite supersedes the optimisation. |
-| [`ajreynol:perfDataStructures`](https://github.com/ajreynol/cvc5/tree/perfDataStructures) | R25 | **CANNOT BUILD** | A 2018 benchmarking scaffold. Merging silently resurrected two files master had deleted — `smt_engine.cpp` (6105 lines, renamed `solver_engine.cpp`) and the autotools `src/Makefile.am` — a clean-looking merge that was in fact broken. Its `--do-test` hook lands in `SmtEnginePrivate::processAssertions`, which no longer exists, and its sources use `cvc4_private.h`, `namespace CVC4` and `__CVC4__` guards, so they cannot compile against `cvc5::internal`. |
+**Retiring a proposal removes its row.** When a branch cannot be brought onto a
+current commit, or an update leaves it with no changes of its own, the row goes
+and nothing takes its place here: this register tracks what is proposed, not
+what was. The reason is worth writing down — what upstream did to the ground the
+branch stood on is a finding — but it belongs in the maintainer's own abandoned
+list, beside the fork, not in a table that would grow forever. The *question*
+the direction asks is not retired with the branch, and a fresh implementation of
+the same mechanism is a new proposal.
 
 **Recording a proposal does not send it anywhere.** Filing an issue or opening
 a pull request is a person's act, and out of scope for this project. When a

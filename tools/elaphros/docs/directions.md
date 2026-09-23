@@ -885,7 +885,7 @@ carries. This is the rule heuresis's progress record already applies to a histor
 is a `Merge branch 'master' into …` commit, which is enough to build and
 measure but is not the linear series an upstream review will ask for;
 linearising is deferred, not avoided. Five branches across the two projects came out of such a merge
-with no changes of their own left and are retired below, which is why the
+with no changes of their own left and lost their rows here, which is why the
 [shared list](../../../docs/active-dev-branches.md) records a source diff per
 branch and why the update procedure checks it.
 
@@ -903,26 +903,18 @@ which `ajreynol/cvc5` `master` pointed at: **nineteen of the twenty branches
 named here are within eleven commits of the pin** and carry a line count, with
 the build column being re-measured at these new tips. The twentieth,
 [`ajreynol:rareEncodeSubcall`][rareEncodeSubcall], has never been updated and is
-764 commits back. Four proposals are retired below, two of them because an
-update left the branch with no changes of its own. Being current is not a
+764 commits back. Four proposals have been removed since the last reading, two
+of them because an update left the branch with no changes of its own. Being current is not a
 measurement: with no corpus, `± solved` stays empty regardless.
 
-**Four proposals retired**, most recently on 2026-09-23. A proposal
-leaves the register when its branch cannot be brought onto a current commit —
-and the reason is the finding, because it says what upstream did to the ground
-the branch stood on. 2 of them are a different failure: an update
-resolved in favour of upstream and left the branch with no changes of its own,
-so the row described nothing. The rows are gone from the direction tables above;
-the *questions* are not retired with them, and a fresh implementation of any of
-these mechanisms would be a new proposal. Where the lost work still exists, the
-commit that holds it is named.
-
-| branch | direction | verdict | why |
-| --- | --- | --- | --- |
-| [`ajreynol:pfrConvert`](https://github.com/ajreynol/cvc5/tree/pfrConvert) | E3 | **NEEDS REIMPLEMENTATION** | Adds a `CONVERT` rule with no upstream equivalent, but merging resurrects two directories master deleted in the ALF→Eunoia rename (`src/proof/alf/`, `proofs/alf/`) and duplicates the `BETA_REDUCE` enumerator. Its signature program is written in ALF/smt3; the upstream equivalent is Eunoia, a different language. Carrying it forward means rewriting the signature, relocating the printer change and re-adding the rule — a reimplementation. |
-| [`ajreynol:smtPpBasicRewriteOnly`](https://github.com/ajreynol/cvc5/tree/smtPpBasicRewriteOnly) | E7 | **NO CHANGES LEFT** | Emptied by a merge; 1 src file, +3/−12 still at `cfddc7a96c`. |
-| [`ajreynol:pfrDev`](https://github.com/ajreynol/cvc5/tree/pfrDev) | E8 | **SUPERSEDED** | Its mechanism is a `proofMacroRes` option plus a `MACRO_RESOLUTION` proof checker. Master has removed `ProofRule::MACRO_RESOLUTION` entirely and replaced it with `CHAIN_M_RESOLUTION` and its own `proofChainMRes` option — the route `cpcDevChainMRes` (E5) took — and rewrote the checker algorithm. There is nothing left to merge onto. |
-| [`ajreynol:stringsIpcAgg2`](https://github.com/ajreynol/cvc5/tree/stringsIpcAgg2) | E10 | **NO CHANGES LEFT** | Emptied by a merge; 1 src file, +17/−0 still at `892d178f2b`. |
+**Retiring a proposal removes its row.** When a branch cannot be brought onto a
+current commit, or an update leaves it with no changes of its own, the row goes
+and nothing takes its place here: this register tracks what is proposed, not
+what was. The reason is worth writing down — what upstream did to the ground the
+branch stood on is a finding — but it belongs in the maintainer's own abandoned
+list, beside the fork, not in a table that would grow forever. The *question*
+the direction asks is not retired with the branch, and a fresh implementation of
+the same mechanism is a new proposal.
 
 **Recording a proposal does not send it anywhere.** Publishing a finding,
 filing an issue and opening a pull request stay a person's act, carried

@@ -52,6 +52,11 @@ means the host scripts are now ours to change.
 
 ## AI-agent priorities
 
+**The expensive combined design remains R1 + R2 + R9** — eager, incremental,
+forgetting — and the attribution still has to earn it. Each of the three is
+ranked on its own below; none of them is proposed as a bundle until the
+measurements say the combination is what the gap needs.
+
 The table contains ten research directions in priority order. Normally a
 direction has one row. Where genuinely independent starting choices are
 useful, a continuation row leaves the first three columns blank.
