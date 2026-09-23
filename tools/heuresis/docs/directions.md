@@ -270,7 +270,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--inst-when`, `full-last-call` → `full` | `--inst-when=full` | — |
+| `--inst-when`, `full-last-call` → `full` | `--inst-when=full` | **+45 / −162**, net **-117** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst` | — |
 | [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst --eager-inst-term=assert` | — |
 | [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst` | — |
@@ -502,7 +502,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--inst-max-rounds`, `-1`, unbounded → a finite budget | `--inst-max-rounds=50` | — |
+| `--inst-max-rounds`, `-1`, unbounded → a finite budget | `--inst-max-rounds=50` | **+2 / −233**, net **-231**, 440 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:dtInstMode`](../../../docs/active-dev-branches.md#dtInstMode) | `--no-dt-inst-internal` | — |
 | [`ajreynol:instLastCallDelay`](../../../docs/active-dev-branches.md#instLastCallDelay) | *(none — the branch changes behaviour directly)* | — |
 | [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=1` | — |
@@ -657,7 +657,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--cbqi`, `true` → `false` | *(already in the base, as `--no-cbqi`)* | **+83** vs `default`, 5497 of 6124 ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
-| `--sub-cbqi`, `false` → `true` | `--sub-cbqi` | — |
+| `--sub-cbqi`, `false` → `true` | `--sub-cbqi` | **+2 / −1504**, net **-1502** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:ai-cbqi-0423`](../../../docs/active-dev-branches.md#ai-cbqi-0423) | *(none — the branch changes behaviour directly)* | — |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
@@ -716,8 +716,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--ieval`, `use` → `off` | `--ieval=off` | **+16** vs the reference, 5564 of 6124 ([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)) |
-| `--inst-no-entail`, `true` → `false` | `--no-inst-no-entail` | **+1**, inside noise ([ledger](ledger/2026-09-16-entailment-filtering.md)) |
+| `--ieval`, `use` → `off` | `--ieval=off` | **+20 / −6**, net **+14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--inst-no-entail`, `true` → `false` | `--no-inst-no-entail` | **+4 / −9**, net **-5** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--e-matching-stratify-ieval` | — |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--term-db-cd` | — |
 | [`ajreynol:ievalTravTrie`](../../../docs/active-dev-branches.md#ievalTravTrie) | *(none — the branch changes behaviour directly)* | **−1** vs `central`, pre-update tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
@@ -781,7 +781,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--enum-inst`, `false` → `true` | `--enum-inst` | — |
+| `--enum-inst`, `false` → `true` | `--enum-inst` | **+3 / −5**, net **-2** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 
 ## R28 — Eager conflict-based instantiation: find a useful instance before full effort
 
@@ -961,11 +961,19 @@ approximation, not deletion; classify its helped cases before trying
 `--inst-defer`. A true GC still needs the notification plumbing first.
 
 **Proposals.** This direction's own; a proposal is listed here and in no
-other direction. Columns and rules: [Proposals](#proposals).
+other direction. Columns and rules: [Proposals](#proposals). **The `--inst-local`
+figure this direction argued from is overturned**: measured against the current
+reference it loses 598 solves and raises PAR2 85%, where the 2026-09-15 entry
+recorded +9 and +1.19%. Those runs used different SAT backends — the older pair
+passed no `--sat-solver` at a revision where the implicit choice was not CaDiCaL
+— so the option's approximation of deletion looks very different depending on
+which solver holds the clauses. That is itself a result for R9, whose subject is
+what the SAT solver keeps; the arm that would settle it is `--inst-local` with
+`--sat-solver=minisat` at this revision, and it has not been run.
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--inst-local`, `false` → `true` | `--inst-local` | **+9** solved but **+1.19% PAR2** ([ledger](ledger/2026-09-15-sat-and-instance-order.md)) |
+| `--inst-local`, `false` → `true` | `--inst-local` | **+24 / −622**, net **-598**; the +9 this register carried was measured on another SAT backend ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:notifySatClause`](../../../docs/active-dev-branches.md#notifySatClause) | *(none — the branch changes behaviour directly)* | — |
 | [`ajreynol:smtLazyAssert`](../../../docs/active-dev-branches.md#smtLazyAssert) | `--smt-lazy-assert` | — |
 | [`ajreynol:virtualClauseDel`](../../../docs/active-dev-branches.md#virtualClauseDel) | *(none — the branch changes behaviour directly)* | — |
@@ -1103,9 +1111,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--decision`, `justification` here → `internal` | `--decision=internal` | — |
-| `--decision`, `justification` here → `stoponly` | `--decision=stoponly` | — |
-| `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | **−66** vs the reference, 5429 of 6124 ([ledger](ledger/2026-09-15-sat-and-instance-order.md)) |
+| `--decision`, `justification` here → `internal` | `--decision=internal` | **+25 / −504**, net **-479** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--decision`, `justification` here → `stoponly` | `--decision=stoponly` | **+20 / −519**, net **-499** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | **+14 / −18**, net **-4** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:jhRandom`](../../../docs/active-dev-branches.md#jhRandom) | `--jh-rand` | — |
 
 ## R12 — Lemma inprocessing and conflict minimisation
@@ -1305,9 +1313,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--deep-restart`, `none` → `input` | `--deep-restart=input` | — |
-| `--deep-restart`, `none` → `all` | `--deep-restart=all` | — |
-| `--deep-restart-factor`, `3.0` → a tuned threshold | `--deep-restart=input --deep-restart-factor=1.5` | — |
+| `--deep-restart`, `none` → `input` | `--deep-restart=input` | **+23 / −20**, net **+3** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--deep-restart`, `none` → `all` | `--deep-restart=all` | **+17 / −94**, net **-77** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--deep-restart-factor`, `3.0` → `1.5`, with `--deep-restart=input` | `--deep-restart=input --deep-restart-factor=1.5` | **+21 / −23**, net **-2** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 
 ---
 
@@ -1374,7 +1382,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--theoryof-mode`, `type`, `term` by logic → `type` always | `--theoryof-mode=type` | — |
+| `--theoryof-mode`, `type`, `term` by logic → `type` always | `--theoryof-mode=type` | **+9 / −23**, net **-14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:mbtc25`](../../../docs/active-dev-branches.md#mbtc25) | `--tc-mode=model-based` | — |
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
@@ -1454,7 +1462,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--ee-mode`, `distributed` → `central` | `--ee-mode=central` | **+63** vs the reference, 5611 of 6124 ([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)) |
+| `--ee-mode`, `distributed` → `central` | `--ee-mode=central` | **+86 / −19**, net **+67**; reproduces at two earlier revisions ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:ai-eecNoShare`](../../../docs/active-dev-branches.md#ai-eecNoShare) | *(none — the branch changes behaviour directly)* | **+2** vs `best`, pre-update tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
 | [`ajreynol:cdno`](../../../docs/active-dev-branches.md#cdno) | *(none — the branch changes behaviour directly)* | — |
 | [`ajreynol:dtMergeNotify-v3`](../../../docs/active-dev-branches.md#dtMergeNotify-v3) | *(none — the branch changes behaviour directly)* | — |
@@ -1539,7 +1547,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | **−8** vs the reference ([ledger](ledger/2026-09-16-datatype-and-equality-controls.md)) |
+| `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | **+12 / −23**, net **-11** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:dtElim`](../../../docs/active-dev-branches.md#dtElim) | `--dt-elim` | — |
 | [`ajreynol:dtLazyInst3`](../../../docs/active-dev-branches.md#dtLazyInst3) | `--dt-lazy-inst` | — |
 | [`ajreynol:dtSplitRelevant`](../../../docs/active-dev-branches.md#dtSplitRelevant) | `--dt-split-relevant` | — |
@@ -1685,7 +1693,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--nl-ext`, `full`, by logic → `light` | `--nl-ext=light` | — |
+| `--nl-ext`, `full`, by logic → `light` | `--nl-ext=light` | **+6 / −281**, net **-275**, 268 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
 
 ## R19 — Bit-vectors inside quantified problems
 
@@ -1896,8 +1904,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--miniscope-quant`, `conj-and-fv` → `off` | `--miniscope-quant=off` | — |
-| `--macros-quant`, `false` → `true`, mode `all` | `--macros-quant --macros-quant-mode=all` | — |
+| `--miniscope-quant`, `conj-and-fv` → `off` | `--miniscope-quant=off` | **+3 / −6**, net **-3** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--macros-quant`, `false` → `true`, mode `all` | `--macros-quant --macros-quant-mode=all` | **+41 / −579**, net **-538**, 511 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:quantRew-1006`](../../../docs/active-dev-branches.md#quantRew-1006) | *(none — the branch changes behaviour directly)* | — |
 
 ## R22 — Preregistration: which literals the theories are told about
@@ -1938,7 +1946,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--preregister-mode`, `eager` → `lazy` | `--preregister-mode=lazy` | — |
+| `--preregister-mode`, `eager` → `lazy` | `--preregister-mode=lazy` | **+21 / −64**, net **-43** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:preregRlv`](../../../docs/active-dev-branches.md#preregRlv) | `--preregister-mode=rlv` | — |
 
 ## R23 — Term-database relevance: which ground terms E-matching may use
@@ -1987,7 +1995,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--term-db-mode`, `relevant-all-delay` → `all` | `--term-db-mode=all` | — |
+| `--term-db-mode`, `relevant-all-delay` → `all` | `--term-db-mode=all` | **+29 / −124**, net **-95** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:tdbOldIndex`](../../../docs/active-dev-branches.md#tdbOldIndex) | `--tdb-old-index` | — |
 
 ---
@@ -2308,9 +2316,16 @@ where its currency, size and build status live — none of that is repeated here
 **run as** is the option string to add to the base configuration,
 `-q --no-cbqi --user-pat=strict`, which is this project's reference; a branch
 that changes behaviour directly needs no option and says so. **± solved on
-`quant-07-25`** is benchmarks solved on the whole set at the fixed 30 s timeout
-minus the baseline's, positive for more solved, each cell naming its baseline
-and the ledger entry that carries it.
+`quant-07-25`** is **+gained / −lost**, then the net: benchmarks the arm solves
+that the reference does not, benchmarks the reference solves that it does not,
+on the whole set at the fixed 30 s timeout. The two halves are kept apart
+because a net figure hides what matters most here — whether a change is
+*orthogonal* to the reference. `--inst-when=full` nets −117 and still rescues
+45 benchmarks the reference cannot solve; `--macros-quant` nets −538 and rescues
+41. A change that only loses is uninteresting; one that gains while losing is a
+candidate for a combination, or for finding out what those benchmarks have in
+common. Each cell names its ledger entry, and a large `unknown` count is shown
+because it means incompleteness rather than slowness.
 
 **One row per run, not per proposal.** A branch with several option strings
 worth trying owns several rows — `eagerInst3` has five — because each row is a

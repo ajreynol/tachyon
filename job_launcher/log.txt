@@ -350,3 +350,75 @@ solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-enum-inst -q
 solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-ieval-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --ieval=off
 # ajr-cvc5: git d7d5b948c1 on branch master
 
+# 2026-09-23 14:28 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-inst-local.conf)
+# queued 1/3 in window quant-092326-w1-inst-local
+# heuresis R9 wave 1: reference + --inst-local
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-inst-local -q --no-cbqi --user-pat=strict --sat-solver=cadical --inst-local
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 14:28 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-inst-max-rounds-50.conf)
+# queued 2/3 in window quant-092326-w1-inst-local
+# heuresis R4 wave 1: reference + --inst-max-rounds=50
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-inst-max-rounds-50 -q --no-cbqi --user-pat=strict --sat-solver=cadical --inst-max-rounds=50
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 14:28 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-inst-when-full.conf)
+# queued 3/3 in window quant-092326-w1-inst-local
+# heuresis R1 wave 1: reference + --inst-when=full
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-inst-when-full -q --no-cbqi --user-pat=strict --sat-solver=cadical --inst-when=full
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 14:55 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-jh-rlv-order.conf)
+# queued 1/3 in window quant-092326-w1-jh-rlv-order
+# heuresis R11 wave 1: reference + --jh-rlv-order
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-jh-rlv-order -q --no-cbqi --user-pat=strict --sat-solver=cadical --jh-rlv-order
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 14:55 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-macros-quant-all.conf)
+# queued 2/3 in window quant-092326-w1-jh-rlv-order
+# heuresis R21 wave 1: reference + --macros-quant --macros-quant-mode=all
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-macros-quant-all -q --no-cbqi --user-pat=strict --sat-solver=cadical --macros-quant --macros-quant-mode=all
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 14:55 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-miniscope-quant-off.conf)
+# queued 3/3 in window quant-092326-w1-jh-rlv-order
+# heuresis R21 wave 1: reference + --miniscope-quant=off
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-miniscope-quant-off -q --no-cbqi --user-pat=strict --sat-solver=cadical --miniscope-quant=off
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 15:18 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-nl-ext-light.conf)
+# queued 1/3 in window quant-092326-w1-nl-ext-light
+# heuresis R18 wave 1: reference + --nl-ext=light
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-nl-ext-light -q --no-cbqi --user-pat=strict --sat-solver=cadical --nl-ext=light
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 15:18 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-no-inst-no-entail.conf)
+# queued 2/3 in window quant-092326-w1-nl-ext-light
+# heuresis R7 wave 1: reference + --no-inst-no-entail
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-no-inst-no-entail -q --no-cbqi --user-pat=strict --sat-solver=cadical --no-inst-no-entail
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 15:18 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-preregister-mode-lazy.conf)
+# queued 3/3 in window quant-092326-w1-nl-ext-light
+# heuresis R22 wave 1: reference + --preregister-mode=lazy
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-preregister-mode-lazy -q --no-cbqi --user-pat=strict --sat-solver=cadical --preregister-mode=lazy
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 15:41 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-sub-cbqi.conf)
+# queued 1/3 in window quant-092326-w1-sub-cbqi
+# heuresis R6 wave 1: reference + --sub-cbqi
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-sub-cbqi -q --no-cbqi --user-pat=strict --sat-solver=cadical --sub-cbqi
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 15:41 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-term-db-mode-all.conf)
+# queued 2/3 in window quant-092326-w1-sub-cbqi
+# heuresis R23 wave 1: reference + --term-db-mode=all
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-term-db-mode-all -q --no-cbqi --user-pat=strict --sat-solver=cadical --term-db-mode=all
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 15:41 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-theoryof-mode-type.conf)
+# queued 3/3 in window quant-092326-w1-sub-cbqi
+# heuresis R14 wave 1: reference + --theoryof-mode=type
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-theoryof-mode-type -q --no-cbqi --user-pat=strict --sat-solver=cadical --theoryof-mode=type
+# ajr-cvc5: git d7d5b948c1 on branch master
+
