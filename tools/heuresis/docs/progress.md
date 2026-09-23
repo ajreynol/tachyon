@@ -196,9 +196,9 @@ Not a performance change, so it will not move a row, but it is the first
 upstream-reportable defect this project has produced.
 
 **Standing candidates**, from the ledger, none yet proposed upstream. The
-[proposals tables](directions.md#proposals) now name eighty-seven proposals
-across twenty-seven of the twenty-eight directions — sixty-five branches and
-twenty-two changes to an option's default, the option rows carrying this
+[proposals tables](directions.md#proposals) now name seventy-nine proposals
+across twenty-seven of the twenty-eight directions — fifty-seven branches, all
+current, and twenty-two changes to an option's default, the option rows carrying this
 project's first measured `± solved` figures. **`--ee-mode=central` is one of
 them**, R15's row, with its +63. What remains below is the candidate no option
 and no branch yet expresses, which is why it has no row: the eager pair budget,
