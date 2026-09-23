@@ -18,7 +18,7 @@
 | What fraction is attributed? | Unknown; no profiles or phase measurements. |
 | Which branches build and produce validated proofs? | Not established here. |
 | Which optimizations improve time or memory? | None established. |
-| What changes to cvc5 are proposed? | Twenty-four branches across E1–E12, each named as a merge candidate the survey characterized; E13–E16 have none. No proposal is measured: each branch is behind upstream main, and a number needs the corpus, baseline and validated measurement goal 1 fixes. See the [proposals tables](../README.md#proposals). |
+| What changes to cvc5 are proposed? | Twenty-three branches across E1–E12, each named as a merge candidate the survey characterized; E13–E16 have none. No proposal is measured: each branch is behind upstream main, and a number needs the corpus, baseline and validated measurement goal 1 fixes. See the [proposals tables](../README.md#proposals). |
 
 All inventory counts come from the [source survey](ledger/2026-09-18-branch-survey.md),
 and the pipeline observations from the

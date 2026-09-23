@@ -13,10 +13,11 @@ and inform future work.
 **Twenty-seven directions, R1–R23 and R25–R28, each with an argued risk/gain
 estimate, the same four inventories — the cvc5 flags that test it today,
 what has been tried, what z3 and others do, and the papers — and, last, the
-table of [proposals](#proposals) that direction owns — seventy-two branches
-across twenty-five of the twenty-seven directions, of which fifty-two now carry
-[`c2cc3caf`](https://github.com/cvc5/cvc5/commit/c2cc3caf78414931b0feaed26a05c4426ed96098)
-and none has yet been measured there.** Written
+table of [proposals](#proposals) that direction owns — sixty-five branches
+across twenty-five of the twenty-seven directions, of which fifty-two are within
+six commits of
+[`10bd5cb3`](https://github.com/cvc5/cvc5/commit/10bd5cb3bb9ad9cb10277e0ae54e352e6d2ac345)
+and compile-checked there, and none has yet been measured.** Written
 2026-09-15 from the performance notes
 summarised in [`../notes.md`](notes.md) (the `h-N` rows referenced below),
 from cvc5 `main` at
@@ -174,6 +175,7 @@ assert a candidacy that has not been checked. Rows are ordered by distance from
 | --- | --- |
 | **proposal** | The branch as `ajreynol:NAME`, linked, for a branch; the option and the change of default — `--ee-mode`, `distributed` → `central` — for the other kind. One row per proposal. |
 | **rebased to** | The newest cvc5 `main` commit the branch contains, by sha and date — **never a branch name**, for the reason below. *merged in* marks a branch that got there by merging rather than by a rebase, which is enough to build and measure but leaves a history a maintainer will ask to be linearised before review. A branch behind the pin carries its own base and its distance from that pin, and cannot be built, measured or reviewed as it stands, so its other columns stay empty. |
+| **builds** | Whether the branch's source compiles and links at its current tip, against the pin, on the project's benchmark host with GCC 10.5 and the `unrestricted` build type. ✅ carries the wall time of that branch's incremental build. A branch that does not carry a recent commit is not built (`—`): it would be compiling a cvc5 from years ago. **Compiling proves nothing about the proposal** — two branches here compile precisely because a merge emptied them. |
 | **± LOC** | For a branch, `+A/−B`: the three-dot source diff from merge base to tip over `src/` and the regression list, the convention the archaeology table above uses, naming the `main` revision it was taken against. Rebase first, then measure. It estimates how much there is to review, not how good it is. For a default-option change, `—`: the change is the default value. |
 | **± solved on `quant-07-25`** | Benchmarks solved on the whole set at the fixed 30 s timeout, minus the baseline's; positive is more solved. The baseline is the configuration the proposal would change, and the cell names it: `default` for a change of default, because that is what cvc5 does out of the box, and the tracked configuration a branch is meant to improve — `best` today — for a branch. `—` until measured; a measured loss is written in as a loss and the row stays. |
 
@@ -192,9 +194,9 @@ different code. Every cell names a sha and that commit's date, exactly as
 revision, not "current main"*. Distances are given against a named pin for the
 same reason.
 
-**Every branch that carries the pin got there by a merge, not a rebase.** All
-fifty-two tips are `Merge branch 'master' into …` commits, each adding one
-commit to the branch. Two of those merges resolved in favour of upstream and
+**Every branch that carries a recent commit got there by a merge, not a
+rebase.** All fifty-two tips are `Merge branch 'master' into …` commits, each
+adding one commit to the branch. Two of those merges resolved in favour of upstream and
 left the branch with no changes at all; both are flagged in their rows and in
 [`active-dev-branches.md`](active-dev-branches.md), with the pre-merge tip that
 still holds the work. Nothing is wrong with that here: the branch contains
@@ -212,20 +214,39 @@ the pass that fills these columns. That list, with each branch's state and the
 procedure, is [`active-dev-branches.md`](active-dev-branches.md), derived from
 these tables.
 
-**Read 2026-09-22, after two update passes**, against the pin both passes
+**Read 2026-09-22, after three update passes**, against the pin the newest pass
 targeted, cvc5
-[`c2cc3caf`](https://github.com/cvc5/cvc5/commit/c2cc3caf78414931b0feaed26a05c4426ed96098):
-of the **seventy-two branches** named across twenty-five directions, **fifty-two
-carry it** and their `± LOC` is filled from that tip. Two days earlier, one did.
-The other twenty carry commits 243 to 9371 behind the pin, the oldest from 2016.
-**Two of the fifty-two are empty**: their merges resolved in favour of upstream
-and dropped the branch's own changes, which the `± LOC` cell records rather than
-reporting a healthy zero. The whole list, the two lost branches with the tips
-that still hold their work, and the update procedure are in
+[`10bd5cb3`](https://github.com/cvc5/cvc5/commit/10bd5cb3bb9ad9cb10277e0ae54e352e6d2ac345),
+which `ajreynol/cvc5` `master` matched exactly: of the **sixty-five branches**
+named across twenty-five directions, **fifty-two are within six commits of it**
+and carry a line count and a build result: **all fifty-two compile** against the
+pin, checked branch by branch rather than assumed. The other thirteen carry
+commits 522 to 9377 behind, the oldest from 2016, and are not built. Seven more
+were **retired** on 2026-09-22, below. **Two of the fifty-two are
+empty**: their merges resolved in favour of upstream and dropped the branch's
+own changes, which the `± LOC` cell records rather than reporting a healthy
+zero, and which is why they compile. The whole list, the two lost branches with
+the tips that still hold their work, and the build procedure are in
 [`active-dev-branches.md`](active-dev-branches.md); it is derived from these
-tables, which stay authoritative. The fork moves while this is read — `master`
-has since passed the pin — so **re-derive before acting on it**: this column is
-a measurement like the others, not a plan.
+tables, which stay authoritative. The fork moves while this is read, so
+**re-derive before acting on it**.
+
+**Seven proposals retired 2026-09-22.** A proposal leaves the register when its
+branch cannot be brought onto a current commit — and the reason is the finding,
+because it says what upstream did to the ground the branch stood on. These came
+from the maintainer's own update-pass notes, checked against the pin. The rows are gone from
+the direction tables above; the *questions* are not retired with them, and a
+fresh implementation of any of these mechanisms would be a new proposal.
+
+| branch | direction | verdict | why |
+| --- | --- | --- | --- |
+| [`ajreynol:refactorQcf`](https://github.com/ajreynol/cvc5/tree/refactorQcf) | R6 | **REWRITTEN UPSTREAM** | 79 substantive conflict hunks, all inside `quant_conflict_find.{cpp,h}`, which master has rewritten. A merge would be a rewrite of the branch against a different design. |
+| [`ajreynol:qcfClean`](https://github.com/ajreynol/cvc5/tree/qcfClean) | R6 | **REWRITTEN UPSTREAM** | 60 substantive conflict hunks in the same two rewritten files. Same verdict as `refactorQcf`. |
+| [`ajreynol:virtualLemma`](https://github.com/ajreynol/cvc5/tree/virtualLemma) | R9 | **TARGETS DELETED CODE** | 40 substantive hunks across 13 files, two of which master has deleted: `decision_engine_old.cpp` and `decision_engine_old.h`. The decision-engine surface the branch attaches to no longer exists. |
+| [`ajreynol:linearSolverSub`](https://github.com/ajreynol/cvc5/tree/linearSolverSub) | R17 | **NEEDS REIMPLEMENTATION** | Dropped by the author, and independently a signature migration rather than a merge: master changed `LinearSolver`'s interface — `propagate()` lost its `Effort` argument, `ppAssert` returns `bool`, `ppStaticLearn` takes `std::vector<TrustNode>` — while the branch adds a 376-line implementation of the old signatures. Porting means migrating the base, `LinearSolverLegacy`, `LinearSolverSub` and the call sites together. |
+| [`ajreynol:ai-fixAlphaEq-2`](https://github.com/ajreynol/cvc5/tree/ai-fixAlphaEq-2) | R21 | **AUTHOR-DROPPED** | Dropped on the author's instruction; not assessed further. The branch is left untouched on the fork. |
+| [`ajreynol:optTdbTNode`](https://github.com/ajreynol/cvc5/tree/optTdbTNode) | R25 | **SUPERSEDED** | Its entire content is `Node` → `TNode` on `TermDb::d_op_map` and `d_type_map` to avoid reference counting. Master replaced both with context-dependent `CDHashMap<Node, std::shared_ptr<DbList>>`, so all 25 hunks target structures that no longer exist, and master's own `DbList` rewrite supersedes the optimisation. |
+| [`ajreynol:perfDataStructures`](https://github.com/ajreynol/cvc5/tree/perfDataStructures) | R25 | **CANNOT BUILD** | A 2018 benchmarking scaffold. Merging silently resurrected two files master had deleted — `smt_engine.cpp` (6105 lines, renamed `solver_engine.cpp`) and the autotools `src/Makefile.am` — a clean-looking merge that was in fact broken. Its `--do-test` hook lands in `SmtEnginePrivate::processAssertions`, which no longer exists, and its sources use `cvc4_private.h`, `namespace CVC4` and `__CVC4__` guards, so they cannot compile against `cvc5::internal`. |
 
 **Recording a proposal does not send it anywhere.** Filing an issue or opening
 a pull request is a person's act, and out of scope for this project. When a
@@ -361,13 +382,13 @@ experiment must follow if the eager signal is positive.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:ai-extEagerInst3-1`](https://github.com/ajreynol/cvc5/tree/ai-extEagerInst3-1) | **`c2cc3ca`** (2026-09-21), merged in | +4057/−38, 39 src files (13 other) | — |
-| [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | **`c2cc3ca`** (2026-09-21), merged in | +1455/−8, 13 src files (12 other) | — |
-| [`ajreynol:eagerInst3`](https://github.com/ajreynol/cvc5/tree/eagerInst3) | **`c2cc3ca`** (2026-09-21), merged in | +3771/−37, 38 src files (12 other) | — |
-| [`ajreynol:instFullPreempt`](https://github.com/ajreynol/cvc5/tree/instFullPreempt) | **`c2cc3ca`** (2026-09-21), merged in | +11/−1, 2 src files | — |
-| [`ajreynol:eagerQM`](https://github.com/ajreynol/cvc5/tree/eagerQM) | `aca9908` (2025-08-28), 617 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:ai-extEagerInst3-1`](https://github.com/ajreynol/cvc5/tree/ai-extEagerInst3-1) | **`47f43bd`** (2026-09-22), merged in | **✅** | +4057/−38, 39 src files | — |
+| [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | **`47f43bd`** (2026-09-22), merged in | **✅** | +1455/−8, 13 src files | — |
+| [`ajreynol:eagerInst3`](https://github.com/ajreynol/cvc5/tree/eagerInst3) | **`47f43bd`** (2026-09-22), merged in | **✅** | +3771/−37, 38 src files | — |
+| [`ajreynol:instFullPreempt`](https://github.com/ajreynol/cvc5/tree/instFullPreempt) | **`47f43bd`** (2026-09-22), merged in | **✅** | +11/−1, 2 src files | — |
+| [`ajreynol:eagerQM`](https://github.com/ajreynol/cvc5/tree/eagerQM) | `aca9908` (2025-08-28), 623 behind `10bd5cb` | — | — | — |
 
 ## R2 — Incremental E-matching: match what changed, not everything
 
@@ -449,14 +470,14 @@ matching work that was genuinely new, is the target.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:ai-emFilter`](https://github.com/ajreynol/cvc5/tree/ai-emFilter) | **`c2cc3ca`** (2026-09-21), merged in | +758/−15, 20 src files | — |
-| [`ajreynol:ai-imgDirect`](https://github.com/ajreynol/cvc5/tree/ai-imgDirect) | **`c2cc3ca`** (2026-09-21), merged in | +704/−4, 5 src files (2 other) | — |
-| [`ajreynol:ai-quantOpt-1`](https://github.com/ajreynol/cvc5/tree/ai-quantOpt-1) | **`c2cc3ca`** (2026-09-21), merged in | +47/−4, 2 src files | — |
-| [`ajreynol:imSimpleInc2`](https://github.com/ajreynol/cvc5/tree/imSimpleInc2) | **`c2cc3ca`** (2026-09-21), merged in | +124/−23, 4 src files (2 other) | — |
-| [`ajreynol:imTrivial`](https://github.com/ajreynol/cvc5/tree/imTrivial) | **`c2cc3ca`** (2026-09-21), merged in | +264/−21, 14 src files | — |
-| [`ajreynol:emExp`](https://github.com/ajreynol/cvc5/tree/emExp) | `310f487` (2025-11-11), 516 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:ai-emFilter`](https://github.com/ajreynol/cvc5/tree/ai-emFilter) | **`47f43bd`** (2026-09-22), merged in | **✅** | +758/−15, 20 src files | — |
+| [`ajreynol:ai-imgDirect`](https://github.com/ajreynol/cvc5/tree/ai-imgDirect) | **`47f43bd`** (2026-09-22), merged in | **✅** | +705/−4, 5 src files | — |
+| [`ajreynol:ai-quantOpt-1`](https://github.com/ajreynol/cvc5/tree/ai-quantOpt-1) | **`47f43bd`** (2026-09-22), merged in | **✅** | +36/−4, 2 src files | — |
+| [`ajreynol:imSimpleInc2`](https://github.com/ajreynol/cvc5/tree/imSimpleInc2) | **`47f43bd`** (2026-09-22), merged in | **✅** | +122/−23, 4 src files | — |
+| [`ajreynol:imTrivial`](https://github.com/ajreynol/cvc5/tree/imTrivial) | **`47f43bd`** (2026-09-22), merged in | **✅** | +268/−21, 14 src files | — |
+| [`ajreynol:emExp`](https://github.com/ajreynol/cvc5/tree/emExp) | `310f487` (2025-11-11), 522 behind `10bd5cb` | — | — | — |
 
 ## R3 — Worst-case E-matching: failure caching and early pruning
 
@@ -511,11 +532,11 @@ gap set: a heavy tail on few benchmarks is R3, a uniform cost is R2.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) | **`c2cc3ca`** (2026-09-21), merged in | +291/−6, 4 src files (3 other) | — |
-| [`ajreynol:emFailMasks`](https://github.com/ajreynol/cvc5/tree/emFailMasks) | `2e555b3` (2022-04-20), 3319 behind `c2cc3caf` | — | — |
-| [`ajreynol:cacheEntCheck`](https://github.com/ajreynol/cvc5/tree/cacheEntCheck) | `b446953` (2021-10-15), 4433 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) | **`47f43bd`** (2026-09-22), merged in | **✅** | +291/−6, 4 src files | — |
+| [`ajreynol:emFailMasks`](https://github.com/ajreynol/cvc5/tree/emFailMasks) | `2e555b3` (2022-04-20), 3325 behind `10bd5cb` | — | — | — |
+| [`ajreynol:cacheEntCheck`](https://github.com/ajreynol/cvc5/tree/cacheEntCheck) | `b446953` (2021-10-15), 4439 behind `10bd5cb` | — | — | — |
 
 ## R4 — Instantiation budgeting: how many instances per round, and which
 
@@ -583,12 +604,12 @@ R9) is the direction; if the counts are similar, the cost is elsewhere.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:dtInstMode`](https://github.com/ajreynol/cvc5/tree/dtInstMode) | **`c2cc3ca`** (2026-09-21), merged in | +14/−1, 2 src files | — |
-| [`ajreynol:instLastCallDelay`](https://github.com/ajreynol/cvc5/tree/instLastCallDelay) | **`c2cc3ca`** (2026-09-21), merged in | +2/−2, 1 src files | — |
-| [`ajreynol:termOrigin`](https://github.com/ajreynol/cvc5/tree/termOrigin) | **`c2cc3ca`** (2026-09-21), merged in | +474/−11, 19 src files (1 other) | — |
-| [`ajreynol:carryInst`](https://github.com/ajreynol/cvc5/tree/carryInst) | `54490c6` (2021-07-28), 4805 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:dtInstMode`](https://github.com/ajreynol/cvc5/tree/dtInstMode) | **`47f43bd`** (2026-09-22), merged in | **✅** | +14/−1, 2 src files | — |
+| [`ajreynol:instLastCallDelay`](https://github.com/ajreynol/cvc5/tree/instLastCallDelay) | **`47f43bd`** (2026-09-22), merged in | **✅** | +2/−2, 1 src files | — |
+| [`ajreynol:termOrigin`](https://github.com/ajreynol/cvc5/tree/termOrigin) | **`47f43bd`** (2026-09-22), merged in | **✅** | +474/−11, 19 src files | — |
+| [`ajreynol:carryInst`](https://github.com/ajreynol/cvc5/tree/carryInst) | `54490c6` (2021-07-28), 4811 behind `10bd5cb` | — | — | — |
 
 ## R5 — Trigger selection: strict user patterns, multi-triggers, and what strictness disables
 
@@ -668,12 +689,12 @@ there are, and an A/B of `trust` vs `strict` alone (the baseline measured
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:gttOpt`](https://github.com/ajreynol/cvc5/tree/gttOpt) | **`c2cc3ca`** (2026-09-21), merged in | +9/−1, 2 src files | — |
-| [`ajreynol:multiTriggerSingleBase`](https://github.com/ajreynol/cvc5/tree/multiTriggerSingleBase) | **`c2cc3ca`** (2026-09-21), merged in | +43/−0, 3 src files | — |
-| [`ajreynol:nestedTriggers`](https://github.com/ajreynol/cvc5/tree/nestedTriggers) | **`c2cc3ca`** (2026-09-21), merged in | +40/−22, 4 src files | — |
-| [`ajreynol:simpleTriggerMore`](https://github.com/ajreynol/cvc5/tree/simpleTriggerMore) | **`c2cc3ca`** (2026-09-21), merged in | +52/−33, 3 src files | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:gttOpt`](https://github.com/ajreynol/cvc5/tree/gttOpt) | **`47f43bd`** (2026-09-22), merged in | **✅** | +9/−1, 2 src files | — |
+| [`ajreynol:multiTriggerSingleBase`](https://github.com/ajreynol/cvc5/tree/multiTriggerSingleBase) | **`47f43bd`** (2026-09-22), merged in | **✅** | +43/−0, 3 src files | — |
+| [`ajreynol:nestedTriggers`](https://github.com/ajreynol/cvc5/tree/nestedTriggers) | **`47f43bd`** (2026-09-22), merged in | **✅** | +40/−22, 4 src files | — |
+| [`ajreynol:simpleTriggerMore`](https://github.com/ajreynol/cvc5/tree/simpleTriggerMore) | **`47f43bd`** (2026-09-22), merged in | **✅** | +48/−33, 2 src files | — |
 
 ## R6 — Conflict-based instantiation: off for this domain, and why that is right or wrong
 
@@ -735,11 +756,9 @@ instances becomes a target.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | **`c2cc3ca`** (2026-09-21), merged in | +136/−87, 1 src files (1 other) | — |
-| [`ajreynol:refactorQcf`](https://github.com/ajreynol/cvc5/tree/refactorQcf) | `51d731e` (2022-01-26), 3875 behind `c2cc3caf` | — | — |
-| [`ajreynol:qcfClean`](https://github.com/ajreynol/cvc5/tree/qcfClean) | `b3c6975` (2021-03-25), 5405 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | **`47f43bd`** (2026-09-22), merged in | **✅** | +136/−87, 1 src files | — |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
 
@@ -795,11 +814,11 @@ in a fresh focused port.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:fmfIeval`](https://github.com/ajreynol/cvc5/tree/fmfIeval) | **`c2cc3ca`** (2026-09-21), merged in | **+0/−0 — the merge dropped +40/−22** | — |
-| [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | **`c2cc3ca`** (2026-09-21), merged in | +165/−43, 8 src files | **−1** vs `central`, pre-merge tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
-| [`ajreynol:emStratify`](https://github.com/ajreynol/cvc5/tree/emStratify) | `78e58a5` (2023-11-01), 2205 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:fmfIeval`](https://github.com/ajreynol/cvc5/tree/fmfIeval) | **`47f43bd`** (2026-09-22), merged in | **✅** | **+0/−0 — the merge dropped +40/−22** | — |
+| [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | **`47f43bd`** (2026-09-22), merged in | **✅** | +165/−43, 8 src files | **−1** vs `central`, pre-merge tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| [`ajreynol:emStratify`](https://github.com/ajreynol/cvc5/tree/emStratify) | `78e58a5` (2023-11-01), 2211 behind `10bd5cb` | — | — | — |
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
@@ -858,9 +877,9 @@ cvc5-unsolved gap slice.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| *(none yet — no fork branch fits; the next step is an option A/B)* |  |  |  |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| *(none yet — no fork branch fits; the next step is an option A/B)* |  |  |  |  |
 
 ## R28 — Eager conflict-based instantiation: find a useful instance before full effort
 
@@ -936,9 +955,9 @@ and memory. Mine old
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi) | **`c2cc3ca`** (2026-09-21), merged in | +5248/−202, 58 src files (2 other) | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi) | **`47f43bd`** (2026-09-22), merged in | **✅** | +5248/−202, 58 src files | — |
 
 ---
 
@@ -1038,13 +1057,12 @@ approximation, not deletion; classify its helped cases before trying
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause) | **`c2cc3ca`** (2026-09-21), merged in | +49/−10, 6 src files | — |
-| [`ajreynol:isActiveLemma`](https://github.com/ajreynol/cvc5/tree/isActiveLemma) | `51aa806` (2023-08-18), 2368 behind `c2cc3caf` | — | — |
-| [`ajreynol:smtLazyAssert`](https://github.com/ajreynol/cvc5/tree/smtLazyAssert) | `1c41fda` (2022-08-03), 3039 behind `c2cc3caf` | — | — |
-| [`ajreynol:virtualLemma`](https://github.com/ajreynol/cvc5/tree/virtualLemma) | `8fe459b` (2021-10-19), 4424 behind `c2cc3caf` | — | — |
-| [`ajreynol:virtualClauseDel`](https://github.com/ajreynol/cvc5/tree/virtualClauseDel) | `55ce505` (2021-10-13), 4444 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause) | **`47f43bd`** (2026-09-22), merged in | **✅** | +49/−10, 6 src files | — |
+| [`ajreynol:isActiveLemma`](https://github.com/ajreynol/cvc5/tree/isActiveLemma) | `51aa806` (2023-08-18), 2374 behind `10bd5cb` | — | — | — |
+| [`ajreynol:smtLazyAssert`](https://github.com/ajreynol/cvc5/tree/smtLazyAssert) | `1c41fda` (2022-08-03), 3045 behind `10bd5cb` | — | — | — |
+| [`ajreynol:virtualClauseDel`](https://github.com/ajreynol/cvc5/tree/virtualClauseDel) | `55ce505` (2021-10-13), 4450 behind `10bd5cb` | — | — | — |
 
 ## R10 — Where instance lemmas sit in the decision order: local, deferred, gated
 
@@ -1108,12 +1126,12 @@ with `sat::decisions` before building or rebasing `--inst-defer`.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | **`c2cc3ca`** (2026-09-21), merged in | +116/−32, 11 src files | — |
-| [`ajreynol:ai-jhConflictFirst`](https://github.com/ajreynol/cvc5/tree/ai-jhConflictFirst) | **`c2cc3ca`** (2026-09-21), merged in | +93/−33, 9 src files | — |
-| [`ajreynol:ai-jhRlvInst`](https://github.com/ajreynol/cvc5/tree/ai-jhRlvInst) | **`c2cc3ca`** (2026-09-21), merged in | +326/−18, 9 src files (2 other) | — |
-| [`ajreynol:claudeDev-dts-idef`](https://github.com/ajreynol/cvc5/tree/claudeDev-dts-idef) | **`c2cc3ca`** (2026-09-21), merged in | +179/−37, 13 src files (2 other) | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | **`47f43bd`** (2026-09-22), merged in | **✅** | +116/−32, 11 src files | — |
+| [`ajreynol:ai-jhConflictFirst`](https://github.com/ajreynol/cvc5/tree/ai-jhConflictFirst) | **`47f43bd`** (2026-09-22), merged in | **✅** | +93/−33, 9 src files | — |
+| [`ajreynol:ai-jhRlvInst`](https://github.com/ajreynol/cvc5/tree/ai-jhRlvInst) | **`47f43bd`** (2026-09-22), merged in | **✅** | +326/−18, 9 src files | — |
+| [`ajreynol:claudeDev-dts-idef`](https://github.com/ajreynol/cvc5/tree/claudeDev-dts-idef) | **`47f43bd`** (2026-09-22), merged in | **✅** | +179/−37, 13 src files | — |
 
 ## R11 — Decision heuristic versus relevancy: what the SAT solver is made to decide on
 
@@ -1177,9 +1195,9 @@ decision count.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:jhRandom`](https://github.com/ajreynol/cvc5/tree/jhRandom) | **`c2cc3ca`** (2026-09-21), merged in | +262/−20, 7 src files (3 other) | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:jhRandom`](https://github.com/ajreynol/cvc5/tree/jhRandom) | **`47f43bd`** (2026-09-22), merged in | **✅** | +262/−20, 7 src files | — |
 
 ## R12 — Lemma inprocessing and conflict minimisation
 
@@ -1227,9 +1245,9 @@ on cvc5's inprocessing.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:subConflict`](https://github.com/ajreynol/cvc5/tree/subConflict) | **`c2cc3ca`** (2026-09-21), merged in | +332/−1, 12 src files | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:subConflict`](https://github.com/ajreynol/cvc5/tree/subConflict) | **`47f43bd`** (2026-09-22), merged in | **✅** | +333/−1, 12 src files | — |
 
 ## R13 — The SAT backend: CaDiCaL, MiniSat, restarts, units
 
@@ -1303,9 +1321,9 @@ before designing a narrower SAT-policy experiment.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:cadicalPortfolio`](https://github.com/ajreynol/cvc5/tree/cadicalPortfolio) | **`c2cc3ca`** (2026-09-21), merged in | +50/−0, 1 src files (3 other) | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:cadicalPortfolio`](https://github.com/ajreynol/cvc5/tree/cadicalPortfolio) | **`47f43bd`** (2026-09-22), merged in | **✅** | +50/−0, 1 src files | — |
 
 ---
 
@@ -1370,9 +1388,9 @@ but not that count. Then build the PR branch.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:mbtc25`](https://github.com/ajreynol/cvc5/tree/mbtc25) | **`c2cc3ca`** (2026-09-21), merged in | +365/−82, 15 src files (5 other) | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:mbtc25`](https://github.com/ajreynol/cvc5/tree/mbtc25) | **`47f43bd`** (2026-09-22), merged in | **✅** | +365/−82, 15 src files | — |
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
 
@@ -1449,11 +1467,11 @@ branch figures (`d7d03b082c`, 2026-09-16).
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | **`c2cc3ca`** (2026-09-21), merged in | +9/−3, 1 src files | **+2** vs `best`, pre-merge tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
-| [`ajreynol:cdno`](https://github.com/ajreynol/cvc5/tree/cdno) | **`c2cc3ca`** (2026-09-21), merged in | +168/−12, 5 src files | — |
-| [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | **`c2cc3ca`** (2026-09-21), merged in | +378/−72, 10 src files (8 other) | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | **`47f43bd`** (2026-09-22), merged in | **✅** | +9/−3, 1 src files | **+2** vs `best`, pre-merge tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| [`ajreynol:cdno`](https://github.com/ajreynol/cvc5/tree/cdno) | **`47f43bd`** (2026-09-22), merged in | **✅** | +168/−12, 5 src files | — |
+| [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | **`47f43bd`** (2026-09-22), merged in | **✅** | +378/−72, 10 src files | — |
 
 ## R16 — Datatypes: when to split, on what, and whether to have them at all
 
@@ -1533,12 +1551,12 @@ logic as a narrowly instrumented current-main patch and check completeness.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:dtLazyInst3`](https://github.com/ajreynol/cvc5/tree/dtLazyInst3) | **`c2cc3ca`** (2026-09-21), merged in | +82/−4, 3 src files | — |
-| [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | **`c2cc3ca`** (2026-09-21), merged in | +61/−8, 2 src files (2 other) | — |
-| [`ajreynol:oneConsInst`](https://github.com/ajreynol/cvc5/tree/oneConsInst) | **`c2cc3ca`** (2026-09-21), merged in | +42/−11, 2 src files | — |
-| [`ajreynol:dtElim`](https://github.com/ajreynol/cvc5/tree/dtElim) | `aeb5547` (2025-10-29), 531 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:dtLazyInst3`](https://github.com/ajreynol/cvc5/tree/dtLazyInst3) | **`47f43bd`** (2026-09-22), merged in | **✅** | +80/−2, 3 src files | — |
+| [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | **`47f43bd`** (2026-09-22), merged in | **✅** | +61/−8, 2 src files | — |
+| [`ajreynol:oneConsInst`](https://github.com/ajreynol/cvc5/tree/oneConsInst) | **`47f43bd`** (2026-09-22), merged in | **✅** | +42/−11, 2 src files | — |
+| [`ajreynol:dtElim`](https://github.com/ajreynol/cvc5/tree/dtElim) | `aeb5547` (2025-10-29), 537 behind `10bd5cb` | — | — | — |
 
 ## R17 — Linear integer arithmetic: branch and bound, cuts, and the Diophantine solver
 
@@ -1615,11 +1633,10 @@ building [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc).
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | **`c2cc3ca`** (2026-09-21), merged in | +95/−2, 6 src files | — |
-| [`ajreynol:deferBlock`](https://github.com/ajreynol/cvc5/tree/deferBlock) | **`c2cc3ca`** (2026-09-21), merged in | +330/−16, 15 src files | — |
-| [`ajreynol:linearSolverSub`](https://github.com/ajreynol/cvc5/tree/linearSolverSub) | `9a741c0` (2024-08-24), 1356 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | **`47f43bd`** (2026-09-22), merged in | **✅** | +95/−2, 6 src files | — |
+| [`ajreynol:deferBlock`](https://github.com/ajreynol/cvc5/tree/deferBlock) | **`47f43bd`** (2026-09-22), merged in | **✅** | +330/−16, 15 src files | — |
 
 ## R18 — Nonlinear arithmetic: off, light, or lazy
 
@@ -1678,9 +1695,9 @@ nonlinear off, the extension was pure cost here.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| *(none yet — no fork branch fits; the next step is an option A/B)* |  |  |  |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| *(none yet — no fork branch fits; the next step is an option A/B)* |  |  |  |  |
 
 ## R19 — Bit-vectors inside quantified problems
 
@@ -1743,12 +1760,12 @@ direction. Then `--theoryof-mode=term` on that subset.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:bitblastLc`](https://github.com/ajreynol/cvc5/tree/bitblastLc) | **`c2cc3ca`** (2026-09-21), merged in | +28/−1, 2 src files | — |
-| [`ajreynol:bvToIntQuant-031126`](https://github.com/ajreynol/cvc5/tree/bvToIntQuant-031126) | **`c2cc3ca`** (2026-09-21), merged in | **+0/−0 — the merge dropped +60/−16** | — |
-| [`ajreynol:ufConvRlv`](https://github.com/ajreynol/cvc5/tree/ufConvRlv) | **`c2cc3ca`** (2026-09-21), merged in | +12/−4, 3 src files | — |
-| [`ajreynol:bvBbExtf`](https://github.com/ajreynol/cvc5/tree/bvBbExtf) | `be7662b` (2016-12-08), 9371 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:bitblastLc`](https://github.com/ajreynol/cvc5/tree/bitblastLc) | **`47f43bd`** (2026-09-22), merged in | **✅** | +28/−1, 2 src files | — |
+| [`ajreynol:bvToIntQuant-031126`](https://github.com/ajreynol/cvc5/tree/bvToIntQuant-031126) | **`47f43bd`** (2026-09-22), merged in | **✅** | **+0/−0 — the merge dropped +60/−16** | — |
+| [`ajreynol:ufConvRlv`](https://github.com/ajreynol/cvc5/tree/ufConvRlv) | **`47f43bd`** (2026-09-22), merged in | **✅** | +12/−4, 3 src files | — |
+| [`ajreynol:bvBbExtf`](https://github.com/ajreynol/cvc5/tree/bvBbExtf) | `be7662b` (2016-12-08), 9377 behind `10bd5cb` | — | — | — |
 
 ---
 
@@ -1824,11 +1841,11 @@ gap set (`--stats`); then `--simplification=none`, `--no-static-learning`,
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:simplifyRecFun`](https://github.com/ajreynol/cvc5/tree/simplifyRecFun) | **`c2cc3ca`** (2026-09-21), merged in | +101/−39, 11 src files | — |
-| [`ajreynol:ufEagerDistinct`](https://github.com/ajreynol/cvc5/tree/ufEagerDistinct) | **`c2cc3ca`** (2026-09-21), merged in | +25/−0, 3 src files | — |
-| [`ajreynol:eagerElimDefs`](https://github.com/ajreynol/cvc5/tree/eagerElimDefs) | `9e7ee41` (2024-10-04), 1286 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:simplifyRecFun`](https://github.com/ajreynol/cvc5/tree/simplifyRecFun) | **`47f43bd`** (2026-09-22), merged in | **✅** | +101/−39, 11 src files | — |
+| [`ajreynol:ufEagerDistinct`](https://github.com/ajreynol/cvc5/tree/ufEagerDistinct) | **`47f43bd`** (2026-09-22), merged in | **✅** | +25/−0, 3 src files | — |
+| [`ajreynol:eagerElimDefs`](https://github.com/ajreynol/cvc5/tree/eagerElimDefs) | `9e7ee41` (2024-10-04), 1292 behind `10bd5cb` | — | — | — |
 
 ## R21 — Quantifier preprocessing: what is done to a quantifier before it is ever matched
 
@@ -1891,11 +1908,10 @@ and Pit-Claudel CAV
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:quantRew-1006`](https://github.com/ajreynol/cvc5/tree/quantRew-1006) | **`c2cc3ca`** (2026-09-21), merged in | +27/−4, 1 src files | — |
-| [`ajreynol:ai-fixAlphaEq-2`](https://github.com/ajreynol/cvc5/tree/ai-fixAlphaEq-2) | `f172d88` (2026-04-17), 243 behind `c2cc3caf` | — | — |
-| [`ajreynol:p657`](https://github.com/ajreynol/cvc5/tree/p657) | `43c1d0f` (2023-08-23), 2353 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:quantRew-1006`](https://github.com/ajreynol/cvc5/tree/quantRew-1006) | **`47f43bd`** (2026-09-22), merged in | **✅** | +27/−4, 1 src files | — |
+| [`ajreynol:p657`](https://github.com/ajreynol/cvc5/tree/p657) | `43c1d0f` (2023-08-23), 2359 behind `10bd5cb` | — | — | — |
 
 ## R22 — Preregistration: which literals the theories are told about
 
@@ -1933,9 +1949,9 @@ branch.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | **`c2cc3ca`** (2026-09-21), merged in | +833/−13, 9 src files (4 other) | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | **`47f43bd`** (2026-09-22), merged in | **✅** | +833/−13, 9 src files | — |
 
 ## R23 — Term-database relevance: which ground terms E-matching may use
 
@@ -1981,9 +1997,9 @@ term-database size and instance counts.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:tdbOldIndex`](https://github.com/ajreynol/cvc5/tree/tdbOldIndex) | **`c2cc3ca`** (2026-09-21), merged in | +61/−7, 5 src files | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:tdbOldIndex`](https://github.com/ajreynol/cvc5/tree/tdbOldIndex) | **`47f43bd`** (2026-09-22), merged in | **✅** | +61/−7, 5 src files | — |
 
 ---
 
@@ -2028,12 +2044,10 @@ the direction for those ten.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/cvc5/tree/lowLevelOptMore) | **`c2cc3ca`** (2026-09-21), merged in | +72/−8, 2 src files | — |
-| [`ajreynol:tdbLLOpts`](https://github.com/ajreynol/cvc5/tree/tdbLLOpts) | **`c2cc3ca`** (2026-09-21), merged in | +34/−34, 2 src files | — |
-| [`ajreynol:optTdbTNode`](https://github.com/ajreynol/cvc5/tree/optTdbTNode) | `a6bd02c` (2019-03-26), 7581 behind `c2cc3caf` | — | — |
-| [`ajreynol:perfDataStructures`](https://github.com/ajreynol/cvc5/tree/perfDataStructures) | `047e75b` (2018-08-07), 8174 behind `c2cc3caf` | — | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/cvc5/tree/lowLevelOptMore) | **`47f43bd`** (2026-09-22), merged in | **✅** | +72/−8, 2 src files | — |
+| [`ajreynol:tdbLLOpts`](https://github.com/ajreynol/cvc5/tree/tdbLLOpts) | **`47f43bd`** (2026-09-22), merged in | **✅** | +34/−34, 2 src files | — |
 
 ## R26 — Attribution instrumentation: the tools goal 2 needs
 
@@ -2127,11 +2141,11 @@ gaps.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:debugDumpLemmas`](https://github.com/ajreynol/cvc5/tree/debugDumpLemmas) | **`c2cc3ca`** (2026-09-21), merged in | +49/−0, 5 src files | — |
-| [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | **`c2cc3ca`** (2026-09-21), merged in | +534/−15, 19 src files | — |
-| [`ajreynol:trackInferId`](https://github.com/ajreynol/cvc5/tree/trackInferId) | **`c2cc3ca`** (2026-09-21), merged in | +22/−3, 3 src files | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:debugDumpLemmas`](https://github.com/ajreynol/cvc5/tree/debugDumpLemmas) | **`47f43bd`** (2026-09-22), merged in | **✅** | +49/−0, 5 src files | — |
+| [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | **`47f43bd`** (2026-09-22), merged in | **✅** | +534/−15, 19 src files | — |
+| [`ajreynol:trackInferId`](https://github.com/ajreynol/cvc5/tree/trackInferId) | **`47f43bd`** (2026-09-22), merged in | **✅** | +22/−3, 3 src files | — |
 
 ## R27 — SMT-LIB parser throughput: pay less before solving
 
@@ -2194,9 +2208,9 @@ command execution as the actual target.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | ---: | ---: |
-| [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | **`c2cc3ca`** (2026-09-21), merged in | +228/−141, 7 src files | — |
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | **`47f43bd`** (2026-09-22), merged in | **✅** | +228/−141, 7 src files | — |
 
 ---
 

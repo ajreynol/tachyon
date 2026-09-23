@@ -136,10 +136,10 @@ upstream revision the branch is rebased to; ± LOC for a branch; and
 [register's own section](docs/directions.md#proposals) defines them and what to
 do with a change that touches two directions.
 
-**Twelve of the sixteen tables name branches — twenty-four in all — and not
+**Twelve of the sixteen tables name branches — twenty-three in all — and not
 one carries a number.** A direction may own several, because competing designs
-for one mechanism compete in the same table. Eighteen carry cvc5 `main@c2cc3caf`; the other six are 548 to
-4379 commits behind it, read on 2026-09-22, and the last column names a corpus this
+for one mechanism compete in the same table. Eighteen are within six commits of cvc5 `main@10bd5cb3` and compile there;
+the other five are 554 to 4385 commits behind it, read on 2026-09-22, and the last column names a corpus this
 project does not have: goal 1 fixes it, and until then there is no
 baseline to subtract. Goal 1 also settles what those three columns
 are missing here — added seconds, the time ratio, proof size, checker time and
