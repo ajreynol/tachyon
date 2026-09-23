@@ -149,9 +149,9 @@ column says which happened.
 Nothing is measured until it is rebased, and rebasing every branch named in
 these tables — the *active* branches, the ones a proposal depends on — is the
 pass that has to come before any of these columns can be filled. This project's
-active branches are the rows below; heuresis keeps its own list, with the update
-procedure a pass should follow, in
-[`active-dev-branches.md`](../../heuresis/docs/active-dev-branches.md).
+active branches are the rows below, and they also appear, with every sibling
+project's and with the update procedure a pass should follow, in tachyon's
+shared [`active-dev-branches.md`](../../../docs/active-dev-branches.md).
 
 **Read 2026-09-22, after three update passes**, against the pin the newest pass
 targeted, cvc5

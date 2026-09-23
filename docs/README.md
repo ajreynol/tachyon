@@ -8,6 +8,7 @@ shared tools and how to maintain them. Each research project under
 | --- | --- |
 | [github-issues-rewrites.md](github-issues-rewrites.md) | Metagraphe's cvc5 issue survey, ranked rewrite candidates, RARE drafts, and implementation handoff. |
 | [Metagraphe rewrite database](../tools/metagraphe/rewrite_db/README.md) | Structured filings, update and reporting policy, and the experience log. |
+| [active-dev-branches.md](active-dev-branches.md) | Shared across the research projects: every `ajreynol/cvc5` branch a proposal names, the cvc5 commit it carries, whether it compiles, and the procedure for an update pass. |
 | [job-launcher.md](job-launcher.md) | Configure experiments, deploy host scripts, launch jobs and retrieve results. |
 | [stats-profiler.md](stats-profiler.md) | Interpret statistics, configure timers and export offline reports and PDFs. |
 | [site.md](site.md) | Build and deploy the published report site, and add a project report to it. |

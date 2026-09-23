@@ -198,7 +198,7 @@ same reason.
 rebase.** All fifty-two tips are `Merge branch 'master' into …` commits, each
 adding one commit to the branch. Two of those merges resolved in favour of upstream and
 left the branch with no changes at all; both are flagged in their rows and in
-[`active-dev-branches.md`](active-dev-branches.md), with the pre-merge tip that
+[`active-dev-branches.md`](../../../docs/active-dev-branches.md), with the pre-merge tip that
 still holds the work. Nothing is wrong with that here: the branch contains
 current code, it builds against it, and the `± LOC` above is a three-dot diff
 against `master`, so it still reports only the branch's own changes. What a
@@ -211,7 +211,8 @@ Nothing is measured until it is rebased: a stale branch's old line counts and
 old results describe a cvc5 that no longer exists. Rebasing every branch named
 in these tables — the *active* branches, the ones a proposal depends on — is
 the pass that fills these columns. That list, with each branch's state and the
-procedure, is [`active-dev-branches.md`](active-dev-branches.md), derived from
+procedure, is the shared
+[`active-dev-branches.md`](../../../docs/active-dev-branches.md), derived from
 these tables.
 
 **Read 2026-09-22, after three update passes**, against the pin the newest pass
@@ -226,9 +227,10 @@ were **retired** on 2026-09-22, below. **Two of the fifty-two are
 empty**: their merges resolved in favour of upstream and dropped the branch's
 own changes, which the `± LOC` cell records rather than reporting a healthy
 zero, and which is why they compile. The whole list, the two lost branches with
-the tips that still hold their work, and the build procedure are in
-[`active-dev-branches.md`](active-dev-branches.md); it is derived from these
-tables, which stay authoritative. The fork moves while this is read, so
+the tips that still hold their work, and the build procedure are in tachyon's
+shared [`active-dev-branches.md`](../../../docs/active-dev-branches.md), which
+carries every child project's active branches; it is derived from these tables,
+which stay authoritative for this project's. The fork moves while this is read, so
 **re-derive before acting on it**.
 
 **Seven proposals retired 2026-09-22.** A proposal leaves the register when its
