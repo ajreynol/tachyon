@@ -88,6 +88,12 @@ the history below are all against **23413.7**.
 
 One row per cvc5 `main` revision, per configuration. Newest last.
 
+**The last row is the reference** that every `± solved` cell in
+[`directions.md`](directions.md) is measured against — an invariant the two
+documents hold together. Adding a row for a new revision of the reference
+configuration means the register's cells have to be re-measured or cleared;
+they cannot quietly keep numbers taken against the row above.
+
 | date | cvc5 `main` | config | solved | timeout | PAR2 | ratio | gap | Δ PAR2 | ledger |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | 2026-09-14 | `5cc03f4b9` | default | 5418 | 702 | 53390 | 2.28 | 2266 | — | [baseline](ledger/2026-09-14-baseline.md) |
@@ -102,6 +108,7 @@ One row per cvc5 `main` revision, per configuration. Newest last.
 | 2026-09-17 | `67954d09dc` | **best** | 5626 | 471 | **35532.7** | **1.52** | **784** | −0.07% | [self-contained](ledger/2026-09-17-self-contained-launcher-and-current-main.md) |
 | 2026-09-17 | `a07d513075` ‡ | verus | 5545 | 574 | 41191.8 | 1.76 | 1079 | +0.12% | [1.4.0](ledger/2026-09-17-cvc5-1-4-0-release.md) |
 | 2026-09-17 | `a07d513075` ‡ | **best** | 5624 | 473 | **35580.3** | **1.52** | 786 | +0.13% | [1.4.0](ledger/2026-09-17-cvc5-1-4-0-release.md) |
+| 2026-09-23 | `d7d5b948c1` | **reference** | 5550 | 569 | 41055.9 | 1.75 | 1064 | −0.33% | [reference](ledger/2026-09-23-reference-at-current-main.md) |
 
 † measured on `claude-eagerInst@995b23bcfa` with its module off, which is 0
 behind `95050cf8155d`. Compared against the `best` row at `d7d03b082c` it

@@ -44,9 +44,9 @@ between them.
 | | |
 | --- | --- |
 | active branches | **77** — 57 heuresis, 20 elaphros |
-| within 11 commits of the pin | **76** (57 heuresis + 19 elaphros) |
-| older | **1**, carrying commits 764 to 764 back |
-| compile-checked | **76 of 76** pass |
+| within 11 commits of the pin | **77** (57 heuresis + 20 elaphros) |
+| older | **none** — every active branch is within that distance |
+| compile-checked | **77 of 77** pass |
 
 Three passes have run: 37 branches on 2026-09-21, 33 more on 2026-09-22, and 58
 refreshed again the same day. **Every one was brought up by merging, not by
@@ -87,7 +87,7 @@ the time beside it. It does not mean the branch is correct, that its regressions
 pass, or that it helps. Only branches within 6 commits of the pin are built; an
 older branch would be compiling a cvc5 from years ago, which answers nothing.
 
-**All 76 pass, which is worth distrusting**, so the check was verified rather
+**All 77 pass, which is worth distrusting**, so the check was verified rather
 than assumed: the binary built from [`claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
 accepts `--eager-inst-limit=5`, and the binary built from the pin rejects it as
 an unknown option. The branch's code is in the binary, and each branch is a real
@@ -127,7 +127,7 @@ git --git-dir=fork.git diff --stat $PIN...BRANCH -- src/ # empty means content w
 6. **Then update two places:** the proposal row in the owning project's
    register, and the row here.
 
-## Carrying the pin, or within 11 commits of it — 76 branches
+## Carrying the pin, or within 11 commits of it — 77 branches
 
 `± LOC` is the three-dot source diff against [`1c0b206`](https://github.com/cvc5/cvc5/commit/1c0b2066ce8d6c947f25212af74be705f1c0cbe5), `src/` only.
 
@@ -143,6 +143,7 @@ git --git-dir=fork.git diff --stat $PIN...BRANCH -- src/ # empty means content w
 | <a id="rareOptEval"></a>[`rareOptEval`](https://github.com/ajreynol/cvc5/tree/rareOptEval) | Stops clearing `d_evalCache` at every `RewriteDbProofCons::prove` | elaphros | [E7](../tools/elaphros/docs/directions.md#e7-reconstruction-cache-and-search-policy) | 7 | +1/−2 over 1 src files | ✅ 67s |
 | <a id="rpcAlwaysPre"></a>[`rpcAlwaysPre`](https://github.com/ajreynol/cvc5/tree/rpcAlwaysPre) | Promotes `POST_DSL` theory rewrites to `PRE_DSL` | elaphros | [E7](../tools/elaphros/docs/directions.md#e7-reconstruction-cache-and-search-policy) | 12 | +60/−1 over 6 src files | ✅ 65s |
 | <a id="rareNoEvalPremise"></a>[`rareNoEvalPremise`](https://github.com/ajreynol/cvc5/tree/rareNoEvalPremise) | Changes reconstruction of evaluation premises and several theory rewrites | elaphros | [E7](../tools/elaphros/docs/directions.md#e7-reconstruction-cache-and-search-policy) | 15 | +3/−3 over 2 src files | ✅ 71s |
+| <a id="rareEncodeSubcall"></a>[`rareEncodeSubcall`](https://github.com/ajreynol/cvc5/tree/rareEncodeSubcall) | One stratified search with an on-demand `ENCODE` step, not two full searches | elaphros | [E7](../tools/elaphros/docs/directions.md#e7-reconstruction-cache-and-search-policy) | 6 | +46/−41 over 4 src files | ✅ 67s |
 | <a id="chainMResOpt"></a>[`chainMResOpt`](https://github.com/ajreynol/cvc5/tree/chainMResOpt) | Pending-pivot counts and a surviving-literal set in `CHAIN_M_RESOLUTION` checking | elaphros | [E8](../tools/elaphros/docs/directions.md#e8-resolution-construction-and-internal-checking) | 3 | +62/−55 over 1 src files | ✅ 5s |
 | <a id="pf-defineFun"></a>[`pf-defineFun`](https://github.com/ajreynol/cvc5/tree/pf-defineFun) | `--proof-define-fun-macros`: tracks definitions through output and assumptions | elaphros | [E9](../tools/elaphros/docs/directions.md#e9-definitions-and-proof-output) | 10 | +698/−60 over 15 src files | ✅ 73s |
 | <a id="pf-defineFun-printerOnly"></a>[`pf-defineFun-printerOnly`](https://github.com/ajreynol/cvc5/tree/pf-defineFun-printerOnly) | The same idea moved to a `MacroDefConverter` in proof output | elaphros | [E9](../tools/elaphros/docs/directions.md#e9-definitions-and-proof-output) | 8 | +876/−25 over 11 src files | ✅ 41s |
@@ -223,20 +224,9 @@ work and not the merge. **builds** is the compile check described above, with
 that branch's incremental build time.
 
 
-## Older than the pin — 1 branches
+## Older than the pin — none
 
-**This is the work order for the next pass.** Nearest first; the last column is
-commits behind the pin. Nothing here can be built, measured or reviewed as it
-stands, and none is compile-checked.
-
-| branch | project | direction | newest cvc5 commit it carries | its commits | behind `1c0b206` |
-| --- | --- | --- | --- | ---: | ---: |
-| <a id="rareEncodeSubcall"></a>[`rareEncodeSubcall`](https://github.com/ajreynol/cvc5/tree/rareEncodeSubcall) | elaphros | [E7](../tools/elaphros/docs/directions.md#e7-reconstruction-cache-and-search-policy) | [`85fa780`](https://github.com/cvc5/cvc5/commit/85fa7800ce49e88be19d92389b3a4d89316f0524) (2025-05-20) | 3 | **764** |
-
-**The far end is design evidence, not a queue.** The oldest commits carried here
-predate current cvc5 by years; `bvBbExtf` holds one from 2016. The registers
-keep those rows because the idea is a candidate, not because the patch is one,
-and below roughly a thousand commits an update is more likely to drop the
-mechanism than to preserve it — which is no longer hypothetical. A report that
-such a branch should be reimplemented rather than updated is the useful outcome.
+**Every active branch is within reach of the pin**, for the first time since
+this list was started. There is no update backlog left; what remains is
+measurement.
 

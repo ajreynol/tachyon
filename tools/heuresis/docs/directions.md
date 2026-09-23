@@ -10,6 +10,36 @@ independently at their discretion; discovery continues without waiting for
 that follow-up. The possible implementations below help investigate candidates
 and inform future work.
 
+> ## The reference
+>
+> Every `± solved` number in this document is measured against **one
+> configuration**, and every `run as` cell says what to add to it:
+>
+> ```
+> cvc5 -q --no-cbqi --user-pat=strict
+> ```
+>
+> on the fixed set [`quant-07-25`](../README.md#the-set), 6124 benchmarks, at a
+> **30 s** timeout, one job at a time on an idle host. `--sat-solver=cadical` is
+> not passed because CaDiCaL is now cvc5's default; the configs that predate
+> that change spell it out, and the two are the same solver.
+>
+> **A ± number is meaningless without the revision it was measured at**, so
+> every cell names the cvc5 commit through the ledger entry it cites. A run of
+> the reference at a given commit is what the arms of that batch are subtracted
+> from — not a reference from an earlier day.
+>
+> **The reference is the last row of [`progress.md`](progress.md)**, and that is
+> an invariant, not a coincidence: the run that anchors this document is the
+> newest measurement of cvc5 `main` the project has. Today that row is
+>
+> | date | cvc5 `main` | config | solved | PAR2 | ledger |
+> | --- | --- | --- | ---: | ---: | --- |
+> | 2026-09-23 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | reference | **5550** of 6124 | 41055.9 | [entry](ledger/2026-09-23-reference-at-current-main.md) |
+>
+> If the two ever disagree, this document is stale and its numbers are being
+> read against a solver that no longer exists.
+
 **Twenty-eight directions, R1–R23 and R25–R29, each with an argued risk/gain
 estimate, the same four inventories — the cvc5 flags that test it today,
 what has been tried, what z3 and others do, and the papers — and, last, the
@@ -2187,6 +2217,16 @@ carries, how large it is, whether it compiles — is in the shared
 [`active-dev-branches.md`](../../../docs/active-dev-branches.md), not here, so
 that the fork moving does not require editing this file. What is here is the
 argument, the runs it justifies, and the numbers that came back.
+
+**The invariant to hold.** [The reference](#the-reference) at the top of this
+document must be the **last row of [`progress.md`](progress.md)** — same
+configuration, same revision, same ledger entry. The order of work when the
+reference moves is: run the reference at the new revision, write its ledger
+entry, add the row to `progress.md`, then update the block at the top here to
+match. A `± solved` cell measured against an older reference is not merely
+out of date, it is wrong, because the arms and the baseline then describe
+different solvers; re-measure or clear those cells rather than leave them
+standing.
 
 ## Proposals
 

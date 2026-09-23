@@ -291,3 +291,8 @@ solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-140 -q --
 solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-best-140 -q --no-cbqi --user-pat=strict --sat-solver=cadical --ee-mode=central --ieval=off
 # ajr-cvc5: git a07d513075 on branch master
 
+# 2026-09-23 11:18 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-baseline.conf)
+# heuresis baseline: cvc5 best known configuration on the set [baseline @ master]
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-u-ssc-baseline -q --no-cbqi --user-pat=strict --sat-solver=cadical
+# built from master@1c0b2066ce
+
