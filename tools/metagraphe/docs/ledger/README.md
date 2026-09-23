@@ -13,6 +13,7 @@ Each entry records work actually performed. Search proposals belong in the
 | 2026-09-19 | [Candidate-only reporting scope](2026-09-19-rewrite-candidate-scope.md) | Six triage records archived, M-12 retained as an explicit proposal, and candidate-only filing requirements. |
 | 2026-09-20 | [String benchmark comparison](2026-09-20-string-benchmark-comparison.md) | 200 paired QF_SLIA inputs against Z3-Noodler on a matching cvc5 build, ten confirmed gaps, two filed candidate rewrites (M-21, M-22), and four leads that are not rewrite gaps. |
 | 2026-09-20 | [Bounded repetition and replace-all](2026-09-20-regex-loop-candidates.md) | The human's re.loop identity checked against an unmerged branch, two siblings found by probing, occurrence counts, and paired measurements; M-23, M-24 and M-25 filed. |
+| 2026-09-23 | [M-2 on an unmerged branch](2026-09-23-m2-unmerged-branch.md) | Read-only source audit of `strContainsBeforeIdof`: its rule is M-2 for a nonempty needle, with a prefix generalization in C++; not built or run, and M-2 is unchanged. |
 
 ## An entry
 
