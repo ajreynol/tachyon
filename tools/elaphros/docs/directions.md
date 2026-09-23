@@ -106,15 +106,22 @@ whose mechanism nobody has read stays in **Tried** — naming it here would
 assert a candidacy that has not been checked. Rows are ordered by distance from
 `master`, so the cheapest to make real is on top.
 
-**The columns.**
+**The columns.** **proposal** names the change: a branch, linked to its row in
+the shared [`active-dev-branches.md`](../../../docs/active-dev-branches.md),
+where its currency, size and build status live — none of that is repeated here.
+**run as** is the option string to add to the proof-producing
+configuration that goal 1 will fix; until it is fixed, these strings say what to
+pass, not what to compare against; a branch
+that changes behaviour directly needs no option and says so. **± solved on the corpus** waits on that
+corpus and stays empty until there is one.
 
-| column | what goes in it |
-| --- | --- |
-| **proposal** | The branch as `ajreynol:NAME`, linked, for a branch; the option and the change of default for the other kind. One row per proposal. |
-| **rebased to** | The newest cvc5 `main` commit the branch contains, by sha and date — **never a branch name**, for the reason below. *merged in* marks a branch that got there by merging rather than by a rebase, which is enough to build and measure but leaves a history a maintainer will ask to be linearised before review. A branch behind the pin carries its own base and its distance from that pin, and cannot be built, measured or reviewed as it stands, so its other columns stay empty. |
-| **builds** | Whether the branch's source compiles and links at its current tip, against the pin, on heuresis's benchmark host with GCC 10.5 and the `unrestricted` build type. ✅ carries the wall time of that branch's incremental build. A branch that does not carry a recent commit is not built (`—`): it would be compiling a cvc5 from years ago. **Compiling proves nothing about the proposal** — two branches here compile precisely because a merge emptied them. |
- the source diff from its merge base to its tip, in the convention the [survey](ledger/2026-09-18-branch-survey.md) uses for pinned tips, naming the upstream revision it was taken against. Rebase first, then measure. It estimates how much there is to review, not how good it is. For a default-option change, `—`: the change is the default value. |
-| **± solved on the corpus** | Benchmarks solved, minus the baseline's, on the corpus and under the resource limits [goal 1](../README.md#the-charter) fixes, with proofs produced and checked in both arms. Positive is more solved. `—` until measured; a measured loss is written in as a loss and the row stays. |
+**One row per run, not per proposal.** A branch with several option strings
+worth trying owns several rows — `unrewrite2` has two — because each row is a
+run someone can launch. A proposal is still the branch or the default change;
+the rows are how it gets measured. The tables are, taken together, the queue of
+runs this project has argued for.
+
+
 
 **The third column has no corpus yet**, and so can hold nothing. When goal 1
 fixes one, its name replaces *the corpus* in every header here, as heuresis's
@@ -145,13 +152,13 @@ merge does not give is the linear patch series an upstream review expects, so
 a proposal that reaches a pull request will have to be linearised then. The
 column says which happened.
 
-**A row with no numbers is a branch that does not carry the pin.**
-Nothing is measured until it is rebased, and rebasing every branch named in
-these tables — the *active* branches, the ones a proposal depends on — is the
-pass that has to come before any of these columns can be filled. This project's
-active branches are the rows below, and they also appear, with every sibling
-project's and with the update procedure a pass should follow, in tachyon's
-shared [`active-dev-branches.md`](../../../docs/active-dev-branches.md).
+**Every `± solved` cell is empty and will stay so until goal 1 fixes a corpus.** This register no
+longer carries how current a branch is, how large it is, or whether it
+compiles: all three moved to the shared
+[`active-dev-branches.md`](../../../docs/active-dev-branches.md), which each
+branch row links to, so there is one place to update when the fork moves and
+one place to read before launching anything. What stays here is the argument
+for the change and the number that came of it.
 
 **Read 2026-09-23, after a fourth update pass**, against cvc5
 [`1c0b2066`](https://github.com/cvc5/cvc5/commit/1c0b2066ce8d6c947f25212af74be705f1c0cbe5),
@@ -229,9 +236,10 @@ falls, retain that narrower result and lower the production-time expectation.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:unrewrite2`][unrewrite2] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +1082/−0, 10 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:unrewrite2`](../../../docs/active-dev-branches.md#unrewrite2) | `--proof-unrewrite` | — |
+| [`ajreynol:unrewrite2`](../../../docs/active-dev-branches.md#unrewrite2) | `--proof-unrewrite --proof-unrewrite-input-only` | — |
 
 ## E2 Smaller macro obligations
 
@@ -269,9 +277,9 @@ priority if large macros mostly change throughout or already share their work.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:reduceTransform`][reduceTransform] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +324/−1, 2 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:reduceTransform`](../../../docs/active-dev-branches.md#reduceTransform) | *(none — the branch changes behaviour directly)* | — |
 
 ## E3 Compact term conversion
 
@@ -314,9 +322,9 @@ checking benefit separately.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:pfrConvert2`][pfrConvert2] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +272/−20, 7 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:pfrConvert2`](../../../docs/active-dev-branches.md#pfrConvert2) | `--proof-use-rule-convert` | — |
 
 ## E4 Rewrite dependencies
 
@@ -350,9 +358,9 @@ dependencies or expensive unsuccessful probes would lower this priority.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:rewriteDep`][rewriteDep] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +225/−32, 6 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:rewriteDep`](../../../docs/active-dev-branches.md#rewriteDep) | *(none — the branch changes behaviour directly)* | — |
 
 ## E5 Proof DAG simplification and sharing
 
@@ -396,10 +404,10 @@ production gain.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:pfTrustId`][pfTrustId] | **`72f647e`** (2026-09-22) | ⏳ | +597/−232, 24 src files | — |
-| [`ajreynol:cpcDevChainMRes`][cpcDevChainMRes] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +522/−1, 3 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:cpcDevChainMRes`](../../../docs/active-dev-branches.md#cpcDevChainMRes) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:pfTrustId`](../../../docs/active-dev-branches.md#pfTrustId) | *(none — the branch changes behaviour directly)* | — |
 
 ## E6 Recorded rewrite provenance
 
@@ -434,9 +442,9 @@ Discovering new rewrite rules remains Metagraphe's question.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:rdbExec`][rdbExec] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +2561/−49, 29 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:rdbExec`](../../../docs/active-dev-branches.md#rdbExec) | *(none — the branch changes behaviour directly)* | — |
 
 ## E7 Reconstruction cache and search policy
 
@@ -485,12 +493,12 @@ regardless of the patch's small size.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:rareNoEvalPremise`][rareNoEvalPremise] | **`72f647e`** (2026-09-22), merged in | ⏳ | +3/−3, 2 src files | — |
-| [`ajreynol:rpcAlwaysPre`][rpcAlwaysPre] | **`72f647e`** (2026-09-22), merged in | ⏳ | +60/−1, 6 src files | — |
-| [`ajreynol:rareOptEval`][rareOptEval] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +1/−2, 1 src files | — |
-| [`ajreynol:rareEncodeSubcall`][rareEncodeSubcall] | `85fa780` (2025-05-20), 764 behind `1c0b206` | — | — | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:rareEncodeSubcall`](../../../docs/active-dev-branches.md#rareEncodeSubcall) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:rareNoEvalPremise`](../../../docs/active-dev-branches.md#rareNoEvalPremise) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:rareOptEval`](../../../docs/active-dev-branches.md#rareOptEval) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:rpcAlwaysPre`](../../../docs/active-dev-branches.md#rpcAlwaysPre) | *(none — the branch changes behaviour directly)* | — |
 
 ## E8 Resolution construction and internal checking
 
@@ -526,9 +534,9 @@ optimization remains outside Elaphros's scope.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:chainMResOpt`][chainMResOpt] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +62/−55, 1 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:chainMResOpt`](../../../docs/active-dev-branches.md#chainMResOpt) | *(none — the branch changes behaviour directly)* | — |
 
 ## E9 Definitions and proof output
 
@@ -563,10 +571,10 @@ bytes, report it as such and avoid predicting lower construction time.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:pf-defineFun`][defineFun] | **`72f647e`** (2026-09-22), merged in | ⏳ | +698/−60, 15 src files | — |
-| [`ajreynol:pf-defineFun-printerOnly`][defineFunPrinter] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +876/−25, 11 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:pf-defineFun`](../../../docs/active-dev-branches.md#pf-defineFun) | `--proof-define-fun-macros` | — |
+| [`ajreynol:pf-defineFun-printerOnly`](../../../docs/active-dev-branches.md#pf-defineFun-printerOnly) | `--proof-define-fun-macros` | — |
 
 ## E10 Lazy bookkeeping and theory reconstruction
 
@@ -607,12 +615,12 @@ allocations. Strings variants need an actual strings workload.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:stringsIpcAgg`][stringsIpcAgg] | **`72f647e`** (2026-09-22), merged in | ⏳ | +72/−4, 3 src files | — |
-| [`ajreynol:stringsIpcRefactor`][stringsIpcRefactor] | **`72f647e`** (2026-09-22), merged in | ⏳ | +4/−0, 2 src files | — |
-| [`ajreynol:theoryEngineLazyProofs`][theoryEngineLazyProofs] | **`72f647e`** (2026-09-22), merged in | ⏳ | +32/−29, 2 src files | — |
-| [`ajreynol:stratifiedStrIpc`][stratifiedStrIpc] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +58/−7, 1 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:stratifiedStrIpc`](../../../docs/active-dev-branches.md#stratifiedStrIpc) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:stringsIpcAgg`](../../../docs/active-dev-branches.md#stringsIpcAgg) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:stringsIpcRefactor`](../../../docs/active-dev-branches.md#stringsIpcRefactor) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:theoryEngineLazyProofs`](../../../docs/active-dev-branches.md#theoryEngineLazyProofs) | *(none — the branch changes behaviour directly)* | — |
 
 ## E11 Incremental output and reuse
 
@@ -647,9 +655,9 @@ state against any time saved.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:ai-pfIncremental`][aiPfIncremental] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +365/−23, 7 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:ai-pfIncremental`](../../../docs/active-dev-branches.md#ai-pfIncremental) | *(none — the branch changes behaviour directly)* | — |
 
 ## E12 Proof-induced search changes
 
@@ -687,9 +695,9 @@ It does not expand into general solver tuning.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:ai-macroPf`][aiMacroPf] | **`c2cc3ca`** (2026-09-21), merged in | ⏳ | +118/−45, 5 src files | — |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| [`ajreynol:ai-macroPf`](../../../docs/active-dev-branches.md#ai-macroPf) | *(none — the branch changes behaviour directly)* | — |
 
 ## E13 Proof-work accounting
 
@@ -740,9 +748,9 @@ report a phase attribution whose scopes overlap.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| *(none yet — no branch behind this direction)* |  |  |  |  |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| *(none yet)* |  |  |
 
 ## E14 Proof node representation and allocation
 
@@ -785,9 +793,9 @@ postprocessor.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| *(none yet — no branch behind this direction)* |  |  |  |  |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| *(none yet)* |  |  |
 
 ## E15 Streaming proof emission
 
@@ -828,9 +836,9 @@ anyway.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| *(none yet — no branch behind this direction)* |  |  |  |  |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| *(none yet)* |  |  |
 
 ## E16 Traversal fusion
 
@@ -871,9 +879,9 @@ elaboration.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on the corpus |
-| --- | --- | :-: | ---: | ---: |
-| *(none yet — no branch behind this direction)* |  |  |  |  |
+| proposal | run as | ± solved on the corpus |
+| --- | --- | ---: |
+| *(none yet)* |  |  |
 
 ## Attribution before an experiment queue
 

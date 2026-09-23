@@ -182,22 +182,23 @@ whose mechanism nobody has read stays in **Tried** — naming it here would
 assert a candidacy that has not been checked. Rows are ordered by distance from
 `master`, so the cheapest to make real is on top.
 
-**The columns.**
+**The columns.** **proposal** names the change: a branch, linked to its row in
+the shared [`active-dev-branches.md`](../../../docs/active-dev-branches.md),
+where its currency, size and build status live — none of that is repeated here.
+**run as** is the option string to add to the base configuration,
+`-q --no-cbqi --user-pat=strict`, which is this project's reference; a branch
+that changes behaviour directly needs no option and says so. **± solved on
+`quant-07-25`** is benchmarks solved on the whole set at the fixed 30 s timeout
+minus the baseline's, positive for more solved, each cell naming its baseline
+and the ledger entry that carries it.
 
-| column | what goes in it |
-| --- | --- |
-| **proposal** | The branch as `ajreynol:NAME`, linked, for a branch; the option and the change of default — `--ee-mode`, `distributed` → `central` — for the other kind. One row per proposal. |
-| **rebased to** | For an **option** proposal, the commit whose defaults were read — a default is not a fixed fact either, and `set_defaults.cpp` can override the declared one per logic, so the reading is pinned like any other. For a **branch**, the newest cvc5 `main` commit it contains, by sha and date — **never a branch name**, for the reason below. *merged in* marks a branch that got there by merging rather than by a rebase, which is enough to build and measure but leaves a history a maintainer will ask to be linearised before review. A branch behind the pin carries its own base and its distance from that pin, and cannot be built, measured or reviewed as it stands, so its other columns stay empty. |
-| **builds** | `—` for an option proposal: there is nothing to build, because the option already exists on `main` and only its default is proposed to change. For a branch, whether its source compiles and links at its current tip, against the pin, on the project's benchmark host with GCC 10.5 and the `unrestricted` build type. ✅ carries the wall time of that branch's incremental build. A branch that does not carry a recent commit is not built (`—`): it would be compiling a cvc5 from years ago. **Compiling proves nothing about the proposal** — two branches here compile precisely because a merge emptied them. |
-| **± LOC** | For a branch, `+A/−B`: the three-dot source diff from merge base to tip over `src/` and the regression list, the convention the archaeology table above uses, naming the `main` revision it was taken against. Rebase first, then measure. It estimates how much there is to review, not how good it is. For a default-option change, `—`: the change is the default value. |
-| **± solved on `quant-07-25`** | Benchmarks solved on the whole set at the fixed 30 s timeout, minus the baseline's; positive is more solved. The baseline is the configuration the proposal would change, and the cell names it: `default` for a change of default, because that is what cvc5 does out of the box, and the tracked configuration a branch is meant to improve — `best` today — for a branch. `—` until measured; a measured loss is written in as a loss and the row stays. |
+**One row per run, not per proposal.** A branch with several option strings
+worth trying owns several rows — `eagerInst3` has five — because each row is a
+run someone can launch. A proposal is still the branch or the default change;
+the rows are how it gets measured. The tables are, taken together, the queue of
+runs this project has argued for.
 
-Every figure in the last two columns cites the [ledger](ledger) entry that
-carries it, as every figure in this project does. PAR2 remains
-[`progress.md`](progress.md)'s measure; this column counts benchmarks because
-that is the first thing asked of a proposed change and because a count does
-not move with the timeout's arithmetic. The ledger entry behind the cell has
-the ratio.
+
 
 **No cell here names a moving reference.** `master` and `main` are different
 commits on different days, so a row that says *rebased to master* says nothing a
@@ -219,14 +220,13 @@ merge does not give is the linear patch series an upstream review expects, so
 a proposal that reaches a pull request will have to be linearised then. The
 column says which happened.
 
-**A row with no numbers is a branch that does not carry the pin.**
-Nothing is measured until it is rebased: a stale branch's old line counts and
-old results describe a cvc5 that no longer exists. Rebasing every branch named
-in these tables — the *active* branches, the ones a proposal depends on — is
-the pass that fills these columns. That list, with each branch's state and the
-procedure, is the shared
-[`active-dev-branches.md`](../../../docs/active-dev-branches.md), derived from
-these tables.
+**An empty `± solved` cell means the run has not happened.** This register no
+longer carries how current a branch is, how large it is, or whether it
+compiles: all three moved to the shared
+[`active-dev-branches.md`](../../../docs/active-dev-branches.md), which each
+branch row links to, so there is one place to update when the fork moves and
+one place to read before launching anything. What stays here is the argument
+for the change and the number that came of it.
 
 **Read 2026-09-23, after a fourth update pass**, against cvc5
 [`1c0b2066`](https://github.com/cvc5/cvc5/commit/1c0b2066ce8d6c947f25212af74be705f1c0cbe5),
@@ -400,14 +400,22 @@ experiment must follow if the eager signal is positive.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--inst-when`, `full-last-call` → `full` | defaults at `1c0b206` | — | — | — |
-| [`ajreynol:ai-extEagerInst3-1`](https://github.com/ajreynol/cvc5/tree/ai-extEagerInst3-1) | **`72f647e`** (2026-09-22), merged in | ⏳ | +4060/−42, 39 src files | — |
-| [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | **`72f647e`** (2026-09-22), merged in | ⏳ | +1449/−8, 13 src files | — |
-| [`ajreynol:eagerInst3`](https://github.com/ajreynol/cvc5/tree/eagerInst3) | **`72f647e`** (2026-09-22), merged in | ⏳ | +3777/−41, 38 src files | — |
-| [`ajreynol:eagerQM`](https://github.com/ajreynol/cvc5/tree/eagerQM) | **`72f647e`** (2026-09-22), merged in | ⏳ | +219/−0, 8 src files | — |
-| [`ajreynol:instFullPreempt`](https://github.com/ajreynol/cvc5/tree/instFullPreempt) | **`72f647e`** (2026-09-22), merged in | ⏳ | +10/−0, 2 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--inst-when`, `full-last-call` → `full` | `--inst-when=full` | — |
+| [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst` | — |
+| [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst --eager-inst-term=assert` | — |
+| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst` | — |
+| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-rlv` | — |
+| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-pair-limit=500` | — |
+| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-gen-limit=2` | — |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst` | — |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=eqc-merge` | — |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=assert` | — |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-quant=preregister` | — |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-macro-only` | — |
+| [`ajreynol:eagerQM`](../../../docs/active-dev-branches.md#eagerQM) | `--eager-q-matching` | — |
+| [`ajreynol:instFullPreempt`](../../../docs/active-dev-branches.md#instFullPreempt) | `--inst-when=full-preempt` | — |
 
 ## R2 — Incremental E-matching: match what changed, not everything
 
@@ -489,14 +497,14 @@ matching work that was genuinely new, is the target.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:ai-emFilter`](https://github.com/ajreynol/cvc5/tree/ai-emFilter) | **`72f647e`** (2026-09-22), merged in | ⏳ | +764/−16, 20 src files | — |
-| [`ajreynol:ai-imgDirect`](https://github.com/ajreynol/cvc5/tree/ai-imgDirect) | **`72f647e`** (2026-09-22), merged in | ⏳ | +707/−4, 5 src files | — |
-| [`ajreynol:ai-quantOpt-1`](https://github.com/ajreynol/cvc5/tree/ai-quantOpt-1) | **`72f647e`** (2026-09-22), merged in | ⏳ | +36/−4, 2 src files | — |
-| [`ajreynol:emExp`](https://github.com/ajreynol/cvc5/tree/emExp) | **`72f647e`** (2026-09-22) | ⏳ | +124/−2, 13 src files | — |
-| [`ajreynol:imSimpleInc2`](https://github.com/ajreynol/cvc5/tree/imSimpleInc2) | **`72f647e`** (2026-09-22), merged in | ⏳ | +122/−23, 4 src files | — |
-| [`ajreynol:imTrivial`](https://github.com/ajreynol/cvc5/tree/imTrivial) | **`72f647e`** (2026-09-22), merged in | ⏳ | +268/−21, 14 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:ai-emFilter`](../../../docs/active-dev-branches.md#ai-emFilter) | `--filter-e-matching` | — |
+| [`ajreynol:ai-imgDirect`](../../../docs/active-dev-branches.md#ai-imgDirect) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:ai-quantOpt-1`](../../../docs/active-dev-branches.md#ai-quantOpt-1) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:emExp`](../../../docs/active-dev-branches.md#emExp) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:imSimpleInc2`](../../../docs/active-dev-branches.md#imSimpleInc2) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:imTrivial`](../../../docs/active-dev-branches.md#imTrivial) | *(none — the branch changes behaviour directly)* | — |
 
 ## R3 — Worst-case E-matching: failure caching and early pruning
 
@@ -551,9 +559,9 @@ gap set: a heavy tail on few benchmarks is R3, a uniform cost is R2.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:ai-prepared13`](https://github.com/ajreynol/cvc5/tree/ai-prepared13) | **`72f647e`** (2026-09-22), merged in | ⏳ | +290/−6, 4 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:ai-prepared13`](../../../docs/active-dev-branches.md#ai-prepared13) | *(none — the branch changes behaviour directly)* | — |
 
 ## R4 — Instantiation budgeting: how many instances per round, and which
 
@@ -621,12 +629,13 @@ R9) is the direction; if the counts are similar, the cost is elsewhere.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--inst-max-rounds`, `-1`, unbounded → a finite budget | defaults at `1c0b206` | — | — | — |
-| [`ajreynol:dtInstMode`](https://github.com/ajreynol/cvc5/tree/dtInstMode) | **`72f647e`** (2026-09-22), merged in | ⏳ | +14/−1, 2 src files | — |
-| [`ajreynol:instLastCallDelay`](https://github.com/ajreynol/cvc5/tree/instLastCallDelay) | **`72f647e`** (2026-09-22), merged in | ⏳ | +5/−4, 1 src files | — |
-| [`ajreynol:termOrigin`](https://github.com/ajreynol/cvc5/tree/termOrigin) | **`72f647e`** (2026-09-22), merged in | ⏳ | +478/−11, 19 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--inst-max-rounds`, `-1`, unbounded → a finite budget | `--inst-max-rounds=50` | — |
+| [`ajreynol:dtInstMode`](../../../docs/active-dev-branches.md#dtInstMode) | `--dt-inst-internal` | — |
+| [`ajreynol:instLastCallDelay`](../../../docs/active-dev-branches.md#instLastCallDelay) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=1` | — |
+| [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=3` | — |
 
 ## R5 — Trigger selection: strict user patterns, multi-triggers, and what strictness disables
 
@@ -706,13 +715,13 @@ there are, and an A/B of `trust` vs `strict` alone (the baseline measured
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--user-pat`, `trust` → `strict` | defaults at `1c0b206` | — | — | **+78** vs `default`, 5492 of 6124 ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
-| [`ajreynol:gttOpt`](https://github.com/ajreynol/cvc5/tree/gttOpt) | **`72f647e`** (2026-09-22), merged in | ⏳ | +9/−1, 2 src files | — |
-| [`ajreynol:multiTriggerSingleBase`](https://github.com/ajreynol/cvc5/tree/multiTriggerSingleBase) | **`72f647e`** (2026-09-22), merged in | ⏳ | +44/−0, 3 src files | — |
-| [`ajreynol:nestedTriggers`](https://github.com/ajreynol/cvc5/tree/nestedTriggers) | **`72f647e`** (2026-09-22), merged in | ⏳ | +39/−22, 4 src files | — |
-| [`ajreynol:simpleTriggerMore`](https://github.com/ajreynol/cvc5/tree/simpleTriggerMore) | **`72f647e`** (2026-09-22), merged in | ⏳ | +48/−33, 2 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--user-pat`, `trust` → `strict` | *(already in the base)* | **+78** vs `default`, 5492 of 6124 ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
+| [`ajreynol:gttOpt`](../../../docs/active-dev-branches.md#gttOpt) | `--gt-trigger-reg` | — |
+| [`ajreynol:multiTriggerSingleBase`](../../../docs/active-dev-branches.md#multiTriggerSingleBase) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:nestedTriggers`](../../../docs/active-dev-branches.md#nestedTriggers) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:simpleTriggerMore`](../../../docs/active-dev-branches.md#simpleTriggerMore) | *(none — the branch changes behaviour directly)* | — |
 
 ## R6 — Conflict-based instantiation: off for this domain, and why that is right or wrong
 
@@ -774,11 +783,11 @@ instances becomes a target.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--cbqi`, `true` → `false` | defaults at `1c0b206` | — | — | **+83** vs `default`, 5497 of 6124 ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
-| `--sub-cbqi`, `false` → `true` | defaults at `1c0b206` | — | — | — |
-| [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | **`72f647e`** (2026-09-22), merged in | ⏳ | +136/−87, 1 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--cbqi`, `true` → `false` | *(already in the base, as `--no-cbqi`)* | **+83** vs `default`, 5497 of 6124 ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
+| `--sub-cbqi`, `false` → `true` | `--sub-cbqi` | — |
+| [`ajreynol:ai-cbqi-0423`](../../../docs/active-dev-branches.md#ai-cbqi-0423) | *(none — the branch changes behaviour directly)* | — |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
 
@@ -834,12 +843,13 @@ in a fresh focused port.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--ieval`, `use` → `off` | defaults at `1c0b206` | — | — | **+16** vs the reference, 5564 of 6124 ([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)) |
-| `--inst-no-entail`, `true` → `false` | defaults at `1c0b206` | — | — | **+1**, inside noise ([ledger](ledger/2026-09-16-entailment-filtering.md)) |
-| [`ajreynol:emStratify`](https://github.com/ajreynol/cvc5/tree/emStratify) | **`72f647e`** (2026-09-22), merged in | ⏳ | +180/−27, 16 src files | — |
-| [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | **`72f647e`** (2026-09-22), merged in | ⏳ | +166/−43, 8 src files | **−1** vs `central`, pre-merge tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--ieval`, `use` → `off` | `--ieval=off` | **+16** vs the reference, 5564 of 6124 ([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)) |
+| `--inst-no-entail`, `true` → `false` | `--no-inst-no-entail` | **+1**, inside noise ([ledger](ledger/2026-09-16-entailment-filtering.md)) |
+| [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--e-matching-stratify-ieval` | — |
+| [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--term-db-cd` | — |
+| [`ajreynol:ievalTravTrie`](../../../docs/active-dev-branches.md#ievalTravTrie) | *(none — the branch changes behaviour directly)* | **−1** vs `central`, pre-update tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
@@ -898,9 +908,9 @@ cvc5-unsolved gap slice.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--enum-inst`, `false` → `true` | defaults at `1c0b206` | — | — | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--enum-inst`, `false` → `true` | `--enum-inst` | — |
 
 ## R28 — Eager conflict-based instantiation: find a useful instance before full effort
 
@@ -976,9 +986,13 @@ and memory. Mine old
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi) | **`72f647e`** (2026-09-22), merged in | ⏳ | +5250/−206, 58 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst` | — |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=conflict` | — |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=prop` | — |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-when=asserted` | — |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-trigger=narrow` | — |
 
 ---
 
@@ -1078,12 +1092,12 @@ approximation, not deletion; classify its helped cases before trying
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--inst-local`, `false` → `true` | defaults at `1c0b206` | — | — | **+9** solved but **+1.19% PAR2** ([ledger](ledger/2026-09-15-sat-and-instance-order.md)) |
-| [`ajreynol:notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause) | **`72f647e`** (2026-09-22), merged in | ⏳ | +49/−10, 6 src files | — |
-| [`ajreynol:smtLazyAssert`](https://github.com/ajreynol/cvc5/tree/smtLazyAssert) | **`72f647e`** (2026-09-22), merged in | ⏳ | +377/−16, 15 src files | — |
-| [`ajreynol:virtualClauseDel`](https://github.com/ajreynol/cvc5/tree/virtualClauseDel) | **`72f647e`** (2026-09-22) | ⏳ | +25/−5, 9 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--inst-local`, `false` → `true` | `--inst-local` | **+9** solved but **+1.19% PAR2** ([ledger](ledger/2026-09-15-sat-and-instance-order.md)) |
+| [`ajreynol:notifySatClause`](../../../docs/active-dev-branches.md#notifySatClause) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:smtLazyAssert`](../../../docs/active-dev-branches.md#smtLazyAssert) | `--smt-lazy-assert` | — |
+| [`ajreynol:virtualClauseDel`](../../../docs/active-dev-branches.md#virtualClauseDel) | *(none — the branch changes behaviour directly)* | — |
 
 ## R10 — Where instance lemmas sit in the decision order: local, deferred, gated
 
@@ -1147,12 +1161,12 @@ with `sat::decisions` before building or rebasing `--inst-defer`.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | **`72f647e`** (2026-09-22), merged in | ⏳ | +116/−32, 11 src files | — |
-| [`ajreynol:ai-jhConflictFirst`](https://github.com/ajreynol/cvc5/tree/ai-jhConflictFirst) | **`72f647e`** (2026-09-22), merged in | ⏳ | +90/−36, 9 src files | — |
-| [`ajreynol:ai-jhRlvInst`](https://github.com/ajreynol/cvc5/tree/ai-jhRlvInst) | **`72f647e`** (2026-09-22), merged in | ⏳ | +327/−18, 9 src files | — |
-| [`ajreynol:claudeDev-dts-idef`](https://github.com/ajreynol/cvc5/tree/claudeDev-dts-idef) | **`72f647e`** (2026-09-22), merged in | ⏳ | +177/−40, 13 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:ai-instDefer`](../../../docs/active-dev-branches.md#ai-instDefer) | `--inst-defer` | — |
+| [`ajreynol:ai-jhConflictFirst`](../../../docs/active-dev-branches.md#ai-jhConflictFirst) | `--jh-conflict-first` | — |
+| [`ajreynol:ai-jhRlvInst`](../../../docs/active-dev-branches.md#ai-jhRlvInst) | `--jh-rlv-inst` | — |
+| [`ajreynol:claudeDev-dts-idef`](../../../docs/active-dev-branches.md#claudeDev-dts-idef) | `--inst-defer --dt-split-relevant` | — |
 
 ## R11 — Decision heuristic versus relevancy: what the SAT solver is made to decide on
 
@@ -1216,12 +1230,12 @@ decision count.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--decision`, `justification` here → `internal` | defaults at `1c0b206` | — | — | — |
-| `--decision`, `justification` here → `stoponly` | defaults at `1c0b206` | — | — | — |
-| `--jh-rlv-order`, `false` → `true` | defaults at `1c0b206` | — | — | **−66** vs the reference, 5429 of 6124 ([ledger](ledger/2026-09-15-sat-and-instance-order.md)) |
-| [`ajreynol:jhRandom`](https://github.com/ajreynol/cvc5/tree/jhRandom) | **`72f647e`** (2026-09-22), merged in | ⏳ | +262/−20, 7 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--decision`, `justification` here → `internal` | `--decision=internal` | — |
+| `--decision`, `justification` here → `stoponly` | `--decision=stoponly` | — |
+| `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | **−66** vs the reference, 5429 of 6124 ([ledger](ledger/2026-09-15-sat-and-instance-order.md)) |
+| [`ajreynol:jhRandom`](../../../docs/active-dev-branches.md#jhRandom) | `--jh-rand` | — |
 
 ## R12 — Lemma inprocessing and conflict minimisation
 
@@ -1269,9 +1283,10 @@ on cvc5's inprocessing.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:subConflict`](https://github.com/ajreynol/cvc5/tree/subConflict) | **`72f647e`** (2026-09-22), merged in | ⏳ | +328/−1, 12 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find` | — |
+| [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find --no-sub-conflict-last-call` | — |
 
 ## R13 — The SAT backend: CaDiCaL, MiniSat, restarts, units
 
@@ -1345,9 +1360,9 @@ before designing a narrower SAT-policy experiment.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:cadicalPortfolio`](https://github.com/ajreynol/cvc5/tree/cadicalPortfolio) | **`72f647e`** (2026-09-22), merged in | ⏳ | +50/−0, 1 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:cadicalPortfolio`](../../../docs/active-dev-branches.md#cadicalPortfolio) | *(none — the branch changes behaviour directly)* | — |
 
 ## R29 — Deep restarts: throw the search away, keep what it proved
 
@@ -1410,11 +1425,11 @@ the other way of forgetting and is measured as a net loss.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--deep-restart`, `none` → `input` | defaults at `1c0b206` | — | — | — |
-| `--deep-restart`, `none` → `all` | defaults at `1c0b206` | — | — | — |
-| `--deep-restart-factor`, `3.0` → a tuned threshold | defaults at `1c0b206` | — | — | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--deep-restart`, `none` → `input` | `--deep-restart=input` | — |
+| `--deep-restart`, `none` → `all` | `--deep-restart=all` | — |
+| `--deep-restart-factor`, `3.0` → a tuned threshold | `--deep-restart=input --deep-restart-factor=1.5` | — |
 
 ---
 
@@ -1479,10 +1494,10 @@ but not that count. Then build the PR branch.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--theoryof-mode`, `type`, `term` by logic → `type` always | defaults at `1c0b206` | — | — | — |
-| [`ajreynol:mbtc25`](https://github.com/ajreynol/cvc5/tree/mbtc25) | **`72f647e`** (2026-09-22), merged in | ⏳ | +367/−82, 15 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--theoryof-mode`, `type`, `term` by logic → `type` always | `--theoryof-mode=type` | — |
+| [`ajreynol:mbtc25`](../../../docs/active-dev-branches.md#mbtc25) | `--tc-mode=model-based` | — |
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
 
@@ -1559,12 +1574,12 @@ branch figures (`d7d03b082c`, 2026-09-16).
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--ee-mode`, `distributed` → `central` | defaults at `1c0b206` | — | — | **+63** vs the reference, 5611 of 6124 ([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)) |
-| [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | **`72f647e`** (2026-09-22), merged in | ⏳ | +9/−3, 1 src files | **+2** vs `best`, pre-merge tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
-| [`ajreynol:cdno`](https://github.com/ajreynol/cvc5/tree/cdno) | **`72f647e`** (2026-09-22), merged in | ⏳ | +168/−12, 5 src files | — |
-| [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | **`72f647e`** (2026-09-22), merged in | ⏳ | +377/−73, 10 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--ee-mode`, `distributed` → `central` | `--ee-mode=central` | **+63** vs the reference, 5611 of 6124 ([ledger](ledger/2026-09-16-combined-central-equality-and-evaluator-off.md)) |
+| [`ajreynol:ai-eecNoShare`](../../../docs/active-dev-branches.md#ai-eecNoShare) | *(none — the branch changes behaviour directly)* | **+2** vs `best`, pre-update tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| [`ajreynol:cdno`](../../../docs/active-dev-branches.md#cdno) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:dtMergeNotify-v3`](../../../docs/active-dev-branches.md#dtMergeNotify-v3) | *(none — the branch changes behaviour directly)* | — |
 
 ## R16 — Datatypes: when to split, on what, and whether to have them at all
 
@@ -1644,13 +1659,13 @@ logic as a narrowly instrumented current-main patch and check completeness.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--dt-binary-split`, `false` → `true` | defaults at `1c0b206` | — | — | **−8** vs the reference ([ledger](ledger/2026-09-16-datatype-and-equality-controls.md)) |
-| [`ajreynol:dtElim`](https://github.com/ajreynol/cvc5/tree/dtElim) | **`72f647e`** (2026-09-22), merged in | ⏳ | +1086/−2, 13 src files | — |
-| [`ajreynol:dtLazyInst3`](https://github.com/ajreynol/cvc5/tree/dtLazyInst3) | **`72f647e`** (2026-09-22), merged in | ⏳ | +80/−2, 3 src files | — |
-| [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | **`72f647e`** (2026-09-22), merged in | ⏳ | +61/−8, 2 src files | — |
-| [`ajreynol:oneConsInst`](https://github.com/ajreynol/cvc5/tree/oneConsInst) | **`72f647e`** (2026-09-22), merged in | ⏳ | +42/−11, 2 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | **−8** vs the reference ([ledger](ledger/2026-09-16-datatype-and-equality-controls.md)) |
+| [`ajreynol:dtElim`](../../../docs/active-dev-branches.md#dtElim) | `--dt-elim` | — |
+| [`ajreynol:dtLazyInst3`](../../../docs/active-dev-branches.md#dtLazyInst3) | `--dt-lazy-inst` | — |
+| [`ajreynol:dtSplitRelevant`](../../../docs/active-dev-branches.md#dtSplitRelevant) | `--dt-split-relevant` | — |
+| [`ajreynol:oneConsInst`](../../../docs/active-dev-branches.md#oneConsInst) | *(none — the branch changes behaviour directly)* | — |
 
 ## R17 — Linear integer arithmetic: branch and bound, cuts, and the Diophantine solver
 
@@ -1727,10 +1742,11 @@ building [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc).
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | **`72f647e`** (2026-09-22), merged in | ⏳ | +95/−2, 6 src files | — |
-| [`ajreynol:deferBlock`](https://github.com/ajreynol/cvc5/tree/deferBlock) | **`72f647e`** (2026-09-22), merged in | ⏳ | +336/−17, 15 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:ai-dioLc`](../../../docs/active-dev-branches.md#ai-dioLc) | `--dio-solver-last-call` | — |
+| [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block` | — |
+| [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block --defer-block-mode=delay` | — |
 
 ## R18 — Nonlinear arithmetic: off, light, or lazy
 
@@ -1789,9 +1805,9 @@ nonlinear off, the extension was pure cost here.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--nl-ext`, `full`, by logic → `light` | defaults at `1c0b206` | — | — | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--nl-ext`, `full`, by logic → `light` | `--nl-ext=light` | — |
 
 ## R19 — Bit-vectors inside quantified problems
 
@@ -1854,10 +1870,10 @@ direction. Then `--theoryof-mode=term` on that subset.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:bitblastLc`](https://github.com/ajreynol/cvc5/tree/bitblastLc) | **`72f647e`** (2026-09-22), merged in | ⏳ | +27/−0, 2 src files | — |
-| [`ajreynol:ufConvRlv`](https://github.com/ajreynol/cvc5/tree/ufConvRlv) | **`72f647e`** (2026-09-22), merged in | ⏳ | +13/−4, 3 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:bitblastLc`](../../../docs/active-dev-branches.md#bitblastLc) | `--bitblast-lc` | — |
+| [`ajreynol:ufConvRlv`](../../../docs/active-dev-branches.md#ufConvRlv) | *(none — the branch changes behaviour directly)* | — |
 
 ---
 
@@ -1933,11 +1949,11 @@ gap set (`--stats`); then `--simplification=none`, `--no-static-learning`,
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:eagerElimDefs`](https://github.com/ajreynol/cvc5/tree/eagerElimDefs) | **`72f647e`** (2026-09-22), merged in | ⏳ | +70/−15, 8 src files | — |
-| [`ajreynol:simplifyRecFun`](https://github.com/ajreynol/cvc5/tree/simplifyRecFun) | **`72f647e`** (2026-09-22), merged in | ⏳ | +101/−39, 11 src files | — |
-| [`ajreynol:ufEagerDistinct`](https://github.com/ajreynol/cvc5/tree/ufEagerDistinct) | **`72f647e`** (2026-09-22), merged in | ⏳ | +25/−0, 3 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:eagerElimDefs`](../../../docs/active-dev-branches.md#eagerElimDefs) | `--eager-elim-defs` | — |
+| [`ajreynol:simplifyRecFun`](../../../docs/active-dev-branches.md#simplifyRecFun) | `--simplify-rec-fun` | — |
+| [`ajreynol:ufEagerDistinct`](../../../docs/active-dev-branches.md#ufEagerDistinct) | `--uf-eager-distinct` | — |
 
 ## R21 — Quantifier preprocessing: what is done to a quantifier before it is ever matched
 
@@ -2000,10 +2016,10 @@ and Pit-Claudel CAV
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--miniscope-quant`, `conj-and-fv` → `off` | defaults at `1c0b206` | — | — | — |
-| [`ajreynol:quantRew-1006`](https://github.com/ajreynol/cvc5/tree/quantRew-1006) | **`72f647e`** (2026-09-22), merged in | ⏳ | +27/−4, 1 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--miniscope-quant`, `conj-and-fv` → `off` | `--miniscope-quant=off` | — |
+| [`ajreynol:quantRew-1006`](../../../docs/active-dev-branches.md#quantRew-1006) | *(none — the branch changes behaviour directly)* | — |
 
 ## R22 — Preregistration: which literals the theories are told about
 
@@ -2041,10 +2057,10 @@ branch.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--preregister-mode`, `eager` → `lazy` | defaults at `1c0b206` | — | — | — |
-| [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) | **`72f647e`** (2026-09-22), merged in | ⏳ | +833/−13, 9 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--preregister-mode`, `eager` → `lazy` | `--preregister-mode=lazy` | — |
+| [`ajreynol:preregRlv`](../../../docs/active-dev-branches.md#preregRlv) | `--preregister-mode=rlv` | — |
 
 ## R23 — Term-database relevance: which ground terms E-matching may use
 
@@ -2090,10 +2106,10 @@ term-database size and instance counts.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| `--term-db-mode`, `relevant-all-delay` → `all` | defaults at `1c0b206` | — | — | — |
-| [`ajreynol:tdbOldIndex`](https://github.com/ajreynol/cvc5/tree/tdbOldIndex) | **`72f647e`** (2026-09-22), merged in | ⏳ | +61/−7, 5 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| `--term-db-mode`, `relevant-all-delay` → `all` | `--term-db-mode=all` | — |
+| [`ajreynol:tdbOldIndex`](../../../docs/active-dev-branches.md#tdbOldIndex) | `--tdb-old-index` | — |
 
 ---
 
@@ -2138,10 +2154,10 @@ the direction for those ten.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:lowLevelOptMore`](https://github.com/ajreynol/cvc5/tree/lowLevelOptMore) | **`72f647e`** (2026-09-22), merged in | ⏳ | +72/−8, 2 src files | — |
-| [`ajreynol:tdbLLOpts`](https://github.com/ajreynol/cvc5/tree/tdbLLOpts) | **`72f647e`** (2026-09-22), merged in | ⏳ | +38/−34, 2 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:lowLevelOptMore`](../../../docs/active-dev-branches.md#lowLevelOptMore) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:tdbLLOpts`](../../../docs/active-dev-branches.md#tdbLLOpts) | *(none — the branch changes behaviour directly)* | — |
 
 ## R26 — Attribution instrumentation: the tools goal 2 needs
 
@@ -2233,13 +2249,17 @@ conflict-use counters. Inspect `qdebugStats` and port only what supplies those
 gaps.
 
 **Proposals.** This direction's own; a proposal is listed here and in no
-other direction. Columns and rules: [Proposals](#proposals).
+other direction. Columns and rules: [Proposals](#proposals). **None of these
+should move `± solved`**: they add counters and dumps, and a run of one is for
+the numbers it prints, not for the time it takes. R26 pays for itself by
+unblocking other directions — S3's new-versus-rediscovered instantiation count
+is what R2 has been waiting on.
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:debugDumpLemmas`](https://github.com/ajreynol/cvc5/tree/debugDumpLemmas) | **`72f647e`** (2026-09-22), merged in | ⏳ | +50/−0, 5 src files | — |
-| [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | **`72f647e`** (2026-09-22), merged in | ⏳ | +536/−15, 19 src files | — |
-| [`ajreynol:trackInferId`](https://github.com/ajreynol/cvc5/tree/trackInferId) | **`72f647e`** (2026-09-22), merged in | ⏳ | +22/−3, 3 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:debugDumpLemmas`](../../../docs/active-dev-branches.md#debugDumpLemmas) | `--re-check-lemmas` | *n/a — instrumentation* |
+| [`ajreynol:qdebugStats`](../../../docs/active-dev-branches.md#qdebugStats) | `--stats` (counters only) | *n/a — instrumentation* |
+| [`ajreynol:trackInferId`](../../../docs/active-dev-branches.md#trackInferId) | `--track-lemma-inference-ids` | *n/a — instrumentation* |
 
 ## R27 — SMT-LIB parser throughput: pay less before solving
 
@@ -2302,9 +2322,9 @@ command execution as the actual target.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
-| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
-| --- | --- | :-: | ---: | ---: |
-| [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | **`72f647e`** (2026-09-22), merged in | ⏳ | +228/−141, 7 src files | — |
+| proposal | run as | ± solved on `quant-07-25` |
+| --- | --- | ---: |
+| [`ajreynol:ai-parserOpt`](../../../docs/active-dev-branches.md#ai-parserOpt) | *(none — the branch changes behaviour directly)* | — |
 
 ---
 
