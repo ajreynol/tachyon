@@ -588,7 +588,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--user-pat`, `trust` → `strict` | *(already in the base)* | **+78** vs `default`, 5492 of 6124 ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
+| `--user-pat`, `trust` → `strict` | *(already in the base)* | — it is in the reference, so it is not an arm to run; a plain `-q` run at the pin would price it. It contributed +78 against `default` at `5cc03f4b9`, a revision and baseline this register no longer measures against ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
 | [`ajreynol:gttOpt`](../../../docs/active-dev-branches.md#gttOpt) | `--gt-trigger-reg` | — |
 | [`ajreynol:multiTriggerSingleBase`](../../../docs/active-dev-branches.md#multiTriggerSingleBase) | *(none — the branch changes behaviour directly)* | — |
 | [`ajreynol:nestedTriggers`](../../../docs/active-dev-branches.md#nestedTriggers) | *(none — the branch changes behaviour directly)* | — |
@@ -656,7 +656,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--cbqi`, `true` → `false` | *(already in the base, as `--no-cbqi`)* | **+83** vs `default`, 5497 of 6124 ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
+| `--cbqi`, `true` → `false` | *(already in the base, as `--no-cbqi`)* | — it is in the reference, so it is not an arm to run; a plain `-q` run at the pin would price it. It contributed +83 against `default` at `5cc03f4b9`, a revision and baseline this register no longer measures against ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
 | `--sub-cbqi`, `false` → `true` | `--sub-cbqi` | **+2 / −1504**, net **-1502** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:ai-cbqi-0423`](../../../docs/active-dev-branches.md#ai-cbqi-0423) | *(none — the branch changes behaviour directly)* | — |
 
@@ -720,7 +720,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | `--inst-no-entail`, `true` → `false` | `--no-inst-no-entail` | **+4 / −9**, net **-5** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--e-matching-stratify-ieval` | — |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--term-db-cd` | — |
-| [`ajreynol:ievalTravTrie`](../../../docs/active-dev-branches.md#ievalTravTrie) | *(none — the branch changes behaviour directly)* | **−1** vs `central`, pre-update tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| [`ajreynol:ievalTravTrie`](../../../docs/active-dev-branches.md#ievalTravTrie) | *(none — the branch changes behaviour directly)* | — |
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
@@ -1463,7 +1463,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--ee-mode`, `distributed` → `central` | `--ee-mode=central` | **+86 / −19**, net **+67**; reproduces at two earlier revisions ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:ai-eecNoShare`](../../../docs/active-dev-branches.md#ai-eecNoShare) | *(none — the branch changes behaviour directly)* | **+2** vs `best`, pre-update tip ([ledger](ledger/2026-09-16-rebased-equality-and-evaluator-branches.md)) |
+| [`ajreynol:ai-eecNoShare`](../../../docs/active-dev-branches.md#ai-eecNoShare) | *(none — the branch changes behaviour directly)* | — |
 | [`ajreynol:cdno`](../../../docs/active-dev-branches.md#cdno) | *(none — the branch changes behaviour directly)* | — |
 | [`ajreynol:dtMergeNotify-v3`](../../../docs/active-dev-branches.md#dtMergeNotify-v3) | *(none — the branch changes behaviour directly)* | — |
 
@@ -2326,6 +2326,15 @@ because a net figure hides what matters most here — whether a change is
 candidate for a combination, or for finding out what those benchmarks have in
 common. Each cell names its ledger entry, and a large `unknown` count is shown
 because it means incompleteness rather than slowness.
+
+**Only a cell measured against the current reference carries numbers.** A figure
+taken at an older revision, or against a different baseline, is not converted
+into this form and left standing — it is cleared, and the row waits for its run.
+Two kinds of row are therefore empty even though something was once measured:
+branches whose tip has moved since, and the two options that are *in* the
+reference and so cannot be added to it. That is deliberate. A table where some
+cells are current and others are not is worse than a table with gaps, because
+nothing marks which is which.
 
 **One row per run, not per proposal.** A branch with several option strings
 worth trying owns several rows — `eagerInst3` has five — because each row is a
