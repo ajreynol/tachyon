@@ -63,136 +63,6 @@ necessary equality derivation is represented. **Dependency minimization** avoids
 justifying child rewrites irrelevant to the final result. A combined branch
 cannot tell us which mechanism matters.
 
-## Proposals
-
-**A proposal is a change to cvc5 that a person could carry upstream**, named
-precisely enough that they would not have to reconstruct it. Exactly two
-things qualify:
-
-1. **A default-option change** — a cvc5 option whose *default* this project
-   proposes to change. The option already exists; the proposal is the default.
-   Passing it on a command line is a configuration, not a proposal.
-2. **A development branch** — a branch of the fork proposed for merge into
-   cvc5 `main`, named by its tip and measured against its merge base.
-
-Nothing else is one. A probe, a counter, an instrument, an experimental patch
-written to answer a question: each can produce a proposal and none is a
-proposal. Neither is a branch that is merely interesting — the forty-nine
-branches the [survey](ledger/2026-09-18-branch-survey.md) characterizes are
-candidates in exactly that sense. And a change that buys its saving by
-weakening the proof requirement is not a proposal at all, for the reason the
-[charter](../README.md#the-charter) gives: an unchecked or incomplete proof is
-not a cheaper proof.
-
-**Each proposal has exactly one direction.** It appears in that direction's
-table and nowhere else in this document; the union of the tables is the whole
-register, and there is no global copy of it to fall out of date. A direction
-that shares the mechanism links to the owning row rather than repeating it. A
-branch that changes two mechanisms is either split into two branches, one per
-mechanism, or owned by the direction whose mechanism it principally changes —
-which is the same discipline the directions already ask for, that changes with
-distinct mechanisms be kept separate. The same row in two tables is a
-bookkeeping error.
-
-**A direction owns as many proposals as it has candidates.** One row per
-proposal, not one per direction: eager instantiation has three generations of
-branch behind it and they are not one idea, so each stands or falls on its own
-row. Competing designs for the same mechanism are the normal case, and the
-table is where they compete. What does *not* earn a row: an ancestor of a
-branch already listed, since the tip of a lineage stands for it; a branch whose
-option or mechanism has reached `main`, since there is nothing left to merge;
-and one this register records as broken, superseded, or a skeleton. A branch
-whose mechanism nobody has read stays in **Tried** — naming it here would
-assert a candidacy that has not been checked. Rows are ordered by distance from
-`master`, so the cheapest to make real is on top.
-
-**The columns.** **proposal** names the change: a branch, linked to its row in
-the shared [`active-dev-branches.md`](../../../docs/active-dev-branches.md),
-where its currency, size and build status live — none of that is repeated here.
-**run as** is the option string to add to the proof-producing
-configuration that goal 1 will fix; until it is fixed, these strings say what to
-pass, not what to compare against; a branch
-that changes behaviour directly needs no option and says so. **± solved on the corpus** waits on that
-corpus and stays empty until there is one.
-
-**One row per run, not per proposal.** A branch with several option strings
-worth trying owns several rows — `unrewrite2` has two — because each row is a
-run someone can launch. A proposal is still the branch or the default change;
-the rows are how it gets measured. The tables are, taken together, the queue of
-runs this project has argued for.
-
-
-
-**The third column has no corpus yet**, and so can hold nothing. When goal 1
-fixes one, its name replaces *the corpus* in every header here, as heuresis's
-headers name `quant-07-25`. Goal 1 also settles what these three columns are
-missing for a proof-production result: an overhead claim needs added seconds
-and the time ratio, and a proposal is not assessable without the proof size,
-the checker time and the validation outcome
-([what an overhead claim means](../README.md#what-an-overhead-claim-means)).
-Whether those become further columns or stay in the ledger entry each cell
-cites is a decision for the pass that fixes the corpus, not one to invent
-here.
-
-**No cell here names a moving reference.** `master` and `main` are different
-commits on different days, so a row that says *rebased to master* says nothing a
-week later, and two rows written a week apart would claim the same thing about
-different code. Every cell names a sha and that commit's date, exactly as
-[`progress.md`](progress.md) requires of a history row — *the exact cvc5 `main`
-revision, not "current main"*. Distances are given against a named pin for the
-same reason.
-
-**Every branch that carries a recent commit got there by a merge, not a
-rebase.** All eighteen of this project's are `Merge branch 'master' into …`
-tips, as are the fifty-two of heuresis's in the same three passes, each adding
-one commit to its branch. Nothing is wrong with that here: the branch contains
-current code, it builds against it, and the `± LOC` above is a three-dot diff
-against `master`, so it still reports only the branch's own changes. What a
-merge does not give is the linear patch series an upstream review expects, so
-a proposal that reaches a pull request will have to be linearised then. The
-column says which happened.
-
-**Every `± solved` cell is empty and will stay so until goal 1 fixes a corpus.** This register no
-longer carries how current a branch is, how large it is, or whether it
-compiles: all three moved to the shared
-[`active-dev-branches.md`](../../../docs/active-dev-branches.md), which each
-branch row links to, so there is one place to update when the fork moves and
-one place to read before launching anything. What stays here is the argument
-for the change and the number that came of it.
-
-**Read 2026-09-23, after a fourth update pass**, against cvc5
-[`1c0b2066`](https://github.com/cvc5/cvc5/commit/1c0b2066ce8d6c947f25212af74be705f1c0cbe5),
-which `ajreynol/cvc5` `master` pointed at: **nineteen of the twenty branches
-named here are within eleven commits of the pin** and carry a line count, with
-the build column being re-measured at these new tips. The twentieth,
-[`ajreynol:rareEncodeSubcall`][rareEncodeSubcall], has never been updated and is
-764 commits back. Four proposals are retired below, two of them because an
-update left the branch with no changes of its own. Being current is not a
-measurement: with no corpus, `± solved` stays empty regardless.
-
-**Four proposals retired**, most recently on 2026-09-23. A proposal
-leaves the register when its branch cannot be brought onto a current commit —
-and the reason is the finding, because it says what upstream did to the ground
-the branch stood on. 2 of them are a different failure: an update
-resolved in favour of upstream and left the branch with no changes of its own,
-so the row described nothing. The rows are gone from the direction tables above;
-the *questions* are not retired with them, and a fresh implementation of any of
-these mechanisms would be a new proposal. Where the lost work still exists, the
-commit that holds it is named.
-
-| branch | direction | verdict | why |
-| --- | --- | --- | --- |
-| [`ajreynol:pfrConvert`](https://github.com/ajreynol/cvc5/tree/pfrConvert) | E3 | **NEEDS REIMPLEMENTATION** | Adds a `CONVERT` rule with no upstream equivalent, but merging resurrects two directories master deleted in the ALF→Eunoia rename (`src/proof/alf/`, `proofs/alf/`) and duplicates the `BETA_REDUCE` enumerator. Its signature program is written in ALF/smt3; the upstream equivalent is Eunoia, a different language. Carrying it forward means rewriting the signature, relocating the printer change and re-adding the rule — a reimplementation. |
-| [`ajreynol:smtPpBasicRewriteOnly`](https://github.com/ajreynol/cvc5/tree/smtPpBasicRewriteOnly) | E7 | **NO CHANGES LEFT** | Emptied by a merge; 1 src file, +3/−12 still at `cfddc7a96c`. |
-| [`ajreynol:pfrDev`](https://github.com/ajreynol/cvc5/tree/pfrDev) | E8 | **SUPERSEDED** | Its mechanism is a `proofMacroRes` option plus a `MACRO_RESOLUTION` proof checker. Master has removed `ProofRule::MACRO_RESOLUTION` entirely and replaced it with `CHAIN_M_RESOLUTION` and its own `proofChainMRes` option — the route `cpcDevChainMRes` (E5) took — and rewrote the checker algorithm. There is nothing left to merge onto. |
-| [`ajreynol:stringsIpcAgg2`](https://github.com/ajreynol/cvc5/tree/stringsIpcAgg2) | E10 | **NO CHANGES LEFT** | Emptied by a merge; 1 src file, +17/−0 still at `892d178f2b`. |
-
-**Recording a proposal does not send it anywhere.** Publishing a finding,
-filing an issue and opening a pull request stay a person's act, carried
-through tachyon's reporting process; a proposal is this project saying what it
-would file, with the evidence attached. [`progress.md`](progress.md) records
-whether any proposal exists at all.
-
 ## E1 Unrewriting
 
 **Effort.** 🔴 High Risk / 🟢 High Gain — eliminating entire rewrite
@@ -909,6 +779,156 @@ attribution but do not produce equivalent validated outputs. They do not
 necessarily remove the production cost either: the SAT replacement happens
 after fetching the SAT proof. Record exactly which work is bypassed, rather
 than interpreting the switch name as a timer boundary.
+
+# Maintaining this page
+
+**Every research direction is written the same way**, and a new one is expected
+to follow it. The subsections appear in this order, each opening with its
+bolded label:
+
+| subsection | what belongs in it |
+| --- | --- |
+| **Effort.** | The two colour-coded axes, risk and gain, and the argument for them. A direction without one is refused by the report builder. |
+| **Question.** | What this direction asks about proof-production cost. |
+| **Code.** | The branches and the pinned-main source behind it, with what each actually changes. |
+| **Controls and next evidence.** | What exists on main to compare against, and the measurement that would settle the question. |
+| **Manage the risk.** | The bounded first step, and what would justify expanding it or dropping it. |
+| **Proposals.** | Last, always. The table of runs this direction argues for — see [Proposals](#proposals) below for the columns and the rules. |
+
+A direction may add a labelled paragraph of its own where the material needs it,
+but not in place of these.
+
+**Where the moving parts live.** Branch state — which commit each branch
+carries, how large it is, whether it compiles — is in the shared
+[`active-dev-branches.md`](../../../docs/active-dev-branches.md), not here, so
+that the fork moving does not require editing this file.
+
+## Proposals
+
+**A proposal is a change to cvc5 that a person could carry upstream**, named
+precisely enough that they would not have to reconstruct it. Exactly two
+things qualify:
+
+1. **A default-option change** — a cvc5 option whose *default* this project
+   proposes to change. The option already exists; the proposal is the default.
+   Passing it on a command line is a configuration, not a proposal.
+2. **A development branch** — a branch of the fork proposed for merge into
+   cvc5 `main`, named by its tip and measured against its merge base.
+
+Nothing else is one. A probe, a counter, an instrument, an experimental patch
+written to answer a question: each can produce a proposal and none is a
+proposal. Neither is a branch that is merely interesting — the forty-nine
+branches the [survey](ledger/2026-09-18-branch-survey.md) characterizes are
+candidates in exactly that sense. And a change that buys its saving by
+weakening the proof requirement is not a proposal at all, for the reason the
+[charter](../README.md#the-charter) gives: an unchecked or incomplete proof is
+not a cheaper proof.
+
+**Each proposal has exactly one direction.** It appears in that direction's
+table and nowhere else in this document; the union of the tables is the whole
+register, and there is no global copy of it to fall out of date. A direction
+that shares the mechanism links to the owning row rather than repeating it. A
+branch that changes two mechanisms is either split into two branches, one per
+mechanism, or owned by the direction whose mechanism it principally changes —
+which is the same discipline the directions already ask for, that changes with
+distinct mechanisms be kept separate. The same row in two tables is a
+bookkeeping error.
+
+**A direction owns as many proposals as it has candidates.** One row per
+proposal, not one per direction: eager instantiation has three generations of
+branch behind it and they are not one idea, so each stands or falls on its own
+row. Competing designs for the same mechanism are the normal case, and the
+table is where they compete. What does *not* earn a row: an ancestor of a
+branch already listed, since the tip of a lineage stands for it; a branch whose
+option or mechanism has reached `main`, since there is nothing left to merge;
+and one this register records as broken, superseded, or a skeleton. A branch
+whose mechanism nobody has read stays in **Tried** — naming it here would
+assert a candidacy that has not been checked. Rows are ordered by distance from
+`master`, so the cheapest to make real is on top.
+
+**The columns.** **proposal** names the change: a branch, linked to its row in
+the shared [`active-dev-branches.md`](../../../docs/active-dev-branches.md),
+where its currency, size and build status live — none of that is repeated here.
+**run as** is the option string to add to the proof-producing
+configuration that goal 1 will fix; until it is fixed, these strings say what to
+pass, not what to compare against; a branch
+that changes behaviour directly needs no option and says so. **± solved on the corpus** waits on that
+corpus and stays empty until there is one.
+
+**One row per run, not per proposal.** A branch with several option strings
+worth trying owns several rows — `unrewrite2` has two — because each row is a
+run someone can launch. A proposal is still the branch or the default change;
+the rows are how it gets measured. The tables are, taken together, the queue of
+runs this project has argued for.
+
+
+
+**The third column has no corpus yet**, and so can hold nothing. When goal 1
+fixes one, its name replaces *the corpus* in every header here, as heuresis's
+headers name `quant-07-25`. Goal 1 also settles what these three columns are
+missing for a proof-production result: an overhead claim needs added seconds
+and the time ratio, and a proposal is not assessable without the proof size,
+the checker time and the validation outcome
+([what an overhead claim means](../README.md#what-an-overhead-claim-means)).
+Whether those become further columns or stay in the ledger entry each cell
+cites is a decision for the pass that fixes the corpus, not one to invent
+here.
+
+**No cell here names a moving reference.** `master` and `main` are different
+commits on different days, so a cell that said *at master* would say nothing a
+week later, and two rows written a week apart would claim the same thing about
+different code. An option row names the sha whose defaults were read; the
+[shared list](../../../docs/active-dev-branches.md) names the sha each branch
+carries. This is the rule heuresis's progress record already applies to a history row — *the exact cvc5 `main` revision, not "current main"*.
+
+**Every branch here reached the pin by a merge, not a rebase.** Each current tip
+is a `Merge branch 'master' into …` commit, which is enough to build and
+measure but is not the linear series an upstream review will ask for;
+linearising is deferred, not avoided. Five branches across the two projects came out of such a merge
+with no changes of their own left and are retired below, which is why the
+[shared list](../../../docs/active-dev-branches.md) records a source diff per
+branch and why the update procedure checks it.
+
+**Every `± solved` cell is empty and will stay so until goal 1 fixes a corpus.** This register no
+longer carries how current a branch is, how large it is, or whether it
+compiles: all three moved to the shared
+[`active-dev-branches.md`](../../../docs/active-dev-branches.md), which each
+branch row links to, so there is one place to update when the fork moves and
+one place to read before launching anything. What stays here is the argument
+for the change and the number that came of it.
+
+**Read 2026-09-23, after a fourth update pass**, against cvc5
+[`1c0b2066`](https://github.com/cvc5/cvc5/commit/1c0b2066ce8d6c947f25212af74be705f1c0cbe5),
+which `ajreynol/cvc5` `master` pointed at: **nineteen of the twenty branches
+named here are within eleven commits of the pin** and carry a line count, with
+the build column being re-measured at these new tips. The twentieth,
+[`ajreynol:rareEncodeSubcall`][rareEncodeSubcall], has never been updated and is
+764 commits back. Four proposals are retired below, two of them because an
+update left the branch with no changes of its own. Being current is not a
+measurement: with no corpus, `± solved` stays empty regardless.
+
+**Four proposals retired**, most recently on 2026-09-23. A proposal
+leaves the register when its branch cannot be brought onto a current commit —
+and the reason is the finding, because it says what upstream did to the ground
+the branch stood on. 2 of them are a different failure: an update
+resolved in favour of upstream and left the branch with no changes of its own,
+so the row described nothing. The rows are gone from the direction tables above;
+the *questions* are not retired with them, and a fresh implementation of any of
+these mechanisms would be a new proposal. Where the lost work still exists, the
+commit that holds it is named.
+
+| branch | direction | verdict | why |
+| --- | --- | --- | --- |
+| [`ajreynol:pfrConvert`](https://github.com/ajreynol/cvc5/tree/pfrConvert) | E3 | **NEEDS REIMPLEMENTATION** | Adds a `CONVERT` rule with no upstream equivalent, but merging resurrects two directories master deleted in the ALF→Eunoia rename (`src/proof/alf/`, `proofs/alf/`) and duplicates the `BETA_REDUCE` enumerator. Its signature program is written in ALF/smt3; the upstream equivalent is Eunoia, a different language. Carrying it forward means rewriting the signature, relocating the printer change and re-adding the rule — a reimplementation. |
+| [`ajreynol:smtPpBasicRewriteOnly`](https://github.com/ajreynol/cvc5/tree/smtPpBasicRewriteOnly) | E7 | **NO CHANGES LEFT** | Emptied by a merge; 1 src file, +3/−12 still at `cfddc7a96c`. |
+| [`ajreynol:pfrDev`](https://github.com/ajreynol/cvc5/tree/pfrDev) | E8 | **SUPERSEDED** | Its mechanism is a `proofMacroRes` option plus a `MACRO_RESOLUTION` proof checker. Master has removed `ProofRule::MACRO_RESOLUTION` entirely and replaced it with `CHAIN_M_RESOLUTION` and its own `proofChainMRes` option — the route `cpcDevChainMRes` (E5) took — and rewrote the checker algorithm. There is nothing left to merge onto. |
+| [`ajreynol:stringsIpcAgg2`](https://github.com/ajreynol/cvc5/tree/stringsIpcAgg2) | E10 | **NO CHANGES LEFT** | Emptied by a merge; 1 src file, +17/−0 still at `892d178f2b`. |
+
+**Recording a proposal does not send it anywhere.** Publishing a finding,
+filing an issue and opening a pull request stay a person's act, carried
+through tachyon's reporting process; a proposal is this project saying what it
+would file, with the evidence attached. [`progress.md`](progress.md) records
+whether any proposal exists at all.
 
 ## Reading that frames the questions
 
