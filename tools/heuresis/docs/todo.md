@@ -18,11 +18,34 @@ A human may independently pursue it at their discretion. Continue discovery
 without waiting for that decision; implementation suggestions serve as possible
 experiments or starting points for later work.
 
-**Proposals are not ranked here.** When a goal produces a named change to cvc5
-— a default to change, or a branch to merge — it is recorded as a
-[proposal](../README.md#proposals) in its research direction's table, once,
-and the rows below link to it rather than restate it. This queue ranks
-directions and short-term goals; the register holds the proposals.
+**Work at the level of a proposal row.** The register's tables are no longer a
+list of candidates: each row is **a run someone can launch** — a branch or an
+option-default change, the exact option string to add to the
+reference stated at the top of [`directions.md`](directions.md), and the
+`± solved` it produced. That
+is the level of detail to strive for here too. A queue item should name the
+rows that would answer it, and a step that cannot be expressed as one or more
+runs should say what it is instead: a counter to add, a branch to read, a
+source question. "Investigate R*n*" is no longer a step.
+
+**What that changes.** This queue still ranks *directions*, because the ranking
+is a judgement about where the gap is and rows cannot carry that. What it stops
+doing is restating experiments the register already specifies: where a row
+exists, the queue points at it and the register owns the wording. Seventy-nine
+proposals across twenty-seven directions currently sit there, ninety-five rows
+in all once the option strings are counted separately.
+
+## Runs in flight
+
+One row per wave of the option-and-branch sweep the register specifies. A wave
+is finished when its `± solved` cells are filled and a ledger entry carries the
+numbers.
+
+| wave | what it measures | state |
+| --- | --- | --- |
+| **0** | the reference itself, on current `main` [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **done** — 5550 of 6124 solved, PAR2 41055.9, ratio 1.75, gap 1064 ([ledger](ledger/2026-09-23-reference-at-current-main.md)); now the last row of [`progress.md`](progress.md) |
+| **1** | the 20 option rows, each the reference plus one change, same binary | **running** — fills every option row and replaces the seven figures taken against `d7d03b082c`, which the reference invariant makes wrong rather than old |
+| **2** | the 70 branch runs | **blocked** — `submit` refuses each branch as BEHIND, one or eleven commits short of the fork's `master`; an update pass onto the reference commit clears it, and nothing else stands in the way |
 
 ## Short-term goals
 
@@ -80,18 +103,18 @@ of a measured mechanism rather than a recalled one, which also converges with
 the maintainer's ranking; that convergence is evidence-driven and not
 deference. This remains the AI agent's independent ordering.
 
-| rank | research direction | effort | next possible step |
-| ---: | --- | --- | --- |
-| 1 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🔴 High Risk / 🟢 High Gain | S1 measured the drowning directly: 13.7% less time on solved, 109 more timeouts, 19 more unknowns. Add persistent-clause and conflict-use counters (S5), then design deletion. |
-| 2 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🔴 High Risk / 🟢 High Gain | Still the largest measured signal: central mode cuts current-main PAR2 10.3%. Count skipped shared-equality propagations and callback time (S4); [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) itself is neutral. |
-| 3 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | Not a default: −19.46% PAR2 at branch budgets, −10.88% with `--eager-inst-rlv`. But 29 gap cases are reachable only this way. Take the module's counters (S2), then ask what separates the rescues from the slowdowns (S6). |
-| 4 | [R28 — Eager conflict-based instantiation](directions.md#r28--eager-conflict-based-instantiation-find-a-useful-instance-before-full-effort) | 🔴 High Risk / 🟢 High Gain | The bounded matcher exists and is measured; the untested half is acceptance. Add conflict/unit acceptance so an eager instance is kept only when it conflicts or propagates, which is the obvious answer to a 19% unpaced loss. |
-| 5 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🔴 High Risk / 🟢 High Gain | E-matching is 27.8% of gap-set time. `d_statRematch` answers this inside the eager module (S2); `qdebugStats` has the mainline count as a `Trace`, needing the port in S3. |
-| 6 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟢 Low Risk / 🟡 Medium Gain | Add evaluator pushes, early-rejection, time, and memory counters before designing a narrower replacement; [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) is neutral and evaluator-off remains better. |
-| 7 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | Produce the first normalized per-benchmark attribution table for the current gap; the eager run showed how little a bare PAR2 total says without one. |
-| 8 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟡 Medium Risk / 🟢 High Gain | Classify the disjoint wins and losses from the two negative global controls before building or rebasing `ai-instDefer`. |
-| 9 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | Isolate the roughly one-quarter of the old gap with DIO or branch-and-bound activity, intersect it with the new gap, then test a policy change. |
-| 10 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | Add eligible-versus-suppressed split counters before pursuing relevance gating; global binary splitting worsened PAR2 1.15%. |
+| rank | research direction | effort | its rows in the register | next possible step |
+| ---: | --- | --- | --- | --- |
+| 1 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🔴 High Risk / 🟢 High Gain | 3 branch runs + `--inst-local` | S1 measured the drowning directly: 13.7% less time on solved, 109 more timeouts, 19 more unknowns. Add persistent-clause and conflict-use counters (S5), then design deletion. |
+| 2 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🔴 High Risk / 🟢 High Gain | 3 branch runs + `--ee-mode=central` | Still the largest measured signal: central mode cuts current-main PAR2 10.3%. Count skipped shared-equality propagations and callback time (S4); [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) itself is neutral. |
+| 3 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🔴 High Risk / 🟢 High Gain | **13 branch runs** + `--inst-when=full` | Not a default: −19.46% PAR2 at branch budgets, −10.88% with `--eager-inst-rlv`. But 29 gap cases are reachable only this way. Take the module's counters (S2), then ask what separates the rescues from the slowdowns (S6). |
+| 4 | [R28 — Eager conflict-based instantiation](directions.md#r28--eager-conflict-based-instantiation-find-a-useful-instance-before-full-effort) | 🔴 High Risk / 🟢 High Gain | 5 branch runs (`eagerCbqi` modes) | The bounded matcher exists and is measured; the untested half is acceptance. Add conflict/unit acceptance so an eager instance is kept only when it conflicts or propagates, which is the obvious answer to a 19% unpaced loss. |
+| 5 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🔴 High Risk / 🟢 High Gain | 6 branch runs, no option | E-matching is 27.8% of gap-set time. `d_statRematch` answers this inside the eager module (S2); `qdebugStats` has the mainline count as a `Trace`, needing the port in S3. |
+| 6 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟢 Low Risk / 🟡 Medium Gain | 3 branch runs + `--ieval=off`, `--no-inst-no-entail` | Add evaluator pushes, early-rejection, time, and memory counters before designing a narrower replacement; [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) is neutral and evaluator-off remains better. |
+| 7 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟢 Low Risk / 🟢 High Gain | 3 runs, all *n/a* — counters, not speed | Produce the first normalized per-benchmark attribution table for the current gap; the eager run showed how little a bare PAR2 total says without one. |
+| 8 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟡 Medium Risk / 🟢 High Gain | 4 branch runs, no option | Classify the disjoint wins and losses from the two negative global controls before building or rebasing `ai-instDefer`. |
+| 9 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🔴 High Risk / 🟡 Medium Gain | 3 branch runs, no option | Isolate the roughly one-quarter of the old gap with DIO or branch-and-bound activity, intersect it with the new gap, then test a policy change. |
+| 10 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟡 Medium Risk / 🟡 Medium Gain | 4 branch runs + `--dt-binary-split` | Add eligible-versus-suppressed split counters before pursuing relevance gating; global binary splitting worsened PAR2 1.15%. |
 
 ## Human-maintainer priorities
 
@@ -120,39 +143,13 @@ maintainer supplies it.
 
 ## Branch maintenance
 
-**Closed 2026-09-22.** The request was to push the updated
-[`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats),
-whose public ref had sat at `9f3e4ae6a1` since the previous audit. It is now
-published at `ea71e3e7`, carrying `main@c2cc3caf` with 31 commits of its own,
-so it is visible to the execution host and S3 is unblocked.
-The previous request is closed: the rebased
-[`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
-tip was pushed, and it has since built and passed `make regress`. The fork's
-`master` already matches upstream, so no base fast-forward is needed.
+**Moved, and mostly gone.** The table that used to sit here was a hand-kept copy
+of branch state audited on 2026-09-16; it went stale within a day of every
+update pass. Every active branch is now within eleven commits of the pin and
+compiles, so there is no maintenance backlog left to rank.
 
-This is the AI agent's rebase assessment, not part of the human priority
-ranking. It is intentionally evidence-sensitive: a stale experimental branch
-does not need maintenance until its cheaper prerequisite experiment points to
-it. Every row below was live-audited 2026-09-16 against
-[`cvc5:main@95050cf815`](https://github.com/cvc5/cvc5/commit/95050cf8155d),
-which advanced one commit from the `d7d03b082c` of the preceding audit.
-Behind / ahead is `git rev-list --left-right --count main...branch`, the
-symmetric difference that `submit`'s BEHIND check tests; where that disagrees
-with a figure carried in an earlier row, the row says so rather than
-overwriting it silently.
-“Clean trial” means a disposable local rebase, never a mutation of the fork.
-
-| recommendation | branch | directions | behind / ahead | reason or trigger |
-| --- | --- | --- | ---: | --- |
-| ✅ No base action | [`ajreynol:master`](https://github.com/ajreynol/cvc5/tree/master) | all | 0 / 0 | The fork base already equals current upstream main, and tracked it across the one commit main advanced. |
-| 🟡 Keep; do not upstream as a default | [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst) | R1, R28 | 0 / 6 | **Tested 2026-09-16.** Built, regression-clean at `995b23bcfa`, and with the module off it is main to within 2 solves and 0 benchmarks ≥2× either way — an unusually clean control. `--eager-inst` costs 19.46% PAR2, so no default follows; but it rescues 29 otherwise-unsolved gap cases, so keep the branch as the substrate for S2, S6, S7 and the R28 acceptance layer. |
-| ✅ Pushed 2026-09-22 | [`ajreynol:qdebugStats`](https://github.com/ajreynol/cvc5/tree/qdebugStats) | R26, R2 | 31 own commits on `c2cc3caf` | Published at `ea71e3e7`, so S3 is unblocked. Port only the missing counters — in particular the `#inst unique/total` figure, which was a `Trace("ajr-temp-stats")` line and not a registered statistic. |
-| 🟡 Instrument before upstreaming | [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) | R15 | 1 / 2 | Behind only because main advanced; the 2026-09-16 result stands. Regression-clean; the effective one-file patch adds two net solves and changes PAR2 −0.20%, within observed noise. Count skipped propagation work first (S4). |
-| ⚪ Do not upstream from this result | [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) | R7 | 1 / 3 | Behind only because main advanced; the result stands — one net solve and 0.09% PAR2 worse than evaluator-on, 3.91% worse than evaluator-off. Any retry should be a focused port with counters. *(The preceding audit recorded “0 / 320 history commits” for this branch; today's symmetric difference is 3 ahead, 2 of them non-merge. The discrepancy is in the counting, not in the branch, and is left visible.)* |
-| 🟠 Mine; do not rebase wholesale | [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi) | R28 | 1267 / 204 | Its first replayed commit conflicts in equality and quantifier-engine files; retain its conflict/unit modes as design evidence for the acceptance layer now going on top of `claude-eagerInst`. |
-| 🟡 Do not rebase yet | [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | R6 | 219 / 4 | Clean trial, but current QCF emits only 54 conflict lemmas after 272,280 rounds and costs 0.24% directly; this branch optimizes the wrong first target for this corpus. |
-| 🟡 Instrument first | [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | R16 | 139 / 2 | Clean trial, but global binary splitting was negative; count eligible and suppressed relevance-gated splits before maintaining the branch. |
-| 🟠 Port selectively; do not rebase wholesale | [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3) | R15 | 179 / 31 | Its first replayed commit conflicts in `inference_manager.cpp`; start with the clean one-commit equality branch instead. |
-| 🟡 Defer despite clean trial rebase | [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) | R9, R10 | 131 / 2 | Both mainline global ordering controls regressed; classify their helped subsets first. |
-| ⚪ Wait for parser timing | [`ajreynol:ai-parserOpt`](https://github.com/ajreynol/cvc5/tree/ai-parserOpt) | R27 | 317 / 2 | Rebase only if `--parse-only` shows a material front-end share. |
-| ⚪ Wait for slice analysis | [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) | R17 | 130 / 3 | Intersect DIO and branch-and-bound activity with the current 796-case gap before maintaining the branch. |
+| what | where it lives now |
+| --- | --- |
+| which commit a branch carries, its distance from the pin, its size, whether it compiles | the shared [`active-dev-branches.md`](../../../docs/active-dev-branches.md), regenerated from the fork rather than maintained by hand |
+| why a branch could not be carried forward | beside the fork, in the maintainer's abandoned list; the register retires the row and keeps the question |
+| whether to spend an update pass now | this queue — it is what Wave 2 above is waiting on |

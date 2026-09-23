@@ -296,3 +296,39 @@ solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-091726-u-ssc-best-140 
 solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-u-ssc-baseline -q --no-cbqi --user-pat=strict --sat-solver=cadical
 # built from master@1c0b2066ce
 
+# 2026-09-23 11:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-decision-internal.conf)
+# queued 1/3 in window quant-092326-w1-decision-internal
+# heuresis R11 wave 1: reference + --decision=internal
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-decision-internal -q --no-cbqi --user-pat=strict --sat-solver=cadical --decision=internal
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 11:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-decision-stoponly.conf)
+# queued 2/3 in window quant-092326-w1-decision-internal
+# heuresis R11 wave 1: reference + --decision=stoponly
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-decision-stoponly -q --no-cbqi --user-pat=strict --sat-solver=cadical --decision=stoponly
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 11:39 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-deep-restart-all.conf)
+# queued 3/3 in window quant-092326-w1-decision-internal
+# heuresis R29 wave 1: reference + --deep-restart=all
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-deep-restart-all -q --no-cbqi --user-pat=strict --sat-solver=cadical --deep-restart=all
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 13:44 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-deep-restart-input-deep-restart-factor-15.conf)
+# queued 1/3 in window quant-092326-w1-deep-restart-input-deep-restart-factor-15
+# heuresis R29 wave 1: reference + --deep-restart=input --deep-restart-factor=1.5
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-deep-restart-input-deep-restart-factor-15 -q --no-cbqi --user-pat=strict --sat-solver=cadical --deep-restart=input --deep-restart-factor=1.5
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 13:44 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-deep-restart-input.conf)
+# queued 2/3 in window quant-092326-w1-deep-restart-input-deep-restart-factor-15
+# heuresis R29 wave 1: reference + --deep-restart=input
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-deep-restart-input -q --no-cbqi --user-pat=strict --sat-solver=cadical --deep-restart=input
+# ajr-cvc5: git d7d5b948c1 on branch master
+
+# 2026-09-23 13:44 [dev1:~/benchmarks/quant-07-25] (quant-cvc5-w1-dt-binary-split.conf)
+# queued 3/3 in window quant-092326-w1-deep-restart-input-deep-restart-factor-15
+# heuresis R16 wave 1: reference + --dt-binary-split
+solve_dir_rec_par_cvc5 -t 30 ajr-cvc5 cvc5_solve.sh quant-092326-w1-dt-binary-split -q --no-cbqi --user-pat=strict --sat-solver=cadical --dt-binary-split
+# ajr-cvc5: git d7d5b948c1 on branch master
+

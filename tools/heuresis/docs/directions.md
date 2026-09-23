@@ -12,26 +12,38 @@ and inform future work.
 
 > ## The reference
 >
-> Every `± solved` number in this document is measured against **one
-> configuration**, and every `run as` cell says what to add to it:
+> Every `± solved` number in this document is a difference against **one
+> configuration**, run on the fixed set
+> [`quant-07-25`](../README.md#the-set) — 6124 benchmarks, **30 s** timeout,
+> one job at a time on an idle host:
 >
 > ```
-> cvc5 -q --no-cbqi --user-pat=strict
+> cvc5 -q --no-cbqi --user-pat=strict --sat-solver=cadical
 > ```
 >
-> on the fixed set [`quant-07-25`](../README.md#the-set), 6124 benchmarks, at a
-> **30 s** timeout, one job at a time on an idle host. `--sat-solver=cadical` is
-> not passed because CaDiCaL is now cvc5's default; the configs that predate
-> that change spell it out, and the two are the same solver.
+> `--sat-solver=cadical` is redundant on current cvc5 — CaDiCaL has been the
+> default since 2026-08 — and is carried only so these rows stay comparable with
+> the earlier history, every row of which spells it out.
+>
+> **These options are a fixed prefix on every arm, branch arms included.** A
+> branch is never run bare: it runs as the reference plus whatever its `run as`
+> cell names, and a branch whose cell says *none* still carries the whole
+> prefix. That is what makes a `± solved` cell attributable to one change — the
+> arm and the reference differ in that change and nothing else. An arm that
+> drops or alters the prefix measures something this register cannot interpret.
+>
+> **The arm must also use the same binary** the reference row was measured on.
+> A different build of the same revision is fine; a different revision is not,
+> which is why the launcher configs name `$REPO_BINARY`.
 >
 > **A ± number is meaningless without the revision it was measured at**, so
-> every cell names the cvc5 commit through the ledger entry it cites. A run of
-> the reference at a given commit is what the arms of that batch are subtracted
-> from — not a reference from an earlier day.
+> every cell names the cvc5 commit through the ledger entry it cites. The arms
+> of a batch are subtracted from a reference run at *that* commit, not from an
+> earlier day's.
 >
 > **The reference is the last row of [`progress.md`](progress.md)**, and that is
-> an invariant, not a coincidence: the run that anchors this document is the
-> newest measurement of cvc5 `main` the project has. Today that row is
+> an invariant, not a coincidence: the run anchoring this document is the newest
+> measurement of cvc5 `main` the project has. Today that row is
 >
 > | date | cvc5 `main` | config | solved | PAR2 | ledger |
 > | --- | --- | --- | ---: | ---: | --- |
@@ -1878,6 +1890,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--miniscope-quant`, `conj-and-fv` → `off` | `--miniscope-quant=off` | — |
+| `--macros-quant`, `false` → `true`, mode `all` | `--macros-quant --macros-quant-mode=all` | — |
 | [`ajreynol:quantRew-1006`](../../../docs/active-dev-branches.md#quantRew-1006) | *(none — the branch changes behaviour directly)* | — |
 
 ## R22 — Preregistration: which literals the theories are told about
