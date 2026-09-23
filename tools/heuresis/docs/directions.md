@@ -10,11 +10,11 @@ independently at their discretion; discovery continues without waiting for
 that follow-up. The possible implementations below help investigate candidates
 and inform future work.
 
-**Twenty-seven directions, R1–R23 and R25–R28, each with an argued risk/gain
+**Twenty-eight directions, R1–R23 and R25–R29, each with an argued risk/gain
 estimate, the same four inventories — the cvc5 flags that test it today,
 what has been tried, what z3 and others do, and the papers — and, last, the
-table of [proposals](#proposals) that direction owns — eighty-three in all
-across twenty-six of the twenty-seven directions: eighteen option-default
+table of [proposals](#proposals) that direction owns — eighty-seven in all
+across twenty-seven of the twenty-eight directions: twenty-two option-default
 changes, seven of them measured, and sixty-five branches, of which fifty-two are
 within six commits of
 [`10bd5cb3`](https://github.com/cvc5/cvc5/commit/10bd5cb3bb9ad9cb10277e0ae54e352e6d2ac345)
@@ -90,7 +90,7 @@ These are priors, not measured claims; attribution should change them.
 | group | directions | what they have in common |
 | --- | --- | --- |
 | A — when and how much to instantiate | R1–R8, R28 | the instantiation policy: z3 instantiates *during* search and cheaply; cvc5 instantiates at full effort and completely |
-| B — what happens to lemmas afterwards | R9–R13 | the lemma lifecycle and the SAT search around it: deletion, ordering, relevance, the SAT core |
+| B — what happens to lemmas afterwards | R9–R13, R29 | the lemma lifecycle and the SAT search around it: deletion, ordering, relevance, the SAT core, and restarting out of it |
 | C — the ground engine | R14–R19 | theory combination, congruence closure, datatypes, arithmetic, bit-vectors |
 | D — before the search | R20–R23 | preprocessing and what the search is made to look at |
 | E — cross-cutting | R25–R27 | low-level engineering, instrumentation, and input parsing |
@@ -138,7 +138,7 @@ things qualify:
 1. **A default-option change** — a cvc5 option whose *default* this project
    proposes to change. The option already exists; the proposal is the default.
    Passing it on a command line is a configuration, and
-   [`progress.md`](progress.md) tracks those. **Eighteen of these are listed**,
+   [`progress.md`](progress.md) tracks those. **Twenty-two of these are listed**,
    one row per single-option change, and they are the cheapest proposals in the
    register: no branch to rebase, nothing to build, and seven already carry a
    measured number. Each names the default as read at the pin, because a
@@ -146,7 +146,11 @@ things qualify:
    `set_defaults.cpp` chooses `justification` for quantified logics, which is
    what this set actually runs, and `--theoryof-mode` is chosen by logic in the
    same way. The **from** side of each row is the effective default here, not
-   the declared one.
+   the declared one, and **overriding a choice `set_defaults` makes is a
+   default change like any other**: `--decision=internal` and
+   `--theoryof-mode=type` propose that cvc5 stop making those substitutions for
+   this class of problem, which is as much a change to what a user gets out of
+   the box as flipping a declared default is.
 2. **A development branch** — a branch of the fork proposed for merge into
    cvc5 `main`, named by its tip and measured against its merge base.
 
@@ -227,9 +231,9 @@ these tables.
 **Read 2026-09-22, after three update passes**, against the pin the newest pass
 targeted, cvc5
 [`10bd5cb3`](https://github.com/cvc5/cvc5/commit/10bd5cb3bb9ad9cb10277e0ae54e352e6d2ac345),
-which `ajreynol/cvc5` `master` matched exactly: of the **eighty-three proposals** named across
-twenty-six directions — sixty-five branches and eighteen single-option default
-changes — **fifty-two are within six commits of it**
+which `ajreynol/cvc5` `master` matched exactly: of the **eighty-seven proposals** named across
+twenty-seven directions — sixty-five branches and twenty-two single-option
+default changes — **fifty-two are within six commits of it**
 and carry a line count and a build result: **all fifty-two compile** against the
 pin, checked branch by branch rather than assumed. The other thirteen carry
 commits 522 to 9377 behind, the oldest from 2016, and are not built. Seven more
@@ -774,6 +778,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | :-: | ---: | ---: |
 | `--cbqi`, `true` → `false` | defaults at `10bd5cb` | — | — | **+83** vs `default`, 5497 of 6124 ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
+| `--sub-cbqi`, `false` → `true` | defaults at `10bd5cb` | — | — | — |
 | [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) | **`47f43bd`** (2026-09-22), merged in | **✅** | +136/−87, 1 src files | — |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
@@ -1346,6 +1351,73 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
 | --- | --- | :-: | ---: | ---: |
 | [`ajreynol:cadicalPortfolio`](https://github.com/ajreynol/cvc5/tree/cadicalPortfolio) | **`47f43bd`** (2026-09-22), merged in | **✅** | +50/−0, 1 src files | — |
+
+## R29 — Deep restarts: throw the search away, keep what it proved
+
+**Effort.** 🟢 Low Risk / 🟡 Medium Gain — the mechanism is already built and off
+by default, so testing it costs a run rather than a patch; the gain is unknown
+here, and turning it on changes every solve, not just the pathological ones.
+
+*Coupled to R9 (what the solver forgets), R12 (inprocessing), R13 (the SAT
+backend's own restarts). Distinct from all three: this one discards the SAT
+solver's state wholesale and re-solves from what was proven at level zero.*
+
+**The hypothesis.** R9's evidence says this workload drowns in instantiation
+lemmas: `--inst-local` spends 13.7% less time on what it solves and pays for it
+with 109 more timeouts, which is what forgetting without remembering looks
+like. A deep restart is the other shape of the same idea — keep nothing of the
+search except the literals proven at level zero, then start again with them as
+input. If the gap is dominated by clause-database growth rather than by any
+single instantiation decision, the mechanism that already exists may buy more
+than the deletion machinery R9 would have to build.
+
+**In cvc5 today `(code)`.**
+- `--deep-restart` [`none`]: modes `none`, `input` (learn literals appearing in
+  the input), `input-and-solvable`, `input-and-prop`, `all` (learn every
+  literal).
+- `--deep-restart-factor` [`3.0`]: the threshold on average assertions per
+  literal that triggers one.
+- `src/smt/smt_driver_deep_restarts.cpp`, 116 lines: it asks the prop engine
+  for `getLearnedZeroLevelLiteralsForRestart()`, and restarts only when that
+  set is non-empty, re-asserting those literals into the fresh solve.
+- `src/prop/zero_level_learner.{cpp,h}` decides which literals qualify;
+  `src/prop/theory_proxy.cpp` feeds it.
+- `set_defaults.cpp` touches the mode at five points and forces it back to
+  `none` for unsat cores; **it does not support proof production** either,
+  which bounds where a default change could ever go.
+
+**Tried.** No branch on the fork implements or tunes this; the only adjacent
+one is [`ajreynol:noSimpleLearnedLitPp`](https://github.com/ajreynol/cvc5/tree/noSimpleLearnedLitPp)
+(R20), which concerns what preprocessing does with learned literals rather than
+restarting on them. The mechanism is mainline work, not fork work.
+
+**Elsewhere.** z3 restarts inside its SAT core, under `smt.restart_strategy`
+and `smt.restart_factor`, which is the R13 comparison rather than this one.
+**Whether z3 has an SMT-level equivalent that re-solves from distilled literals
+was not checked here** — the parameter file this project read in September has
+moved, and nothing else was consulted, so this row is an open question rather
+than a claim about z3.
+
+**Papers.** None identified here. The mechanism is documented in the option's
+own help text and in the two source files above; if it has a write-up, this
+register has not found it.
+
+**Evidence and next step.** Two runs on the set at the fixed timeout,
+`--deep-restart=input` and `--deep-restart=all` against the reference, are the
+cheapest unexplored option experiment in the register. Record restarts
+performed, literals carried across each one, and — because the cost falls
+where R9 says the problem is — the clause count and the timeout split. If it
+helps at all, the interesting comparison is against `--inst-local`, which is
+the other way of forgetting and is measured as a net loss.
+
+**Proposals.** This direction's own; a proposal is listed here and in no
+other direction. Columns and rules: [Proposals](#proposals).
+
+| proposal | rebased to | builds | ± LOC | ± solved on `quant-07-25` |
+| --- | --- | :-: | ---: | ---: |
+| `--deep-restart`, `none` → `input` | defaults at `10bd5cb` | — | — | — |
+| `--deep-restart`, `none` → `all` | defaults at `10bd5cb` | — | — | — |
+| `--deep-restart-factor`, `3.0` → a tuned threshold | defaults at `10bd5cb` | — | — | — |
 
 ---
 

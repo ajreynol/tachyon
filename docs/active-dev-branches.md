@@ -17,7 +17,7 @@ add a branch: a branch earns a row here by first earning a proposal row there.
 | elaphros | [`directions.md`](../tools/elaphros/docs/directions.md#proposals) | 23 | proof-production branches |
 
 **Branches only.** A proposal can also be a change to the default of an option
-that already exists on `main`; heuresis records 18 of those. They have no
+that already exists on `main`; heuresis records 22 of those. They have no
 branch to update and nothing to build, so they live in their register and not
 here.
 
