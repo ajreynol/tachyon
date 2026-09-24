@@ -88,6 +88,11 @@ the history below are all against **23413.7**.
 
 One row per cvc5 `main` revision, per configuration. Newest last.
 
+◊ the same revision as the row above, built in a different directory: it solves
+26 benchmarks the other build does not and loses none, at identical declared
+CMake settings. Which build a measurement used therefore matters as much as
+which revision, and a cell that does not name both cannot be interpreted.
+
 **The last row is the reference** that every `± solved` cell in
 [`directions.md`](directions.md) is measured against — an invariant the two
 documents hold together. Adding a row for a new revision of the reference
@@ -109,6 +114,7 @@ they cannot quietly keep numbers taken against the row above.
 | 2026-09-17 | `a07d513075` ‡ | verus | 5545 | 574 | 41191.8 | 1.76 | 1079 | +0.12% | [1.4.0](ledger/2026-09-17-cvc5-1-4-0-release.md) |
 | 2026-09-17 | `a07d513075` ‡ | **best** | 5624 | 473 | **35580.3** | **1.52** | 786 | +0.13% | [1.4.0](ledger/2026-09-17-cvc5-1-4-0-release.md) |
 | 2026-09-23 | `d7d5b948c1` | **reference** | 5550 | 569 | 41055.9 | 1.75 | 1064 | −0.33% | [reference](ledger/2026-09-23-reference-at-current-main.md) |
+| 2026-09-24 | `d7d5b948c1` ◊ | **reference** | 5576 | 543 | 39304.4 | 1.68 | — | −4.26% | [build-difference](ledger/2026-09-24-build-directory-difference.md) |
 
 † measured on `claude-eagerInst@995b23bcfa` with its module off, which is 0
 behind `95050cf8155d`. Compared against the `best` row at `d7d03b082c` it

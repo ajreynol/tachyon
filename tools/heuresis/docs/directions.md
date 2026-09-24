@@ -43,14 +43,22 @@ and inform future work.
 >
 > **The reference is the last row of [`progress.md`](progress.md)**, and that is
 > an invariant, not a coincidence: the run anchoring this document is the newest
-> measurement of cvc5 `main` the project has. Today that row is
+> measurement of cvc5 `main` the project has. **There are currently two**, the
+> same revision built in two directories, because they do not measure the same
+> solver:
 >
-> | date | cvc5 `main` | config | solved | PAR2 | ledger |
-> | --- | --- | --- | ---: | ---: | --- |
-> | 2026-09-23 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | reference | **5550** of 6124 | 41055.9 | [entry](ledger/2026-09-23-reference-at-current-main.md) |
+> | date | cvc5 `main` | build | solved | PAR2 | anchors | ledger |
+> | --- | --- | --- | ---: | ---: | --- | --- |
+> | 2026-09-23 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | the launcher's | **5550** | 41055.9 | the option rows | [entry](ledger/2026-09-23-reference-at-current-main.md) |
+> | 2026-09-24 | the same revision | a separate one, used for branch arms | **5576** | 39304.4 | the branch rows | [entry](ledger/2026-09-24-build-directory-difference.md) |
 >
-> If the two ever disagree, this document is stale and its numbers are being
-> read against a solver that no longer exists.
+> The newer build solves 26 benchmarks the older does not and loses none, at
+> identical declared CMake settings — a difference larger than every measured
+> option effect except `--ee-mode=central`. **So a cell is read against its own
+> ledger entry's reference, and an option row must not be compared with a branch
+> row.** This is a known imperfection, accepted so that the first branch data
+> could be gathered rather than delayed; removing it means re-running the option
+> sweep in the branch build directory.
 
 **Twenty-eight directions, R1–R23 and R25–R29, each with an argued risk/gain
 estimate, the same four inventories — the cvc5 flags that test it today,
@@ -271,19 +279,19 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--inst-when`, `full-last-call` → `full` | `--inst-when=full` | **+45 / −162**, net **-117** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst` | — |
-| [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst --eager-inst-term=assert` | — |
-| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst` | — |
-| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-rlv` | — |
-| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-pair-limit=500` | — |
-| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-gen-limit=2` | — |
-| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst` | — |
-| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=eqc-merge` | — |
-| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=assert` | — |
-| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-quant=preregister` | — |
-| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-macro-only` | — |
-| [`ajreynol:eagerQM`](../../../docs/active-dev-branches.md#eagerQM) | `--eager-q-matching` | — |
-| [`ajreynol:instFullPreempt`](../../../docs/active-dev-branches.md#instFullPreempt) | `--inst-when=full-preempt` | — |
+| [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst` | **+18 / −897**, net **-879**, 72 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst --eager-inst-term=assert` | **+16 / −564**, net **-548**, 66 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst` | **+28 / −147**, net **-119** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-rlv` | **+13 / −130**, net **-117** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-pair-limit=500` | **+17 / −149**, net **-132** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-gen-limit=2` | **+18 / −131**, net **-113** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst` | **+18 / −913**, net **-895**, 77 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=eqc-merge` | **+14 / −525**, net **-511**, 59 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=assert` | **+18 / −564**, net **-546**, 71 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-quant=preregister` | **+27 / −1069**, net **-1042**, 65 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-macro-only` | **+22 / −116**, net **-94** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerQM`](../../../docs/active-dev-branches.md#eagerQM) | `--eager-q-matching` | **+0 / −2539**, net **-2539**, 1671 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:instFullPreempt`](../../../docs/active-dev-branches.md#instFullPreempt) | `--inst-when=full-preempt` | **+12 / −388**, net **-376** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R2 — Incremental E-matching: match what changed, not everything
 
@@ -367,12 +375,12 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-emFilter`](../../../docs/active-dev-branches.md#ai-emFilter) | `--filter-e-matching` | — |
-| [`ajreynol:ai-imgDirect`](../../../docs/active-dev-branches.md#ai-imgDirect) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:ai-quantOpt-1`](../../../docs/active-dev-branches.md#ai-quantOpt-1) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:emExp`](../../../docs/active-dev-branches.md#emExp) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:imSimpleInc2`](../../../docs/active-dev-branches.md#imSimpleInc2) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:imTrivial`](../../../docs/active-dev-branches.md#imTrivial) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:ai-emFilter`](../../../docs/active-dev-branches.md#ai-emFilter) | `--filter-e-matching` | **+11 / −27**, net **-16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ai-imgDirect`](../../../docs/active-dev-branches.md#ai-imgDirect) | *(none — the branch changes behaviour directly)* | **+7 / −27**, net **-20** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ai-quantOpt-1`](../../../docs/active-dev-branches.md#ai-quantOpt-1) | *(none — the branch changes behaviour directly)* | **+11 / −7**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:emExp`](../../../docs/active-dev-branches.md#emExp) | *(none — the branch changes behaviour directly)* | **+10 / −6**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:imSimpleInc2`](../../../docs/active-dev-branches.md#imSimpleInc2) | *(none — the branch changes behaviour directly)* | **+10 / −17**, net **-7** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:imTrivial`](../../../docs/active-dev-branches.md#imTrivial) | *(none — the branch changes behaviour directly)* | **+14 / −20**, net **-6** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R3 — Worst-case E-matching: failure caching and early pruning
 
@@ -432,7 +440,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-prepared13`](../../../docs/active-dev-branches.md#ai-prepared13) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:ai-prepared13`](../../../docs/active-dev-branches.md#ai-prepared13) | *(none — the branch changes behaviour directly)* | **+1 / −31**, net **-30** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R4 — Instantiation budgeting: how many instances per round, and which
 
@@ -503,7 +511,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--inst-max-rounds`, `-1`, unbounded → a finite budget | `--inst-max-rounds=50` | **+2 / −233**, net **-231**, 440 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:dtInstMode`](../../../docs/active-dev-branches.md#dtInstMode) | `--no-dt-inst-internal` | — |
+| [`ajreynol:dtInstMode`](../../../docs/active-dev-branches.md#dtInstMode) | `--no-dt-inst-internal` | **+23 / −253**, net **-230**, 265 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:instLastCallDelay`](../../../docs/active-dev-branches.md#instLastCallDelay) | *(none — the branch changes behaviour directly)* | — |
 | [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=1` | — |
 | [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=3` | — |
