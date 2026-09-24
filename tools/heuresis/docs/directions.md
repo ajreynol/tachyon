@@ -286,7 +286,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-pair-limit=500` | **+17 / −149**, net **-132** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-gen-limit=2` | **+18 / −131**, net **-113** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst` | **+18 / −913**, net **-895**, 77 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=eqc-merge` | **+14 / −525**, net **-511**, 59 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=eqc-merge` | — |
 | [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=assert` | **+18 / −564**, net **-546**, 71 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-quant=preregister` | **+27 / −1069**, net **-1042**, 65 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-macro-only` | **+22 / −116**, net **-94** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -512,9 +512,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 | --- | --- | ---: |
 | `--inst-max-rounds`, `-1`, unbounded → a finite budget | `--inst-max-rounds=50` | **+2 / −233**, net **-231**, 440 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:dtInstMode`](../../../docs/active-dev-branches.md#dtInstMode) | `--no-dt-inst-internal` | **+23 / −253**, net **-230**, 265 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:instLastCallDelay`](../../../docs/active-dev-branches.md#instLastCallDelay) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=1` | — |
-| [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=3` | — |
+| [`ajreynol:instLastCallDelay`](../../../docs/active-dev-branches.md#instLastCallDelay) | *(none — the branch changes behaviour directly)* | **+6 / −13**, net **-7** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=1` | **+5 / −6**, net **-1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=3` | **+4 / −5**, net **-1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R5 — Trigger selection: strict user patterns, multi-triggers, and what strictness disables
 
@@ -597,10 +597,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--user-pat`, `trust` → `strict` | *(already in the base)* | — it is in the reference, so it is not an arm to run; a plain `-q` run at the pin would price it. It contributed +78 against `default` at `5cc03f4b9`, a revision and baseline this register no longer measures against ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
-| [`ajreynol:gttOpt`](../../../docs/active-dev-branches.md#gttOpt) | `--gt-trigger-reg` | — |
-| [`ajreynol:multiTriggerSingleBase`](../../../docs/active-dev-branches.md#multiTriggerSingleBase) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:nestedTriggers`](../../../docs/active-dev-branches.md#nestedTriggers) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:simpleTriggerMore`](../../../docs/active-dev-branches.md#simpleTriggerMore) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:gttOpt`](../../../docs/active-dev-branches.md#gttOpt) | `--gt-trigger-reg` | **+3 / −4**, net **-1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:multiTriggerSingleBase`](../../../docs/active-dev-branches.md#multiTriggerSingleBase) | *(none — the branch changes behaviour directly)* | **+5 / −5**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:nestedTriggers`](../../../docs/active-dev-branches.md#nestedTriggers) | *(none — the branch changes behaviour directly)* | **+3 / −4**, net **-1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:simpleTriggerMore`](../../../docs/active-dev-branches.md#simpleTriggerMore) | *(none — the branch changes behaviour directly)* | **+15 / −7**, net **+8** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R6 — Conflict-based instantiation: off for this domain, and why that is right or wrong
 
@@ -666,7 +666,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | --- | --- | ---: |
 | `--cbqi`, `true` → `false` | *(already in the base, as `--no-cbqi`)* | — it is in the reference, so it is not an arm to run; a plain `-q` run at the pin would price it. It contributed +83 against `default` at `5cc03f4b9`, a revision and baseline this register no longer measures against ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
 | `--sub-cbqi`, `false` → `true` | `--sub-cbqi` | **+2 / −1504**, net **-1502** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:ai-cbqi-0423`](../../../docs/active-dev-branches.md#ai-cbqi-0423) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:ai-cbqi-0423`](../../../docs/active-dev-branches.md#ai-cbqi-0423) | *(none — the branch changes behaviour directly)* | **+6 / −3**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
 
@@ -726,7 +726,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | --- | --- | ---: |
 | `--ieval`, `use` → `off` | `--ieval=off` | **+20 / −6**, net **+14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | `--inst-no-entail`, `true` → `false` | `--no-inst-no-entail` | **+4 / −9**, net **-5** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--e-matching-stratify-ieval` | — |
+| [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--e-matching-stratify-ieval` | **+6 / −109**, net **-103** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--term-db-cd` | — |
 | [`ajreynol:ievalTravTrie`](../../../docs/active-dev-branches.md#ievalTravTrie) | *(none — the branch changes behaviour directly)* | — |
 
