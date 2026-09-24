@@ -375,12 +375,12 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-emFilter`](../../../docs/active-dev-branches.md#ai-emFilter) | `--filter-e-matching` | 🔴 **+11 / −27**, net **−16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ai-emFilter`](../../../docs/active-dev-branches.md#ai-emFilter) | `--filter-e-matching` | ⚪ **+11 / −27**, net **−16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-imgDirect`](../../../docs/active-dev-branches.md#ai-imgDirect) | *(none — the branch changes behaviour directly)* | 🔴 **+7 / −27**, net **−20** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:ai-quantOpt-1`](../../../docs/active-dev-branches.md#ai-quantOpt-1) | *(none — the branch changes behaviour directly)* | 🟡 **+11 / −7**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:emExp`](../../../docs/active-dev-branches.md#emExp) | *(none — the branch changes behaviour directly)* | 🟡 **+10 / −6**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:imSimpleInc2`](../../../docs/active-dev-branches.md#imSimpleInc2) | *(none — the branch changes behaviour directly)* | 🔴 **+10 / −17**, net **−7** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:imTrivial`](../../../docs/active-dev-branches.md#imTrivial) | *(none — the branch changes behaviour directly)* | 🔴 **+14 / −20**, net **−6** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ai-quantOpt-1`](../../../docs/active-dev-branches.md#ai-quantOpt-1) | *(none — the branch changes behaviour directly)* | ⚪ **+11 / −7**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:emExp`](../../../docs/active-dev-branches.md#emExp) | *(none — the branch changes behaviour directly)* | ⚪ **+10 / −6**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:imSimpleInc2`](../../../docs/active-dev-branches.md#imSimpleInc2) | *(none — the branch changes behaviour directly)* | ⚪ **+10 / −17**, net **−7** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:imTrivial`](../../../docs/active-dev-branches.md#imTrivial) | *(none — the branch changes behaviour directly)* | ⚪ **+14 / −20**, net **−6** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R3 — Worst-case E-matching: failure caching and early pruning
 
@@ -512,7 +512,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | --- | --- | ---: |
 | `--inst-max-rounds`, `-1`, unbounded → a finite budget | `--inst-max-rounds=50` | 🔴 **+2 / −233**, net **−231**, 440 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:dtInstMode`](../../../docs/active-dev-branches.md#dtInstMode) | `--no-dt-inst-internal` | 🔴 **+23 / −253**, net **−230**, 265 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:instLastCallDelay`](../../../docs/active-dev-branches.md#instLastCallDelay) | *(none — the branch changes behaviour directly)* | 🔴 **+6 / −13**, net **−7** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:instLastCallDelay`](../../../docs/active-dev-branches.md#instLastCallDelay) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −13**, net **−7** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=1` | ⚪ **+5 / −6**, net **−1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=3` | ⚪ **+4 / −5**, net **−1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
@@ -600,7 +600,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | [`ajreynol:gttOpt`](../../../docs/active-dev-branches.md#gttOpt) | `--gt-trigger-reg` | ⚪ **+3 / −4**, net **−1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:multiTriggerSingleBase`](../../../docs/active-dev-branches.md#multiTriggerSingleBase) | *(none — the branch changes behaviour directly)* | ⚪ **+5 / −5**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:nestedTriggers`](../../../docs/active-dev-branches.md#nestedTriggers) | *(none — the branch changes behaviour directly)* | ⚪ **+3 / −4**, net **−1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:simpleTriggerMore`](../../../docs/active-dev-branches.md#simpleTriggerMore) | *(none — the branch changes behaviour directly)* | 🟢 **+15 / −7**, net **+8** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:simpleTriggerMore`](../../../docs/active-dev-branches.md#simpleTriggerMore) | *(none — the branch changes behaviour directly)* | ⚪ **+15 / −7**, net **+8** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R6 — Conflict-based instantiation: off for this domain, and why that is right or wrong
 
@@ -724,7 +724,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--ieval`, `use` → `off` | `--ieval=off` | 🟢 **+20 / −6**, net **+14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--ieval`, `use` → `off` | `--ieval=off` | 🟡 **+20 / −6**, net **+14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | `--inst-no-entail`, `true` → `false` | `--no-inst-no-entail` | ⚪ **+4 / −9**, net **−5** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--e-matching-stratify-ieval` | 🔴 **+6 / −109**, net **−103** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--term-db-cd` | — |
@@ -1121,7 +1121,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | --- | --- | ---: |
 | `--decision`, `justification` here → `internal` | `--decision=internal` | 🔴 **+25 / −504**, net **−479** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | `--decision`, `justification` here → `stoponly` | `--decision=stoponly` | 🔴 **+20 / −519**, net **−499** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | 🟡 **+14 / −18**, net **−4** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | ⚪ **+14 / −18**, net **−4** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:jhRandom`](../../../docs/active-dev-branches.md#jhRandom) | `--jh-rand` | — |
 
 ## R12 — Lemma inprocessing and conflict minimisation
@@ -1390,7 +1390,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--theoryof-mode`, `type`, `term` by logic → `type` always | `--theoryof-mode=type` | 🔴 **+9 / −23**, net **−14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--theoryof-mode`, `type`, `term` by logic → `type` always | `--theoryof-mode=type` | ⚪ **+9 / −23**, net **−14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:mbtc25`](../../../docs/active-dev-branches.md#mbtc25) | `--tc-mode=model-based` | — |
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
@@ -1555,7 +1555,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | 🔴 **+12 / −23**, net **−11** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | ⚪ **+12 / −23**, net **−11** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:dtElim`](../../../docs/active-dev-branches.md#dtElim) | `--dt-elim` | — |
 | [`ajreynol:dtLazyInst3`](../../../docs/active-dev-branches.md#dtLazyInst3) | `--dt-lazy-inst` | — |
 | [`ajreynol:dtSplitRelevant`](../../../docs/active-dev-branches.md#dtSplitRelevant) | `--dt-split-relevant` | — |
@@ -2336,22 +2336,26 @@ common. Each cell names its ledger entry, and a large `unknown` count is shown
 because it means incompleteness rather than slowness.
 
 **The marker.** Each measured cell opens with a colour, so a table can be read
-down its right-hand edge without parsing every figure:
+down its right-hand edge without parsing every figure. The tests are applied in
+order, and all three turn on the same number, **20 solves**:
 
 | | meaning | test |
 |---|---|---|
-| 🟢 | a net gain worth carrying | net **>** +5 |
-| 🔴 | a net loss | net **<** −5 |
-| 🟡 | **orthogonal** — the arm moves benchmarks both ways and they cancel | net within ±5, and **both** sides above 5 |
-| ⚪ | no effect either way | net within ±5, and neither side above 5 |
+| 🟢 | a net gain worth carrying | net **≥ +20** |
+| 🔴 | a net loss | net **≤ −20** |
+| 🟡 | **orthogonal** — it rescues real benchmarks without netting out to a gain | otherwise, **gained ≥ 20** |
+| ⚪ | too small to argue from | otherwise |
 
-The band is ±5 solves, the same one [`progress.md`](progress.md) uses. The
-yellow case is the one the two halves exist to expose: 🟡 **+50 / −50** and
-⚪ **+2 / −2** both net zero and mean opposite things — the first change
-decides fifty benchmarks differently from the reference, the second changes
-almost nothing. A yellow row is a candidate for a combination; a grey row is a
-proposal that does not earn its merge. Green and red read on the net alone,
-however the two halves fall.
+Twenty is deliberately well outside the ±5 noise band
+[`progress.md`](progress.md) uses: a green here is a result, not a run-to-run
+wobble, and grey covers everything from genuine indifference to a difference too
+small to defend. The yellow case is the one the two halves exist to expose:
+🟡 **+50 / −50** and ⚪ **+2 / −2** both net zero and mean opposite things — the
+first decides fifty benchmarks differently from the reference, the second
+changes almost nothing. A yellow row is a candidate for a combination, or for
+asking what its gained benchmarks have in common; a grey row is a proposal that
+does not yet earn its merge. Green and red read on the net alone, however the
+two halves fall, so an arm that gains heavily and loses more is red.
 
 **Only a cell measured against the current reference carries numbers.** A figure
 taken at an older revision, or against a different baseline, is not converted

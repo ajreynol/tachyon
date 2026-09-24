@@ -855,6 +855,20 @@ pass, not what to compare against; a branch
 that changes behaviour directly needs no option and says so. **± solved on the corpus** waits on that
 corpus and stays empty until there is one.
 
+**The marker.** When cells here do carry numbers they take the form heuresis
+uses — **+gained / −lost**, then the net, opening with a colour so a table can
+be read down its right-hand edge. The tests are applied in order:
+
+| | meaning | test |
+|---|---|---|
+| 🟢 | a net gain worth carrying | net **≥ +20** |
+| 🔴 | a net loss | net **≤ −20** |
+| 🟡 | **orthogonal** — it rescues real benchmarks without netting out to a gain | otherwise, **gained ≥ 20** |
+| ⚪ | too small to argue from | otherwise |
+
+The threshold is provisional: it is heuresis's 20 solves, and goal 1 sets this
+project's own once the corpus and its repeat variance are known.
+
 **One row per run, not per proposal.** A branch with several option strings
 worth trying owns several rows — `unrewrite2` has two — because each row is a
 run someone can launch. A proposal is still the branch or the default change;
