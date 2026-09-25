@@ -23,7 +23,7 @@ evidence that the old fork tip was merged verbatim. Buildability and proof
 validity have not been tested.
 
 **Effort levels.** As in Heuresis, each direction has two color-coded axes:
-*Risk* runs 🟢 Low → 🟡 Medium → 🔴 High and combines implementation size,
+*Risk* runs 🟩 Low → 🟨 Medium → 🟥 High and combines implementation size,
 architectural reach, correctness exposure and regression risk. *Gain* runs
 🔴 Low → 🟡 Medium → 🟢 High and estimates project value if the hypothesis is
 right: time or memory saved, or an important uncertainty resolved. The
@@ -65,7 +65,7 @@ cannot tell us which mechanism matters.
 
 ## E1 Unrewriting
 
-**Effort.** 🔴 High Risk / 🟢 High Gain — eliminating entire rewrite
+**Effort.** 🟥 High Risk / 🟩 High Gain — eliminating entire rewrite
 justifications could save substantial work, but atom collisions,
 theory-sensitive rules and scopes put correctness at risk.
 
@@ -113,7 +113,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E2 Smaller macro obligations
 
-**Effort.** 🟡 Medium Risk / 🟢 High Gain — local decomposition could avoid
+**Effort.** 🟨 Medium Risk / 🟩 High Gain — local decomposition could avoid
 full-formula elaboration without redesigning the pipeline. Recursive
 obligations, speculative checks and lost DAG sharing can still cause regressions.
 
@@ -153,7 +153,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E3 Compact term conversion
 
-**Effort.** 🔴 High Risk / 🟢 High Gain — compact conversion could reduce
+**Effort.** 🟥 High Risk / 🟩 High Gain — compact conversion could reduce
 proof scaffolding across many theories. Rule semantics, context handling and
 external checker compatibility make this broader than a postprocessor patch.
 
@@ -198,7 +198,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E4 Rewrite dependencies
 
-**Effort.** 🔴 High Risk / 🟢 High Gain — avoiding irrelevant child proofs
+**Effort.** 🟥 High Risk / 🟩 High Gain — avoiding irrelevant child proofs
 could remove substantial reconstruction, but discovering dependencies adds
 rewriting and translating proofs must preserve binding and assumptions.
 
@@ -234,7 +234,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E5 Proof DAG simplification and sharing
 
-**Effort.** 🔴 High Risk / 🟢 High Gain — simplifying before expansion can
+**Effort.** 🟥 High Risk / 🟩 High Gain — simplifying before expansion can
 avoid work throughout the proof DAG. Shared mutable nodes, open assumptions
 and cycles make even small transformations sensitive.
 
@@ -281,7 +281,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E6 Recorded rewrite provenance
 
-**Effort.** 🔴 High Risk / 🟢 High Gain — recorded rule identities could
+**Effort.** 🟥 High Risk / 🟩 High Gain — recorded rule identities could
 replace expensive reconstruction search, but generated rewriting, retained
 provenance and subtype-pass ordering change several parts of the pipeline.
 
@@ -318,7 +318,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E7 Reconstruction cache and search policy
 
-**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — cache reuse and better attempt
+**Effort.** 🟨 Medium Risk / 🟨 Medium Gain — cache reuse and better attempt
 ordering offer contained candidates, but their benefit depends on repetition
 and failed search. Memory retention and reconstruction coverage are the risks.
 
@@ -372,7 +372,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E8 Resolution construction and internal checking
 
-**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — a recent one-file change could
+**Effort.** 🟨 Medium Risk / 🟨 Medium Gain — a recent one-file change could
 reduce repeated clause scans, but only exercised checker calls can save
 production time. Pivot and literal-representation corner cases need care.
 
@@ -410,7 +410,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E9 Definitions and proof output
 
-**Effort.** 🔴 High Risk / 🟡 Medium Gain — preserving definitions could
+**Effort.** 🟥 High Risk / 🟨 Medium Gain — preserving definitions could
 reduce conversion and output costs on generated inputs. Assumption connections,
 definition scope and checker interpretation raise the risk; gain depends on
 the corpus's use of definitions.
@@ -448,7 +448,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E10 Lazy bookkeeping and theory reconstruction
 
-**Effort.** 🔴 High Risk / 🟡 Medium Gain — retention and repeated theory
+**Effort.** 🟥 High Risk / 🟨 Medium Gain — retention and repeated theory
 reconstruction may cost substantial memory or time, but relevance is not yet
 attributed. Old interfaces and backtracking-sensitive ownership increase risk.
 
@@ -494,7 +494,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E11 Incremental output and reuse
 
-**Effort.** 🔴 High Risk / 🟢 High Gain — real incremental clients could
+**Effort.** 🟥 High Risk / 🟩 High Gain — real incremental clients could
 avoid repeated setup and output across many queries. Correct scoping, state
 lifetime and checker support make this a substantial change; the high gain
 estimate is conditional on selecting such sessions.
@@ -531,7 +531,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E12 Proof-induced search changes
 
-**Effort.** 🟢 Low Risk / 🟢 High Gain — a source/configuration comparison
+**Effort.** 🟩 Low Risk / 🟩 High Gain — a source/configuration comparison
 can prevent misattributing changed solving behavior to proof construction.
 The gain is information needed by every other direction, not a promised
 solver speedup.
@@ -571,7 +571,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E13 Proof-work accounting
 
-**Effort.** 🟢 Low Risk / 🟢 High Gain — instrumentation changes no proof
+**Effort.** 🟩 Low Risk / 🟩 High Gain — instrumentation changes no proof
 obligation, and it supplies the partition on which every other direction's
 priority depends. The gain is information needed to rank E1–E16, not a solver
 speedup.
@@ -624,7 +624,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E14 Proof node representation and allocation
 
-**Effort.** 🔴 High Risk / 🟡 Medium Gain — mutability is load-bearing in the
+**Effort.** 🟥 High Risk / 🟨 Medium Gain — mutability is load-bearing in the
 postprocessor, so an immutable or shared representation reaches much of the
 pipeline. It is the only direction aimed at allocation and memory, which the
 charter names as half the subject; the gain estimate is conditional on E13.
@@ -669,7 +669,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E15 Streaming proof emission
 
-**Effort.** 🔴 High Risk / 🟡 Medium Gain — peak memory could fall if the
+**Effort.** 🟥 High Risk / 🟨 Medium Gain — peak memory could fall if the
 final proof need not coexist with its output, but scoping, letification and
 the checker's input contract constrain what may be emitted early. The gain is
 conditional on peak memory being a binding cost on the corpus.
@@ -712,7 +712,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 ## E16 Traversal fusion
 
-**Effort.** 🟡 Medium Risk / 🟡 Medium Gain — the passes are identifiable and
+**Effort.** 🟨 Medium Risk / 🟨 Medium Gain — the passes are identifiable and
 fusing them changes no proof obligation, but each exists for a reason, and
 their per-node work may be small beside elaboration.
 

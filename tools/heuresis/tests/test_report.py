@@ -144,7 +144,7 @@ The agent's own ordering.
 
 | rank | research direction | effort | next possible step |
 | ---: | --- | --- | --- |
-| 1 | [R1 — a direction](directions.md#r1--a-direction) | 🟢 Low Risk | count something |
+| 1 | [R1 — a direction](directions.md#r1--a-direction) | 🟩 Low Risk | count something |
 
 ## Human-maintainer priorities
 
@@ -152,7 +152,7 @@ The maintainer's, kept separate.
 
 | rank | research direction | effort | next possible step | human rationale |
 | ---: | --- | --- | --- | --- |
-| 1 | [R1 — a direction](directions.md#r1--a-direction) | 🟢 Low Risk | count something | |
+| 1 | [R1 — a direction](directions.md#r1--a-direction) | 🟩 Low Risk | count something | |
 
 ## Branch maintenance
 
@@ -165,11 +165,11 @@ DIRECTIONS = """# demo directions
 
 ## R1 — A direction: with a subtitle
 
-**Effort.** 🟢 Low Risk / 🟢 High Gain — because it is small.
+**Effort.** 🟩 Low Risk / 🟩 High Gain — because it is small.
 
 ## R2 — Another direction
 
-**Effort.** 🔴 High Risk / 🟡 Medium Gain — because it is not.
+**Effort.** 🟥 High Risk / 🟨 Medium Gain — because it is not.
 """
 
 PULL_REQUESTS = """
