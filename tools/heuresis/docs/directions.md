@@ -286,7 +286,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-pair-limit=500` | 🔴 **+17 / −149**, net **−132** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst --eager-inst-gen-limit=2` | 🔴 **+18 / −131**, net **−113** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst` | 🔴 **+18 / −913**, net **−895**, 77 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=eqc-merge` | — |
+| [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=eqc-merge` | 🔴 **+15 / −926**, net **−911**, 173 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-term=assert` | 🔴 **+18 / −564**, net **−546**, 71 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-quant=preregister` | 🔴 **+27 / −1069**, net **−1042**, 65 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerInst3`](../../../docs/active-dev-branches.md#eagerInst3) | `--eager-inst --eager-inst-macro-only` | 🔴 **+22 / −116**, net **−94** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -727,8 +727,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 | `--ieval`, `use` → `off` | `--ieval=off` | 🟡 **+20 / −6**, net **+14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | `--inst-no-entail`, `true` → `false` | `--no-inst-no-entail` | ⚪ **+4 / −9**, net **−5** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--e-matching-stratify-ieval` | 🔴 **+6 / −109**, net **−103** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
-| [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--term-db-cd` | — |
-| [`ajreynol:ievalTravTrie`](../../../docs/active-dev-branches.md#ievalTravTrie) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--term-db-cd` | ⚪ **+4 / −6**, net **−2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ievalTravTrie`](../../../docs/active-dev-branches.md#ievalTravTrie) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −4**, net **+2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R8 — The fallbacks: enumerative instantiation, MBQI, finite model finding
 
@@ -982,9 +982,9 @@ what the SAT solver keeps; the arm that would settle it is `--inst-local` with
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--inst-local`, `false` → `true` | `--inst-local` | 🔴 **+24 / −622**, net **−598**; the +9 this register carried was measured on another SAT backend ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:notifySatClause`](../../../docs/active-dev-branches.md#notifySatClause) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:smtLazyAssert`](../../../docs/active-dev-branches.md#smtLazyAssert) | `--smt-lazy-assert` | — |
-| [`ajreynol:virtualClauseDel`](../../../docs/active-dev-branches.md#virtualClauseDel) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:notifySatClause`](../../../docs/active-dev-branches.md#notifySatClause) | *(none — the branch changes behaviour directly)* | ⚪ **+3 / −3**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:smtLazyAssert`](../../../docs/active-dev-branches.md#smtLazyAssert) | `--smt-lazy-assert` | ⚪ **+2 / −5**, net **−3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:virtualClauseDel`](../../../docs/active-dev-branches.md#virtualClauseDel) | *(none — the branch changes behaviour directly)* | ⚪ **+7 / −4**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R10 — Where instance lemmas sit in the decision order: local, deferred, gated
 
@@ -1050,10 +1050,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-instDefer`](../../../docs/active-dev-branches.md#ai-instDefer) | `--inst-defer` | — |
-| [`ajreynol:ai-jhConflictFirst`](../../../docs/active-dev-branches.md#ai-jhConflictFirst) | `--jh-conflict-first` | — |
-| [`ajreynol:ai-jhRlvInst`](../../../docs/active-dev-branches.md#ai-jhRlvInst) | `--jh-rlv-inst` | — |
-| [`ajreynol:claudeDev-dts-idef`](../../../docs/active-dev-branches.md#claudeDev-dts-idef) | `--inst-defer --dt-split-relevant` | — |
+| [`ajreynol:ai-instDefer`](../../../docs/active-dev-branches.md#ai-instDefer) | `--inst-defer` | 🟡 **+47 / −33**, net **+14** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ai-jhConflictFirst`](../../../docs/active-dev-branches.md#ai-jhConflictFirst) | `--jh-conflict-first` | ⚪ **+19 / −37**, net **−18** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ai-jhRlvInst`](../../../docs/active-dev-branches.md#ai-jhRlvInst) | `--jh-rlv-inst` | 🟡 **+27 / −17**, net **+10** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:claudeDev-dts-idef`](../../../docs/active-dev-branches.md#claudeDev-dts-idef) | `--inst-defer --dt-split-relevant` | 🟡 **+44 / −31**, net **+13** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R11 — Decision heuristic versus relevancy: what the SAT solver is made to decide on
 
@@ -1122,7 +1122,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | `--decision`, `justification` here → `internal` | `--decision=internal` | 🔴 **+25 / −504**, net **−479** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | `--decision`, `justification` here → `stoponly` | `--decision=stoponly` | 🔴 **+20 / −519**, net **−499** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | ⚪ **+14 / −18**, net **−4** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:jhRandom`](../../../docs/active-dev-branches.md#jhRandom) | `--jh-rand` | — |
+| [`ajreynol:jhRandom`](../../../docs/active-dev-branches.md#jhRandom) | `--jh-rand` | 🔴 **+25 / −150**, net **−125** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R12 — Lemma inprocessing and conflict minimisation
 
@@ -1172,8 +1172,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find` | — |
-| [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find --no-sub-conflict-last-call` | — |
+| [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find` | ⚪ **+7 / −8**, net **−1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find --no-sub-conflict-last-call` | 🔴 **+2 / −1423**, net **−1421** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R13 — The SAT backend: CaDiCaL, MiniSat, restarts, units
 

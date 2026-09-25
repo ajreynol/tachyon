@@ -44,8 +44,8 @@ numbers.
 | wave | what it measures | state |
 | --- | --- | --- |
 | **0** | the reference itself, on current `main` [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **done** — 5550 of 6124 solved, PAR2 41055.9, ratio 1.75, gap 1064 ([ledger](ledger/2026-09-23-reference-at-current-main.md)); now the last row of [`progress.md`](progress.md) |
-| **1** | the 20 option rows, each the reference plus one change, same binary | **running** — fills every option row and replaces the seven figures taken against `d7d03b082c`, which the reference invariant makes wrong rather than old |
-| **2** | the 70 branch runs | **blocked** — `submit` refuses each branch as BEHIND, one or eleven commits short of the fork's `master`; an update pass onto the reference commit clears it, and nothing else stands in the way |
+| **1** | the 20 option rows, each the reference plus one change, same binary | **done** — 21 arms against the 5550 reference; every option row carries a number, and the seven figures taken against `d7d03b082c` are replaced ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| **2** | the 70 branch runs | **running, 42 filled** — in its own clone and build directory, against a reference rebuilt there (5576, not Wave 1's 5550, so the two are not comparable [why](ledger/2026-09-24-build-directory-difference.md)). Each branch is 1 or 11 behind the fork's `master`, recorded per row; `submit` would refuse them as BEHIND and this was accepted to get first data ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## Short-term goals
 
