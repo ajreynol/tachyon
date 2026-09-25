@@ -867,11 +867,11 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst` | — |
-| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=conflict` | — |
-| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=prop` | — |
-| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-when=asserted` | — |
-| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-trigger=narrow` | — |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst` | ⚪ **+9 / −6**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=conflict` | ⚪ **+4 / −8**, net **−4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=prop` | ⚪ **+7 / −3**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-when=asserted` | ⚪ **+2 / −15**, net **−13** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-trigger=narrow` | ⚪ **+7 / −3**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ---
 
@@ -1256,7 +1256,7 @@ nothing on the fork touches.
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:cadicalPortfolio`](../../../docs/active-dev-branches.md#cadicalPortfolio) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:cadicalPortfolio`](../../../docs/active-dev-branches.md#cadicalPortfolio) | *(none — the branch changes behaviour directly)* | ⚪ **+4 / −7**, net **−3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R29 — Deep restarts: throw the search away, keep what it proved
 
@@ -1391,7 +1391,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--theoryof-mode`, `type`, `term` by logic → `type` always | `--theoryof-mode=type` | ⚪ **+9 / −23**, net **−14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:mbtc25`](../../../docs/active-dev-branches.md#mbtc25) | `--tc-mode=model-based` | — |
+| [`ajreynol:mbtc25`](../../../docs/active-dev-branches.md#mbtc25) | `--tc-mode=model-based` | ⚪ **+16 / −18**, net **−2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
 
@@ -1471,9 +1471,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--ee-mode`, `distributed` → `central` | `--ee-mode=central` | 🟢 **+86 / −19**, net **+67**; reproduces at two earlier revisions ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:ai-eecNoShare`](../../../docs/active-dev-branches.md#ai-eecNoShare) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:cdno`](../../../docs/active-dev-branches.md#cdno) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:dtMergeNotify-v3`](../../../docs/active-dev-branches.md#dtMergeNotify-v3) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:ai-eecNoShare`](../../../docs/active-dev-branches.md#ai-eecNoShare) | *(none — the branch changes behaviour directly)* | ⚪ **+8 / −7**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:cdno`](../../../docs/active-dev-branches.md#cdno) | *(none — the branch changes behaviour directly)* | ⚪ **+5 / −4**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:dtMergeNotify-v3`](../../../docs/active-dev-branches.md#dtMergeNotify-v3) | *(none — the branch changes behaviour directly)* | ⚪ **+3 / −19**, net **−16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R16 — Datatypes: when to split, on what, and whether to have them at all
 
@@ -1556,10 +1556,10 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | ⚪ **+12 / −23**, net **−11** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:dtElim`](../../../docs/active-dev-branches.md#dtElim) | `--dt-elim` | — |
-| [`ajreynol:dtLazyInst3`](../../../docs/active-dev-branches.md#dtLazyInst3) | `--dt-lazy-inst` | — |
-| [`ajreynol:dtSplitRelevant`](../../../docs/active-dev-branches.md#dtSplitRelevant) | `--dt-split-relevant` | — |
-| [`ajreynol:oneConsInst`](../../../docs/active-dev-branches.md#oneConsInst) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:dtElim`](../../../docs/active-dev-branches.md#dtElim) | `--dt-elim` | 🔴 **+9 / −954**, net **−945**, 917 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:dtLazyInst3`](../../../docs/active-dev-branches.md#dtLazyInst3) | `--dt-lazy-inst` | 🔴 **+27 / −75**, net **−48** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:dtSplitRelevant`](../../../docs/active-dev-branches.md#dtSplitRelevant) | `--dt-split-relevant` | ⚪ **+9 / −7**, net **+2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:oneConsInst`](../../../docs/active-dev-branches.md#oneConsInst) | *(none — the branch changes behaviour directly)* | ⚪ **+15 / −31**, net **−16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R17 — Linear integer arithmetic: branch and bound, cuts, and the Diophantine solver
 
@@ -1638,9 +1638,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-dioLc`](../../../docs/active-dev-branches.md#ai-dioLc) | `--dio-solver-last-call` | — |
-| [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block` | — |
-| [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block --defer-block-mode=delay` | — |
+| [`ajreynol:ai-dioLc`](../../../docs/active-dev-branches.md#ai-dioLc) | `--dio-solver-last-call` | 🔴 **+5 / −93**, net **−88** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block` | ⚪ **+5 / −5**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block --defer-block-mode=delay` | ⚪ **+5 / −5**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R18 — Nonlinear arithmetic: off, light, or lazy
 
@@ -1766,8 +1766,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:bitblastLc`](../../../docs/active-dev-branches.md#bitblastLc) | `--bitblast-lc` | — |
-| [`ajreynol:ufConvRlv`](../../../docs/active-dev-branches.md#ufConvRlv) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:bitblastLc`](../../../docs/active-dev-branches.md#bitblastLc) | `--bitblast-lc` | 🔴 **+5 / −26**, net **−21** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ufConvRlv`](../../../docs/active-dev-branches.md#ufConvRlv) | *(none — the branch changes behaviour directly)* | ⚪ **+5 / −4**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ---
 
@@ -1845,9 +1845,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:eagerElimDefs`](../../../docs/active-dev-branches.md#eagerElimDefs) | `--eager-elim-defs` | — |
-| [`ajreynol:simplifyRecFun`](../../../docs/active-dev-branches.md#simplifyRecFun) | `--simplify-rec-fun` | — |
-| [`ajreynol:ufEagerDistinct`](../../../docs/active-dev-branches.md#ufEagerDistinct) | `--uf-eager-distinct` | — |
+| [`ajreynol:eagerElimDefs`](../../../docs/active-dev-branches.md#eagerElimDefs) | `--eager-elim-defs` | ⚪ **+5 / −1**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:simplifyRecFun`](../../../docs/active-dev-branches.md#simplifyRecFun) | `--simplify-rec-fun` | ⚪ **+4 / −5**, net **−1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:ufEagerDistinct`](../../../docs/active-dev-branches.md#ufEagerDistinct) | `--uf-eager-distinct` | ⚪ **+4 / −17**, net **−13** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R21 — Quantifier preprocessing: what is done to a quantifier before it is ever matched
 
@@ -1914,7 +1914,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | --- | --- | ---: |
 | `--miniscope-quant`, `conj-and-fv` → `off` | `--miniscope-quant=off` | ⚪ **+3 / −6**, net **−3** ([ledger](ledger/2026-09-23-option-sweep.md)) |
 | `--macros-quant`, `false` → `true`, mode `all` | `--macros-quant --macros-quant-mode=all` | 🔴 **+41 / −579**, net **−538**, 511 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:quantRew-1006`](../../../docs/active-dev-branches.md#quantRew-1006) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:quantRew-1006`](../../../docs/active-dev-branches.md#quantRew-1006) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −5**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R22 — Preregistration: which literals the theories are told about
 
@@ -1955,7 +1955,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--preregister-mode`, `eager` → `lazy` | `--preregister-mode=lazy` | 🔴 **+21 / −64**, net **−43** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:preregRlv`](../../../docs/active-dev-branches.md#preregRlv) | `--preregister-mode=rlv` | — |
+| [`ajreynol:preregRlv`](../../../docs/active-dev-branches.md#preregRlv) | `--preregister-mode=rlv` | 🔴 **+26 / −54**, net **−28**, 51 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R23 — Term-database relevance: which ground terms E-matching may use
 
@@ -2004,7 +2004,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--term-db-mode`, `relevant-all-delay` → `all` | `--term-db-mode=all` | 🔴 **+29 / −124**, net **−95** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| [`ajreynol:tdbOldIndex`](../../../docs/active-dev-branches.md#tdbOldIndex) | `--tdb-old-index` | — |
+| [`ajreynol:tdbOldIndex`](../../../docs/active-dev-branches.md#tdbOldIndex) | `--tdb-old-index` | ⚪ **+12 / −15**, net **−3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ---
 
@@ -2054,8 +2054,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:lowLevelOptMore`](../../../docs/active-dev-branches.md#lowLevelOptMore) | *(none — the branch changes behaviour directly)* | — |
-| [`ajreynol:tdbLLOpts`](../../../docs/active-dev-branches.md#tdbLLOpts) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:lowLevelOptMore`](../../../docs/active-dev-branches.md#lowLevelOptMore) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −5**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| [`ajreynol:tdbLLOpts`](../../../docs/active-dev-branches.md#tdbLLOpts) | *(none — the branch changes behaviour directly)* | ⚪ **+5 / −3**, net **+2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R26 — Attribution instrumentation: the tools goal 2 needs
 
@@ -2222,7 +2222,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-parserOpt`](../../../docs/active-dev-branches.md#ai-parserOpt) | *(none — the branch changes behaviour directly)* | — |
+| [`ajreynol:ai-parserOpt`](../../../docs/active-dev-branches.md#ai-parserOpt) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −6**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ---
 
