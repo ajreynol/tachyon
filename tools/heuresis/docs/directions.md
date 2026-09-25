@@ -32,6 +32,18 @@ and inform future work.
 > arm and the reference differ in that change and nothing else. An arm that
 > drops or alters the prefix measures something this register cannot interpret.
 >
+> **Exactly one arm is a deliberate exception.** `--cbqi` (R6) *removes*
+> `--no-cbqi` rather than adding anything, because that option is the
+> reference's own choice and the only way to price a choice the prefix
+> already makes is to subtract it. `cbqi` is default-on in cvc5, so the
+> reference disables a default, and that decision deserves a number like any
+> other. Its row says so in the `run as` cell. It is the only such row, and an
+> arm that alters the prefix without saying why in its own cell is an error,
+> not a second exception. **Its `± solved` reads backwards**: the arm is the
+> proposal's opposite, so a loss for the arm is a gain for the proposal, and
+> the cell says which is which. `--user-pat=strict` is the reference's other such
+> choice and is **not** yet priced this way.
+>
 > **The arm must also use the same binary** the reference row was measured on.
 > A different build of the same revision is fine; a different revision is not,
 > which is why the launcher configs name `$REPO_BINARY`.
@@ -43,22 +55,31 @@ and inform future work.
 >
 > **The reference is the last row of [`progress.md`](progress.md)**, and that is
 > an invariant, not a coincidence: the run anchoring this document is the newest
-> measurement of cvc5 `main` the project has. **There are currently two**, the
-> same revision built in two directories, because they do not measure the same
-> solver:
+> measurement of cvc5 `main` the project has. **Every cell in this document is
+> now against one reference**:
 >
-> | date | cvc5 `main` | build | solved | PAR2 | anchors | ledger |
-> | --- | --- | --- | ---: | ---: | --- | --- |
-> | 2026-09-23 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | the launcher's | **5550** | 41055.9 | the option rows | [entry](ledger/2026-09-23-reference-at-current-main.md) |
-> | 2026-09-24 | the same revision | a separate one, used for branch arms | **5576** | 39304.4 | the branch rows | [entry](ledger/2026-09-24-build-directory-difference.md) |
+> | date | cvc5 `main` | solved | PAR2 | anchors | ledger |
+> | --- | --- | ---: | ---: | --- | --- |
+> | 2026-09-25 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **5576** | 39313.7 | every option row and every branch row | [entry](ledger/2026-09-25-option-sweep-one-reference.md) |
 >
-> The newer build solves 26 benchmarks the older does not and loses none, at
-> identical declared CMake settings — a difference larger than every measured
-> option effect except `--ee-mode=central`. **So a cell is read against its own
-> ledger entry's reference, and an option row must not be compared with a branch
-> row.** This is a known imperfection, accepted so that the first branch data
-> could be gathered rather than delayed; removing it means re-running the option
-> sweep in the branch build directory.
+> It was not always so. The option rows were first measured in a different build
+> directory, whose build of the *same commit* solves **5550** — 26 fewer, losing
+> none, at identical declared CMake settings
+> ([entry](ledger/2026-09-24-build-directory-difference.md)). That was a larger
+> difference than every measured option effect except `--ee-mode=central`, so for
+> two days an option row could not be compared with a branch row. The option
+> sweep was re-run in the branch directory to remove it
+> ([entry](ledger/2026-09-25-option-sweep-one-reference.md)), and the two-anchor
+> era is over. **If a future batch is measured elsewhere, this table grows a row
+> again and the rule that a cell is read against its own ledger entry comes back
+> with it.**
+>
+> **The noise band is ±5 solves, and it is measured, not assumed.** Rebuilding
+> the reference in the same directory reproduced 5576 exactly — same unknown,
+> same timeout, PAR2 within 0.02% — while deciding **4 benchmarks each way**. So
+> two runs of the identical configuration disagree on 8 benchmarks and net zero.
+> A cell inside ±5 is reporting that churn, which is why it is marked ⚪ rather
+> than as a small gain or a small loss.
 
 **Twenty-eight directions, R1–R23 and R25–R29, each with an argued risk/gain
 estimate, the same four inventories — the cvc5 flags that test it today,
@@ -278,7 +299,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--inst-when`, `full-last-call` → `full` | `--inst-when=full` | 🔴 **+45 / −162**, net **−117** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--inst-when`, `full-last-call` → `full` | `--inst-when=full` | 🔴 **+38 / −170**, net **−132** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst` | 🔴 **+18 / −897**, net **−879**, 72 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst --eager-inst-term=assert` | 🔴 **+16 / −564**, net **−548**, 66 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst` | 🔴 **+28 / −147**, net **−119** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -510,7 +531,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--inst-max-rounds`, `-1`, unbounded → a finite budget | `--inst-max-rounds=50` | 🔴 **+2 / −233**, net **−231**, 440 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--inst-max-rounds`, `-1`, unbounded → a finite budget | `--inst-max-rounds=50` | 🔴 **+3 / −248**, net **−245**, 450 unknown ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:dtInstMode`](../../../docs/active-dev-branches.md#dtInstMode) | `--no-dt-inst-internal` | 🔴 **+23 / −253**, net **−230**, 265 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:instLastCallDelay`](../../../docs/active-dev-branches.md#instLastCallDelay) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −13**, net **−7** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:termOrigin`](../../../docs/active-dev-branches.md#termOrigin) | `--inst-nested-max-level=1` | ⚪ **+5 / −6**, net **−1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -664,8 +685,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--cbqi`, `true` → `false` | *(already in the base, as `--no-cbqi`)* | — it is in the reference, so it is not an arm to run; a plain `-q` run at the pin would price it. It contributed +83 against `default` at `5cc03f4b9`, a revision and baseline this register no longer measures against ([ledger](ledger/2026-09-15-quantifier-controls.md)) |
-| `--sub-cbqi`, `false` → `true` | `--sub-cbqi` | 🔴 **+2 / −1504**, net **−1502** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--cbqi`, `true` → `false` | `--cbqi`, with `--no-cbqi` **removed** from the prefix — the one arm that subtracts from the reference rather than adding to it | ⚪ **+2 / −16**, net **−14** — **read the sign backwards here**: the arm turns cbqi *on*, so the proposal (off, as the reference has it) is worth **+14**, not −14 ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| `--sub-cbqi`, `false` → `true` | `--sub-cbqi` | 🔴 **+2 / −1484**, net **−1482** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:ai-cbqi-0423`](../../../docs/active-dev-branches.md#ai-cbqi-0423) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −3**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
@@ -724,8 +745,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--ieval`, `use` → `off` | `--ieval=off` | 🟡 **+20 / −6**, net **+14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| `--inst-no-entail`, `true` → `false` | `--no-inst-no-entail` | ⚪ **+4 / −9**, net **−5** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--ieval`, `use` → `off` | `--ieval=off` | 🟡 **+20 / −8**, net **+12** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| `--inst-no-entail`, `true` → `false` | `--no-inst-no-entail` | ⚪ **+8 / −9**, net **−1**, inside noise ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--e-matching-stratify-ieval` | 🔴 **+6 / −109**, net **−103** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:emStratify`](../../../docs/active-dev-branches.md#emStratify) | `--term-db-cd` | ⚪ **+4 / −6**, net **−2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ievalTravTrie`](../../../docs/active-dev-branches.md#ievalTravTrie) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −4**, net **+2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -789,7 +810,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--enum-inst`, `false` → `true` | `--enum-inst` | ⚪ **+3 / −5**, net **−2** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--enum-inst`, `false` → `true` | `--enum-inst` | ⚪ **+7 / −3**, net **+4**, inside noise ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 
 ## R28 — Eager conflict-based instantiation: find a useful instance before full effort
 
@@ -981,7 +1002,7 @@ what the SAT solver keeps; the arm that would settle it is `--inst-local` with
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--inst-local`, `false` → `true` | `--inst-local` | 🔴 **+24 / −622**, net **−598**; the +9 this register carried was measured on another SAT backend ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--inst-local`, `false` → `true` | `--inst-local` | 🔴 **+23 / −629**, net **−606** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:notifySatClause`](../../../docs/active-dev-branches.md#notifySatClause) | *(none — the branch changes behaviour directly)* | ⚪ **+3 / −3**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:smtLazyAssert`](../../../docs/active-dev-branches.md#smtLazyAssert) | `--smt-lazy-assert` | ⚪ **+2 / −5**, net **−3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:virtualClauseDel`](../../../docs/active-dev-branches.md#virtualClauseDel) | *(none — the branch changes behaviour directly)* | ⚪ **+7 / −4**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1119,9 +1140,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--decision`, `justification` here → `internal` | `--decision=internal` | 🔴 **+25 / −504**, net **−479** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| `--decision`, `justification` here → `stoponly` | `--decision=stoponly` | 🔴 **+20 / −519**, net **−499** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | ⚪ **+14 / −18**, net **−4** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--decision`, `justification` here → `internal` | `--decision=internal` | 🔴 **+25 / −502**, net **−477** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| `--decision`, `justification` here → `stoponly` | `--decision=stoponly` | 🔴 **+23 / −525**, net **−502** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | ⚪ **+11 / −23**, net **−12** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:jhRandom`](../../../docs/active-dev-branches.md#jhRandom) | `--jh-rand` | 🔴 **+25 / −150**, net **−125** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R12 — Lemma inprocessing and conflict minimisation
@@ -1321,9 +1342,9 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--deep-restart`, `none` → `input` | `--deep-restart=input` | 🟡 **+23 / −20**, net **+3** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| `--deep-restart`, `none` → `all` | `--deep-restart=all` | 🔴 **+17 / −94**, net **−77** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| `--deep-restart-factor`, `3.0` → `1.5`, with `--deep-restart=input` | `--deep-restart=input --deep-restart-factor=1.5` | 🟡 **+21 / −23**, net **−2** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--deep-restart`, `none` → `input` | `--deep-restart=input` | ⚪ **+19 / −18**, net **+1**, inside noise ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| `--deep-restart`, `none` → `all` | `--deep-restart=all` | 🔴 **+15 / −95**, net **−80** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| `--deep-restart-factor`, `3.0` → `1.5`, with `--deep-restart=input` | `--deep-restart=input --deep-restart-factor=1.5` | ⚪ **+19 / −17**, net **+2**, inside noise ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 
 ---
 
@@ -1390,7 +1411,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--theoryof-mode`, `type`, `term` by logic → `type` always | `--theoryof-mode=type` | ⚪ **+9 / −23**, net **−14** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--theoryof-mode`, `type`, `term` by logic → `type` always | `--theoryof-mode=type` | ⚪ **+10 / −29**, net **−19** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:mbtc25`](../../../docs/active-dev-branches.md#mbtc25) | `--tc-mode=model-based` | ⚪ **+16 / −18**, net **−2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R15 — Equality engine architecture: central, distributed, and who gets told what
@@ -1470,7 +1491,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--ee-mode`, `distributed` → `central` | `--ee-mode=central` | 🟢 **+86 / −19**, net **+67**; reproduces at two earlier revisions ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--ee-mode`, `distributed` → `central` | `--ee-mode=central` | 🟢 **+73 / −19**, net **+54** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:ai-eecNoShare`](../../../docs/active-dev-branches.md#ai-eecNoShare) | *(none — the branch changes behaviour directly)* | ⚪ **+8 / −7**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:cdno`](../../../docs/active-dev-branches.md#cdno) | *(none — the branch changes behaviour directly)* | ⚪ **+5 / −4**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtMergeNotify-v3`](../../../docs/active-dev-branches.md#dtMergeNotify-v3) | *(none — the branch changes behaviour directly)* | ⚪ **+3 / −19**, net **−16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1555,7 +1576,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | ⚪ **+12 / −23**, net **−11** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | ⚪ **+12 / −23**, net **−11** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:dtElim`](../../../docs/active-dev-branches.md#dtElim) | `--dt-elim` | 🔴 **+9 / −954**, net **−945**, 917 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtLazyInst3`](../../../docs/active-dev-branches.md#dtLazyInst3) | `--dt-lazy-inst` | 🔴 **+27 / −75**, net **−48** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtSplitRelevant`](../../../docs/active-dev-branches.md#dtSplitRelevant) | `--dt-split-relevant` | ⚪ **+9 / −7**, net **+2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1701,7 +1722,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--nl-ext`, `full`, by logic → `light` | `--nl-ext=light` | 🔴 **+6 / −281**, net **−275**, 268 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--nl-ext`, `full`, by logic → `light` | `--nl-ext=light` | 🔴 **+8 / −281**, net **−273**, 268 unknown ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 
 ## R19 — Bit-vectors inside quantified problems
 
@@ -1912,8 +1933,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--miniscope-quant`, `conj-and-fv` → `off` | `--miniscope-quant=off` | ⚪ **+3 / −6**, net **−3** ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| `--macros-quant`, `false` → `true`, mode `all` | `--macros-quant --macros-quant-mode=all` | 🔴 **+41 / −579**, net **−538**, 511 unknown ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--miniscope-quant`, `conj-and-fv` → `off` | `--miniscope-quant=off` | ⚪ **+5 / −8**, net **−3**, inside noise ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| `--macros-quant`, `false` → `true`, mode `all` | `--macros-quant --macros-quant-mode=all` | 🔴 **+43 / −595**, net **−552**, 521 unknown ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:quantRew-1006`](../../../docs/active-dev-branches.md#quantRew-1006) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −5**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R22 — Preregistration: which literals the theories are told about
@@ -1954,7 +1975,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--preregister-mode`, `eager` → `lazy` | `--preregister-mode=lazy` | 🔴 **+21 / −64**, net **−43** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--preregister-mode`, `eager` → `lazy` | `--preregister-mode=lazy` | 🔴 **+26 / −72**, net **−46** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:preregRlv`](../../../docs/active-dev-branches.md#preregRlv) | `--preregister-mode=rlv` | 🔴 **+26 / −54**, net **−28**, 51 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R23 — Term-database relevance: which ground terms E-matching may use
@@ -2003,7 +2024,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--term-db-mode`, `relevant-all-delay` → `all` | `--term-db-mode=all` | 🔴 **+29 / −124**, net **−95** ([ledger](ledger/2026-09-23-option-sweep.md)) |
+| `--term-db-mode`, `relevant-all-delay` → `all` | `--term-db-mode=all` | 🔴 **+29 / −129**, net **−100** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | [`ajreynol:tdbOldIndex`](../../../docs/active-dev-branches.md#tdbOldIndex) | `--tdb-old-index` | ⚪ **+12 / −15**, net **−3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ---

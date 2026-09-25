@@ -43,9 +43,10 @@ numbers.
 
 | wave | what it measures | state |
 | --- | --- | --- |
-| **0** | the reference itself, on current `main` [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **done** — 5550 of 6124 solved, PAR2 41055.9, ratio 1.75, gap 1064 ([ledger](ledger/2026-09-23-reference-at-current-main.md)); now the last row of [`progress.md`](progress.md) |
-| **1** | the 23 option rows, each the reference plus one change, same binary | **done** — 21 arms against the 5550 reference; 21 of the 23 rows carry a number and the remaining two *are* in the reference, so they cannot be added to it. The seven figures taken against `d7d03b082c` are replaced ([ledger](ledger/2026-09-23-option-sweep.md)) |
-| **2** | the 70 branch runs | **done** — all 70 arms, every branch row filled; no arm reaches +20, and the best three are R10 (`--inst-defer` +47/−33, `--inst-defer --dt-split-relevant` +44/−31, `--jh-rlv-inst` +27/−17), each beating the reference on PAR2 ([ledger](ledger/2026-09-24-branch-sweep.md)). Measured against a reference rebuilt in its own build directory (5576, not Wave 1's 5550), so branch rows and option rows are **not** comparable ([why](ledger/2026-09-24-build-directory-difference.md)) |
+| **0** | the reference itself, on current `main` [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **done** — 5550 of 6124 solved, PAR2 41055.9, ratio 1.75, gap 1064 ([ledger](ledger/2026-09-23-reference-at-current-main.md)). Superseded as the register's anchor by the 5576 build measured in wave 1b; it stays in [`progress.md`](progress.md) as history |
+| **1** | the 23 option rows, each the reference plus one change, same binary | **done, then re-run** — the first pass measured against the 5550 build; every arm was re-run in the branch build directory so the whole register shares one reference, and `--cbqi` was added by *removing* `--no-cbqi` ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| **2** | the 70 branch runs | **done** — all 70 arms, every branch row filled; no arm reaches +20, and the best three are R10 (`--inst-defer` +47/−33, `--inst-defer --dt-split-relevant` +44/−31, `--jh-rlv-inst` +27/−17), each beating the reference on PAR2 ([ledger](ledger/2026-09-24-branch-sweep.md)) |
+| **1b** | the option sweep re-run on the branch reference, plus a reference re-run | **done** — 22 arms and the reference on one binary. The reference reproduced 5576 exactly, fixing this project's run-to-run churn at 4 solves each way and putting the ±5 noise band on measured ground ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 
 ## Short-term goals
 
