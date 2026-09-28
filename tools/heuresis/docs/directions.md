@@ -29,20 +29,17 @@ and inform future work.
 > branch is never run bare: it runs as the reference plus whatever its `run as`
 > cell names, and a branch whose cell says *none* still carries the whole
 > prefix. That is what makes a `± solved` cell attributable to one change — the
-> arm and the reference differ in that change and nothing else. An arm that
-> drops or alters the prefix measures something this register cannot interpret.
+> arm and the reference differ in the settings named by its row. A prefix
+> override must be explicit in that row and explained by its direction.
 >
-> **Exactly one arm is a deliberate exception.** `--cbqi` (R6) *removes*
-> `--no-cbqi` rather than adding anything, because that option is the
-> reference's own choice and the only way to price a choice the prefix
-> already makes is to subtract it. `cbqi` is default-on in cvc5, so the
-> reference disables a default, and that decision deserves a number like any
-> other. Its row says so in the `run as` cell. It is the only such row, and an
-> arm that alters the prefix without saying why in its own cell is an error,
-> not a second exception. **Its `± solved` reads backwards**: the arm is the
-> proposal's opposite, so a loss for the arm is a gain for the proposal, and
-> the cell says which is which. `--user-pat=strict` is the reference's other such
-> choice and is **not** yet priced this way.
+> **R6 explicitly enables QCF for its experiments.** Its `--cbqi` rows remove
+> `--no-cbqi` from the prefix. For the mainline default-change proposal, this
+> tests the opposite of the proposed default: **that row's `± solved` reads
+> backwards**, as its cell explains. The `ai-heuresis-r6-claude` rows need
+> QCF enabled to exercise their round policies and include an enabled control
+> on the same branch. Their signs read normally against the reference; the
+> ledger must also compare each policy with that control to isolate its effect.
+> `--user-pat=strict` remains fixed.
 >
 > **The arm must also use the same binary** the reference row was measured on.
 > A different build of the same revision is fine; a different revision is not,
@@ -103,11 +100,11 @@ which. The branches selected for possible rebasing were checked again on
 [`main@d7d03b082c`](https://github.com/cvc5/cvc5/commit/d7d03b082c56ad8e7226e0b5385973d82b16d626);
 those newer divergence counts are labeled where used.
 
-**Inventory summary:** the registry names **200 distinct concrete cvc5-style
-command-line options** (including experimental fork options) and links
-**170 distinct branches** in [`ajreynol/cvc5`](https://github.com/ajreynol/cvc5).
-The option count excludes the generic `--name` notation, Git's `--count`, and
-the wildcard families `--cadical-*` and `--replay-*`.
+**New branch candidates (2026-09-28).** The `ai-heuresis-*` additions were
+inspected from source. Their pinned tips and source diffs are in the
+[shared list](../../../docs/active-dev-branches.md#branches-inspected-2026-09-28).
+Builds and benchmarks remain pending. Measure the reference at their base
+before filling the new result cells.
 
 **Direction identifiers are stable.** Retired directions are deleted without
 renumbering the survivors, so gaps are intentional; Git history is the record
@@ -220,7 +217,16 @@ instantiation and record three attempts.
 - `none` for eager instantiation itself: no option instantiates below full
   effort.
 
-**Tried.** Three design lines in the fork, none on `main`; the labels below
+**Tried.** [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude)
+([source](https://github.com/ajreynol/cvc5/blob/9b3bf13d54f1a461ce56f8ca15c576c9a7d72ecd/src/theory/quantifiers/ematching/inst_chain.cpp), read 2026-09-28)
+matches ground terms from newly produced instance bodies against single
+user triggers before returning to SAT. The trigger must bind every variable;
+multi-triggers stay with ordinary E-matching. `--inst-chain` is off by default,
+`--inst-chain-depth` defaults to 1, and `--inst-chain-limit=0` is unlimited.
+The limit is checked between ground terms, so one term's matching patterns can
+overshoot it.
+
+Earlier attempts: three design lines in the fork, none on `main`; the labels below
 do not imply ancestry. Line A, the evaluator-backed conflict/unit design in
 [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi), is
 now R28. Line B has verified ancestry
@@ -296,9 +302,17 @@ experiment must follow if the eager signal is positive.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
+The chain rows vary depth first, then bound the added instances at depth
+4. The budgets are experimental settings, with no measured preference yet.
+
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--inst-when`, `full-last-call` → `full` | `--inst-when=full` | 🔴 **+38 / −170**, net **−132** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain` | |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=4` | |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=8` | |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=4 --inst-chain-limit=100` | |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=4 --inst-chain-limit=1000` | |
 | [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst` | 🔴 **+18 / −897**, net **−879**, 72 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst --eager-inst-term=assert` | 🔴 **+16 / −564**, net **−548**, 66 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst` | 🔴 **+28 / −147**, net **−119** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -340,7 +354,15 @@ and widened to everything as a last resort before answering unknown
 regenerates trigger sets every third pass. `--register-quant-body-terms`
 [`false`].
 
-**Tried.** [`ajreynol:ai-emFilter`](https://github.com/ajreynol/cvc5/tree/ai-emFilter) (2026-04, `--filter-e-matching` "conservatively
+**Tried.** [`ajreynol:ai-heuresis-r2-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r2-codex)
+([source](https://github.com/ajreynol/cvc5/blob/65b7b012f0a15c127b43dcd7b518eda1db9c4f2f/src/theory/quantifiers/term_database.cpp), read 2026-09-28)
+adds `--term-db-reuse-eqc` [false]. It retains equivalence-class term
+tries across rounds and validates their full ordered contents, including term
+and argument representatives, before reuse. It still scans those contents;
+the experiment measures avoided trie reconstruction. Unused indices expire,
+and a new `check-sat` clears the retained indices.
+
+Earlier attempts: [`ajreynol:ai-emFilter`](https://github.com/ajreynol/cvc5/tree/ai-emFilter) (2026-04, `--filter-e-matching` "conservatively
 filter quantified formulas from E-matching": an `EMatchingFilter` that
 snapshots master-engine events and marks triggers dirty by match operator,
 with a last-call backstop; the author's note reads "Probably too
@@ -395,6 +417,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
+| [`ajreynol:ai-heuresis-r2-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r2-codex) | `--term-db-reuse-eqc` | |
 | [`ajreynol:ai-emFilter`](../../../docs/active-dev-branches.md#ai-emFilter) | `--filter-e-matching` | ⚪ **+11 / −27**, net **−16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-imgDirect`](../../../docs/active-dev-branches.md#ai-imgDirect) | *(none — the branch changes behaviour directly)* | 🔴 **+7 / −27**, net **−20** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-quantOpt-1`](../../../docs/active-dev-branches.md#ai-quantOpt-1) | *(none — the branch changes behaviour directly)* | ⚪ **+11 / −7**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -645,7 +668,16 @@ z3's `qi.promote_unsat` would be a win.
 not constructed; nothing runs at `QEFFORT_CONFLICT`. Passing `--cbqi-mode`
 re-enables `--cbqi` unconditionally.
 
-**Tried.** [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) (2026-04, unmerged): a rework of
+**Tried.** [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude)
+([source](https://github.com/ajreynol/cvc5/blob/e60d0b4b76e893605ba0b921201dec7e183f7e9f/src/theory/quantifiers/quant_conflict_find.cpp), read 2026-09-28)
+adds `--cbqi-round-budget` [-1, unlimited] and `--cbqi-round-share`
+[false]. After the budget of consecutive checks without an instance is spent,
+QCF runs only in rounds another module requests; an instance restores its
+budget. Round sharing lets E-matching follow a QCF lemma in the same round.
+`set_defaults.cpp` resets both options when `--no-cbqi` is set, so the new
+policy must be tested with QCF explicitly enabled.
+
+Earlier attempts: [`ajreynol:ai-cbqi-0423`](https://github.com/ajreynol/cvc5/tree/ai-cbqi-0423) (2026-04, unmerged): a rework of
 `quant_conflict_find.cpp` for the case where "large flattened UF encodings,
 e.g. graph-preservation constraints, tend to force QCF into an exhaustive
 search over auxiliary function applications while other quantifier modules
@@ -682,10 +714,24 @@ instances becomes a target.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
+For each `ai-heuresis-r6-claude` row, remove `--no-cbqi` from the reference
+prefix and pass `--cbqi`. The unlimited, unshared row is the control for
+isolating the policy change on the same branch. Budget 0 prevents QCF from
+requesting rounds of its own; budget 2 allows a short unsuccessful streak.
+Compare budget and sharing separately, then together. The branch rows' future
+`± solved` cells retain the ordinary sign against the reference with QCF off;
+the control comparison belongs in the ledger.
+
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--cbqi`, `true` → `false` | `--cbqi`, with `--no-cbqi` **removed** from the prefix — the one arm that subtracts from the reference rather than adding to it | ⚪ **+2 / −16**, net **−14** — **read the sign backwards here**: the arm turns cbqi *on*, so the proposal (off, as the reference has it) is worth **+14**, not −14 ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| `--cbqi`, `true` → `false` | `--cbqi`, with `--no-cbqi` **removed** from the prefix | ⚪ **+2 / −16**, net **−14** — **read the sign backwards here**: the arm turns cbqi *on*, so the proposal (off, as the reference has it) is worth **+14**, not −14 ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | `--sub-cbqi`, `false` → `true` | `--sub-cbqi` | 🔴 **+2 / −1484**, net **−1482** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=-1 --no-cbqi-round-share` — control; remove `--no-cbqi` from the prefix | |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=0` — remove `--no-cbqi` from the prefix | |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=2` — remove `--no-cbqi` from the prefix | |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-share` — remove `--no-cbqi` from the prefix | |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=0 --cbqi-round-share` — remove `--no-cbqi` from the prefix | |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=2 --cbqi-round-share` — remove `--no-cbqi` from the prefix | |
 | [`ajreynol:ai-cbqi-0423`](../../../docs/active-dev-branches.md#ai-cbqi-0423) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −3**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
@@ -839,7 +885,17 @@ rejects entailed completed instances but does not make their discovery eager
 compare conflict-only and propagation/equality QCF under the same strict
 patterns, and measure `theory::QuantifiersEngine::time_conflict_based_inst`.
 
-**Tried.** [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi)
+**Tried.** [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex)
+([source](https://github.com/ajreynol/cvc5/blob/7729490e739ea8a1f22a0a8fb7d4c541713c596d/src/theory/quantifiers/inst_strategy_eager_literal.cpp), read 2026-09-28)
+adds `--eager-inst-literal` [false]. At standard effort, falsified flat
+predicate literals supply substitutions for clausal quantified formulas.
+It accepts conflicts and units over existing ground terms; units may introduce
+new Boolean atoms. Strict user patterns are respected, and ordinary E-matching remains the
+fallback. `--eager-inst-literal-budget` [10000] counts fact/anchor candidates
+per `check-sat`; 0 disables candidate processing rather than removing the
+limit.
+
+Earlier attempts: [`ajreynol:eagerCbqi`](https://github.com/ajreynol/cvc5/tree/eagerCbqi)
 (tip 2024-10-09) is the direct prototype. Despite its name, it is not merely
 the current QCF module run earlier: it adds an eager term database and matcher,
 fed by new classes and merges, then uses the instantiation evaluator to retain
@@ -874,19 +930,27 @@ Solvers*](https://leodemoura.github.io/files/ematching.pdf), CADE 2007.
 statistics](ledger/2026-09-16-conflict-instantiation.md) rule out “run
 mainline QCF earlier” as the implementation: 272,280 structural QCF rounds
 produce only 54 conflict lemmas, and both enabled modes regress. Use the
-compact [`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
-branch as the bounded eager-matching substrate — its published tip now carries
-`c2cc3caf` — then add only the assignment-sensitive conflict/unit acceptance
-and counters. Compare it with ordinary E-matching on the 796-case current gap,
-recording full rounds, eager candidates, accepted conflicts/units, clauses,
-and memory. Mine old
-`eagerCbqi` for design and tests; do not rebase all 204 commits.
+new `ai-heuresis-r28-codex` branch to measure its narrower literal strategy
+against ordinary E-matching, recording full rounds, eager candidates, accepted
+conflicts/units, clauses, and memory. The
+[`ajreynol:claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
+branch supplies a broader eager-matching design (R1). Mine `eagerCbqi` for
+designs that cover cases the literal strategy cannot match.
 
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
+The eager-literal rows bracket the default candidate budget with
+1000 and 100000. Budget 0 is the fallback control. Keep ordinary E-matching
+enabled in each row and record candidates, accepted conflicts/units, and
+rejections.
+
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
+| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal` | |
+| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal --eager-inst-literal-budget=1000` | |
+| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal --eager-inst-literal-budget=100000` | |
+| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal --eager-inst-literal-budget=0` — fallback control | |
 | [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst` | ⚪ **+9 / −6**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=conflict` | ⚪ **+4 / −8**, net **−4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=prop` | ⚪ **+7 / −3**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -940,7 +1004,16 @@ reason. Deletion therefore needs a deletion *notification* back to the
 quantifiers module, which is what the fork's [`ajreynol:satNotify`](https://github.com/ajreynol/cvc5/tree/satNotify) / [`ajreynol:notifySatClause`](https://github.com/ajreynol/cvc5/tree/notifySatClause)
 branches built.
 
-**Tried.** [`ajreynol:virtualLemma`](https://github.com/ajreynol/cvc5/tree/virtualLemma) (2021, `--virtual-inst` "mark instantiations as
+**Tried.** [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude)
+([source](https://github.com/ajreynol/cvc5/blob/7b2548f123a8a7f39ffafd56bc739431acfbc1f2/src/theory/quantifiers/instantiate.cpp), read 2026-09-28)
+adds `--inst-gc` [none]. Mode `assert` marks instance assertion clauses
+removable; `body` also makes their Tseitin definitions removable. The instance
+cache does not re-send discarded instances, so sending a removable instance
+prevents a later `sat` answer (`unknown` instead). Proofs, unsat cores, and
+incremental solving are unsupported. This tests deletion before the full
+cache/deletion-notification design is implemented.
+
+Earlier attempts: [`ajreynol:virtualLemma`](https://github.com/ajreynol/cvc5/tree/virtualLemma) (2021, `--virtual-inst` "mark instantiations as
 virtual clauses") and [`ajreynol:virtualClauseDel`](https://github.com/ajreynol/cvc5/tree/virtualClauseDel) (2021) — the first design;
 [`ajreynol:instVolatile`](https://github.com/ajreynol/cvc5/tree/instVolatile) (2025, merged as `--inst-local`); [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) (2026,
 `--inst-defer`: "instantiations are recorded globally (never re-derived) but
@@ -986,7 +1059,9 @@ and 69.9 million decisions across the gap, but not live persistent-clause
 count or instance-clause conflict use. Add those two counters. The negative,
 high-variance `--inst-local` result above tests its scoped-cache/justification
 approximation, not deletion; classify its helped cases before trying
-`--inst-defer`. A true GC still needs the notification plumbing first.
+`--inst-defer`. The new `inst-gc` modes can measure deletion now, while a
+complete solver that re-sends deleted instances still needs notification
+plumbing.
 
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals). **The `--inst-local`
@@ -999,9 +1074,17 @@ which solver holds the clauses. That is itself a result for R9, whose subject is
 what the SAT solver keeps; the arm that would settle it is `--inst-local` with
 `--sat-solver=minisat` at this revision, and it has not been run.
 
+The GC rows explicitly use `--no-incremental`; the `inst-gc=none` row
+controls for that setting on the same branch. Compare `assert` with `body` to
+separate removal of assertion clauses from removal of their definitions, and
+record the removable-clause counters and `unknown` results.
+
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--inst-local`, `false` → `true` | `--inst-local` | 🔴 **+23 / −629**, net **−606** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude) | `--no-incremental --inst-gc=none` — control | |
+| [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude) | `--no-incremental --inst-gc=assert` | |
+| [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude) | `--no-incremental --inst-gc=body` | |
 | [`ajreynol:notifySatClause`](../../../docs/active-dev-branches.md#notifySatClause) | *(none — the branch changes behaviour directly)* | ⚪ **+3 / −3**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:smtLazyAssert`](../../../docs/active-dev-branches.md#smtLazyAssert) | `--smt-lazy-assert` | ⚪ **+2 / −5**, net **−3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:virtualClauseDel`](../../../docs/active-dev-branches.md#virtualClauseDel) | *(none — the branch changes behaviour directly)* | ⚪ **+7 / −4**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1028,7 +1111,14 @@ heuristic); `--jh-skolem` [`first`], `--jh-skolem-rlv` [`assert`] — the
 skolem-definition machinery that [`ajreynol:ai-jhRlvInst`](https://github.com/ajreynol/cvc5/tree/ai-jhRlvInst) generalises to instances;
 `--decision` [`justification`] for any quantified logic (R11).
 
-**Tried.** [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) (`--inst-defer`, above) and [`ajreynol:claudeDev-dts-idef`](https://github.com/ajreynol/cvc5/tree/claudeDev-dts-idef)
+**Tried.** [`ajreynol:ai-heuresis-r10-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r10-codex)
+([source](https://github.com/ajreynol/cvc5/blob/96e7ec1edd3bef1664e2c1b2f158830945dfa6e4/src/decision/justification_strategy.cpp), read 2026-09-28)
+adds `--jh-inst-round-robin` [false]. It groups quantifier-guarded
+lemmas by quantifier and interleaves those groups in the justification
+heuristic, preserving the positions of ungrouped assertions and backtracking
+the group cursors. Local assertions use the existing separate list.
+
+Earlier attempts: [`ajreynol:ai-instDefer`](https://github.com/ajreynol/cvc5/tree/ai-instDefer) (`--inst-defer`, above) and [`ajreynol:claudeDev-dts-idef`](https://github.com/ajreynol/cvc5/tree/claudeDev-dts-idef)
 (`--inst-defer` with `--dt-split-relevant`, "taking both ideas");
 [`ajreynol:ai-jhRlvInst`](https://github.com/ajreynol/cvc5/tree/ai-jhRlvInst) (`--jh-rlv-inst`: "dynamically activate instantiation lemmas
 based on whether their associated quantified formula is asserted, analogous
@@ -1068,8 +1158,14 @@ with `sat::decisions` before building or rebasing `--inst-defer`.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
+The round-robin rows test the ordering alone and with the existing
+`--jh-rlv-order` activity ordering. Use the existing option row as the
+mechanism-level control, remeasured at the new branch's base.
+
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
+| [`ajreynol:ai-heuresis-r10-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r10-codex) | `--jh-inst-round-robin` | |
+| [`ajreynol:ai-heuresis-r10-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r10-codex) | `--jh-inst-round-robin --jh-rlv-order` | |
 | [`ajreynol:ai-instDefer`](../../../docs/active-dev-branches.md#ai-instDefer) | `--inst-defer` | 🟡 **+47 / −33**, net **+14** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-jhConflictFirst`](../../../docs/active-dev-branches.md#ai-jhConflictFirst) | `--jh-conflict-first` | ⚪ **+19 / −37**, net **−18** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-jhRlvInst`](../../../docs/active-dev-branches.md#ai-jhRlvInst) | `--jh-rlv-inst` | 🟡 **+27 / −17**, net **+10** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1100,7 +1196,16 @@ asserted; `relevant` does not exist on `main`); `--relevance-filter`
 `NEEDS_JUSTIFY` bookkeeping today); `--random-freq` [`0.0`]; no phase-saving
 options are exposed for MiniSat.
 
-**Tried.** [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) (2024–2026, 155 commits, [PR
+**Tried.** [`ajreynol:ai-heuresis-r11-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r11-claude)
+([source](https://github.com/ajreynol/cvc5/blob/079613fb8b03c07c70ff8df8cfb103ba05a4ecff/src/theory/quantifiers_engine.cpp), read 2026-09-28)
+adds `--rlv-quant` [off] and automatically enables the relevance
+manager. Mode `full` skips quantified formulas outside the relevant selection
+at full effort, then considers them at last call. Mode `strict` keeps the filter at
+last call and returns `unknown` instead of `sat` if formulas were filtered.
+`QuantifiersEngine::Rlv_Quant_Kept` and `Rlv_Quant_Filtered` expose the work
+selected and skipped.
+
+Earlier attempts: [`ajreynol:preregRlv`](https://github.com/ajreynol/cvc5/tree/preregRlv) (2024–2026, 155 commits, [PR
 #9503](https://github.com/cvc5/cvc5/pull/9503):
 `--preregister-mode=rlv` "Preregister literals when they become relevant";
 `RelevantPreregistrar`: "we want to preregister only the literals that, if
@@ -1137,11 +1242,16 @@ decision count.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
+Compare `full` and `strict` to price the last-call fallback, recording
+both filtering counters and `unknown` outcomes.
+
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--decision`, `justification` here → `internal` | `--decision=internal` | 🔴 **+25 / −502**, net **−477** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | `--decision`, `justification` here → `stoponly` | `--decision=stoponly` | 🔴 **+23 / −525**, net **−502** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | ⚪ **+11 / −23**, net **−12** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| [`ajreynol:ai-heuresis-r11-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r11-claude) | `--rlv-quant=full` | |
+| [`ajreynol:ai-heuresis-r11-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r11-claude) | `--rlv-quant=strict` | |
 | [`ajreynol:jhRandom`](../../../docs/active-dev-branches.md#jhRandom) | `--jh-rand` | 🔴 **+25 / −150**, net **−125** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R12 — Lemma inprocessing and conflict minimisation
@@ -1444,7 +1554,15 @@ only after `markNeedsRestore()`. Its reported incremental `Kind2` improvement
 is evidence about context-restoration traffic, not equality-merge callbacks;
 it was still unmerged on 2026-09-15.
 
-**Tried.** [`ajreynol:centralEe`](https://github.com/ajreynol/cvc5/tree/centralEe), [`ajreynol:centralEeDev`](https://github.com/ajreynol/cvc5/tree/centralEeDev) (2021, merged: `--ee-mode=central`);
+**Tried.** [`ajreynol:ai-heuresis-r15-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r15-claude)
+([source](https://github.com/ajreynol/cvc5/blob/5a936dbf58c8c1ab00d9b23f757a949443331570/src/theory/ee_manager_distributed.cpp), read 2026-09-28)
+adds `--ee-share-uf-dt` [false]. UF and datatypes share one equality
+engine inside the distributed architecture, with notifications dispatched to
+both theories and explanations allowed to consult the companion theory's
+propagation record. Central mode and SyGuS disable this option. Sharing also
+requires both theories to be active with compatible equality-engine setups.
+
+Earlier attempts: [`ajreynol:centralEe`](https://github.com/ajreynol/cvc5/tree/centralEe), [`ajreynol:centralEeDev`](https://github.com/ajreynol/cvc5/tree/centralEeDev) (2021, merged: `--ee-mode=central`);
 [`ajreynol:dtMergeNotify`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify),
 [`ajreynol:dtMergeNotify-v2`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v2),
 [`ajreynol:dtMergeNotify-v3`](https://github.com/ajreynol/cvc5/tree/dtMergeNotify-v3)
@@ -1490,9 +1608,16 @@ branch figures (`d7d03b082c`, 2026-09-16).
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
+Test sharing alone and with `--ieval=off`, whose interaction with
+equality architecture already matters in R7/R15. Remeasure evaluator-off on
+the branch's base for attribution; combining this option with central mode
+would disable the new mechanism.
+
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--ee-mode`, `distributed` → `central` | `--ee-mode=central` | 🟢 **+73 / −19**, net **+54** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| [`ajreynol:ai-heuresis-r15-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r15-claude) | `--ee-share-uf-dt` | |
+| [`ajreynol:ai-heuresis-r15-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r15-claude) | `--ee-share-uf-dt --ieval=off` | |
 | [`ajreynol:ai-eecNoShare`](../../../docs/active-dev-branches.md#ai-eecNoShare) | *(none — the branch changes behaviour directly)* | ⚪ **+8 / −7**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:cdno`](../../../docs/active-dev-branches.md#cdno) | *(none — the branch changes behaviour directly)* | ⚪ **+5 / −4**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtMergeNotify-v3`](../../../docs/active-dev-branches.md#dtMergeNotify-v3) | *(none — the branch changes behaviour directly)* | ⚪ **+3 / −19**, net **−16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1527,7 +1652,15 @@ to combine with … E-matching"]; `--dt-infer-as-lemmas` [`false`];
 `--quant-dsplit` [`default`, idle without FMF], `--dt-var-exp-quant`
 [`true`], `--cons-exp-triggers` [`false`].
 
-**Tried.** [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) (2026-06, `--dt-split-relevant` "only add
+**Tried.** [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude)
+([source](https://github.com/ajreynol/cvc5/blob/8f890911af9a4a3ee98c7de67c3b40ecf780784d/src/theory/datatypes/theory_datatypes.cpp), read 2026-09-28)
+adds `--dt-split-order` [none] and `--dt-split-prefer-phase` [false].
+`base-first` and `base-last` move the constructor used for a ground term to
+the front or back of each split. The phase option asks SAT to try the first
+tester positively. Reordered splits are incompatible with proofs and unsat
+cores; the phase-only option retains that support.
+
+Earlier attempts: [`ajreynol:dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) (2026-06, `--dt-split-relevant` "only add
 splitting lemmas for datatype terms that occur in asserted literals");
 [`ajreynol:dtRlvSplit`](https://github.com/ajreynol/cvc5/tree/dtRlvSplit) (2025-11, partly merged, reworked into [`ajreynol:verusDev`](https://github.com/ajreynol/cvc5/tree/verusDev)'s "No split
 infinite"); [`ajreynol:dtElim`](https://github.com/ajreynol/cvc5/tree/dtElim) (2025-10, 26 commits, `--dt-elim` "eliminate datatypes
@@ -1575,9 +1708,18 @@ logic as a narrowly instrumented current-main patch and check completeness.
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
+The datatype rows separate constructor order from phase preference
+and combine each order with the phase option. `base-last` is the ordering
+control for `base-first`; phase alone retains declaration order.
+
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | ⚪ **+12 / −23**, net **−11** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-first` | |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-last` | |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-prefer-phase` | |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-first --dt-split-prefer-phase` | |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-last --dt-split-prefer-phase` | |
 | [`ajreynol:dtElim`](../../../docs/active-dev-branches.md#dtElim) | `--dt-elim` | 🔴 **+9 / −954**, net **−945**, 917 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtLazyInst3`](../../../docs/active-dev-branches.md#dtLazyInst3) | `--dt-lazy-inst` | 🔴 **+27 / −75**, net **−48** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtSplitRelevant`](../../../docs/active-dev-branches.md#dtSplitRelevant) | `--dt-split-relevant` | ⚪ **+9 / −7**, net **+2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1609,7 +1751,16 @@ off only for quantifier-free nonlinear logics], `--dio-turns` [`10`],
 for pure quantifier-free arithmetic; `--arith-rewrite-equalities` off for
 these logics.
 
-**Tried.** [`ajreynol:deferBlock`](https://github.com/ajreynol/cvc5/tree/deferBlock) (2025, `--defer-block`, branch-and-bound deferral
+**Tried.** [`ajreynol:ai-heuresis-r17-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r17-codex)
+([source](https://github.com/ajreynol/cvc5/blob/05b63a7b09b1f9b25acc06dd2f9d0f88ec205d09/src/theory/arith/linear/theory_arith_private.cpp), read 2026-09-28)
+adds `--arith-int-repair` [false]. Before integer cuts and branching,
+it tries exact assignment changes toward the floor or ceiling of fractional
+integer inputs. Changes must preserve all affected bounds and already
+integral assignments. A fixed work budget bounds the attempt, after which
+ordinary integer reasoning continues. It runs only in linear logics, so NIA
+inputs do not exercise it.
+
+Earlier attempts: [`ajreynol:deferBlock`](https://github.com/ajreynol/cvc5/tree/deferBlock) (2025, `--defer-block`, branch-and-bound deferral
 hooks "BB only"; the notes: block or delay the lemmas); [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc) (2026-06,
 `--dio-solver-last-call` "defer Diophantine equation solver conflict
 detection to last call effort, instead of running it at every full effort
@@ -1658,8 +1809,12 @@ building [`ajreynol:ai-dioLc`](https://github.com/ajreynol/cvc5/tree/ai-dioLc).
 **Proposals.** This direction's own; a proposal is listed here and in no
 other direction. Columns and rules: [Proposals](#proposals).
 
+Measure repairs, repair attempts, and external branch-and-bound calls
+on the linear-arithmetic slice as well as whole-set solved counts.
+
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
+| [`ajreynol:ai-heuresis-r17-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r17-codex) | `--arith-int-repair` | |
 | [`ajreynol:ai-dioLc`](../../../docs/active-dev-branches.md#ai-dioLc) | `--dio-solver-last-call` | 🔴 **+5 / −93**, net **−88** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block` | ⚪ **+5 / −5**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block --defer-block-mode=delay` | ⚪ **+5 / −5**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -2403,16 +2558,17 @@ different code. An option row names the sha whose defaults were read; the
 carries. This is the rule [`progress.md`](progress.md) already applies to a
 history row — *the exact cvc5 `main` revision, not "current main"*.
 
-**Every branch here reached the pin by a merge, not a rebase.** Each current tip
-is a `Merge branch 'master' into …` commit, which is enough to build and
-measure but is not the linear series an upstream review will ask for;
-linearising is deferred, not avoided. Five branches have no changes of
+**The earlier branch update passes used merges.** Those tips were
+`Merge branch 'master' into …` commits. Those updates allowed builds and
+measurements; linearising them for upstream review remains pending.
+Five branches have no changes of
 their own left against the pin and lost their rows here — not because a merge
 destroyed them, as this register first recorded, but because four had their
 mechanism land upstream and one was superseded by a more general upstream
 change. The [shared list](../../../docs/active-dev-branches.md) carries the
 reading; the diff is still checked after every update, because an empty one has
-to be explained either way.
+to be explained either way. Newly inspected branches may instead be direct
+commits on their base; their exact tips and build status are in the shared list.
 
 **An empty `± solved` cell means the run has not happened.** This register no
 longer carries how current a branch is, how large it is, or whether it
@@ -2470,7 +2626,7 @@ history.
   branch refs excluding the symbolic
   remote `HEAD`, as fetched into the local checkout on 2026-08-26; commit
   subjects, tip dates, merge-base diffstats and option help text read
-  2026-09-15. All 170 distinct branch URLs used here resolved to those refs,
+  2026-09-15. Branch URLs in that initial inventory resolved to those refs,
   and their displayed names matched the URL targets. Feature status was
   checked semantically against pinned cvc5 source and upstream PR state, not
   inferred from Git ancestry.

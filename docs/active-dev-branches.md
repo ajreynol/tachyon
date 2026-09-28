@@ -34,6 +34,33 @@ exact cvc5 `main` revision, not "current main"*.
 and two of the branches below compile *because* a merge emptied them. No number
 in either project's `± solved` column comes from this file.
 
+## Branches inspected 2026-09-28
+
+GitHub branch heads were checked against the exact local commit objects. The
+option declarations, implementation changes, and regression cases were read
+at the tips below. These branches each add a direct commit to fork `master`
+at [`03e5ee1ebf`](https://github.com/cvc5/cvc5/commit/03e5ee1ebfcaea0994b1f38ef53a1b4aa87a30bd).
+The source diffs below are against that base, and each branch is zero commits
+behind it. Build and performance checks remain pending; the older compile
+results elsewhere in this file do not cover these tips.
+
+The owning direction lists the runnable option combinations. Its results stay
+empty until a reference and branch arms have been measured at a matching base;
+the reference currently recorded by heuresis predates these branches.
+
+| branch | what it does | project | direction | inspected tip | ± LOC (`src/`) | builds |
+| --- | --- | --- | --- | --- | --- | --- |
+| <a id="ai-heuresis-r1-claude"></a>[`ai-heuresis-r1-claude`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r1-claude) | Chains single-trigger matches through newly produced instance bodies | heuresis | [R1](../tools/heuresis/docs/directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | [`9b3bf13d54`](https://github.com/ajreynol/cvc5/commit/9b3bf13d54f1a461ce56f8ca15c576c9a7d72ecd) | +541/−1 over 10 src files | not checked |
+| <a id="ai-heuresis-r2-codex"></a>[`ai-heuresis-r2-codex`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r2-codex) | Reuses equivalence-class term tries after validating their ordered contents | heuresis | [R2](../tools/heuresis/docs/directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | [`65b7b012f0`](https://github.com/ajreynol/cvc5/commit/65b7b012f0a15c127b43dcd7b518eda1db9c4f2f) | +97/−11 over 3 src files | not checked |
+| <a id="ai-heuresis-r6-claude"></a>[`ai-heuresis-r6-claude`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r6-claude) | Budgets QCF-only rounds and lets E-matching share a round with QCF | heuresis | [R6](../tools/heuresis/docs/directions.md#r6--conflict-based-instantiation-off-for-this-domain-and-why-that-is-right-or-wrong) | [`e60d0b4b76`](https://github.com/ajreynol/cvc5/commit/e60d0b4b76e893605ba0b921201dec7e183f7e9f) | +107/−3 over 7 src files | not checked |
+| <a id="ai-heuresis-r9-claude"></a>[`ai-heuresis-r9-claude`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r9-claude) | Makes instance assertions, optionally their Tseitin definitions, removable | heuresis | [R9](../tools/heuresis/docs/directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | [`7b2548f123`](https://github.com/ajreynol/cvc5/commit/7b2548f123a8a7f39ffafd56bc739431acfbc1f2) | +145/−9 over 9 src files | not checked |
+| <a id="ai-heuresis-r10-codex"></a>[`ai-heuresis-r10-codex`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r10-codex) | Interleaves quantifier-guarded lemmas by quantifier in the justification heuristic | heuresis | [R10](../tools/heuresis/docs/directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | [`96e7ec1edd`](https://github.com/ajreynol/cvc5/commit/96e7ec1edd3bef1664e2c1b2f158830945dfa6e4) | +204/−24 over 8 src files | not checked |
+| <a id="ai-heuresis-r11-claude"></a>[`ai-heuresis-r11-claude`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r11-claude) | Filters asserted quantified formulas by relevance, with optional last-call fallback | heuresis | [R11](../tools/heuresis/docs/directions.md#r11--decision-heuristic-versus-relevancy-what-the-sat-solver-is-made-to-decide-on) | [`079613fb8b`](https://github.com/ajreynol/cvc5/commit/079613fb8b03c07c70ff8df8cfb103ba05a4ecff) | +121/−1 over 8 src files | not checked |
+| <a id="ai-heuresis-r15-claude"></a>[`ai-heuresis-r15-claude`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r15-claude) | Shares one equality engine between UF and datatypes within distributed mode | heuresis | [R15](../tools/heuresis/docs/directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | [`5a936dbf58`](https://github.com/ajreynol/cvc5/commit/5a936dbf58c8c1ab00d9b23f757a949443331570) | +266/−1 over 9 src files | not checked |
+| <a id="ai-heuresis-r16-claude"></a>[`ai-heuresis-r16-claude`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r16-claude) | Orders datatype constructor splits and optionally prefers the first tester positively | heuresis | [R16](../tools/heuresis/docs/directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | [`8f890911af`](https://github.com/ajreynol/cvc5/commit/8f890911af9a4a3ee98c7de67c3b40ecf780784d) | +154/−2 over 6 src files | not checked |
+| <a id="ai-heuresis-r17-codex"></a>[`ai-heuresis-r17-codex`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r17-codex) | Tries bounded exact integer assignment repairs before cuts and branching | heuresis | [R17](../tools/heuresis/docs/directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | [`05b63a7b09`](https://github.com/ajreynol/cvc5/commit/05b63a7b09b1f9b25acc06dd2f9d0f88ec205d09) | +167/−0 over 3 src files | not checked |
+| <a id="ai-heuresis-r28-codex"></a>[`ai-heuresis-r28-codex`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r28-codex) | Emits eager conflict/unit instances from falsified flat predicate literals | heuresis | [R28](../tools/heuresis/docs/directions.md#r28--eager-conflict-based-instantiation-find-a-useful-instance-before-full-effort) | [`7729490e73`](https://github.com/ajreynol/cvc5/commit/7729490e739ea8a1f22a0a8fb7d4c541713c596d) | +534/−1 over 11 src files | not checked |
+
 ## State
 
 **Read 2026-09-22, after a third update pass.** The pin is cvc5
