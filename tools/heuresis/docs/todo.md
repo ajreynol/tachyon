@@ -31,9 +31,7 @@ source question. "Investigate R*n*" is no longer a step.
 **What that changes.** This queue still ranks *directions*, because the ranking
 is a judgement about where the gap is and rows cannot carry that. What it stops
 doing is restating experiments the register already specifies: where a row
-exists, the queue points at it and the register owns the wording. Seventy-nine
-proposals across twenty-seven directions currently sit there, ninety-five rows
-in all once the option strings are counted separately.
+exists, the queue points at it and the register owns the wording.
 
 ## Runs in flight
 

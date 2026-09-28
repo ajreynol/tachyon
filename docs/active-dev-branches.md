@@ -11,13 +11,13 @@ table. Those registers are authoritative and this file is derived from them,
 from the fork, and from a build on the benchmark host. It is **not** a place to
 add a branch: a branch earns a row here by first earning a proposal row there.
 
-| project | register | branch proposals | in this file |
-| --- | --- | ---: | --- |
-| heuresis | [`directions.md`](../tools/heuresis/docs/directions.md#proposals) | 57 | quantifier-performance branches |
-| elaphros | [`directions.md`](../tools/elaphros/docs/directions.md#proposals) | 20 | proof-production branches |
+| project | register | in this file |
+| --- | --- | --- |
+| heuresis | [`directions.md`](../tools/heuresis/docs/directions.md#proposals) | quantifier-performance branches |
+| elaphros | [`directions.md`](../tools/elaphros/docs/directions.md#proposals) | proof-production branches |
 
 **Branches only.** A proposal can also be a change to the default of an option
-that already exists on `main`; heuresis records 23 of those. They have no
+that already exists on `main`. These proposals have no
 branch to update and nothing to build, so they live in their register and not
 here.
 
@@ -43,10 +43,8 @@ between them.
 
 | | |
 | --- | --- |
-| active branches | **77** — 57 heuresis, 20 elaphros |
-| within 11 commits of the pin | **77** (57 heuresis + 20 elaphros) |
-| older | **none** — every active branch is within that distance |
-| compile-checked | **77 of 77** pass |
+| distance from the pin | every active branch was within 11 commits at this reading |
+| compile check | every active branch passed at this reading |
 
 Three passes have run: 37 branches on 2026-09-21, 33 more on 2026-09-22, and 58
 refreshed again the same day. **Every one was brought up by merging, not by
@@ -97,7 +95,7 @@ the time beside it. It does not mean the branch is correct, that its regressions
 pass, or that it helps. Only branches within 6 commits of the pin are built; an
 older branch would be compiling a cvc5 from years ago, which answers nothing.
 
-**All 77 pass, which is worth distrusting**, so the check was verified rather
+**Every branch passed, which is worth distrusting**, so the check was verified rather
 than assumed: the binary built from [`claude-eagerInst`](https://github.com/ajreynol/cvc5/tree/claude-eagerInst)
 accepts `--eager-inst-limit=5`, and the binary built from the pin rejects it as
 an unknown option. The branch's code is in the binary, and each branch is a real
@@ -137,7 +135,7 @@ git --git-dir=fork.git diff --stat $PIN...BRANCH -- src/ # empty means content w
 6. **Then update two places:** the proposal row in the owning project's
    register, and the row here.
 
-## Carrying the pin, or within 11 commits of it — 77 branches
+## Carrying the pin, or within 11 commits of it
 
 `± LOC` is the three-dot source diff against [`1c0b206`](https://github.com/cvc5/cvc5/commit/1c0b2066ce8d6c947f25212af74be705f1c0cbe5), `src/` only.
 
@@ -239,4 +237,3 @@ that branch's incremental build time.
 **Every active branch is within reach of the pin**, for the first time since
 this list was started. There is no update backlog left; what remains is
 measurement.
-

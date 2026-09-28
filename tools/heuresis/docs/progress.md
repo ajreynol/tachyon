@@ -216,10 +216,9 @@ Not a performance change, so it will not move a row, but it is the first
 upstream-reportable defect this project has produced.
 
 **Standing candidates**, from the ledger, none yet proposed upstream. The
-[proposals tables](directions.md#proposals) now name seventy-nine proposals
-across twenty-seven of the twenty-eight directions — fifty-seven branches, all
-current, and twenty-two changes to an option's default, the option rows carrying this
-project's first measured `± solved` figures. **`--ee-mode=central` is one of
+[proposals tables](directions.md#proposals) list development branches and
+changes to option defaults, with measured `± solved` figures in their rows.
+**`--ee-mode=central` is one of
 them**, R15's row, with its +63. What remains below is the candidate no option
 and no branch yet expresses, which is why it has no row: the eager pair budget,
 and it would go under one of R1 or R28, not both:

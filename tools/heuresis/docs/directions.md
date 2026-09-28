@@ -81,15 +81,12 @@ and inform future work.
 > A cell inside ±5 is reporting that churn, which is why it is marked ⚪ rather
 > than as a small gain or a small loss.
 
-**Twenty-eight directions, R1–R23 and R25–R29, each with an argued risk/gain
-estimate, the same four inventories — the cvc5 flags that test it today,
-what has been tried, what z3 and others do, and the papers — and, last, the
-table of [proposals](#proposals) that direction owns — seventy-nine in all
-across twenty-seven of the twenty-eight directions: twenty-two option-default
-changes, seven of them measured, and fifty-seven branches, all within one commit
-of
-[`10bd5cb3`](https://github.com/cvc5/cvc5/commit/10bd5cb3bb9ad9cb10277e0ae54e352e6d2ac345)
-and compile-checked there, and none has yet been measured.** Written
+**Each research direction has an argued risk/gain estimate, inventories of
+the cvc5 flags that test it today, what has been tried, what z3 and others do,
+and the papers, followed by its own table of [proposals](#proposals).
+Proposals are option-default changes or development branches.** Branch currency
+and build status live in the [shared list](../../../docs/active-dev-branches.md).
+Written
 2026-09-15 from the performance notes
 summarised in [`../notes.md`](notes.md) (the `h-N` rows referenced below),
 from cvc5 `main` at
@@ -1195,6 +1192,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
+| `--lemma-inprocess`, `none` → `light` | `--lemma-inprocess=light` | |
+| `--conflict-process`, `none` → `min` | `--conflict-process=min` | |
 | [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find` | ⚪ **+7 / −8**, net **−1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find --no-sub-conflict-last-call` | 🔴 **+2 / −1423**, net **−1421** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
@@ -2296,10 +2295,9 @@ things qualify:
 1. **A default-option change** — a cvc5 option whose *default* this project
    proposes to change. The option already exists; the proposal is the default.
    Passing it on a command line is a configuration, and
-   [`progress.md`](progress.md) tracks those. **Twenty-two of these are listed**,
-   one row per single-option change, and they are the cheapest proposals in the
-   register: no branch to rebase, nothing to build, and seven already carry a
-   measured number. Each names the default as read at the pin, because a
+   [`progress.md`](progress.md) tracks those. Each single-option change has its
+   own row. These are the cheapest proposals in the register: no branch to
+   rebase and nothing to build. Each names the default as read at the pin, because a
    default is not a fixed fact — `--decision` declares `internal` but
    `set_defaults.cpp` chooses `justification` for quantified logics, which is
    what this set actually runs, and `--theoryof-mode` is chosen by logic in the
@@ -2426,9 +2424,8 @@ for the change and the number that came of it.
 
 **Read 2026-09-23, after a fourth update pass**, against cvc5
 [`1c0b2066`](https://github.com/cvc5/cvc5/commit/1c0b2066ce8d6c947f25212af74be705f1c0cbe5),
-which `ajreynol/cvc5` `master` pointed at: of the **seventy-nine proposals**
-named across twenty-seven directions — fifty-seven branches and twenty-two
-option-default changes — **every branch is now within one commit of the pin**,
+which `ajreynol/cvc5` `master` pointed at: **every proposed branch was within
+one commit of the pin**,
 because master itself moved on after the pass. There is no long tail left: the
 branches that could not be carried forward have lost their rows, and the ones
 that were carried are current. `± LOC` is read at the pin; the build column is being
