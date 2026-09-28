@@ -75,10 +75,16 @@ means the host scripts are now ours to change.
 
 ## AI-agent priorities
 
-**The expensive combined design remains R1 + R2 + R9** — eager, incremental,
-forgetting — and the attribution still has to earn it. Each of the three is
-ranked on its own below; none of them is proposed as a bundle until the
-measurements say the combination is what the gap needs.
+**The expensive combined design R1 + R2 + R9 is now the weaker hypothesis.**
+Eager, incremental, forgetting was ranked on promise. All three have since been
+measured across 24 arms and none of them produces a proposal above the noise
+band: R1 is red on every one of its 14 arms, R2's best is +4, R9's best is +3
+and its option `--inst-local` is −606. The combination is not refuted — a bundle
+can beat its parts — but it can no longer outrank a direction whose parts
+already win.
+
+**R10 is that direction.** It owns the three best branch arms in the register
+and is the only direction whose branches are positive at all.
 
 The table contains ten research directions in priority order. Normally a
 direction has one row. Where genuinely independent starting choices are
@@ -88,33 +94,47 @@ Each direction comes from [`directions.md`](directions.md). After completing a
 step, record the evidence in [`ledger/`](ledger), rerank the ten
 directions, and replace or refine that direction's possible first steps.
 
-The ranking now incorporates the first whole-set attribution statistics and
-option A/Bs ([evidence](ledger/2026-09-15-attribution-stats.md)); it should
-continue to move when evidence changes.
+**Updated.** 2026-09-25, on the first complete register: all 70 branch arms
+([ledger](ledger/2026-09-24-branch-sweep.md)) and all 22 option arms re-run so
+that every cell shares one reference
+([ledger](ledger/2026-09-25-option-sweep-one-reference.md)). This is the first
+rerank with nothing pending, and it moved more than any before it, because for
+the first time the ranking can be read off measurements rather than priors.
 
-**Updated.** 2026-09-16, after the eager-instantiation runs
-([evidence](ledger/2026-09-16-bounded-eager-instantiation.md)). The
-provisional rank R1 and R28 held in the preceding revision is now settled by
-measurement, and it did not survive intact: eager instantiation as implemented
-is a net loss, so R1 falls from a rank it held on promise. It does not fall
-far, because the same run produced this project's first candidate finding — 29
-gap cases reachable only through an eager mode. R9 rises to 1 on the strength
-of a measured mechanism rather than a recalled one, which also converges with
-the maintainer's ranking; that convergence is evidence-driven and not
-deference. This remains the AI agent's independent ordering.
+**Two directions clear the noise band and eight do not.** R15 at **+54** and R10
+at **+14** are the whole of the register's positive evidence; every other
+direction's best arm sits between +12 and −273. The ordering below is therefore
+those two first, then the directions whose *mechanism* is measured as
+significant even though no proposal exploits it yet, then the directions whose
+proposals have now been measured and found flat.
+
+**Three directions fall on their own evidence.** R9 gives up rank 1: the
+drowning it identified is real and measured, but four arms later nothing in the
+direction exceeds +3, so it is a diagnosis without a remedy rather than a lead.
+R1 falls from 3 to 6 — it has 14 arms, all red, the most failed arms of any
+direction, and keeps a place only because its rescues are large and unique. R28
+falls furthest, 4 to 9: it was ranked on the argument that the bounded matcher's
+acceptance half was untested, and its five arms are now tested and flat (+4 to
+−13).
+
+**R10's next step is cheap and decisive**, which is the other reason it ranks
+second rather than fifth: the question is whether its three arms lose the *same*
+benchmarks, and that is an intersection of gap sets already on disk, not a new
+run.
 
 | rank | research direction | effort | its rows in the register | next possible step |
 | ---: | --- | --- | --- | --- |
-| 1 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🟥 High Risk / 🟩 High Gain | 3 branch runs + `--inst-local` | S1 measured the drowning directly: 13.7% less time on solved, 109 more timeouts, 19 more unknowns. Add persistent-clause and conflict-use counters (S5), then design deletion. |
-| 2 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🟥 High Risk / 🟩 High Gain | 3 branch runs + `--ee-mode=central` | Still the largest measured signal: central mode cuts current-main PAR2 10.3%. Count skipped shared-equality propagations and callback time (S4); [`ajreynol:ai-eecNoShare`](https://github.com/ajreynol/cvc5/tree/ai-eecNoShare) itself is neutral. |
-| 3 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🟥 High Risk / 🟩 High Gain | **13 branch runs** + `--inst-when=full` | Not a default: −19.46% PAR2 at branch budgets, −10.88% with `--eager-inst-rlv`. But 29 gap cases are reachable only this way. Take the module's counters (S2), then ask what separates the rescues from the slowdowns (S6). |
-| 4 | [R28 — Eager conflict-based instantiation](directions.md#r28--eager-conflict-based-instantiation-find-a-useful-instance-before-full-effort) | 🟥 High Risk / 🟩 High Gain | 5 branch runs (`eagerCbqi` modes) | The bounded matcher exists and is measured; the untested half is acceptance. Add conflict/unit acceptance so an eager instance is kept only when it conflicts or propagates, which is the obvious answer to a 19% unpaced loss. |
-| 5 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🟥 High Risk / 🟩 High Gain | 6 branch runs, no option | E-matching is 27.8% of gap-set time. `d_statRematch` answers this inside the eager module (S2); `qdebugStats` has the mainline count as a `Trace`, needing the port in S3. |
-| 6 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟩 Low Risk / 🟨 Medium Gain | 3 branch runs + `--ieval=off`, `--no-inst-no-entail` | Add evaluator pushes, early-rejection, time, and memory counters before designing a narrower replacement; [`ajreynol:ievalTravTrie`](https://github.com/ajreynol/cvc5/tree/ievalTravTrie) is neutral and evaluator-off remains better. |
-| 7 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟩 Low Risk / 🟩 High Gain | 3 runs, all *n/a* — counters, not speed | Produce the first normalized per-benchmark attribution table for the current gap; the eager run showed how little a bare PAR2 total says without one. |
-| 8 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟨 Medium Risk / 🟩 High Gain | 4 branch runs, no option | Classify the disjoint wins and losses from the two negative global controls before building or rebasing `ai-instDefer`. |
-| 9 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🟥 High Risk / 🟨 Medium Gain | 3 branch runs, no option | Isolate the roughly one-quarter of the old gap with DIO or branch-and-bound activity, intersect it with the new gap, then test a policy change. |
-| 10 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟨 Medium Risk / 🟨 Medium Gain | 4 branch runs + `--dt-binary-split` | Add eligible-versus-suppressed split counters before pursuing relevance gating; global binary splitting worsened PAR2 1.15%. |
+| 1 | [R15 — Equality-engine architecture](directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 🟥 High Risk / 🟩 High Gain | 4 arms; `--ee-mode=central` **+73/−19, net +54** — the register's only 🟢 | The largest measured effect in the project, and it is an option rather than a branch: its three branch arms are flat or negative (`ai-eecNoShare` +8/−7, `cdno` +5/−4, `dtMergeNotify-v3` +3/−19). So the gain lives in central mode itself, not in anything the fork has written. Count skipped shared-equality propagations and callback time (S4), then ask what the 73 rescued benchmarks share. |
+| 2 | [R10 — Instance-lemma decision order](directions.md#r10--where-instance-lemmas-sit-in-the-decision-order-local-deferred-gated) | 🟨 Medium Risk / 🟩 High Gain | 4 arms, **zero red**; `--inst-defer` **+47/−33, net +14**, `--inst-defer --dt-split-relevant` +44/−31, `--jh-rlv-inst` +27/−17 | The only direction whose branches win. All three beat the reference on PAR2 (38233, 38398, 38661 against the reference's 39304) and `--inst-defer` rescues more benchmarks than any other arm measured. **Intersect the three arms' lost sets** — if they lose the same 33, one mechanism is mispaced and can be gated; if not, the three compose. The gap sets are on disk, so this costs no run. |
+| 3 | [R7 — Entailment filtering](directions.md#r7--entailment-filtering-of-instances-what-ieval-buys-and-costs) | 🟩 Low Risk / 🟨 Medium Gain | 5 arms; `--ieval=off` **+20/−8, net +12**, `--no-inst-no-entail` +8/−9 | Third-best measured result in the register and the cheapest to act on — 🟩 low risk, an existing option, no branch to land. Rises from 6 on that combination. `--ieval=off` rescuing 20 while losing 8 says the evaluator is refusing instances that were worth keeping; add evaluator push/pop and refusal counters and read which. |
+| 4 | [R9 — Deleting instantiation lemmas](directions.md#r9--deleting-instantiation-lemmas-garbage-collection-or-scoping-them-to-the-branch) | 🟥 High Risk / 🟩 High Gain | 4 arms; best `virtualClauseDel` +7/−4; `--inst-local` **−606** | S1 measured the drowning directly — 13.7% less time on solved, 109 more timeouts, 19 more unknowns — and that stands. What has not appeared is a proposal: four arms, best +3, and the one option is catastrophic. Falls from 1 because a measured problem is not a measured lead. Design deletion against the S1 counters rather than trying another scope switch. |
+| 5 | [R2 — Incremental E-matching](directions.md#r2--incremental-e-matching-match-what-changed-not-everything) | 🟥 High Risk / 🟩 High Gain | 6 arms; best `ai-quantOpt-1` +11/−7 | Holds rank on mechanism, not on proposals: E-matching is 27.8% of gap-set time, the largest single consumer, while the direction's best arm is +4. That gap between cost and achieved gain is the argument for instrumenting rather than patching. `d_statRematch` answers this inside the eager module (S2); `qdebugStats` needs the port in S3. |
+| 6 | [R1 — Eager instantiation](directions.md#r1--eager-instantiation-instantiate-during-search-not-only-at-full-effort) | 🟥 High Risk / 🟩 High Gain | **14 arms, all red**; best `--eager-inst-macro-only` +22/−116; worst `eagerQM` −2539 | The most heavily measured and most thoroughly negative direction in the register. Not a default at any budget. Its claim is now narrow and specific: thirteen of the fourteen arms rescue between 12 and 38 benchmarks the reference cannot solve, `eagerQM` alone rescuing none, and `claude-eagerInst`'s budgets cut the loss from 900 to 120, so pacing works and is simply not paced enough. Ask what separates rescues from slowdowns (S6) before writing another mode. |
+| 7 | [R26 — Attribution instrumentation](directions.md#r26--attribution-instrumentation-the-tools-goal-2-needs) | 🟩 Low Risk / 🟩 High Gain | 3 rows, all *n/a* — counters, not speed | Unchanged in kind and rising in importance: five of the nine directions above and below it now need a counter rather than an arm, and this is the direction that builds them. Produce the first normalized per-benchmark attribution table. |
+| 8 | [R16 — Datatypes](directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 🟨 Medium Risk / 🟨 Medium Gain | 5 arms; `dtLazyInst3` +27/−75; `dtSplitRelevant` +9/−7; `--dt-elim` **−945** | Rises from 10 on one number: `dtLazyInst3` rescues 27 benchmarks, among the largest rescues in the register, while losing 75 — a gating problem rather than a dead end. The other end is now bounded too: `--dt-elim` at −945 rules out eliminating datatypes wholesale. Add eligible-versus-suppressed split counters. |
+| 9 | [R28 — Eager conflict-based instantiation](directions.md#r28--eager-conflict-based-instantiation-find-a-useful-instance-before-full-effort) | 🟥 High Risk / 🟩 High Gain | 5 arms, all inside noise: +4, +4, +3, −4, −13 | Falls from 4, the largest drop in this rerank. It was ranked on the argument that the bounded matcher existed and only its acceptance half was untested; all five `eagerCbqi` modes are now measured and none moves the set. Either acceptance is the whole of the idea and must be built before the direction is ranked again, or the mechanism does not pay here. |
+| 10 | [R17 — Linear integer arithmetic](directions.md#r17--linear-integer-arithmetic-branch-and-bound-cuts-and-the-diophantine-solver) | 🟥 High Risk / 🟨 Medium Gain | 3 arms; best `deferBlock` +5/−5; `--dio-solver-last-call` −88 | Holds last place with the register's flattest evidence: its best arm is net 0 and its branches barely move the set. The roughly one-quarter of gap benchmarks with integer reasoning is still worth isolating, but that is a measurement, not a proposal, and `linearSolverSub` was abandoned as a reimplementation. |
+
 
 ## Human-maintainer priorities
 
