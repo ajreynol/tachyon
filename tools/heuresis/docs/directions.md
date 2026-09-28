@@ -102,7 +102,7 @@ those newer divergence counts are labeled where used.
 
 **New branch candidates (2026-09-28).** The `ai-heuresis-*` additions were
 inspected from source. Their pinned tips and source diffs are in the
-[shared list](../../../docs/active-dev-branches.md#branches-inspected-2026-09-28).
+[shared list](../../../docs/active-dev-branches.md#carrying-the-pin-or-within-11-commits-of-it).
 Builds and benchmarks remain pending. Measure the reference at their base
 before filling the new result cells.
 
