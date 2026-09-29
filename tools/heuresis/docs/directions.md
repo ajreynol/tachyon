@@ -52,8 +52,8 @@ and inform future work.
 >
 > **The reference is the last row of [`progress.md`](progress.md)**, and that is
 > an invariant, not a coincidence: the run anchoring this document is the newest
-> measurement of cvc5 `main` the project has. **Since 2026-09-28 there are two
-> anchors, one build directory, two revisions.** The `ai-heuresis-*` branches sit
+> measurement of cvc5 `main` the project has. **Since 2026-09-28 there are three
+> anchor runs, all in one build directory, at two revisions.** The `ai-heuresis-*` branches sit
 > on a newer `main`, and the register asked for the reference to be measured
 > there before their cells were filled. It was, and it is within noise of the
 > older one (+2 / −6, PAR2 +0.31%). Read each cell against the ledger entry it
@@ -61,8 +61,9 @@ and inform future work.
 >
 > | date | cvc5 `main` | solved | PAR2 | anchors | ledger |
 > | --- | --- | ---: | ---: | --- | --- |
-> | 2026-09-25 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **5576** | 39313.7 | every option row and every branch row except the `ai-heuresis-*` rows | [entry](ledger/2026-09-25-option-sweep-one-reference.md) |
+> | 2026-09-25 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **5576** | 39313.7 | every option row except R12's two, and every branch row except the `ai-heuresis-*` rows | [entry](ledger/2026-09-25-option-sweep-one-reference.md) |
 > | 2026-09-28 | [`03e5ee1ebf`](https://github.com/cvc5/cvc5/commit/03e5ee1ebfcaea0994b1f38ef53a1b4aa87a30bd) | **5572** | 39436.5 | the 31 `ai-heuresis-*` rows | [entry](ledger/2026-09-28-ai-heuresis-branch-sweep.md) |
+> | 2026-09-29 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **5574** | 39400.1 | R12's two option rows, measured later on a rebuild of the first anchor, +3 / −5 from it | [entry](ledger/2026-09-29-lemma-inprocessing-options.md) |
 >
 > It was not always so. The option rows were first measured in a different build
 > directory, whose build of the *same commit* solves **5550** — 26 fewer, losing
@@ -1310,8 +1311,8 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| `--lemma-inprocess`, `none` → `light` | `--lemma-inprocess=light` | |
-| `--conflict-process`, `none` → `min` | `--conflict-process=min` | |
+| `--lemma-inprocess`, `none` → `light` | `--lemma-inprocess=light` | ⚪ **+11 / −12**, net **−1**, inside noise ([ledger](ledger/2026-09-29-lemma-inprocessing-options.md)) |
+| `--conflict-process`, `none` → `min` | `--conflict-process=min` | ⚪ **+4 / −14**, net **−10** ([ledger](ledger/2026-09-29-lemma-inprocessing-options.md)) |
 | [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find` | ⚪ **+7 / −8**, net **−1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:subConflict`](../../../docs/active-dev-branches.md#subConflict) | `--sub-conflict-find --no-sub-conflict-last-call` | 🔴 **+2 / −1423**, net **−1421** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 

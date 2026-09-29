@@ -100,6 +100,9 @@ netting zero, which is the evidence behind the ±5 noise band, and shows the
 26-solve gap above is a property of the build directory rather than randomness.
 The `03e5ee1ebf` row is that same directory at a newer `main`, and it moves
 nothing: +2 / −6 against the row above it, inside the noise band.
+The `d7d5b948c1` row after it is the third run of that build and configuration,
++3 / −5 against the first. It is placed by date, so its Δ PAR2 against the
+newer revision above it is left blank.
 
 **The last row is the reference** that every `± solved` cell in
 [`directions.md`](directions.md) is measured against — an invariant the two
@@ -125,6 +128,7 @@ they cannot quietly keep numbers taken against the row above.
 | 2026-09-24 | `d7d5b948c1` ◊ | **reference** | 5576 | 543 | 39304.4 | 1.68 | — | −4.26% | [build-difference](ledger/2026-09-24-build-directory-difference.md) |
 | 2026-09-25 | `d7d5b948c1` ◇ | **reference** | 5576 | 543 | 39313.7 | 1.68 | — | −4.24% | [one-reference](ledger/2026-09-25-option-sweep-one-reference.md) |
 | 2026-09-28 | `03e5ee1ebf` ◇ | **reference** | 5572 | 547 | 39436.5 | 1.68 | — | +0.31% | [ai-heuresis-sweep](ledger/2026-09-28-ai-heuresis-branch-sweep.md) |
+| 2026-09-29 | `d7d5b948c1` ◇ | **reference** | 5574 | 545 | 39400.1 | 1.68 | — | — | [lemma-inprocessing](ledger/2026-09-29-lemma-inprocessing-options.md) |
 
 † measured on `claude-eagerInst@995b23bcfa` with its module off, which is 0
 behind `95050cf8155d`. Compared against the `best` row at `d7d03b082c` it
