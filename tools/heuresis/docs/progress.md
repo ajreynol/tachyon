@@ -106,11 +106,14 @@ newer revision above it is left blank.
 `4692619e6a` is a newer `main` again, and still flat. Its Δ PAR2 is against
 `03e5ee1ebf`.
 
-**The last row is the reference** that every `± solved` cell in
-[`directions.md`](directions.md) is measured against — an invariant the two
-documents hold together. Adding a row for a new revision of the reference
-configuration means the register's cells have to be re-measured or cleared;
-they cannot quietly keep numbers taken against the row above.
+**The reference rows are the anchors** that the `± solved` cells in
+[`directions.md`](directions.md) are measured against. This was a single-row
+invariant until 2026-09-28: the last row was the reference and every cell was
+read against it. Since then, batches measured at newer revisions carry their own
+reference run, and [`directions.md`](directions.md#the-reference) names which
+row anchors which cells. A new reference row still means a cell cannot quietly
+keep a number taken against a different one. Whether anchors inside the noise
+band may be compared directly is open, as S19 in [`todo.md`](todo.md).
 
 | date | cvc5 `main` | config | solved | timeout | PAR2 | ratio | gap | Δ PAR2 | ledger |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
@@ -160,6 +163,14 @@ span 0.24% (35532.7–35619.5). Every one is inside the noise band below.
 Nothing upstream in that window helped these benchmarks, and nothing hurt them
 either — which is the monitor doing its job, reporting no change rather than
 nothing.
+
+**It still had not moved by `4692619e6a`.** The six `reference` rows measured
+in the branch-sweep build directory, from `d7d5b948c1` on 2026-09-24 to
+`4692619e6a` on 2026-09-29, solve 5572–5577 and span 0.34% in PAR2
+(39304.4–39436.5). That covers three revisions, the 1.4.1 post-release commit
+among them. They are not comparable with the `verus` rows above, which were
+measured in another build directory. That directory difference is the 26-solve
+gap marked ◊.
 
 This is weaker than it looks, and the weakness is worth stating: only five
 revisions have been measured, not every commit between them. A regression that

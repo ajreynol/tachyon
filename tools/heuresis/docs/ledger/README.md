@@ -27,6 +27,16 @@ Entries:
 - [`2026-09-17-cvc5-1-4-0-release.md`](2026-09-17-cvc5-1-4-0-release.md)
 - [`2026-09-19-output-retention.md`](2026-09-19-output-retention.md)
   (retention correction, nothing run)
+- [`2026-09-23-option-sweep.md`](2026-09-23-option-sweep.md)
+- [`2026-09-23-reference-at-current-main.md`](2026-09-23-reference-at-current-main.md)
+- [`2026-09-24-branch-sweep.md`](2026-09-24-branch-sweep.md)
+- [`2026-09-24-build-directory-difference.md`](2026-09-24-build-directory-difference.md)
+- [`2026-09-25-option-sweep-one-reference.md`](2026-09-25-option-sweep-one-reference.md)
+- [`2026-09-28-ai-heuresis-branch-sweep.md`](2026-09-28-ai-heuresis-branch-sweep.md)
+- [`2026-09-29-dt-elim-0929.md`](2026-09-29-dt-elim-0929.md)
+- [`2026-09-29-lemma-inprocessing-options.md`](2026-09-29-lemma-inprocessing-options.md)
+- [`2026-09-29-overlap-of-winning-arms.md`](2026-09-29-overlap-of-winning-arms.md)
+  (an analysis of existing results, nothing run)
 
 Raw results, statistics, processed text dumps and error sidecars remain on the
 execution host; fetch local copies into ignored `scratch/results/`. Each entry

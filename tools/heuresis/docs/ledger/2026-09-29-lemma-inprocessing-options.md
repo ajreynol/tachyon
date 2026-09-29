@@ -34,7 +34,7 @@ quant-092926-w1c-<arm> <options>`.
 ## 4. What came back
 
 Results are `results-cvc5_solve.sh-quant-092926-w1c-<arm>.txt` on the host,
-read with the [`gap`](../../reports/gap) parser as in the 2026-09-28 entry.
+read with [`arms`](../../reports/arms), which uses the `gap` parser, as in the 2026-09-28 entry.
 
 **The rebuilt reference solves 5574**, 5 unknown, 545 timeout, PAR2 39400.1.
 Against the 2026-09-24 run of the same revision in the same directory (5576,

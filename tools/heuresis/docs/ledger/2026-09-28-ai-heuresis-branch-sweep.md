@@ -50,7 +50,10 @@ was `solve_dir_rec_par_cvc5 -t 30 w3-cvc5 cvc5_solve.sh quant-092826-w3-<arm>
 Results are `results-cvc5_solve.sh-quant-092826-w3-<arm>.txt` on the host,
 read with the [`gap`](../../reports/gap) parser's `read` and its definitions of
 solved, timeout and PAR2. Before use, the same reading reproduced the
-2026-09-24 reference exactly: 5576 solved, PAR2 39304.4.
+2026-09-24 reference exactly: 5576 solved, PAR2 39304.4. That reading was
+committed on 2026-09-29 as [`arms`](../../reports/arms), which reproduces every
+figure below:
+`reports/arms reference=<reference results> <arm>=<arm results> ...`.
 
 **The reference at `03e5ee1ebf`: 5572 solved**, 5 unknown, 547 timeout, PAR2
 **39436.5**. Against the 5576 reference at `d7d5b948c1` in the same directory
@@ -119,7 +122,7 @@ twice:
 sundance/UFDTLIA/20241211-verus/{anvil/splinterdb-smt-betree__,splinterdb/betree__}PagedBetreeRefinement_v.{10,11,27,30,34}.smt2
 ```
 
-The wrappers logged `cvc5 suffered a segfault.` for each. No other arm in this
+The wrappers logged a segfault for each; the diagnostics stay in the host's error sidecars. No other arm in this
 sweep produced an error. The branch also answers `unknown` far more often: 37
 and 34 against the reference's 5. **Its losses are mostly not slowdowns.** Of
 the 32 benchmarks `--ee-share-uf-dt --ieval=off` loses, 10 are crashes, 13 are

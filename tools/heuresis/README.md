@@ -375,9 +375,13 @@ The first whole-set statistics run also shows that the earlier 1122-case gap,
 evidence for the next attribution work, not yet an attributed fraction.
 
 The one number inherited from the notes (`h-25`) remains marked as inherited.
-The register is [`docs/directions.md`](docs/directions.md): twenty-seven active
+The register is [`docs/directions.md`](docs/directions.md): twenty-eight active
 research directions, each with testing flags, fork work, the corresponding z3
-mechanism, papers, and an argued risk/gain estimate. The evidence-sensitive AI
+mechanism, papers, and an argued risk/gain estimate. As of 2026-09-29 every one
+of its 131 proposal rows is filled: 128 measured and 3 instrumentation rows
+marked *n/a*. Two are 🟢: `--ee-mode=central`, and a shared UF/datatypes
+equality-engine branch that crashes on 10 benchmarks. The two rescue largely the
+same benchmarks ([ledger](docs/ledger/2026-09-29-overlap-of-winning-arms.md)). The evidence-sensitive AI
 ranking and the separate human-maintainer ranking are in
 [`docs/todo.md`](docs/todo.md).
 
