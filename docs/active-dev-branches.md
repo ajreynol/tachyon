@@ -149,7 +149,10 @@ names. A three-dot diff against the pin would also count those 16 commits of
 cases were read at those tips. Their **builds** column comes from heuresis's
 wave-3 sweep, which builds each tip in this same build directory with `make
 -j60`, checks the binary's `--show-config` sha, and runs the arm's own options
-on a trivial input.
+on a trivial input. **`dtElim-0929`, added 2026-09-29, is read the same way.** It is one
+direct commit on upstream `main` at
+[`4692619e6a`](https://github.com/cvc5/cvc5/commit/4692619e6a2ee8d4faff9fab735f84c809a616fe),
+one CMake-only commit behind fork `master`.
 
 | branch | what it does | project | direction | its commits | ± LOC | builds |
 | --- | --- | --- | --- | ---: | ---: | :-: |
@@ -218,6 +221,7 @@ on a trivial input.
 | <a id="ai-heuresis-r15-claude"></a>[`ai-heuresis-r15-claude`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r15-claude) | Shares one equality engine between UF and datatypes within distributed mode | heuresis | [R15](../tools/heuresis/docs/directions.md#r15--equality-engine-architecture-central-distributed-and-who-gets-told-what) | 1 | +266/−1 over 9 src files, [`03e5ee1ebf`](https://github.com/cvc5/cvc5/commit/03e5ee1ebfcaea0994b1f38ef53a1b4aa87a30bd)..[`5a936dbf58`](https://github.com/ajreynol/cvc5/commit/5a936dbf58c8c1ab00d9b23f757a949443331570) | ✅ 54s |
 | <a id="dtSplitRelevant"></a>[`dtSplitRelevant`](https://github.com/ajreynol/cvc5/tree/dtSplitRelevant) | `--dt-split-relevant`: splits only on datatype terms in asserted literals | heuresis | [R16](../tools/heuresis/docs/directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 6 | +61/−8 over 2 src files | ✅ 48s |
 | <a id="dtElim"></a>[`dtElim`](https://github.com/ajreynol/cvc5/tree/dtElim) | `--dt-elim`: eliminates datatypes at preprocessing, by constructor and field count | heuresis | [R16](../tools/heuresis/docs/directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 28 | +1086/−2 over 13 src files | ✅ 73s |
+| <a id="dtElim-0929"></a>[`dtElim-0929`](https://github.com/ajreynol/cvc5/tree/dtElim-0929) | `--dt-elim`: a fresh implementation that inlines single-constructor datatypes in preprocessing | heuresis | [R16](../tools/heuresis/docs/directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 1 | +703/−0 over 9 src files, [`4692619e6a`](https://github.com/cvc5/cvc5/commit/4692619e6a2ee8d4faff9fab735f84c809a616fe)..[`0731894e97`](https://github.com/ajreynol/cvc5/commit/0731894e973d65dc0f543c688dfea107b5cb9ec7) | ✅ 41s |
 | <a id="dtLazyInst3"></a>[`dtLazyInst3`](https://github.com/ajreynol/cvc5/tree/dtLazyInst3) | `--dt-lazy-inst`: applies the datatypes instantiate rule lazily | heuresis | [R16](../tools/heuresis/docs/directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 23 | +80/−2 over 3 src files | ✅ 73s |
 | <a id="oneConsInst"></a>[`oneConsInst`](https://github.com/ajreynol/cvc5/tree/oneConsInst) | Instantiates single-constructor terms directly | heuresis | [R16](../tools/heuresis/docs/directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 7 | +42/−11 over 2 src files | ✅ 16s |
 | <a id="ai-heuresis-r16-claude"></a>[`ai-heuresis-r16-claude`](https://github.com/ajreynol/cvc5/tree/ai-heuresis-r16-claude) | Orders datatype constructor splits and optionally prefers the first tester positively | heuresis | [R16](../tools/heuresis/docs/directions.md#r16--datatypes-when-to-split-on-what-and-whether-to-have-them-at-all) | 1 | +154/−2 over 6 src files, [`03e5ee1ebf`](https://github.com/cvc5/cvc5/commit/03e5ee1ebfcaea0994b1f38ef53a1b4aa87a30bd)..[`8f890911af`](https://github.com/ajreynol/cvc5/commit/8f890911af9a4a3ee98c7de67c3b40ecf780784d) | ✅ 43s |

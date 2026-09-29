@@ -52,8 +52,9 @@ and inform future work.
 >
 > **The reference is the last row of [`progress.md`](progress.md)**, and that is
 > an invariant, not a coincidence: the run anchoring this document is the newest
-> measurement of cvc5 `main` the project has. **Since 2026-09-28 there are three
-> anchor runs, all in one build directory, at two revisions.** The `ai-heuresis-*` branches sit
+> measurement of cvc5 `main` the project has. **Since 2026-09-28 there are four
+> anchor runs, all in one build directory, at three revisions, all within noise
+> of each other.** The `ai-heuresis-*` branches sit
 > on a newer `main`, and the register asked for the reference to be measured
 > there before their cells were filled. It was, and it is within noise of the
 > older one (+2 / −6, PAR2 +0.31%). Read each cell against the ledger entry it
@@ -64,6 +65,7 @@ and inform future work.
 > | 2026-09-25 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **5576** | 39313.7 | every option row except R12's two, and every branch row except the `ai-heuresis-*` rows | [entry](ledger/2026-09-25-option-sweep-one-reference.md) |
 > | 2026-09-28 | [`03e5ee1ebf`](https://github.com/cvc5/cvc5/commit/03e5ee1ebfcaea0994b1f38ef53a1b4aa87a30bd) | **5572** | 39436.5 | the 31 `ai-heuresis-*` rows | [entry](ledger/2026-09-28-ai-heuresis-branch-sweep.md) |
 > | 2026-09-29 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **5574** | 39400.1 | R12's two option rows, measured later on a rebuild of the first anchor, +3 / −5 from it | [entry](ledger/2026-09-29-lemma-inprocessing-options.md) |
+> | 2026-09-29 | [`4692619e6a`](https://github.com/cvc5/cvc5/commit/4692619e6a2ee8d4faff9fab735f84c809a616fe) | **5577** | 39324.6 | the two `dtElim-0929` rows | [entry](ledger/2026-09-29-dt-elim-0929.md) |
 >
 > It was not always so. The option rows were first measured in a different build
 > directory, whose build of the *same commit* solves **5550** — 26 fewer, losing
@@ -1674,7 +1676,10 @@ splitting lemmas for datatype terms that occur in asserted literals");
 [`ajreynol:dtRlvSplit`](https://github.com/ajreynol/cvc5/tree/dtRlvSplit) (2025-11, partly merged, reworked into [`ajreynol:verusDev`](https://github.com/ajreynol/cvc5/tree/verusDev)'s "No split
 infinite"); [`ajreynol:dtElim`](https://github.com/ajreynol/cvc5/tree/dtElim) (2025-10, 26 commits, `--dt-elim` "eliminate datatypes
 at preprocessing", policies by constructor and field count, "Switch to
-1-cons"); [`ajreynol:oneConsInst`](https://github.com/ajreynol/cvc5/tree/oneConsInst) (single-constructor terms instantiated directly);
+1-cons"), and a fresh implementation of the same idea,
+[`ajreynol:dtElim-0929`](https://github.com/ajreynol/cvc5/tree/dtElim-0929) (2026-09,
+one commit, `--dt-elim` inlining single-constructor datatypes);
+[`ajreynol:oneConsInst`](https://github.com/ajreynol/cvc5/tree/oneConsInst) (single-constructor terms instantiated directly);
 [`ajreynol:dtLazyInst`](https://github.com/ajreynol/cvc5/tree/dtLazyInst),
 [`ajreynol:dtLazyInst2`](https://github.com/ajreynol/cvc5/tree/dtLazyInst2),
 [`ajreynol:dtLazyInst3`](https://github.com/ajreynol/cvc5/tree/dtLazyInst3)
@@ -1729,6 +1734,8 @@ control for `base-first`; phase alone retains declaration order.
 | [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-prefer-phase` | ⚪ **+4 / −4**, net **0**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-first --dt-split-prefer-phase` | ⚪ **+8 / −7**, net **+1**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-last --dt-split-prefer-phase` | ⚪ **+8 / −10**, net **−2**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:dtElim-0929`](../../../docs/active-dev-branches.md#dtElim-0929) | `--dt-elim` | 🔴 **+0 / −2090**, net **−2090**; segfaults on 480 benchmarks and hangs on 1104 the reference solves in under a second ([ledger](ledger/2026-09-29-dt-elim-0929.md)) |
+| [`ajreynol:dtElim-0929`](../../../docs/active-dev-branches.md#dtElim-0929) | `--cbqi --dt-elim` — remove `--no-cbqi` from the prefix | 🔴 **+0 / −1902**, net **−1902**; against its own QCF-on control **+0 / −1888**; segfaults on 421 ([ledger](ledger/2026-09-29-dt-elim-0929.md)) |
 | [`ajreynol:dtElim`](../../../docs/active-dev-branches.md#dtElim) | `--dt-elim` | 🔴 **+9 / −954**, net **−945**, 917 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtLazyInst3`](../../../docs/active-dev-branches.md#dtLazyInst3) | `--dt-lazy-inst` | 🔴 **+27 / −75**, net **−48** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtSplitRelevant`](../../../docs/active-dev-branches.md#dtSplitRelevant) | `--dt-split-relevant` | ⚪ **+9 / −7**, net **+2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |

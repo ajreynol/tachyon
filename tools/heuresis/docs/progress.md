@@ -103,6 +103,8 @@ nothing: +2 / −6 against the row above it, inside the noise band.
 The `d7d5b948c1` row after it is the third run of that build and configuration,
 +3 / −5 against the first. It is placed by date, so its Δ PAR2 against the
 newer revision above it is left blank.
+`4692619e6a` is a newer `main` again, and still flat. Its Δ PAR2 is against
+`03e5ee1ebf`.
 
 **The last row is the reference** that every `± solved` cell in
 [`directions.md`](directions.md) is measured against — an invariant the two
@@ -129,6 +131,7 @@ they cannot quietly keep numbers taken against the row above.
 | 2026-09-25 | `d7d5b948c1` ◇ | **reference** | 5576 | 543 | 39313.7 | 1.68 | — | −4.24% | [one-reference](ledger/2026-09-25-option-sweep-one-reference.md) |
 | 2026-09-28 | `03e5ee1ebf` ◇ | **reference** | 5572 | 547 | 39436.5 | 1.68 | — | +0.31% | [ai-heuresis-sweep](ledger/2026-09-28-ai-heuresis-branch-sweep.md) |
 | 2026-09-29 | `d7d5b948c1` ◇ | **reference** | 5574 | 545 | 39400.1 | 1.68 | — | — | [lemma-inprocessing](ledger/2026-09-29-lemma-inprocessing-options.md) |
+| 2026-09-29 | `4692619e6a` ◇ | **reference** | 5577 | 542 | 39324.6 | 1.68 | — | −0.28% | [dt-elim-0929](ledger/2026-09-29-dt-elim-0929.md) |
 
 † measured on `claude-eagerInst@995b23bcfa` with its module off, which is 0
 behind `95050cf8155d`. Compared against the `best` row at `d7d03b082c` it
