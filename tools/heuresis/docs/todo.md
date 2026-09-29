@@ -45,6 +45,7 @@ numbers.
 | **1** | the 23 option rows, each the reference plus one change, same binary | **done, then re-run** — the first pass measured against the 5550 build; every arm was re-run in the branch build directory so the whole register shares one reference, and `--cbqi` was added by *removing* `--no-cbqi` ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | **2** | the 70 branch runs | **done** — all 70 arms, every branch row filled; no arm reaches +20, and the best three are R10 (`--inst-defer` +47/−33, `--inst-defer --dt-split-relevant` +44/−31, `--jh-rlv-inst` +27/−17), each beating the reference on PAR2 ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | **1b** | the option sweep re-run on the branch reference, plus a reference re-run | **done** — 22 arms and the reference on one binary. The reference reproduced 5576 exactly, fixing this project's run-to-run churn at 4 solves each way and putting the ±5 noise band on measured ground ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
+| **3** | the 31 `ai-heuresis-*` branch rows, plus the reference at their base `03e5ee1ebf` | **done** — the reference solves 5572, within noise of 5576. One 🟢, R15's `--ee-share-uf-dt --ieval=off` at +59/−32, and it **segfaults on 10 benchmarks** and answers `unknown` on 34. R6's round budgets net +11 to +13 against their QCF control but only break even with the reference. R1 chaining and R11 relevance filtering are red. Everything else is inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 
 ## Short-term goals
 

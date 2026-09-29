@@ -52,12 +52,17 @@ and inform future work.
 >
 > **The reference is the last row of [`progress.md`](progress.md)**, and that is
 > an invariant, not a coincidence: the run anchoring this document is the newest
-> measurement of cvc5 `main` the project has. **Every cell in this document is
-> now against one reference**:
+> measurement of cvc5 `main` the project has. **Since 2026-09-28 there are two
+> anchors, one build directory, two revisions.** The `ai-heuresis-*` branches sit
+> on a newer `main`, and the register asked for the reference to be measured
+> there before their cells were filled. It was, and it is within noise of the
+> older one (+2 / −6, PAR2 +0.31%). Read each cell against the ledger entry it
+> cites:
 >
 > | date | cvc5 `main` | solved | PAR2 | anchors | ledger |
 > | --- | --- | ---: | ---: | --- | --- |
-> | 2026-09-25 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **5576** | 39313.7 | every option row and every branch row | [entry](ledger/2026-09-25-option-sweep-one-reference.md) |
+> | 2026-09-25 | [`d7d5b948c1`](https://github.com/cvc5/cvc5/commit/d7d5b948c11d2d83be0212d4a954ef49740ecdab) | **5576** | 39313.7 | every option row and every branch row except the `ai-heuresis-*` rows | [entry](ledger/2026-09-25-option-sweep-one-reference.md) |
+> | 2026-09-28 | [`03e5ee1ebf`](https://github.com/cvc5/cvc5/commit/03e5ee1ebfcaea0994b1f38ef53a1b4aa87a30bd) | **5572** | 39436.5 | the 31 `ai-heuresis-*` rows | [entry](ledger/2026-09-28-ai-heuresis-branch-sweep.md) |
 >
 > It was not always so. The option rows were first measured in a different build
 > directory, whose build of the *same commit* solves **5550** — 26 fewer, losing
@@ -103,8 +108,11 @@ those newer divergence counts are labeled where used.
 **New branch candidates (2026-09-28).** The `ai-heuresis-*` additions were
 inspected from source. Their pinned tips and source diffs are in the
 [shared list](../../../docs/active-dev-branches.md#carrying-the-pin-or-within-11-commits-of-it).
-Builds and benchmarks remain pending. Measure the reference at their base
-before filling the new result cells.
+All ten built and all 31 rows were run on 2026-09-28, against a reference
+measured at their base
+([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)). One arm is 🟢 and it
+crashes: `ai-heuresis-r15-claude` with `--ieval=off` nets +27 but segfaults on
+10 benchmarks.
 
 **Direction identifiers are stable.** Retired directions are deleted without
 renumbering the survivors, so gaps are intentional; Git history is the record
@@ -308,11 +316,11 @@ The chain rows vary depth first, then bound the added instances at depth
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--inst-when`, `full-last-call` → `full` | `--inst-when=full` | 🔴 **+38 / −170**, net **−132** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
-| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain` | |
-| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=4` | |
-| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=8` | |
-| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=4 --inst-chain-limit=100` | |
-| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=4 --inst-chain-limit=1000` | |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain` | 🔴 **+38 / −101**, net **−63** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=4` | 🔴 **+13 / −259**, net **−246** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=8` | 🔴 **+12 / −377**, net **−365** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=4 --inst-chain-limit=100` | 🔴 **+35 / −99**, net **−64**, 13 unknown ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r1-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r1-claude) | `--inst-chain --inst-chain-depth=4 --inst-chain-limit=1000` | 🔴 **+15 / −224**, net **−209** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst` | 🔴 **+18 / −897**, net **−879**, 72 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-extEagerInst3-1`](../../../docs/active-dev-branches.md#ai-extEagerInst3-1) | `--eager-inst --eager-inst-term=assert` | 🔴 **+16 / −564**, net **−548**, 66 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:claude-eagerInst`](../../../docs/active-dev-branches.md#claude-eagerInst) | `--eager-inst` | 🔴 **+28 / −147**, net **−119** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -417,7 +425,7 @@ other direction. Columns and rules: [Proposals](#proposals).
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-heuresis-r2-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r2-codex) | `--term-db-reuse-eqc` | |
+| [`ajreynol:ai-heuresis-r2-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r2-codex) | `--term-db-reuse-eqc` | ⚪ **+7 / −1**, net **+6** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:ai-emFilter`](../../../docs/active-dev-branches.md#ai-emFilter) | `--filter-e-matching` | ⚪ **+11 / −27**, net **−16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-imgDirect`](../../../docs/active-dev-branches.md#ai-imgDirect) | *(none — the branch changes behaviour directly)* | 🔴 **+7 / −27**, net **−20** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-quantOpt-1`](../../../docs/active-dev-branches.md#ai-quantOpt-1) | *(none — the branch changes behaviour directly)* | ⚪ **+11 / −7**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -726,12 +734,12 @@ the control comparison belongs in the ledger.
 | --- | --- | ---: |
 | `--cbqi`, `true` → `false` | `--cbqi`, with `--no-cbqi` **removed** from the prefix | ⚪ **+2 / −16**, net **−14** — **read the sign backwards here**: the arm turns cbqi *on*, so the proposal (off, as the reference has it) is worth **+14**, not −14 ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | `--sub-cbqi`, `false` → `true` | `--sub-cbqi` | 🔴 **+2 / −1484**, net **−1482** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
-| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=-1 --no-cbqi-round-share` — control; remove `--no-cbqi` from the prefix | |
-| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=0` — remove `--no-cbqi` from the prefix | |
-| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=2` — remove `--no-cbqi` from the prefix | |
-| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-share` — remove `--no-cbqi` from the prefix | |
-| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=0 --cbqi-round-share` — remove `--no-cbqi` from the prefix | |
-| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=2 --cbqi-round-share` — remove `--no-cbqi` from the prefix | |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=-1 --no-cbqi-round-share` — control; remove `--no-cbqi` from the prefix | ⚪ **+1 / −11**, net **−10** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=0` — remove `--no-cbqi` from the prefix | ⚪ **+7 / −5**, net **+2**; against the control **+15 / −3**, net +12 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=2` — remove `--no-cbqi` from the prefix | ⚪ **+7 / −5**, net **+2**; against the control **+14 / −2**, net +12 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-share` — remove `--no-cbqi` from the prefix | ⚪ **+3 / −13**, net **−10**; against the control +6 / −6, net 0 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=0 --cbqi-round-share` — remove `--no-cbqi` from the prefix | ⚪ **+5 / −2**, net **+3**; against the control **+15 / −2**, net +13 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r6-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r6-claude) | `--cbqi --cbqi-round-budget=2 --cbqi-round-share` — remove `--no-cbqi` from the prefix | ⚪ **+6 / −5**, net **+1**; against the control **+13 / −2**, net +11 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:ai-cbqi-0423`](../../../docs/active-dev-branches.md#ai-cbqi-0423) | *(none — the branch changes behaviour directly)* | ⚪ **+6 / −3**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R7 — Entailment filtering of instances: what ieval buys and costs
@@ -947,10 +955,10 @@ rejections.
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal` | |
-| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal --eager-inst-literal-budget=1000` | |
-| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal --eager-inst-literal-budget=100000` | |
-| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal --eager-inst-literal-budget=0` — fallback control | |
+| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal` | ⚪ **+5 / −7**, net **−2**; against the control +2 / −10 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal --eager-inst-literal-budget=1000` | ⚪ **+9 / −6**, net **+3**; against the control +5 / −8 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal --eager-inst-literal-budget=100000` | ⚪ **+7 / −10**, net **−3**; against the control +3 / −12 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r28-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r28-codex) | `--eager-inst-literal --eager-inst-literal-budget=0` — fallback control | ⚪ **+8 / −2**, net **+6** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst` | ⚪ **+9 / −6**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=conflict` | ⚪ **+4 / −8**, net **−4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:eagerCbqi`](../../../docs/active-dev-branches.md#eagerCbqi) | `--eager-inst --eager-inst-mode=prop` | ⚪ **+7 / −3**, net **+4**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1082,9 +1090,9 @@ record the removable-clause counters and `unknown` results.
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--inst-local`, `false` → `true` | `--inst-local` | 🔴 **+23 / −629**, net **−606** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
-| [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude) | `--no-incremental --inst-gc=none` — control | |
-| [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude) | `--no-incremental --inst-gc=assert` | |
-| [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude) | `--no-incremental --inst-gc=body` | |
+| [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude) | `--no-incremental --inst-gc=none` — control | ⚪ **+6 / −3**, net **+3**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude) | `--no-incremental --inst-gc=assert` | ⚪ **+4 / −3**, net **+1**; against the control +3 / −5 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r9-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r9-claude) | `--no-incremental --inst-gc=body` | ⚪ **+4 / −12**, net **−8**, 10 unknown; against the control +2 / −13 ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:notifySatClause`](../../../docs/active-dev-branches.md#notifySatClause) | *(none — the branch changes behaviour directly)* | ⚪ **+3 / −3**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:smtLazyAssert`](../../../docs/active-dev-branches.md#smtLazyAssert) | `--smt-lazy-assert` | ⚪ **+2 / −5**, net **−3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:virtualClauseDel`](../../../docs/active-dev-branches.md#virtualClauseDel) | *(none — the branch changes behaviour directly)* | ⚪ **+7 / −4**, net **+3**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1164,8 +1172,8 @@ mechanism-level control, remeasured at the new branch's base.
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-heuresis-r10-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r10-codex) | `--jh-inst-round-robin` | |
-| [`ajreynol:ai-heuresis-r10-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r10-codex) | `--jh-inst-round-robin --jh-rlv-order` | |
+| [`ajreynol:ai-heuresis-r10-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r10-codex) | `--jh-inst-round-robin` | ⚪ **+16 / −26**, net **−10** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r10-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r10-codex) | `--jh-inst-round-robin --jh-rlv-order` | ⚪ **+11 / −21**, net **−10** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:ai-instDefer`](../../../docs/active-dev-branches.md#ai-instDefer) | `--inst-defer` | 🟡 **+47 / −33**, net **+14** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-jhConflictFirst`](../../../docs/active-dev-branches.md#ai-jhConflictFirst) | `--jh-conflict-first` | ⚪ **+19 / −37**, net **−18** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:ai-jhRlvInst`](../../../docs/active-dev-branches.md#ai-jhRlvInst) | `--jh-rlv-inst` | 🟡 **+27 / −17**, net **+10** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1250,8 +1258,8 @@ both filtering counters and `unknown` outcomes.
 | `--decision`, `justification` here → `internal` | `--decision=internal` | 🔴 **+25 / −502**, net **−477** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | `--decision`, `justification` here → `stoponly` | `--decision=stoponly` | 🔴 **+23 / −525**, net **−502** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
 | `--jh-rlv-order`, `false` → `true` | `--jh-rlv-order` | ⚪ **+11 / −23**, net **−12** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
-| [`ajreynol:ai-heuresis-r11-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r11-claude) | `--rlv-quant=full` | |
-| [`ajreynol:ai-heuresis-r11-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r11-claude) | `--rlv-quant=strict` | |
+| [`ajreynol:ai-heuresis-r11-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r11-claude) | `--rlv-quant=full` | 🔴 **+7 / −79**, net **−72** ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r11-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r11-claude) | `--rlv-quant=strict` | 🔴 **+1 / −1280**, net **−1279**, **1487 unknown** — incomplete by design, not slow ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:jhRandom`](../../../docs/active-dev-branches.md#jhRandom) | `--jh-rand` | 🔴 **+25 / −150**, net **−125** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 
 ## R12 — Lemma inprocessing and conflict minimisation
@@ -1616,8 +1624,8 @@ would disable the new mechanism.
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--ee-mode`, `distributed` → `central` | `--ee-mode=central` | 🟢 **+73 / −19**, net **+54** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
-| [`ajreynol:ai-heuresis-r15-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r15-claude) | `--ee-share-uf-dt` | |
-| [`ajreynol:ai-heuresis-r15-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r15-claude) | `--ee-share-uf-dt --ieval=off` | |
+| [`ajreynol:ai-heuresis-r15-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r15-claude) | `--ee-share-uf-dt` | 🟡 **+53 / −38**, net **+15**, PAR2 38407.9. **Segfaults on 10 benchmarks** the reference solves and answers `unknown` on 37; only 13 of its 38 losses are timeouts ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r15-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r15-claude) | `--ee-share-uf-dt --ieval=off` | 🟢 **+59 / −32**, net **+27**, PAR2 **37003.6**, the sweep's best. **Segfaults on the same 10 benchmarks** and answers `unknown` on 34; only 9 of its 32 losses are timeouts ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:ai-eecNoShare`](../../../docs/active-dev-branches.md#ai-eecNoShare) | *(none — the branch changes behaviour directly)* | ⚪ **+8 / −7**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:cdno`](../../../docs/active-dev-branches.md#cdno) | *(none — the branch changes behaviour directly)* | ⚪ **+5 / −4**, net **+1**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtMergeNotify-v3`](../../../docs/active-dev-branches.md#dtMergeNotify-v3) | *(none — the branch changes behaviour directly)* | ⚪ **+3 / −19**, net **−16** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1715,11 +1723,11 @@ control for `base-first`; phase alone retains declaration order.
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
 | `--dt-binary-split`, `false` → `true` | `--dt-binary-split` | ⚪ **+12 / −23**, net **−11** ([ledger](ledger/2026-09-25-option-sweep-one-reference.md)) |
-| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-first` | |
-| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-last` | |
-| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-prefer-phase` | |
-| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-first --dt-split-prefer-phase` | |
-| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-last --dt-split-prefer-phase` | |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-first` | ⚪ **+5 / −2**, net **+3**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-last` | ⚪ **+14 / −10**, net **+4**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-prefer-phase` | ⚪ **+4 / −4**, net **0**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-first --dt-split-prefer-phase` | ⚪ **+8 / −7**, net **+1**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
+| [`ajreynol:ai-heuresis-r16-claude`](../../../docs/active-dev-branches.md#ai-heuresis-r16-claude) | `--dt-split-order=base-last --dt-split-prefer-phase` | ⚪ **+8 / −10**, net **−2**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:dtElim`](../../../docs/active-dev-branches.md#dtElim) | `--dt-elim` | 🔴 **+9 / −954**, net **−945**, 917 unknown ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtLazyInst3`](../../../docs/active-dev-branches.md#dtLazyInst3) | `--dt-lazy-inst` | 🔴 **+27 / −75**, net **−48** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:dtSplitRelevant`](../../../docs/active-dev-branches.md#dtSplitRelevant) | `--dt-split-relevant` | ⚪ **+9 / −7**, net **+2**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
@@ -1814,7 +1822,7 @@ on the linear-arithmetic slice as well as whole-set solved counts.
 
 | proposal | run as | ± solved on `quant-07-25` |
 | --- | --- | ---: |
-| [`ajreynol:ai-heuresis-r17-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r17-codex) | `--arith-int-repair` | |
+| [`ajreynol:ai-heuresis-r17-codex`](../../../docs/active-dev-branches.md#ai-heuresis-r17-codex) | `--arith-int-repair` | ⚪ **+8 / −3**, net **+5**, inside noise ([ledger](ledger/2026-09-28-ai-heuresis-branch-sweep.md)) |
 | [`ajreynol:ai-dioLc`](../../../docs/active-dev-branches.md#ai-dioLc) | `--dio-solver-last-call` | 🔴 **+5 / −93**, net **−88** ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block` | ⚪ **+5 / −5**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
 | [`ajreynol:deferBlock`](../../../docs/active-dev-branches.md#deferBlock) | `--defer-block --defer-block-mode=delay` | ⚪ **+5 / −5**, net **+0**, inside noise ([ledger](ledger/2026-09-24-branch-sweep.md)) |
